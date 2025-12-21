@@ -1,5 +1,5 @@
 import { Slot } from 'expo-router';
-import { ThemeProvider } from '@sanchay/theme-provider/native';
+import { ThemeProvider } from '@sanchay/theme-provider';
 
 export default function Layout() {
   return (

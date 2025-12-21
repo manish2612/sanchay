@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import { APP_NAME } from '@sanchay/config';
 import { Button } from '@sanchay/ui';
-import { useTheme } from '@sanchay/theme-provider/native';
+import { useTheme } from '@sanchay/theme-provider';
 
 export default function Home() {
   const { mode, setMode, theme } = useTheme();
@@ -16,7 +16,7 @@ export default function Home() {
       <Text style={{ color: theme.colors.foreground }}>
         Welcome to {APP_NAME} Mobile
       </Text>
-      <Text style={{ color: theme.colors.primary, marginBottom: 20 }}>
+      <Text style={{ color: theme.colors.primary, marginVertical: 20, fontSize: 22, fontWeight:'bold' }}>
         Current Mode: {mode}
       </Text>
       

@@ -4,7 +4,7 @@
         "strict": true,
         "paths": {
             "@sanchay/*": [
-                "../../packages/*/src/index.ts"
+                "../../packages/*"
             ]
         }
     },
