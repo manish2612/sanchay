@@ -1,0 +1,72 @@
+
+import React, { createContext, useContext, ReactNode } from 'react';
+import { Theme } from '@sanchay/design-tokens';
+
+export type NativeTheme = any; // Ideally we mirror Theme but with numbers instead of strings. 
+// For now, using 'any' or we could construct a mapped type. 
+// Given brevity, let's keep it loose or just say it returns the processed object.
+
+/**
+ * Strips 'px' from a string if it exists and returns a number.
+ * e.g. "16px" -> 16
+ * e.g. "120ms" -> 120 (if we decide to strip ms)
+ */
+const stripUnit = (val: string): number | string => {
+    if (val.endsWith('px')) {
+        const num = parseFloat(val);
+        if (!isNaN(num)) return num;
+    }
+    // Optional: strip 'ms' for animations if RN expects numbers.
+    // Standard Animated API often uses numbers for ms.
+    if (val.endsWith('ms')) {
+        const num = parseFloat(val);
+        if (!isNaN(num)) return num;
+    }
+    return val;
+};
+
+/**
+ * Recursively processing the theme to convert unit strings to numbers for RN.
+ * Targeted keys: spacing, radii, fontSize, lineHeight, motion duration.
+ */
+const processThemeForNative = (obj: any): any => {
+    if (Array.isArray(obj)) {
+        return obj.map(processThemeForNative);
+    }
+    if (obj && typeof obj === 'object') {
+        const result: any = {};
+        for (const k of Object.keys(obj)) {
+            const val = obj[k];
+            // Recursion
+            result[k] = processThemeForNative(val);
+        }
+        return result;
+    }
+    // Primitive handling
+    if (typeof obj === 'string') {
+        // We broadly attempt to strip units if the numeric value is safe.
+        // However, we should be careful not to strip things that SHOULD be strings.
+        // But in our schema, most "16px" values are intended for sizing.
+        return stripUnit(obj);
+    }
+    return obj;
+};
+
+export const getNativeTheme = (theme: Theme): NativeTheme => {
+    // We deep clone and process values.
+    return processThemeForNative(theme);
+};
+
+const ThemeContext = createContext<NativeTheme | null>(null);
+
+export const ThemeProvider = ({ theme, children }: { theme: NativeTheme, children: ReactNode }) => {
+    return React.createElement(ThemeContext.Provider, { value: theme }, children);
+};
+
+export const useTheme = () => {
+    const context = useContext(ThemeContext);
+    if (!context) {
+        throw new Error('useTheme must be used within a ThemeProvider');
+    }
+    return context;
+};
