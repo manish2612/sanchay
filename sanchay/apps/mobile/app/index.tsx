@@ -7,7 +7,7 @@ export default function Home() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Welcome to {APP_NAME} Mobile</Text>
       <Button onClick={() => console.log('Mobile Click')}>
-        <Text>Shared UI Button</Text>
+        Shared UI Button
       </Button>
     </View>
   );
