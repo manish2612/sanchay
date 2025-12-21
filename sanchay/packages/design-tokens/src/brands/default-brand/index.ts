@@ -1,6 +1,7 @@
 
 import { Theme } from '../../types/theme';
 import { colors } from '../../tokens/colors';
+import { colorsDark } from '../../tokens/colors-dark';
 import { spacing } from '../../tokens/spacing';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../../tokens/typography';
 import { radii } from '../../tokens/radii';
@@ -38,7 +39,7 @@ const dark: Theme = {
         version: '1.0.0',
         mode: 'dark',
     },
-    colors, // Placeholder: in reality, override with dark tokens
+    colors: colorsDark,
     ...shared,
 };
 
