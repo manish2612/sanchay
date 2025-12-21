@@ -5,14 +5,20 @@ export const metadata: Metadata = {
   description: 'Pro grade ERP',
 };
 
+import { ThemeProvider } from '@sanchay/theme-provider/web';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider initialBrand="default" initialMode="system">
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

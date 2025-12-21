@@ -53,13 +53,18 @@ const processThemeForNative = (obj: any): any => {
 };
 
 export const getNativeTheme = (theme: Theme): NativeTheme => {
+    console.log('[ThemeAdapters] Processing Native Theme');
     // We deep clone and process values.
-    return processThemeForNative(theme);
+    const start = Date.now();
+    const res = processThemeForNative(theme);
+    console.log(`[ThemeAdapters] Theme processed in ${Date.now() - start}ms`);
+    return res;
 };
 
 const ThemeContext = createContext<NativeTheme | null>(null);
 
 export const ThemeProvider = ({ theme, children }: { theme: NativeTheme, children: ReactNode }) => {
+    console.log('[ThemeAdapters] ThemeProvider rendering');
     return React.createElement(ThemeContext.Provider, { value: theme }, children);
 };
 

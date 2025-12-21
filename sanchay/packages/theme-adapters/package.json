@@ -2,17 +2,21 @@
     "name": "@sanchay/theme-adapters",
     "version": "1.0.0",
     "main": "dist/index.js",
+    "react-native": "src/index.ts",
+    "source": "src/index.ts",
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "@sanchay/design-tokens": "workspace:*",
-        "react": "^18.2.0"
+        "@sanchay/design-tokens": "workspace:*"
+    },
+    "peerDependencies": {
+        "react": "*"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
-        "@types/react": "^18.2.0"
+        "@types/react": "^19.0.0"
     }
 }
