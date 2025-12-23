@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@16.1.0(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.0))(react@19.2.0))(react-dom@19.2.3(react@19.2.0))(react@19.2.0)
     devDependencies:
       eslint:
         specifier: ^9.0.0
@@ -23,6 +27,12 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@expo-google-fonts/ibm-plex-sans':
+        specifier: ^0.4.1
+        version: 0.4.1
+      '@expo-google-fonts/work-sans':
+        specifier: ^0.4.2
+        version: 0.4.2
       '@expo/metro-runtime':
         specifier: ~6.1.0
         version: 6.1.2(expo@54.0.30)(react-dom@19.1.4(react@19.1.4))(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))(react@19.1.4)
@@ -41,6 +51,9 @@ importers:
       expo-constants:
         specifier: ~18.0.0
         version: 18.0.12(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))
+      expo-font:
+        specifier: ^14.0.10
+        version: 14.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))(react@19.1.4)
       expo-linking:
         specifier: ~8.0.0
         version: 8.0.11(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))(react@19.1.4)
@@ -741,6 +754,12 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@expo-google-fonts/ibm-plex-sans@0.4.1':
+    resolution: {integrity: sha512-allsuhZbvKoKDTB/U8creFVYYzhI97Nw9MgyyNjFzqISNc/sURpA7ZY37Rr+IRI567OV9BWQ/ioUCjAQrVGRbw==}
+
+  '@expo-google-fonts/work-sans@0.4.2':
+    resolution: {integrity: sha512-v+I8jQgoOAmI77v1V0EXvgKA4NGg8Agy2BCHAI6sswAKTub2sKsi6PXT4vLBn95dbbTqelSlcT79YRDTlCBrRg==}
 
   '@expo/cli@54.0.20':
     resolution: {integrity: sha512-cwsXmhftvS0p9NNYOhXGnicBAZl9puWwRt19Qq5eQ6njLnaj8WvcR+kDZyADtgZxBsZiyVlrKXvnjt43HXywQA==}
@@ -4810,6 +4829,10 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
+  '@expo-google-fonts/ibm-plex-sans@0.4.1': {}
+
+  '@expo-google-fonts/work-sans@0.4.2': {}
+
   '@expo/cli@54.0.20(expo-router@6.0.21)(expo@54.0.30)(graphql@15.8.0)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))':
     dependencies:
       '@0no-co/graphql.web': 1.2.0(graphql@15.8.0)
@@ -5979,7 +6002,9 @@ snapshots:
       metro-runtime: 0.83.3
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
     optional: true
 
   '@react-native/normalize-colors@0.74.89': {}
@@ -7747,6 +7772,12 @@ snapshots:
       react: 19.1.4
       react-dom: 19.2.3(react@19.1.4)
 
+  next-themes@0.2.1(next@16.1.0(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.0))(react@19.2.0))(react-dom@19.2.3(react@19.2.0))(react@19.2.0):
+    dependencies:
+      next: 16.1.0(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.0))(react@19.2.0)
+      react: 19.2.0
+      react-dom: 19.2.3(react@19.2.0)
+
   next@16.1.0(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.1.4))(react@19.1.4):
     dependencies:
       '@next/env': 16.1.0
@@ -7781,7 +7812,32 @@ snapshots:
       postcss: 8.4.31
       react: 19.1.4
       react-dom: 19.1.4(react@19.1.4)
-      styled-jsx: 5.1.6(@babel/core@7.28.5)(react@19.1.4)
+      styled-jsx: 5.1.6(react@19.1.4)
+    optionalDependencies:
+      '@next/swc-darwin-arm64': 16.1.0
+      '@next/swc-darwin-x64': 16.1.0
+      '@next/swc-linux-arm64-gnu': 16.1.0
+      '@next/swc-linux-arm64-musl': 16.1.0
+      '@next/swc-linux-x64-gnu': 16.1.0
+      '@next/swc-linux-x64-musl': 16.1.0
+      '@next/swc-win32-arm64-msvc': 16.1.0
+      '@next/swc-win32-x64-msvc': 16.1.0
+      babel-plugin-react-compiler: 1.0.0
+      sharp: 0.34.5
+    transitivePeerDependencies:
+      - '@babel/core'
+      - babel-plugin-macros
+
+  next@16.1.0(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.0))(react@19.2.0):
+    dependencies:
+      '@next/env': 16.1.0
+      '@swc/helpers': 0.5.15
+      baseline-browser-mapping: 2.9.11
+      caniuse-lite: 1.0.30001761
+      postcss: 8.4.31
+      react: 19.2.0
+      react-dom: 19.2.3(react@19.2.0)
+      styled-jsx: 5.1.6(react@19.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.1.0
       '@next/swc-darwin-x64': 16.1.0
@@ -8061,6 +8117,11 @@ snapshots:
   react-dom@19.2.3(react@19.1.4):
     dependencies:
       react: 19.1.4
+      scheduler: 0.27.0
+
+  react-dom@19.2.3(react@19.2.0):
+    dependencies:
+      react: 19.2.0
       scheduler: 0.27.0
 
   react-fast-compare@3.2.2: {}
@@ -8514,6 +8575,16 @@ snapshots:
       react: 19.1.4
     optionalDependencies:
       '@babel/core': 7.28.5
+
+  styled-jsx@5.1.6(react@19.1.4):
+    dependencies:
+      client-only: 0.0.1
+      react: 19.1.4
+
+  styled-jsx@5.1.6(react@19.2.0):
+    dependencies:
+      client-only: 0.0.1
+      react: 19.2.0
 
   styleq@0.1.3: {}
 

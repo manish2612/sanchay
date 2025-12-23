@@ -92,6 +92,16 @@ Rules:
 - Tokens are the single source of truth
 - UI components consume tokens, not hardcoded values
 
+- UI components consume tokens, not hardcoded values
+
+### Typography
+- **Body**: IBM Plex Sans (Light, Regular, Medium, Italic)
+- **Heading**: Work Sans (Medium, SemiBold, Bold)
+- **Architecture**:
+  - Tokens use CSS Variables (e.g., `var(--font-ibm-plex-sans)`).
+  - **Web**: Maps to `next/font` injected variables.
+  - **Mobile**: Maps to Native Font Family names via `theme-adapters`.
+
 ---
 
 ## Density Strategy

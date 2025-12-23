@@ -29,6 +29,17 @@ const stripUnit = (val: string): number | string => {
  * Recursively processing the theme to convert unit strings to numbers for RN.
  * Targeted keys: spacing, radii, fontSize, lineHeight, motion duration.
  */
+
+const mapFontToken = (val: string): string => {
+    if (val.includes('var(--font-ibm-plex-sans)')) return 'IBM Plex Sans';
+    if (val.includes('var(--font-work-sans)')) return 'Work Sans';
+    return val;
+};
+
+/**
+ * Recursively processing the theme to convert unit strings to numbers for RN.
+ * Targeted keys: spacing, radii, fontSize, lineHeight, motion duration.
+ */
 const processThemeForNative = (obj: any): any => {
     if (Array.isArray(obj)) {
         return obj.map(processThemeForNative);
@@ -44,6 +55,11 @@ const processThemeForNative = (obj: any): any => {
     }
     // Primitive handling
     if (typeof obj === 'string') {
+        // Map fonts first
+        if (obj.includes('var(--font-')) {
+            return mapFontToken(obj);
+        }
+
         // We broadly attempt to strip units if the numeric value is safe.
         // However, we should be careful not to strip things that SHOULD be strings.
         // But in our schema, most "16px" values are intended for sizing.

@@ -6,6 +6,22 @@ export const metadata: Metadata = {
 };
 
 import { ThemeProvider } from '@sanchay/theme-provider/web';
+import { IBM_Plex_Sans, Work_Sans } from 'next/font/google';
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  style: ['normal', 'italic'],
+  variable: '--font-ibm-plex-sans',
+  display: 'swap',
+});
+
+const workSans = Work_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-work-sans',
+  display: 'swap',
+});
 
 export default function RootLayout({
   children,
@@ -14,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
+      <body className={`${ibmPlexSans.variable} ${workSans.variable}`}>
         <ThemeProvider initialBrand="default" initialMode="system">
           {children}
         </ThemeProvider>

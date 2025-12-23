@@ -1,11 +1,19 @@
 "use client";
 import { APP_NAME } from "@sanchay/config";
+import React from "react";
 import { Button, GridBackground } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
 import { Density } from "@sanchay/design-tokens";
 
 export default function Home() {
   const { mode, setMode, density, setDensity, theme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <main style={{ 
@@ -23,12 +31,13 @@ export default function Home() {
           <h1 style={{ 
               fontSize: theme.typography.fontSize['4xl'], 
               fontWeight: theme.typography.fontWeight.bold,
-              marginBottom: theme.spacing[2] 
+              marginBottom: theme.spacing[2], 
+              fontFamily: theme.typography.fontFamily.heading    
           }}>
             Welcome to {APP_NAME}
           </h1>
-          <p style={{ fontSize: theme.typography.fontSize.lg, opacity: 0.8 }}>
-            Theme & Density Demonstration
+          <p style={{ fontSize: theme.typography.fontSize.lg, opacity: 0.8, fontFamily: theme.typography.fontFamily.body }}>
+            Theme & Density Demonstration 123456
           </p>
       </div>
 
@@ -80,9 +89,33 @@ export default function Home() {
                     <li>Base Unit: {theme.spacing[1]}</li>
                     <li>Button Height: {theme.sizes.buttonHeight}</li>
                     <li>Mode: {mode.toUpperCase()}</li>
+                    <li>Body Font: {theme.typography.fontFamily.body}</li>
+                    <li>Heading Font: {theme.typography.fontFamily.heading}</li>
                 </ul>
             </div>
             
+            <div style={{ padding: theme.spacing[3], backgroundColor: theme.colors.background, borderRadius: theme.radii.md }}>
+                <strong>Font Demo:</strong>
+                
+                <div style={{ marginTop: theme.spacing[3] }}>
+                    <div style={{ fontSize: theme.typography.fontSize.sm, opacity: 0.7, marginBottom: 4 }}>IBM Plex Sans (Body)</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 300 }}>Light 300</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 300, fontStyle: 'italic' }}>Light Italic 300</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 400 }}>Regular 400</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 400, fontStyle: 'italic' }}>Regular Italic 400</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 500 }}>Medium 500</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.body, fontWeight: 500, fontStyle: 'italic' }}>Medium Italic 500</div>
+                </div>
+
+                <div style={{ marginTop: theme.spacing[3] }}>
+                    <div style={{ fontSize: theme.typography.fontSize.sm, opacity: 0.7, marginBottom: 4 }}>Work Sans (Heading)</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.heading, fontWeight: 400 }}>Regular 400</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.heading, fontWeight: 500 }}>Medium 500</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.heading, fontWeight: 600 }}>SemiBold 600</div>
+                    <div style={{ fontFamily: theme.typography.fontFamily.heading, fontWeight: 700 }}>Bold 700</div>
+                </div>
+            </div>
+
             <div style={{ display: 'flex', gap: theme.spacing[2] }}>
                 <Button onClick={() => {}}>Primary Action</Button>
                 <Button onClick={() => {}} style={{ backgroundColor: 'transparent', border: '1px solid currentColor', color: 'inherit' }}>Secondary</Button>

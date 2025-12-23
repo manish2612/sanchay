@@ -21,13 +21,19 @@ export default function Home() {
           fontSize: 24, 
           fontWeight: 'bold',
           marginBottom: t.spacing[2],
-          textAlign: 'center'
+          textAlign: 'center',
+          fontFamily: t.typography.fontFamily.heading
       }}>
-        {APP_NAME} Mobile
+        Welcome to {APP_NAME} Mobile
       </Text>
       
-      <Text style={{ color: t.colors.foreground, opacity: 0.7, marginBottom: 30 }}>
-        Density & Theme Demo
+      <Text style={{ 
+          color: t.colors.foreground, 
+          opacity: 0.7, 
+          marginBottom: 30,
+          fontFamily: t.typography.fontFamily.body 
+      }}>
+        Density & Theme Demo 12345
       </Text>
       
       <View style={{ 
@@ -69,6 +75,27 @@ export default function Home() {
             <Text style={{ color: t.colors.foreground }}>
                 Base Spacing (4): {t.spacing[4]}px
             </Text>
+         </View>
+
+         {/* Font Demo */}
+         <View style={{ padding: t.spacing[4], backgroundColor: t.colors.background, borderRadius: 8, marginTop: 20 }}>
+            <Text style={{ color: t.colors.foreground, fontWeight: 'bold', marginBottom: 10 }}>
+                Font Demo:
+            </Text>
+            
+            <Text style={{ color: t.colors.foreground, fontSize: 12, opacity: 0.7, marginBottom: 4 }}>IBM Plex Sans (Body)</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans-Light', marginBottom: 2 }}>Light 300</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans-Light-Italic', marginBottom: 2 }}>Light Italic 300</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans', marginBottom: 2 }}>Regular 400</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans-Italic', marginBottom: 2 }}>Regular Italic 400</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans-Medium', marginBottom: 2 }}>Medium 500</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'IBM Plex Sans-Medium-Italic', marginBottom: 15 }}>Medium Italic 500</Text>
+
+            <Text style={{ color: t.colors.foreground, fontSize: 12, opacity: 0.7, marginBottom: 4 }}>Work Sans (Heading)</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans-Regular', marginBottom: 2 }}>Regular 400</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans', marginBottom: 2 }}>Medium 500</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans-SemiBold', marginBottom: 2 }}>SemiBold 600</Text>
+            <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans-Bold', marginBottom: 2 }}>Bold 700</Text>
          </View>
       </View>
     </ScrollView>

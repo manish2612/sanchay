@@ -51,6 +51,24 @@ const InnerProvider = ({ children, initialBrand, initialDensity }: { children: R
         });
     });
 
+    // Apply global font basics to the body and headings
+    // Apply global font basics to the body and headings
+    // IMPORTANT: We fallback-define the font variables for Expo Web (where next/font is not present).
+    // On Next.js, the 'next/font' class on body will override these with the hashed font family.
+    // On Expo Web, these point to the font loaded by expo-font.
+    css += `
+      :root {
+        --font-ibm-plex-sans: 'IBM Plex Sans';
+        --font-work-sans: 'Work Sans';
+      }
+      body {
+        font-family: var(--typography-fontFamily-body);
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-family: var(--typography-fontFamily-heading);
+      }
+    `;
+
     return css;
   }, [brand]);
 

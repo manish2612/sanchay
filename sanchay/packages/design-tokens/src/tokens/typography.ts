@@ -1,7 +1,7 @@
 
 export const fontFamily = {
-    body: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
-    heading: "inherit",
+    body: "var(--font-ibm-plex-sans), system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
+    heading: "var(--font-work-sans), sans-serif",
     mono: "ui-monospace, SFMono-Regular, Menlo, monospace",
 };
 
@@ -17,6 +17,7 @@ export const fontSize = {
 };
 
 export const fontWeight = {
+    light: 300,
     regular: 400,
     medium: 500,
     semibold: 600,
