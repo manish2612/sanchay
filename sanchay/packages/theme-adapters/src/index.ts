@@ -1,6 +1,6 @@
 
-import { getTheme, Brand, Mode, Theme } from '@sanchay/design-tokens';
-import { generateWebCSSVariables } from './web';
+import { getTheme, Brand, Mode, Theme, Density } from '@sanchay/design-tokens';
+import { generateWebCSSVariables, getWebTheme } from './web';
 import { getNativeTheme } from './native';
 
 // Re-export specific platform adapters
@@ -24,13 +24,14 @@ interface AdapterResult {
  * @param platform 
  * @returns 
  */
-export const useThemeAdapter = (brand: Brand, mode: Mode, platform: Platform): AdapterResult => {
-    const rawTheme = getTheme(brand, mode);
+export const useThemeAdapter = (brand: Brand, mode: Mode, density: Density, platform: Platform): AdapterResult => {
+    const rawTheme = getTheme(brand, mode, density);
 
     if (platform === 'web') {
-        const cssVars = generateWebCSSVariables(rawTheme);
+        const cssVars = generateWebCSSVariables(rawTheme, ':root');
+        const webTheme = getWebTheme(rawTheme);
         return {
-            theme: rawTheme,
+            theme: webTheme,
             webCSSVariables: cssVars,
         };
     } else {

@@ -1,6 +1,7 @@
 
 import { colors } from '../tokens/colors';
 import { spacing } from '../tokens/spacing';
+import { sizes } from '../tokens/sizes';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../tokens/typography';
 import { radii } from '../tokens/radii';
 import { shadows } from '../tokens/shadows';
@@ -14,7 +15,8 @@ export interface Theme {
         mode: 'light' | 'dark';
     };
     colors: typeof colors;
-    spacing: typeof spacing;
+    spacing: typeof spacing['comfortable'];
+    sizes: typeof sizes['comfortable'];
     typography: {
         fontFamily: typeof fontFamily;
         fontSize: typeof fontSize;

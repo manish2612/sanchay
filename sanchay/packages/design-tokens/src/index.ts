@@ -17,7 +17,20 @@ const brands = {
 
 export type Brand = keyof typeof brands;
 export type Mode = 'light' | 'dark';
+export type Density = 'comfortable' | 'compact' | 'spacious';
 
-export const getTheme = (brand: Brand, mode: Mode): Theme => {
-    return brands[brand][mode];
+export const getTheme = (brand: Brand, mode: Mode, density: Density = 'comfortable'): Theme => {
+    const rawTheme = brands[brand][mode];
+
+    // Resolve Spacing
+    const resolvedSpacing = rawTheme.spacing[density] || rawTheme.spacing.comfortable;
+
+    // Resolve Sizes
+    const resolvedSizes = rawTheme.sizes[density] || rawTheme.sizes.comfortable;
+
+    return {
+        ...rawTheme,
+        spacing: resolvedSpacing,
+        sizes: resolvedSizes,
+    };
 };

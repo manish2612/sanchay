@@ -24,7 +24,26 @@ const flattenTheme = (obj: any, prefix = ''): Record<string, string> => {
     }, {} as Record<string, string>);
 };
 
-export const generateWebCSSVariables = (theme: Theme): string => {
+const processThemeForWeb = (obj: any, prefix = ''): any => {
+    if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+        const result: any = {};
+        for (const k of Object.keys(obj)) {
+            const pre = prefix.length ? prefix + '-' : '';
+            result[k] = processThemeForWeb(obj[k], pre + k);
+        }
+        return result;
+    }
+    // Leaf: Return semantic variable reference
+    return `var(--${prefix})`;
+};
+
+export const getWebTheme = (theme: Theme): Theme => {
+    // We return a theme object where every value is a CSS variable reference
+    // e.g. spacing[1] = "var(--spacing-1)"
+    return processThemeForWeb(theme);
+};
+
+export const generateWebCSSVariables = (theme: Theme, selector: string = ':root'): string => {
     // Generate CSS variables
     // Logic is now MUCH simpler because units are in the tokens.
 
@@ -37,7 +56,10 @@ export const generateWebCSSVariables = (theme: Theme): string => {
     const flat = flattenTheme(theme);
 
     Object.entries(flat).forEach(([key, value]) => {
-        cssVars[`--${key}`] = value;
+        // Only output variables for leaf nodes that have values
+        if (value !== undefined && value !== null) {
+            cssVars[`--${key}`] = value;
+        }
     });
 
     // Generate CSS string
@@ -45,5 +67,5 @@ export const generateWebCSSVariables = (theme: Theme): string => {
         .map(([k, v]) => `  ${k}: ${v};`)
         .join('\n');
 
-    return `:root {\n${variables}\n}`;
+    return `${selector} {\n${variables}\n}`;
 };

@@ -3,6 +3,7 @@ import { Theme } from '../../types/theme';
 import { colors } from '../../tokens/colors';
 import { colorsDark } from '../../tokens/colors-dark';
 import { spacing } from '../../tokens/spacing';
+import { sizes } from '../../tokens/sizes';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../../tokens/typography';
 import { radii } from '../../tokens/radii';
 import { shadows } from '../../tokens/shadows';
@@ -11,6 +12,7 @@ import { zIndex } from '../../tokens/z-index';
 
 const shared = {
     spacing,
+    sizes,
     typography: {
         fontFamily,
         fontSize,
@@ -23,21 +25,21 @@ const shared = {
     zIndex,
 };
 
-const light: Theme = {
+const light = {
     meta: {
         name: 'ERP Default',
         version: '1.0.0',
-        mode: 'light',
+        mode: 'light' as const,
     },
     colors, // In a real app we would have light/dark sets. Using the default set for now.
     ...shared,
 };
 
-const dark: Theme = {
+const dark = {
     meta: {
         name: 'ERP Default',
         version: '1.0.0',
-        mode: 'dark',
+        mode: 'dark' as const,
     },
     colors: colorsDark,
     ...shared,

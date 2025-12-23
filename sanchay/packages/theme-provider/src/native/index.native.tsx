@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { useThemeAdapter } from '@sanchay/theme-adapters';
-import { Brand, Mode } from '@sanchay/design-tokens';
+import { Brand, Mode, Density } from '@sanchay/design-tokens';
 import { ThemeProviderProps, UseThemeResult } from '../types';
 
 const ThemeContext = createContext<UseThemeResult | null>(null);
 
-export const ThemeProvider = ({ children, initialBrand = 'default', initialMode = 'system' }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, initialBrand = 'default', initialMode = 'system', initialDensity = 'comfortable' }: ThemeProviderProps) => {
   const systemScheme = useColorScheme();
   const [mode, setMode] = useState<Mode | 'system'>(initialMode as Mode | 'system');
   const [brand, setBrand] = useState<Brand>(initialBrand);
-  console.log('[ThemeProvider] Initializing with', { initialBrand, initialMode });
+  const [density, setDensity] = useState<Density>(initialDensity);
+  
+  console.log('[ThemeProvider] Initializing with', { initialBrand, initialMode, initialDensity });
 
   const currentMode = useMemo<Mode>(() => {
     if (mode === 'system') {
@@ -20,17 +22,19 @@ export const ThemeProvider = ({ children, initialBrand = 'default', initialMode 
   }, [mode, systemScheme]);
 
   const adapterResult = useMemo(() => {
-    return useThemeAdapter(brand, currentMode, 'native');
-  }, [brand, currentMode]);
+    return useThemeAdapter(brand, currentMode, density, 'native');
+  }, [brand, currentMode, density]);
 
   const value = useMemo<UseThemeResult>(() => ({
     theme: adapterResult.nativeTheme || adapterResult.theme,
     mode: currentMode,
     brand,
+    density,
     setMode: (m: Mode | 'system') => setMode(m),
     setBrand,
+    setDensity,
     isDark: currentMode === 'dark',
-  }), [adapterResult, currentMode, brand]);
+  }), [adapterResult, currentMode, brand, density]);
 
   return (
     <ThemeContext.Provider value={value}>

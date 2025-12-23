@@ -6,17 +6,22 @@ export interface ButtonProps {
   style?: React.CSSProperties; 
 }
 
+import { useTheme } from '@sanchay/theme-provider';
+
 export function Button({ onClick, children, style }: ButtonProps) {
+  const { theme } = useTheme();
+  
   return (
     <button 
       onClick={onClick} 
       style={{
-        padding: '10px 20px',
-        backgroundColor: '#0070f3',
+        padding: `${theme.spacing[2]} ${theme.spacing[4]}`,
+        backgroundColor: theme.colors.primary || '#0070f3',
         color: 'white',
         border: 'none',
-        borderRadius: '5px',
-        fontSize: '16px',
+        borderRadius: theme.radii.sm || '4px',
+        fontSize: theme.typography.fontSize.md,
+        height: theme.sizes.buttonHeight,
         cursor: 'pointer',
         ...style 
       }}

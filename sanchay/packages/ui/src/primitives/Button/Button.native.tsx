@@ -7,27 +7,36 @@ export interface ButtonProps {
   style?: ViewStyle;
 }
 
+import { useTheme } from '@sanchay/theme-provider';
+
 export function Button({ onClick, children, style }: ButtonProps) {
+  const { theme } = useTheme();
+  // Cast theme spacing/sizes to number for RN styles as the adapter converts them at runtime
+  const t = theme as any;
+  
   return (
     <Pressable 
       onPress={onClick}
       style={({ pressed }) => [
         styles.button,
+        {
+            paddingVertical: t.spacing[2],
+            paddingHorizontal: t.spacing[4],
+            backgroundColor: t.colors.primary || '#0070f3',
+            borderRadius: t.radii.sm || 4,
+            height: t.sizes.buttonHeight,
+        },
         pressed && styles.pressed,
         style
       ]}
     >
-      <Text style={styles.text}>{children}</Text>
+      <Text style={[styles.text, { fontSize: t.typography.fontSize.md }]}>{children}</Text>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#0070f3',
-    borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -36,7 +45,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 16,
     fontWeight: '600',
   }
 });
