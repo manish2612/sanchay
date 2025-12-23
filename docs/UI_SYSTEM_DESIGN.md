@@ -246,6 +246,64 @@ Rules:
 
 ---
 
+
+---
+
+## Future-Proofing Guidelines (Critical)
+
+To ensure the codebase can migrate between frameworks (e.g., Next.js → TanStack Start) or platforms (Web → Mobile) with minimal effort, strict rules apply to **Environment Variables**, **Images**, and **Data Fetching**.
+
+### 1. Environment Variables
+**The Trap:** Accessing `process.env.NEXT_PUBLIC_*` or `import.meta.env.*` directly throughout the UI code locks you into a specific bundler.
+
+**The Solution:**
+Centralize all environment access in `@sanchay/config`.
+- **DO NOT** use `process.env` in `packages/ui`.
+- **DO** import from a shared config object.
+
+```typescript
+// packages/config/src/env.ts
+export const Env = {
+  // Graceful fallback for different bundlers
+  API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.EXPO_PUBLIC_API_URL || '',
+};
+
+// Usage
+import { Env } from '@sanchay/config';
+console.log(Env.API_URL);
+```
+
+### 2. Images and Assets
+**The Trap:** `next/image` does not work in Expo or other web frameworks. Using it in shared packages breaks the mobile app.
+
+**The Solution:**
+Use a "Universal Image" wrapper in `packages/ui`.
+- **Default:** Use standard `<img>` tags (most portable).
+- **Optimization:** If needed, inject the optimized component (NextImage / ExpoImage) via a Provider, similar to the Link pattern.
+
+```tsx
+// packages/ui/src/primitives/Image.tsx
+export const UniversalImage = (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+  // Simple, works everywhere
+  return <img {...props} />;
+};
+```
+
+### 3. Data Fetching & Business Logic
+**The Trap:** Writing database queries or API calls directly inside React Components (`apps/web/...`). This couples your "View" to your "Framework" (e.g., Next.js Server Actions).
+
+**The Solution:**
+Logic lives in **Pure Functions** in `packages/api` or `packages/lib`.
+- **DO NOT** write `await db.query()` inside a UI component.
+- **DO** write `await getUserById(id)` where `getUserById` is a pure Typescript function imported from a package.
+
+**Flow:**
+1.  **Package (`packages/api`)**: `export const getUser = async (id) => db.find(...)`
+2.  **App (Next.js)**: Server Component calls `await getUser(id)`.
+3.  **App (TanStack)**: Loader calls `await getUser(id)`.
+
+---
+
 ## Architectural Invariant
 
 If a UI component performs navigation or knows business logic,
