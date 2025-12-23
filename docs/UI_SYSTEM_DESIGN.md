@@ -52,24 +52,49 @@ Unused platform files are excluded from the final bundle.
 
 ## Navigation Strategy (Shared Code)
 
-Shared code **must not perform navigation directly**.
+Shared code **must not perform navigation directly**. Importing `next/link` or `expo-router` inside `packages/ui` will strictly break cross-platform compatibility and lock the system into a specific framework.
 
-### How Navigation Is Triggered
+### Recommended Pattern: The Callback Approach ("Solution 1")
 
-- UI components emit **intent**, not navigation
-- ERP modules call a **navigation abstraction**
-- App shells bind that abstraction to platform navigation
+Instead of the component deciding *how* to navigate, it just signals *that* an action occurred. The parent component (living in the specific App) injects the navigation logic.
 
-### Example Pattern
+#### 1. Why? (The Problem)
+- **Framework Locking**: If you import `next/link`, your component cannot work in Expo.
+- **Maintenance Hell**: Moving from one router (e.g., Next.js Pages) to another (e.g., TanStack Start) would require rewriting every single UI component.
+- **Testing**: It is easier to test `onPress={() => jest.fn()}` than mocking a complex router context.
 
-- UI component → emits `onNavigate("invoiceDetails", id)`
-- Module → calls `NavigationService.navigate(...)`
-- App shell → maps route/screen to platform implementation
+#### 2. What? (The Implementation)
+**In Shared Package (`packages/ui/src/UserCard.tsx`):**
+Define a clear "contract" using props.
+```tsx
+type UserCardProps = {
+  name: string;
+  onViewProfile: (id: string) => void; // ✨ The Contract
+};
 
-This keeps:
-- UI reusable
-- Modules platform-agnostic
-- Navigation replaceable
+export const UserCard = ({ name, onViewProfile }: UserCardProps) => (
+  // Web uses onClick, Native uses onPress
+  <div onClick={() => onViewProfile('123')}>
+    View Profile
+  </div>
+);
+```
+
+**In The App (`apps/web` or `apps/mobile`):**
+Inject the actual router.
+```tsx
+// apps/web/page.tsx
+const router = useRouter();
+<UserCard onViewProfile={(id) => router.push(`/users/${id}`)} />
+
+// apps/mobile/screen.tsx
+const router = useRouter();
+<UserCard onViewProfile={(id) => router.push(`/users/${id}`)} />
+```
+
+#### 3. Future Implications
+- **TanStack Start Migration**: If we migrate from Next.js to anything else, **zero** changes are needed in `packages/ui`. We only update the adapter at the App layer.
+- **Flexibility**: We can easily swap out navigation libraries without touching UI code.
 
 ---
 
