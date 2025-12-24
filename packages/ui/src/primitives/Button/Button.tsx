@@ -1,55 +1,105 @@
-import * as React from 'react';
-import { Slot } from '@radix-ui/react-slot';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../utils';
+import React from 'react';
+import { 
+  Pressable, 
+  Text, 
+  ViewStyle, 
+  TextStyle, 
+  ActivityIndicator, 
+  PressableProps
+} from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useTheme } from '@sanchay/theme-provider';
+import { styles, getVariantStyles, getSizeStyles } from './styles';
 
-const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        primary: "bg-primary text-primaryForeground hover:bg-primaryHover shadow-sm",
-        secondary: "bg-secondary text-secondaryForeground hover:bg-secondaryHover",
-        outline:
-          "border border-border bg-background hover:bg-surfaceHover hover:text-foreground",
-        ghost: "hover:bg-surfaceHover hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        // Using danger token instead of destructive
-        destructive:
-          "bg-danger text-dangerForeground hover:bg-danger/90",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "primary",
-      size: "default",
-    },
-  }
-);
-
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+export interface ButtonProps extends PressableProps {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+  loading?: boolean;
+  iconLeft?: keyof typeof MaterialIcons.glyphMap;
+  iconRight?: keyof typeof MaterialIcons.glyphMap;
+  children?: React.ReactNode;
+  style?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  }
-);
-Button.displayName = "Button";
+export function Button({ 
+  variant = 'primary',
+  size = 'default',
+  loading = false,
+  iconLeft,
+  iconRight,
+  children,
+  style,
+  textStyle,
+  disabled,
+  ...props 
+}: ButtonProps) {
+  const { theme } = useTheme();
+  const t = theme as any;
 
-export { Button, buttonVariants };
+  const { backgroundColor, textColor, borderColor, borderWidth } = getVariantStyles(t, variant);
+  const { height, paddingHorizontal, fontSize, iconSize, width } = getSizeStyles(t, size);
+
+  // --- Render Content ---
+  const content = (
+    <>
+      {loading ? (
+        <ActivityIndicator 
+          size="small" 
+          color={textColor} 
+          style={{ marginRight: children ? 8 : 0 }}
+        />
+      ) : iconLeft ? (
+        <MaterialIcons 
+            name={iconLeft} 
+            size={iconSize} 
+            color={textColor} 
+            style={{ marginRight: children ? 8 : 0 }}
+        />
+      ) : null}
+
+      {children && (
+        <Text style={[
+          styles.text, 
+          { color: textColor, fontSize, fontWeight: '500' },
+          textStyle
+        ]}>
+          {children}
+        </Text>
+      )}
+
+      {!loading && iconRight && (
+        <MaterialIcons 
+            name={iconRight} 
+            size={iconSize} 
+            color={textColor} 
+            style={{ marginLeft: children ? 8 : 0 }}
+        />
+      )}
+    </>
+  );
+
+  return (
+    <Pressable
+      disabled={disabled || loading}
+      style={({ pressed }) => [
+        styles.base,
+        {
+          backgroundColor,
+          borderColor,
+          borderWidth,
+          height,
+          paddingHorizontal,
+          borderRadius: t.radii.md,
+          opacity: (pressed || disabled) ? 0.7 : 1, // Standard pressed/disabled opacity
+        },
+        width ? { width } : {}, // For icon button
+        style
+      ]}
+      {...props}
+    >
+      {content}
+    </Pressable>
+  );
+}
+

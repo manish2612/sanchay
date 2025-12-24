@@ -60,6 +60,15 @@ const processThemeForNative = (obj: any): any => {
             return mapFontToken(obj);
         }
 
+        // Normalize HSL colors for React Native (Space-separated -> Comma-separated)
+        // e.g. "hsl(212 100% 48%)" -> "hsl(212, 100%, 48%)"
+        if (obj.startsWith('hsl(')) {
+            // Handle "hsl(h s l / a)" -> "hsla(h, s, l, a)" if needed, or just standard hsl
+            // Simple regex for standard "hsl(h s% l%)"
+            return obj.replace(/hsl\(\s*([\d.]+)\s+([\d.]+%)\s+([\d.]+%)\s*\)/, 'hsl($1, $2, $3)')
+                .replace(/hsl\(\s*([\d.]+)\s+([\d.]+%)\s+([\d.]+%)\s*\/\s*([\d.]+)\s*\)/, 'hsla($1, $2, $3, $4)');
+        }
+
         // We broadly attempt to strip units if the numeric value is safe.
         // However, we should be careful not to strip things that SHOULD be strings.
         // But in our schema, most "16px" values are intended for sizing.

@@ -48,8 +48,8 @@ export default function Home() {
           Theme Mode
         </Text>
         <View style={{ flexDirection: 'row', gap: 10, marginBottom: 20 }}>
-            <Button onClick={() => setMode('light')}>Light</Button>
-            <Button onClick={() => setMode('dark')}>Dark</Button>
+            <Button onPress={() => setMode('light')}>Light</Button>
+            <Button onPress={() => setMode('dark')}>Dark</Button>
         </View>
 
         {/* Density Controls */}
@@ -58,7 +58,7 @@ export default function Home() {
         </Text>
         <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
             {(['comfortable', 'compact', 'spacious'] as Density[]).map(d => (
-                <Button key={d} onClick={() => setDensity(d)}>
+                <Button key={d} onPress={() => setDensity(d)}>
                     {d}
                 </Button>
             ))}
