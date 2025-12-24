@@ -1,7 +1,7 @@
 "use client";
 import { APP_NAME } from "@sanchay/config";
 import React from "react";
-import { Button, GridBackground } from "@sanchay/ui";
+import { Button, TextInput, GridBackground } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
 import { Density, Brand } from "@sanchay/design-tokens";
 
@@ -130,20 +130,87 @@ export default function Home() {
             </div>
         </div>
 
-        {/* 5. Action Buttons */}
-        <div className="flex gap-3 mt-2">
-            <Button variant="primary" className="w-[250px]">
-                Primary Action
-            </Button>
-            <Button variant="secondary">
-                Secondary
-            </Button>
-            <Button variant="outline">
-                Outline
-            </Button>
-            <Button variant="ghost">
-                Ghost
-            </Button>
+        {/* 5. Components Showcase */}
+        <div className="space-y-8 mt-4">
+            
+            {/* 5.1 Buttons Section */}
+            <div className="p-5 bg-background rounded-lg border border-[#222222]">
+                <strong className="text-foreground block mb-4 text-sm font-bold font-heading border-b border-[#333333] pb-2">Button Examples:</strong>
+                
+                <div className="space-y-4">
+                    {/* Variants */}
+                    <div className="space-y-2">
+                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">Variants</span>
+                        <div className="flex flex-wrap gap-3">
+                            <Button variant="primary">Primary</Button>
+                            <Button variant="secondary">Secondary</Button>
+                            <Button variant="outline">Outline</Button>
+                            <Button variant="ghost">Ghost</Button>
+                            <Button variant="destructive">Destructive</Button>
+                            <Button variant="link">Link</Button>
+                        </div>
+                    </div>
+
+                    {/* Sizes */}
+                    <div className="space-y-2">
+                         <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">Sizes</span>
+                        <div className="flex items-center flex-wrap gap-3">
+                            <Button size="sm">Small</Button>
+                            <Button size="default">Default</Button>
+                            <Button size="lg">Large</Button>
+                            <Button size="icon" variant="outline">✚</Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 5.2 TextInput Section */}
+            <div className="p-5 bg-background rounded-lg border border-[#222222]">
+                <strong className="text-foreground block mb-4 text-sm font-bold font-heading border-b border-[#333333] pb-2">TextInput Examples:</strong>
+                
+                <div className="space-y-4 max-w-sm">
+                    {/* Default */}
+                    <div className="space-y-1">
+                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">Default</span>
+                        <TextInput.Root>
+                             <TextInput.Input placeholder="Enter text..." />
+                        </TextInput.Root>
+                    </div>
+
+                    {/* With Icons */}
+                    <div className="space-y-1">
+                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">With Icons</span>
+                        <TextInput.Root>
+                             <TextInput.Slot side="left">🔍</TextInput.Slot>
+                             <TextInput.Input placeholder="Search..." />
+                        </TextInput.Root>
+                    </div>
+
+                    <div className="space-y-1">
+                         <TextInput.Root>
+                             <TextInput.Input placeholder="Email address" />
+                             <TextInput.Slot side="right">✉️</TextInput.Slot>
+                        </TextInput.Root>
+                    </div>
+
+                     {/* States */}
+                     <div className="space-y-1">
+                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">Error State</span>
+                         <TextInput.Root variant="error">
+                             <TextInput.Slot side="left">⚠️</TextInput.Slot>
+                             <TextInput.Input placeholder="Invalid input" />
+                        </TextInput.Root>
+                    </div>
+
+                    <div className="space-y-1">
+                        <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">Disabled</span>
+                         <TextInput.Root disabled>
+                             <TextInput.Input placeholder="Disabled" disabled />
+                        </TextInput.Root>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
       </div>

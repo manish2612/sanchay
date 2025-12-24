@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-primary text-primaryForeground hover:bg-primaryHover shadow-sm",
+        primary: "bg-primary text-primaryForeground hover:bg-primaryHover shadow-sm focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-primary",
         secondary: "bg-secondary text-secondaryForeground hover:bg-secondaryHover",
         outline:
           "border border-border bg-background hover:bg-surfaceHover hover:text-foreground",
@@ -16,7 +16,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // Using danger token instead of destructive
         destructive:
-          "bg-danger text-dangerForeground hover:bg-danger/90",
+          "bg-danger text-dangerForeground hover:bg-danger/90 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-danger",
       },
       size: {
         default: "h-10 px-4 py-2",

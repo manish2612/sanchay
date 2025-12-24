@@ -3,6 +3,9 @@
     "compilerOptions": {
         "strict": true,
         "paths": {
+            "@sanchay/ui": [
+                "../../packages/ui/src/index.native.ts"
+            ],
             "@sanchay/*": [
                 "../../packages/*"
             ]

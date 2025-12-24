@@ -1,6 +1,6 @@
 import { View, Text, ScrollView } from 'react-native';
 import { APP_NAME } from '@sanchay/config';
-import { Button } from '@sanchay/ui';
+import { Button, TextInput } from '@sanchay/ui';
 import { useTheme } from '@sanchay/theme-provider';
 import { Density } from '@sanchay/design-tokens';
 
@@ -96,6 +96,57 @@ export default function Home() {
             <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans', marginBottom: 2 }}>Medium 500</Text>
             <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans-SemiBold', marginBottom: 2 }}>SemiBold 600</Text>
             <Text style={{ color: t.colors.foreground, fontFamily: 'Work Sans-Bold', marginBottom: 2 }}>Bold 700</Text>
+         </View>
+
+         {/* Components Showcase */}
+         <View style={{ marginTop: 20, width: '100%' }}>
+            <Text style={{ color: t.colors.foreground, fontSize: 18, fontWeight: 'bold', marginBottom: 10, fontFamily: t.typography.fontFamily.heading }}>
+                Components
+            </Text>
+
+            {/* Buttons */}
+            <View style={{ marginBottom: 20 }}>
+                <Text style={{ color: t.colors.foreground, fontSize: 14, opacity: 0.7, marginBottom: 8 }}>Buttons</Text>
+                <View style={{ gap: 8 }}>
+                    <Button variant="primary">Primary</Button>
+                    <Button variant="secondary">Secondary</Button>
+                    <Button variant="outline">Outline</Button>
+                    <Button variant="ghost">Ghost</Button>
+                    <Button size="sm">Small</Button>
+                    <Button size="lg">Large</Button>
+                    <Button loading>Loading</Button>
+                </View>
+            </View>
+
+            {/* Text Inputs */}
+            <View>
+                <Text style={{ color: t.colors.foreground, fontSize: 14, opacity: 0.7, marginBottom: 8 }}>TextInput</Text>
+                <View style={{ gap: 12 }}>
+                    
+                    {/* Default */}
+                    <TextInput.Root>
+                        <TextInput.Input placeholder="Default Input" />
+                    </TextInput.Root>
+
+                    {/* With Icon Left */}
+                    <TextInput.Root>
+                        <TextInput.Slot side="left">
+                            <Text>🔍</Text>
+                        </TextInput.Slot>
+                        <TextInput.Input placeholder="Search..." />
+                    </TextInput.Root>
+
+                     {/* Error State */}
+                     <TextInput.Root variant="error">
+                        <TextInput.Input placeholder="Error State" />
+                        <TextInput.Slot side="right">
+                           <Text>⚠️</Text>
+                        </TextInput.Slot>
+                    </TextInput.Root>
+
+                </View>
+            </View>
+
          </View>
       </View>
     </ScrollView>
