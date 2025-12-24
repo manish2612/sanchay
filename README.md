@@ -1,26 +1,35 @@
 # Sanchay ERP
 
-Welcome to the Sanchay ERP Monorepo. This project contains the frontend applications and shared logic for the Sanchay platform.
+Welcome to the Sanchay ERP Monorepo. This project is a modern, high-performance web and mobile application suite built with a "Write Once, Run Everywhere" philosophy.
 
 ## 🏗 Architecture
 
-This is a **Platform-Agnostic** architecture following the "Thin Apps, Heavy Packages" philosophy.
+We follow a **Platform-Agnostic** architecture where business logic and UI components are decoupled from the specific delivery framework (Next.js/Expo).
 
-- **apps/**: Delivery shells. Contain NO business logic.
-  - `web`: Next.js application.
-  - `mobile`: Expo / React Native application.
-- **packages/**: Core logic shared across platforms.
-  - `ui`: Shared React components (Platform agnostic).
-  - `config`: Shared constants and feature flags.
-  - `types`: Shared TypeScript contracts.
-  - `utils`: Pure JavaScript utilities.
+### Structure
+
+- **apps/**: Delivery shells. Contain configuration and routing only.
+  - `web`: Next.js 16 application with Tailwind v4.
+  - `mobile`: Expo 52 application.
+- **packages/**: The brain of the operation.
+  - `design-tokens`: The source of truth for all visual values (Colors, Spacing, Typography).
+  - `theme-adapters`: Bridges design tokens to platform specifics (CSS Variables for Web, Objects for Native).
+  - `theme-provider`: Manages global state (Theme Mode, Brand) and injects styles.
+  - `ui`: Universal React components that work on both Web and Mobile.
+  - `config`: Shared strict TypeScript and ESLint configurations.
+
+## 🎨 Design System
+
+Our Design System is built into the core:
+- **Multi-Brand**: Supports "Default" and "Orange" brands out of the box.
+- **Dark Mode**: First-class citizen with semantic color mapping.
+- **Universal**: The same `Button` component renders native UI on iOS/Android and HTML on Web.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js (v20+)
-- pnpm (v9+)
+- pnpm (v10+)
 
 ### Installation
 
@@ -30,38 +39,100 @@ pnpm install
 
 ### Development
 
-Start all applications in development mode:
+Start the development servers. Hot reloading works instantly for all packages.
 
+**Web (Localhost:3000)**
 ```bash
-pnpm dev
+pnpm dev:web
 ```
 
-- **Web**: http://localhost:3000
-- **Mobile**: Starts Metro bundler (Press `i` for iOS, `a` for Android)
+**Mobile (Expo Go)**
+```bash
+pnpm dev:mobile
+```
 
 ### Build & Verification
 
-Build all applications and packages:
+Build all apps and packages for production:
 ```bash
 pnpm build
 ```
 
-Run type checking across the entire Workspace:
+Run type checking across the entire Workspace (Web, Mobile, and Packages):
 ```bash
 pnpm type-check
 ```
 
-Lint all files:
+## 📦 Workspace Setup
+
+We use **Turborepo** to orchestrate tasks and cache builds.
+
+- **Fast Builds**: Only changed packages are rebuilt.
+- **Scoping**: Run commands for specific parts of the app.
+  ```bash
+  pnpm --filter web dev        # Dev only web
+  pnpm --filter @sanchay/ui build # Build only UI package
+  ```
+
+## ⚡️ Developer Cheat Sheet
+
+### Running the App
+| Command           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `pnpm dev`        | Starts **Web** and **Mobile** simultaneously   |
+| `pnpm dev:web`    | Starts only **Next.js** (localhost:3000)       |
+| `pnpm dev:mobile` | Starts only **Expo** (Press 'i' for Simulator) |
+
+### Targeted Commands (Turborepo)
+Run commands only for specific packages/apps using `--filter`:
+
 ```bash
-pnpm lint
+# Run dev only for web
+pnpm --filter web dev
+
+# Lint only the UI package
+pnpm --filter @sanchay/ui lint
+
+# Build web and its dependencies
+pnpm --filter web... build
 ```
 
-## 📦 Workspace Commands
+### Maintenance & Reset
+If things act weird, try these in order:
 
-We use [Turborepo](https://turbo.build/) to orchestrate tasks.
+**1. Clear Expo Cache** (Mobile issues)
+```bash
+pnpm dev:mobile -- --clear
+```
 
-- Run a command for a specific app/package:
-  ```bash
-  pnpm --filter web dev
-  pnpm --filter @sanchay/ui lint
-  ```
+**2. Clear Turbo & Next.js Cache** (Build/Web issues)
+```bash
+rm -rf .turbo apps/web/.next
+```
+
+**3. "Nuclear" Reset** (Dependency issues)
+```bash
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+```
+
+### Quality Checks
+```bash
+# Type check entire monorepo
+pnpm type-check
+
+# Lint all files
+pnpm lint
+
+# Format code
+pnpm format
+```
+
+## 🛠 Features Implemented
+- ✅ Monorepo Architecture (Turborepo)
+- ✅ Universal Design Tokens
+- ✅ Dynamic Theme Adapter (Tailwind v4 interactions)
+- ✅ Cross-Platform Theme Provider
+- ✅ Hot Reloading for all packages
+- ✅ Docker-ready deployment structure
+- ✅ Strict TypeScript strictness
