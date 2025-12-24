@@ -3,10 +3,10 @@ import { APP_NAME } from "@sanchay/config";
 import React from "react";
 import { Button, GridBackground } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
-import { Density } from "@sanchay/design-tokens";
+import { Density, Brand } from "@sanchay/design-tokens";
 
 export default function Home() {
-  const { mode, setMode, density, setDensity, theme } = useTheme();
+  const { mode, setMode, density, setDensity, brand, setBrand } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -23,7 +23,7 @@ export default function Home() {
 
       {/* Header Content */}
       <div className="text-center z-10 max-w-xl px-4 mb-8">
-          <h1 className="text-4xl font-extrabold mb-2 font-heading tracking-tight text-white">
+          <h1 className="text-4xl font-extrabold mb-2 font-heading tracking-tight text-foreground">
             Welcome to {APP_NAME}
           </h1>
           <p className="text-lg font-body text-gray-400 font-normal">
@@ -39,8 +39,8 @@ export default function Home() {
 
         {/* 1. Theme Mode Control Row */}
         <div className="flex justify-between items-center h-10">
-            <span className="font-bold text-base text-white font-heading">Theme Mode</span>
-            <div className="flex bg-[#1a1a1a] p-1 rounded-lg border border-[#333333]">
+            <span className="font-bold text-base text-foreground font-heading">Theme Mode</span>
+            <div className="flex bg-background p-1 rounded-lg border border-[#333333] ">
                 <Button 
                     onClick={() => setMode('light')}
                     variant={mode === 'light' ? 'primary' : 'ghost'}
@@ -56,9 +56,25 @@ export default function Home() {
             </div>
         </div>
 
+        {/* 1.1 Brand Control Row */}
+        <div className="flex justify-between items-center h-10 mt-2">
+            <span className="font-bold text-base text-foreground font-heading">Brand</span>
+            <div className="flex bg-background p-1 rounded-lg border border-[#333333] gap-2">
+                {(['default', 'orange'] as Brand[]).map((b) => (
+                    <Button 
+                        key={b}
+                        onClick={() => setBrand(b)}
+                        variant={brand === b ? 'primary' : 'ghost'}
+                    >
+                        {b.charAt(0).toUpperCase() + b.slice(1)}
+                    </Button>
+                ))}
+            </div>
+        </div>
+
         {/* 2. Density Control Row */}
         <div className="flex justify-between items-center h-10 mt-2">
-            <span className="font-bold text-base text-white font-heading">Density</span>
+            <span className="font-bold text-base text-foreground font-heading">Density</span>
             <div className="flex gap-2">
                 {(['comfortable', 'compact', 'spacious'] as Density[]).map((d) => (
                     <Button 
@@ -73,25 +89,26 @@ export default function Home() {
         </div>
 
         {/* 3. Current State Box */}
-        <div className="mt-2 p-5 bg-[#0A0A0A] rounded-lg border border-[#222222]">
-            <strong className="text-white block mb-3 text-sm font-bold font-heading">Current State:</strong>
-            <ul className="space-y-1 text-[13px] text-gray-300 font-mono leading-relaxed list-disc pl-4">
-                <li>Base Unit: <span className="text-gray-400">var(--spacing-1)</span></li>
-                <li>Button Height: <span className="text-gray-400">var(--sizes-buttonHeight)</span></li>
-                <li>Mode: <span className="text-white font-bold">{mode.toUpperCase()}</span></li>
-                <li>Body Font: <span className="text-gray-400">var(--typography-fontFamily-body)</span></li>
-                <li>Heading Font: <span className="text-gray-400">var(--typography-fontFamily-heading)</span></li>
+        <div className="mt-2 p-5 bg-background rounded-lg border border-[#222222]">
+            <strong className="text-foreground block mb-3 text-sm font-bold font-heading">Current State:</strong>
+            <ul className="space-y-1 text-[13px] text-foreground font-mono leading-relaxed list-disc pl-4">
+                <li>Base Unit: <span className="text-foreground">var(--spacing-1)</span></li>
+                <li>Button Height: <span className="text-foreground">var(--sizes-buttonHeight)</span></li>
+                <li>Mode: <span className="text-foreground font-bold">{mode.toUpperCase()}</span></li>
+                <li>Brand: <span className="text-foreground font-bold">{brand.toUpperCase()}</span></li>
+                <li>Body Font: <span className="text-foreground">var(--typography-fontFamily-body)</span></li>
+                <li>Heading Font: <span className="text-foreground">var(--typography-fontFamily-heading)</span></li>
             </ul>
         </div>
         
         {/* 4. Font Demo Box */}
-        <div className="p-5 bg-[#0A0A0A] rounded-lg border border-[#222222]">
-            <strong className="text-white block mb-4 text-sm font-bold font-heading">Font Demo:</strong>
+        <div className="p-5 bg-background rounded-lg border border-[#222222]">
+            <strong className="text-foreground block mb-4 text-sm font-bold font-heading">Font Demo:</strong>
             
             <div className="space-y-6">
                 <div>
                     <div className="text-[11px] font-bold text-gray-500 mb-2 font-heading">IBM Plex Sans (Body)</div>
-                    <div className="space-y-1 text-white text-base">
+                    <div className="space-y-1 text-foreground text-base">
                         <div className="font-body font-light">Light 300</div>
                         <div className="font-body font-light italic">Light Italic 300</div>
                         <div className="font-body font-normal">Regular 400</div>
@@ -102,8 +119,8 @@ export default function Home() {
                 </div>
 
                 <div>
-                    <div className="text-[11px] font-bold text-gray-500 mb-2 font-heading">Work Sans (Heading)</div>
-                    <div className="space-y-1 text-white text-base">
+                    <div className="text-[11px] font-bold text-foreground mb-2 font-heading">Work Sans (Heading)</div>
+                    <div className="space-y-1 text-foreground text-base">
                         <div className="font-heading font-normal">Regular 400</div>
                         <div className="font-heading font-medium">Medium 500</div>
                         <div className="font-heading font-semibold">SemiBold 600</div>
@@ -115,7 +132,7 @@ export default function Home() {
 
         {/* 5. Action Buttons */}
         <div className="flex gap-3 mt-2">
-            <Button variant="primary">
+            <Button variant="primary" className="w-[250px]">
                 Primary Action
             </Button>
             <Button variant="secondary">

@@ -9,10 +9,12 @@ export * from './tokens/motion';
 export * from './tokens/z-index';
 
 import { brand as defaultBrand } from './brands/default-brand';
+import { brand as orangeBrand } from './brands/orange-brand';
 import { Theme } from './types/theme';
 
 const brands = {
     default: defaultBrand,
+    orange: orangeBrand,
 };
 
 export type Brand = keyof typeof brands;
