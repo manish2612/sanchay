@@ -8,8 +8,10 @@
         "type-check": "tsc --noEmit"
     },
     "dependencies": {
+        "@radix-ui/react-slot": "^1.2.4",
         "@sanchay/design-tokens": "workspace:*",
         "@sanchay/theme-provider": "workspace:*",
+        "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "tailwind-merge": "^3.4.0"
     },
