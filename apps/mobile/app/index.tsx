@@ -9,10 +9,24 @@ export default function Home() {
     useTheme();
   const t = theme as any;
 
-  const { contentDirection, contentAlign, panelWidth } = useResponsiveValues({
+  const {
+    contentDirection,
+    contentAlign,
+    panelWidth,
+    controlItemWidth,
+    brandWidth,
+    componentsSubDirection,
+    componentsSubWidth,
+  } = useResponsiveValues({
     contentDirection: { base: "column", lg: "row" } as const,
     contentAlign: { base: "stretch", lg: "flex-start" } as const,
     panelWidth: { base: "100%", lg: "48%" } as const,
+    // Controls: XL=3col, MD/LG=2col, Base=1col
+    controlItemWidth: { base: "100%", md: "48%", xl: "32%" } as const,
+    brandWidth: { base: "100%", md: "100%", xl: "32%" } as const, // Brand takes full row in 2-col mode
+    // Components: XL=SideBySide, LG=Stacked
+    componentsSubDirection: { base: "column", xl: "row" } as const,
+    componentsSubWidth: { base: "100%", xl: "48%" } as const,
   });
 
   return (
@@ -58,116 +72,139 @@ export default function Home() {
             borderRadius: t.radii.lg || 12,
           }}
         >
-          {/* Theme Controls */}
+          {/* Controls Grid Container */}
           <View
             style={{
               flexDirection: "row",
               flexWrap: "wrap",
-              alignItems: "center",
               justifyContent: "space-between",
+              gap: 20,
               marginBottom: 20,
             }}
           >
-            <Text
-              style={{
-                color: t.colors.foreground,
-                fontSize: 16,
-                fontWeight: "600",
-              }}
-            >
-              Theme Mode
-            </Text>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Button
-                onPress={() => setMode("light")}
-                variant={mode === "light" ? "primary" : "outline"}
-              >
-                Light
-              </Button>
-              <Button
-                onPress={() => setMode("dark")}
-                variant={mode === "dark" ? "primary" : "outline"}
-              >
-                Dark
-              </Button>
-            </View>
-          </View>
-
-          {/* Brand Controls */}
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: t.colors.foreground,
-                fontSize: 16,
-                fontWeight: "600",
-              }}
-            >
-              Brand ({brand})
-            </Text>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Button
-                onPress={() => setBrand("default")}
-                variant={brand === "default" ? "primary" : "outline"}
-              >
-                Default
-              </Button>
-              <Button
-                onPress={() => setBrand("orange")}
-                variant={brand === "orange" ? "primary" : "outline"}
-              >
-                Orange
-              </Button>
-            </View>
-          </View>
-
-          {/* Density Controls */}
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 20,
-            }}
-          >
-            <Text
-              style={{
-                color: t.colors.foreground,
-                fontSize: 16,
-                fontWeight: "600",
-              }}
-            >
-              Density ({density})
-            </Text>
+            {/* Theme Controls */}
             <View
               style={{
+                width: controlItemWidth,
                 flexDirection: "row",
-                gap: 10,
                 flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 12,
+                backgroundColor: t.colors.background,
+                borderRadius: 8,
               }}
             >
-              {(["comfortable", "compact", "spacious"] as Density[]).map(
-                (d) => (
-                  <Button
-                    key={d}
-                    onPress={() => setDensity(d)}
-                    variant={density === d ? "primary" : "outline"}
-                  >
-                    {d}
-                  </Button>
-                )
-              )}
+              <Text
+                style={{
+                  color: t.colors.foreground,
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                Theme Mode
+              </Text>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <Button
+                  onPress={() => setMode("light")}
+                  variant={mode === "light" ? "primary" : "outline"}
+                >
+                  Light
+                </Button>
+                <Button
+                  onPress={() => setMode("dark")}
+                  variant={mode === "dark" ? "primary" : "outline"}
+                >
+                  Dark
+                </Button>
+              </View>
             </View>
-          </View>
 
+            {/* Brand Controls */}
+            {/* Brand Controls */}
+            <View
+              style={{
+                width: brandWidth,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 12,
+                backgroundColor: t.colors.background,
+                borderRadius: 8,
+                marginBottom: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: t.colors.foreground,
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                Brand ({brand})
+              </Text>
+              <View style={{ flexDirection: "row", gap: 10 }}>
+                <Button
+                  onPress={() => setBrand("default")}
+                  variant={brand === "default" ? "primary" : "outline"}
+                >
+                  Default
+                </Button>
+                <Button
+                  onPress={() => setBrand("orange")}
+                  variant={brand === "orange" ? "primary" : "outline"}
+                >
+                  Orange
+                </Button>
+              </View>
+            </View>
+
+            {/* Density Controls */}
+            <View
+              style={{
+                width: controlItemWidth, // Uses responsive width
+                flexDirection: "row",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 12,
+                backgroundColor: t.colors.background,
+                borderRadius: 8,
+                marginBottom: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: t.colors.foreground,
+                  fontSize: 16,
+                  fontWeight: "600",
+                }}
+              >
+                Density ({density})
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 10,
+                  flexWrap: "wrap",
+                }}
+              >
+                {(["comfortable", "compact", "spacious"] as Density[]).map(
+                  (d) => (
+                    <Button
+                      key={d}
+                      onPress={() => setDensity(d)}
+                      variant={density === d ? "primary" : "outline"}
+                    >
+                      {d}
+                    </Button>
+                  )
+                )}
+              </View>
+            </View>
+          </View>{" "}
+          {/* End Controls Grid */}
           {/* Responsive Content Container */}
           <View
             style={{
@@ -350,65 +387,74 @@ export default function Home() {
                 >
                   Components
                 </Text>
-
-                {/* Buttons */}
-                <View style={{ marginBottom: 20 }}>
-                  <Text
-                    style={{
-                      color: t.colors.foreground,
-                      fontSize: 14,
-                      opacity: 0.7,
-                      marginBottom: 8,
-                    }}
-                  >
-                    Buttons
-                  </Text>
-                  <View style={{ gap: 8 }}>
-                    <Button variant="primary">Primary</Button>
-                    <Button variant="secondary">Secondary</Button>
-                    <Button variant="outline">Outline</Button>
-                    <Button variant="ghost">Ghost</Button>
-                    <Button size="sm">Small</Button>
-                    <Button size="lg">Large</Button>
-                    <Button loading>Loading</Button>
+                <View
+                  style={{
+                    flexDirection: componentsSubDirection,
+                    flexWrap: "wrap",
+                    justifyContent: "space-between",
+                    gap: 16,
+                  }}
+                >
+                  {/* Buttons */}
+                  <View style={{ width: componentsSubWidth, margin: 0 }}>
+                    <Text
+                      style={{
+                        color: t.colors.foreground,
+                        fontSize: 14,
+                        opacity: 0.7,
+                        marginBottom: 8,
+                      }}
+                    >
+                      Buttons
+                    </Text>
+                    <View style={{ gap: 8 }}>
+                      <Button variant="primary">Primary</Button>
+                      <Button variant="secondary">Secondary</Button>
+                      <Button variant="outline">Outline</Button>
+                      <Button variant="ghost">Ghost</Button>
+                      <Button size="sm">Small</Button>
+                      <Button size="lg">Large</Button>
+                      <Button loading>Loading</Button>
+                    </View>
                   </View>
-                </View>
 
-                {/* Text Inputs */}
-                <View>
-                  <Text
-                    style={{
-                      color: t.colors.foreground,
-                      fontSize: 14,
-                      opacity: 0.7,
-                      marginBottom: 8,
-                    }}
-                  >
-                    TextInput
-                  </Text>
-                  <View style={{ gap: 12 }}>
-                    {/* Default */}
-                    <TextInput.Root>
-                      <TextInput.Input placeholder="Default Input" />
-                    </TextInput.Root>
+                  {/* Text Inputs */}
+                  <View style={{ width: componentsSubWidth, margin: 0 }}>
+                    <Text
+                      style={{
+                        color: t.colors.foreground,
+                        fontSize: 14,
+                        opacity: 0.7,
+                        marginBottom: 8,
+                      }}
+                    >
+                      TextInput
+                    </Text>
+                    <View style={{ gap: 12 }}>
+                      {/* Default */}
+                      <TextInput.Root>
+                        <TextInput.Input placeholder="Default Input" />
+                      </TextInput.Root>
 
-                    {/* With Icon Left */}
-                    <TextInput.Root>
-                      <TextInput.Slot side="left">
-                        <Text>🔍</Text>
-                      </TextInput.Slot>
-                      <TextInput.Input placeholder="Search..." />
-                    </TextInput.Root>
+                      {/* With Icon Left */}
+                      <TextInput.Root>
+                        <TextInput.Slot side="left">
+                          <Text>🔍</Text>
+                        </TextInput.Slot>
+                        <TextInput.Input placeholder="Search..." />
+                      </TextInput.Root>
 
-                    {/* Error State */}
-                    <TextInput.Root variant="error">
-                      <TextInput.Input placeholder="Error State" />
-                      <TextInput.Slot side="right">
-                        <Text>⚠️</Text>
-                      </TextInput.Slot>
-                    </TextInput.Root>
+                      {/* Error State */}
+                      <TextInput.Root variant="error">
+                        <TextInput.Input placeholder="Error State" />
+                        <TextInput.Slot side="right">
+                          <Text>⚠️</Text>
+                        </TextInput.Slot>
+                      </TextInput.Root>
+                    </View>
                   </View>
-                </View>
+                </View>{" "}
+                {/* End Components Sub-Grid */}
               </View>
             </View>
           </View>
