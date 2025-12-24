@@ -11,7 +11,8 @@ export const colorsDark = {
     surfaceBorder: "hsl(222 22% 25%)",
 
     // Primary (adjust luminosity for dark mode if needed, but keeping brand color is common)
-    primary: "hsl(221 83% 53%)",
+    // Primary - Brand Blue #0070f3
+    primary: "hsl(212 100% 48%)",
     primaryHover: "hsl(221 83% 60%)", // Lighter on hover in dark mode
     primaryActive: "hsl(221 83% 45%)",
     primaryForeground: "hsl(0 0% 100%)",

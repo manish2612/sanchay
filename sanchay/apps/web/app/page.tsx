@@ -16,99 +16,117 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-8 gap-12 relative overflow-hidden bg-gradient-to-br from-background via-muted/30 to-background">
-      <GridBackground />
-      
-      <div className="text-center z-10 max-w-2xl px-4">
-          <h1 className="text-5xl font-extrabold mb-4 font-heading text-foreground tracking-tight">
+    <main className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden bg-background text-foreground selection:bg-primary/30 py-16">
+      {/* Background Grid & Glow - Matching Reference */}
+      <GridBackground className="opacity-60 fixed inset-0 z-0 pointer-events-none" />
+      {/* <div className="absolute inset-0 z-0 bg-gradient-radial from-primary/10 via-background/0 to-background/0 opacity-0 pointer-events-none filter-[blur(10px)]" /> */}
+
+      {/* Header Content */}
+      <div className="text-center z-10 max-w-xl px-4 mb-8">
+          <h1 className="text-4xl font-extrabold mb-2 font-heading tracking-tight text-white">
             Welcome to {APP_NAME}
           </h1>
-          <p className="text-xl font-body text-muted-foreground leading-relaxed">
-            A demonstration of our unified design system, featuring adaptive themes, typography, and density aware components.
+          <p className="text-lg font-body text-gray-400 font-normal">
+            Theme & Density Demonstration 123456
           </p>
       </div>
 
-      <div className="flex flex-col gap-6 p-8 bg-card/50 backdrop-blur-xl rounded-2xl border border-border/50 shadow-2xl w-full max-w-lg z-10">
+      {/* Main Card Container - Fixed Width matching Reference */}
+      <div className="w-[500px] z-10 flex flex-col gap-6 p-6 rounded-xl border border-[#333333] shadow-2xl relative">
         
-        {/* Controls */}
-        <div className="space-y-6">
-            <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                <span className="font-semibold text-foreground text-sm uppercase tracking-wider">Theme Mode</span>
-                <div className="flex gap-2">
-                    <Button 
-                        variant={mode === 'light' ? 'primary' : 'outline'} 
-                        onClick={() => setMode('light')}
-                        size="sm"
-                    >
-                        Light
-                    </Button>
-                    <Button 
-                        variant={mode === 'dark' ? 'primary' : 'outline'} 
-                        onClick={() => setMode('dark')}
-                        size="sm"
-                    >
-                        Dark
-                    </Button>
-                </div>
-            </div>
+        {/* Glow behind card */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-xl opacity-100 -z-10 rounded-xl filter-[blur(60px)]" />
 
-            <div className="flex justify-between items-center pb-4 border-b border-border/50">
-                <span className="font-semibold text-foreground text-sm uppercase tracking-wider">Density</span>
-                <div className="flex gap-2">
-                    {(['comfortable', 'compact', 'spacious'] as Density[]).map((d) => (
-                        <Button 
-                            key={d} 
-                            variant={density === d ? 'primary' : 'outline'}
-                            onClick={() => setDensity(d)}
-                            className="capitalize"
-                            size="sm"
-                        >
-                            {d}
-                        </Button>
-                    ))}
+        {/* 1. Theme Mode Control Row */}
+        <div className="flex justify-between items-center h-10">
+            <span className="font-bold text-base text-white font-heading">Theme Mode</span>
+            <div className="flex bg-[#1a1a1a] p-1 rounded-lg border border-[#333333]">
+                <Button 
+                    onClick={() => setMode('light')}
+                    variant={mode === 'light' ? 'primary' : 'ghost'}
+                >
+                    Light
+                </Button>
+                <Button 
+                    onClick={() => setMode('dark')}
+                    variant={mode === 'dark' ? 'primary' : 'ghost'}
+                >
+                    Dark
+                </Button>
+            </div>
+        </div>
+
+        {/* 2. Density Control Row */}
+        <div className="flex justify-between items-center h-10 mt-2">
+            <span className="font-bold text-base text-white font-heading">Density</span>
+            <div className="flex gap-2">
+                {(['comfortable', 'compact', 'spacious'] as Density[]).map((d) => (
+                    <Button 
+                        key={d} 
+                        onClick={() => setDensity(d)}
+                        variant={density === d ? 'primary' : 'secondary'}
+                    >
+                        {d}
+                    </Button>
+                ))}
+            </div>
+        </div>
+
+        {/* 3. Current State Box */}
+        <div className="mt-2 p-5 bg-[#0A0A0A] rounded-lg border border-[#222222]">
+            <strong className="text-white block mb-3 text-sm font-bold font-heading">Current State:</strong>
+            <ul className="space-y-1 text-[13px] text-gray-300 font-mono leading-relaxed list-disc pl-4">
+                <li>Base Unit: <span className="text-gray-400">var(--spacing-1)</span></li>
+                <li>Button Height: <span className="text-gray-400">var(--sizes-buttonHeight)</span></li>
+                <li>Mode: <span className="text-white font-bold">{mode.toUpperCase()}</span></li>
+                <li>Body Font: <span className="text-gray-400">var(--typography-fontFamily-body)</span></li>
+                <li>Heading Font: <span className="text-gray-400">var(--typography-fontFamily-heading)</span></li>
+            </ul>
+        </div>
+        
+        {/* 4. Font Demo Box */}
+        <div className="p-5 bg-[#0A0A0A] rounded-lg border border-[#222222]">
+            <strong className="text-white block mb-4 text-sm font-bold font-heading">Font Demo:</strong>
+            
+            <div className="space-y-6">
+                <div>
+                    <div className="text-[11px] font-bold text-gray-500 mb-2 font-heading">IBM Plex Sans (Body)</div>
+                    <div className="space-y-1 text-white text-base">
+                        <div className="font-body font-light">Light 300</div>
+                        <div className="font-body font-light italic">Light Italic 300</div>
+                        <div className="font-body font-normal">Regular 400</div>
+                        <div className="font-body font-normal italic">Regular Italic 400</div>
+                        <div className="font-body font-medium">Medium 500</div>
+                        <div className="font-body font-medium italic">Medium Italic 500</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="text-[11px] font-bold text-gray-500 mb-2 font-heading">Work Sans (Heading)</div>
+                    <div className="space-y-1 text-white text-base">
+                        <div className="font-heading font-normal">Regular 400</div>
+                        <div className="font-heading font-medium">Medium 500</div>
+                        <div className="font-heading font-semibold">SemiBold 600</div>
+                        <div className="font-heading font-bold">Bold 700</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        {/* Demo Content */}
-        <div className="space-y-6">
-            <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
-                <strong className="text-foreground block mb-2 text-sm font-semibold">Current Theme State</strong>
-                <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li className="flex justify-between"><span>Base Unit:</span> <span className="font-mono text-foreground">{theme.spacing[1]}</span></li>
-                    <li className="flex justify-between"><span>Button Height:</span> <span className="font-mono text-foreground">{theme.sizes.buttonHeight}</span></li>
-                    <li className="flex justify-between"><span>Mode:</span> <span className="font-mono text-foreground">{mode.toUpperCase()}</span></li>
-                </ul>
-            </div>
-            
-            <div className="p-4 bg-muted/30 rounded-lg border border-border/50">
-                <strong className="text-foreground block mb-4 text-sm font-semibold">Typography System</strong>
-                
-                <div className="grid grid-cols-2 gap-8">
-                    <div>
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Body (IBM Plex Sans)</div>
-                        <div className="space-y-2 text-sm">
-                            <div className="font-body font-light">Light 300</div>
-                            <div className="font-body font-normal">Regular 400</div>
-                            <div className="font-body font-medium">Medium 500</div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Heading (Work Sans)</div>
-                        <div className="space-y-2 text-sm">
-                            <div className="font-heading font-normal">Regular 400</div>
-                            <div className="font-heading font-medium">Medium 500</div>
-                            <div className="font-heading font-bold">Bold 700</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="pt-4 flex gap-3">
-                <Button onClick={() => {}} className="w-full">Primary Action</Button>
-                <Button variant="outline" onClick={() => {}} className="w-full">Secondary</Button>
-            </div>
+        {/* 5. Action Buttons */}
+        <div className="flex gap-3 mt-2">
+            <Button variant="primary">
+                Primary Action
+            </Button>
+            <Button variant="secondary">
+                Secondary
+            </Button>
+            <Button variant="outline">
+                Outline
+            </Button>
+            <Button variant="ghost">
+                Ghost
+            </Button>
         </div>
 
       </div>

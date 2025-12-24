@@ -1,8 +1,14 @@
 import React from 'react';
 import { useTheme } from '@sanchay/theme-provider';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
-export const GridBackground = () => {
-    const { density, theme } = useTheme();
+export interface GridBackgroundProps {
+    className?: string;
+}
+
+export const GridBackground = ({ className }: GridBackgroundProps) => {
+    const { density } = useTheme();
 
     // Map density to grid size
     const sizeMap = {
@@ -14,27 +20,14 @@ export const GridBackground = () => {
     // Fallback if density is unset
     const size = sizeMap[density as keyof typeof sizeMap] || 30;
     
-    // We use a CSS variable for color if possible, or a fallback. 
-    // Since theme.colors.border might be a var, we can't use it directly in the data URI easily 
-    // unless we use a mask or direct SVG element.
-    // Direct SVG element is safer for CSS vars.
-    
-    // Stroke color from theme (assuming theme.colors.border exists, else gray)
-    // We use a common color directly because SVG patterns with CSS vars is tricky across browsers 
-    // unless the SVG is in the DOM.
-    // So we will render the SVG in the DOM.
-    
     return (
         <div 
-            style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                zIndex: -1,
-                pointerEvents: 'none',
-            }}
+            className={twMerge(
+                clsx(
+                    "fixed top-0 left-0 w-full h-full pointer-events-none -z-10", 
+                    className
+                )
+            )}
         >
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                 <defs>

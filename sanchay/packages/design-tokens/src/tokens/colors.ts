@@ -11,7 +11,8 @@ export const colors = {
     surfaceBorder: "hsl(0 0% 90%)",
 
     // Primary
-    primary: "hsl(221 83% 53%)",
+    // Primary - Brand Blue #0070f3
+    primary: "hsl(212 100% 48%)",
     primaryHover: "hsl(221 83% 48%)",
     primaryActive: "hsl(221 83% 42%)",
     primaryForeground: "hsl(0 0% 100%)",
