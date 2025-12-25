@@ -83,6 +83,9 @@ We use **Turborepo** to orchestrate tasks and cache builds.
 | `pnpm dev:web`    | Starts only **Next.js** (localhost:3000)       |
 | `pnpm dev:mobile` | Starts only **Expo** (Press 'i' for Simulator) |
 
+> [!NOTE]
+> `dev:mobile` runs directly via `pnpm` (bypassing Turbo) to ensure interactive Expo CLI keys (like 'j', 'r', 'i') work correctly.
+
 ### Targeted Commands (Turborepo)
 Run commands only for specific packages/apps using `--filter`:
 
