@@ -1,27 +1,29 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Sanchay ERP',
-  description: 'Pro grade ERP',
+  title: "Sanchay ERP",
+  description: "Pro grade ERP",
 };
 
-import { ThemeProvider } from '@sanchay/theme-provider/web';
-import { IBM_Plex_Sans, Work_Sans } from 'next/font/google';
+import { ThemeProvider } from "@sanchay/theme-provider/web";
+import { LinkProvider } from "@sanchay/ui";
+import { NextLinkAdapter } from "../providers/NextLinkAdapter";
+import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
 
 const ibmPlexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  style: ['normal', 'italic'],
-  variable: '--font-ibm-plex-sans',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-ibm-plex-sans",
+  display: "swap",
 });
 
 const workSans = Work_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-work-sans',
-  display: 'swap',
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-work-sans",
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -33,7 +35,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${ibmPlexSans.variable} ${workSans.variable}`}>
         <ThemeProvider initialBrand="default" initialMode="system">
-          {children}
+          <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>
         </ThemeProvider>
       </body>
     </html>

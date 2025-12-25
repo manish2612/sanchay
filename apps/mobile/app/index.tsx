@@ -1,6 +1,7 @@
 import { View, Text, ScrollView, DimensionValue } from "react-native";
 import { APP_NAME } from "@sanchay/config";
-import { Button, TextInput, useResponsiveValues } from "@sanchay/ui";
+import { Button, TextInput, useResponsiveValues, NavDemo } from "@sanchay/ui";
+import { useRouter } from "expo-router";
 import { useTheme } from "@sanchay/theme-provider";
 import { Density } from "@sanchay/design-tokens";
 
@@ -8,6 +9,7 @@ export default function Home() {
   const { mode, setMode, density, setDensity, theme, setBrand, brand } =
     useTheme();
   const t = theme as any;
+  const router = useRouter();
 
   const {
     contentDirection,
@@ -76,6 +78,7 @@ export default function Home() {
           }}
         >
           {/* Controls Grid Container */}
+
           <View
             style={{
               flexDirection: "row",
@@ -208,6 +211,7 @@ export default function Home() {
             </View>
           </View>
           {/* End Controls Grid */}
+
           {/* Responsive Content Container */}
           <View
             style={{
@@ -373,6 +377,10 @@ export default function Home() {
                 >
                   Bold 700
                 </Text>
+              </View>
+
+              <View style={{ marginBottom: 24 }}>
+                <NavDemo onLoginPress={() => router.push("/login")} />
               </View>
             </View>
 
