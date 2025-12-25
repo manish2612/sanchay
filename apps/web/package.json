@@ -10,6 +10,7 @@
         "type-check": "tsc --noEmit"
     },
     "dependencies": {
+        "@fontsource/material-icons": "^5.2.7",
         "@sanchay/config": "workspace:*",
         "@sanchay/design-tokens": "workspace:*",
         "@sanchay/theme-adapters": "workspace:*",

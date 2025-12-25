@@ -10,6 +10,7 @@ import { ThemeProvider } from "@sanchay/theme-provider/web";
 import { LinkProvider } from "@sanchay/ui";
 import { NextLinkAdapter } from "../providers/NextLinkAdapter";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
+import "@fontsource/material-icons";
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -34,6 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ibmPlexSans.variable} ${workSans.variable}`}>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `:root { --font-material-icons: 'Material Icons'; }`,
+          }}
+        />
         <ThemeProvider initialBrand="default" initialMode="system">
           <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>
         </ThemeProvider>
