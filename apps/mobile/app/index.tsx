@@ -17,6 +17,7 @@ export default function Home() {
     brandWidth,
     componentsSubDirection,
     componentsSubWidth,
+    rootPadding,
   } = useResponsiveValues({
     contentDirection: { base: "column", lg: "row" } as const,
     contentAlign: { base: "stretch", lg: "flex-start" } as const,
@@ -27,6 +28,7 @@ export default function Home() {
     // Components: XL=SideBySide, LG=Stacked
     componentsSubDirection: { base: "column", xl: "row" } as const,
     componentsSubWidth: { base: "100%", xl: "48%" } as const,
+    rootPadding: { base: t.spacing[16], md: t.spacing[2] } as const,
   });
 
   return (
@@ -37,6 +39,7 @@ export default function Home() {
         alignItems: "center",
         backgroundColor: t.colors.background,
         padding: t.spacing[6] || 24,
+        paddingVertical: rootPadding,
       }}
     >
       <View style={{ width: "100%", maxWidth: 1200, alignSelf: "center" }}>
@@ -203,7 +206,7 @@ export default function Home() {
                 )}
               </View>
             </View>
-          </View>{" "}
+          </View>
           {/* End Controls Grid */}
           {/* Responsive Content Container */}
           <View
@@ -453,7 +456,7 @@ export default function Home() {
                       </TextInput.Root>
                     </View>
                   </View>
-                </View>{" "}
+                </View>
                 {/* End Components Sub-Grid */}
               </View>
             </View>
