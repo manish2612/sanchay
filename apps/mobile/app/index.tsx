@@ -1,6 +1,12 @@
-import { View, Text, ScrollView, DimensionValue } from "react-native";
+import { View, ScrollView, DimensionValue } from "react-native";
 import { APP_NAME } from "@sanchay/config";
-import { Button, TextInput, useResponsiveValues, NavDemo } from "@sanchay/ui";
+import {
+  Button,
+  TextInput,
+  Text,
+  useResponsiveValues,
+  NavDemo,
+} from "@sanchay/ui";
 import { useRouter } from "expo-router";
 import { useTheme } from "@sanchay/theme-provider";
 import { Density } from "@sanchay/design-tokens";
@@ -46,26 +52,16 @@ export default function Home() {
     >
       <View style={{ width: "100%", maxWidth: 1200, alignSelf: "center" }}>
         <Text
-          style={{
-            color: t.colors.foreground,
-            fontSize: 24,
-            fontWeight: "bold",
-            marginBottom: t.spacing[2],
-            textAlign: "center",
-            fontFamily: t.typography.fontFamily.heading,
-          }}
+          variant="heading"
+          size="2xl"
+          weight="bold"
+          align="center"
+          style={{ marginBottom: t.spacing[2] }}
         >
           Welcome to {APP_NAME} Mobile
         </Text>
 
-        <Text
-          style={{
-            color: t.colors.foreground,
-            opacity: 0.7,
-            marginBottom: 30,
-            fontFamily: t.typography.fontFamily.body,
-          }}
-        >
+        <Text style={{ marginBottom: 30 }} variant="body">
           Density & Theme Demo 12345
         </Text>
 
@@ -101,13 +97,7 @@ export default function Home() {
                 borderRadius: 8,
               }}
             >
-              <Text
-                style={{
-                  color: t.colors.foreground,
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
+              <Text size="md" weight="semibold">
                 Theme Mode
               </Text>
               <View style={{ flexDirection: "row", gap: 10 }}>
@@ -141,13 +131,7 @@ export default function Home() {
                 marginBottom: 20,
               }}
             >
-              <Text
-                style={{
-                  color: t.colors.foreground,
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
+              <Text size="md" weight="semibold">
                 Brand ({brand})
               </Text>
               <View style={{ flexDirection: "row", gap: 10 }}>
@@ -180,13 +164,7 @@ export default function Home() {
                 marginBottom: 20,
               }}
             >
-              <Text
-                style={{
-                  color: t.colors.foreground,
-                  fontSize: 16,
-                  fontWeight: "600",
-                }}
-              >
+              <Text size="md" weight="semibold">
                 Density ({density})
               </Text>
               <View
@@ -230,21 +208,11 @@ export default function Home() {
                   borderRadius: 8,
                 }}
               >
-                <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontWeight: "bold",
-                    marginBottom: 5,
-                  }}
-                >
+                <Text weight="bold" style={{ marginBottom: 5 }}>
                   Resolved Tokens:
                 </Text>
-                <Text style={{ color: t.colors.foreground }}>
-                  Button Height: {t.sizes.buttonHeight}px
-                </Text>
-                <Text style={{ color: t.colors.foreground }}>
-                  Base Spacing (4): {t.spacing[4]}px
-                </Text>
+                <Text>Button Height: {t.sizes.buttonHeight}px</Text>
+                <Text>Base Spacing (4): {t.spacing[4]}px</Text>
               </View>
 
               {/* Font Demo */}
@@ -256,124 +224,77 @@ export default function Home() {
                   marginTop: 20,
                 }}
               >
-                <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontWeight: "bold",
-                    marginBottom: 10,
-                  }}
-                >
+                <Text weight="bold" style={{ marginBottom: 10 }}>
                   Font Demo:
                 </Text>
 
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontSize: 12,
-                    opacity: 0.7,
-                    marginBottom: 4,
-                  }}
+                  size="xs"
+                  color="mutedForeground"
+                  style={{ marginBottom: 4 }}
                 >
                   IBM Plex Sans (Body)
                 </Text>
-                <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans-Light",
-                    marginBottom: 2,
-                  }}
-                >
+                <Text weight="light" style={{ marginBottom: 2 }}>
                   Light 300
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans-Light-Italic",
-                    marginBottom: 2,
-                  }}
+                  weight="light"
+                  style={{ marginBottom: 2, fontStyle: "italic" }}
                 >
                   Light Italic 300
                 </Text>
-                <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans",
-                    marginBottom: 2,
-                  }}
-                >
+                <Text weight="regular" style={{ marginBottom: 2 }}>
                   Regular 400
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans-Italic",
-                    marginBottom: 2,
-                  }}
+                  weight="regular"
+                  style={{ marginBottom: 2, fontStyle: "italic" }}
                 >
                   Regular Italic 400
                 </Text>
-                <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans-Medium",
-                    marginBottom: 2,
-                  }}
-                >
+                <Text weight="medium" style={{ marginBottom: 2 }}>
                   Medium 500
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "IBM Plex Sans-Medium-Italic",
-                    marginBottom: 15,
-                  }}
+                  weight="medium"
+                  style={{ marginBottom: 15, fontStyle: "italic" }}
                 >
                   Medium Italic 500
                 </Text>
 
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontSize: 12,
-                    opacity: 0.7,
-                    marginBottom: 4,
-                  }}
+                  size="xs"
+                  color="mutedForeground"
+                  style={{ marginBottom: 4 }}
                 >
                   Work Sans (Heading)
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "Work Sans-Regular",
-                    marginBottom: 2,
-                  }}
+                  variant="heading"
+                  weight="regular"
+                  style={{ marginBottom: 2 }}
                 >
                   Regular 400
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "Work Sans",
-                    marginBottom: 2,
-                  }}
+                  variant="heading"
+                  weight="medium"
+                  style={{ marginBottom: 2 }}
                 >
                   Medium 500
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "Work Sans-SemiBold",
-                    marginBottom: 2,
-                  }}
+                  variant="heading"
+                  weight="semibold"
+                  style={{ marginBottom: 2 }}
                 >
                   SemiBold 600
                 </Text>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontFamily: "Work Sans-Bold",
-                    marginBottom: 2,
-                  }}
+                  variant="heading"
+                  weight="bold"
+                  style={{ marginBottom: 2 }}
                 >
                   Bold 700
                 </Text>
@@ -388,13 +309,10 @@ export default function Home() {
               {/* Components Showcase */}
               <View style={{ marginTop: 0, width: "100%" }}>
                 <Text
-                  style={{
-                    color: t.colors.foreground,
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    marginBottom: 10,
-                    fontFamily: t.typography.fontFamily.heading,
-                  }}
+                  variant="heading"
+                  size="lg"
+                  weight="bold"
+                  style={{ marginBottom: 10 }}
                 >
                   Components
                 </Text>
@@ -409,12 +327,9 @@ export default function Home() {
                   {/* Buttons */}
                   <View style={{ width: componentsSubWidth, margin: 0 }}>
                     <Text
-                      style={{
-                        color: t.colors.foreground,
-                        fontSize: 14,
-                        opacity: 0.7,
-                        marginBottom: 8,
-                      }}
+                      size="sm"
+                      color="mutedForeground"
+                      style={{ marginBottom: 8 }}
                     >
                       Buttons
                     </Text>
@@ -432,12 +347,9 @@ export default function Home() {
                   {/* Text Inputs */}
                   <View style={{ width: componentsSubWidth, margin: 0 }}>
                     <Text
-                      style={{
-                        color: t.colors.foreground,
-                        fontSize: 14,
-                        opacity: 0.7,
-                        marginBottom: 8,
-                      }}
+                      size="sm"
+                      color="mutedForeground"
+                      style={{ marginBottom: 8 }}
                     >
                       TextInput
                     </Text>

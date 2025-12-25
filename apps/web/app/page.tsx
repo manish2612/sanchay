@@ -1,7 +1,7 @@
 "use client";
 import { APP_NAME } from "@sanchay/config";
 import React from "react";
-import { Button, TextInput, GridBackground, NavDemo } from "@sanchay/ui";
+import { Button, TextInput, GridBackground, Text, NavDemo } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
 import { Density, Brand } from "@sanchay/design-tokens";
 import { useRouter } from "next/navigation";

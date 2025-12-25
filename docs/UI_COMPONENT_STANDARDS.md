@@ -65,3 +65,12 @@ The package configures the main entry points to respect this split:
 - **Safety**: Prevents Expo Web from accidentally loading HTML/Tailwind components.
 - **Explicit**: `dom.tsx` clearly indicates "Code intended for the DOM environment".
 - **Separation**: strict split between DOM-based and Native-based logic.
+
+## Component Usage Guidelines
+
+### Text and Typography
+Always use the `Text` primitive from `@sanchay/ui` instead of raw HTML elements (`<p>`, `<h1>`, `<span>`) or React Native `<Text>`.
+
+- **Why?**: properly handles dynamic theming, density, and responsive font sizing.
+- **Web**: Uses `asChild` for semantic HTML (e.g. `<Text asChild><h1>Title</h1></Text>`).
+- **Native**: Handles platform-specific font resolution and maps tokens to native styles.
