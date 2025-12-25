@@ -1,7 +1,7 @@
 "use client";
 import { APP_NAME } from "@sanchay/config";
 import React from "react";
-import { Button, TextInput, GridBackground, Text } from "@sanchay/ui";
+import { Button, TextInput, GridBackground, Text, Icon } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
 import { Density, Brand } from "@sanchay/design-tokens";
 
@@ -250,7 +250,7 @@ export default function Home() {
                   <Button size="default">Default</Button>
                   <Button size="lg">Large</Button>
                   <Button size="icon" variant="outline">
-                    ✚
+                    <Icon name="add" size={20} />
                   </Button>
                 </div>
               </div>
@@ -286,7 +286,9 @@ export default function Home() {
                   With Icons
                 </span>
                 <TextInput.Root>
-                  <TextInput.Slot side="left">🔍</TextInput.Slot>
+                  <TextInput.Slot side="left">
+                    <Icon name="search" size={18} />
+                  </TextInput.Slot>
                   <TextInput.Input placeholder="Search..." />
                 </TextInput.Root>
               </div>
@@ -294,7 +296,9 @@ export default function Home() {
               <div className="space-y-1">
                 <TextInput.Root>
                   <TextInput.Input placeholder="Email address" />
-                  <TextInput.Slot side="right">✉️</TextInput.Slot>
+                  <TextInput.Slot side="right">
+                    <Icon name="mail" size={18} />
+                  </TextInput.Slot>
                 </TextInput.Root>
               </div>
 
@@ -304,7 +308,9 @@ export default function Home() {
                   Error State
                 </span>
                 <TextInput.Root variant="error">
-                  <TextInput.Slot side="left">⚠️</TextInput.Slot>
+                  <TextInput.Slot side="left">
+                    <Icon name="error" size={18} />
+                  </TextInput.Slot>
                   <TextInput.Input placeholder="Invalid input" />
                 </TextInput.Root>
               </div>
