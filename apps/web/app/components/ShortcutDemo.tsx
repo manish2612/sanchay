@@ -13,11 +13,13 @@ import {
   CommandItem,
   CommandSeparator,
   CommandShortcut,
+  ShortcutCheatSheet,
 } from "@sanchay/ui";
 
 export const ShortcutDemo = () => {
   const [triggered, setTriggered] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [cheatSheetOpen, setCheatSheetOpen] = useState(false);
 
   // Global shortcut
   useShortcut(
@@ -38,6 +40,13 @@ export const ShortcutDemo = () => {
     setTriggered("Command Palette Toggled (Cmd+K)");
   });
 
+  // Toggle Cheat Sheet
+  useShortcut("shift+?", (e) => {
+    e.preventDefault();
+    setCheatSheetOpen((open) => !open);
+    setTriggered("Cheat Sheet Toggled (?)");
+  });
+
   return (
     <div className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-md my-4">
       <Text className="mb-2 font-bold text-lg">Shortcut System Demo</Text>
@@ -56,6 +65,12 @@ export const ShortcutDemo = () => {
           </code>
           : Toggle Command Palette
         </li>
+        <li>
+          <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">
+            ? (Shift + /)
+          </code>
+          : Toggle Shortcut Cheat Sheet
+        </li>
       </ul>
 
       {triggered && (
@@ -69,6 +84,9 @@ export const ShortcutDemo = () => {
           Clear Log
         </Button>
         <Button onClick={() => setOpen(true)}>Open Command Palette</Button>
+        <Button onClick={() => setCheatSheetOpen(true)} variant="secondary">
+          Show Cheat Sheet
+        </Button>
       </div>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -134,6 +152,28 @@ export const ShortcutDemo = () => {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+
+      <ShortcutCheatSheet
+        open={cheatSheetOpen}
+        onOpenChange={setCheatSheetOpen}
+        categories={[
+          {
+            title: "Navigation",
+            items: [
+              { id: "nav-home", label: "Go to Home", keys: ["G", "H"] },
+              { id: "nav-settings", label: "Go to Settings", keys: ["G", "S"] },
+            ],
+          },
+          {
+            title: "Actions",
+            items: [
+              { id: "act-save", label: "Save", keys: ["⌘", "S"] },
+              { id: "act-copy", label: "Copy", keys: ["⌘", "C"] },
+              { id: "act-paste", label: "Paste", keys: ["⌘", "V"] },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 };
