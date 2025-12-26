@@ -9,7 +9,7 @@ import {
   ModalDescription,
 } from "../Modal";
 import { TextInput } from "../TextInput";
-import { Icon } from "../Icon"; // Correct import path
+import { Icon } from "../Icon/Icon.dom"; // Correct import path
 import { ShortcutCheatSheetProps } from "./types";
 import { cn } from "../../../utils";
 

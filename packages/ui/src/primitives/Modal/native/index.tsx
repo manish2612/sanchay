@@ -10,7 +10,7 @@ import {
   TextStyle,
 } from "react-native";
 import { styles } from "./styles";
-import { Icon } from "../../Icon";
+import { Icon } from "../../Icon/Icon.native";
 import { useTheme } from "@sanchay/theme-provider";
 
 interface ModalContextType {

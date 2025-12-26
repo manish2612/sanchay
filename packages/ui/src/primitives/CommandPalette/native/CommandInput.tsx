@@ -3,7 +3,7 @@ import { View, TextInput as RNTextInput } from "react-native";
 import { CommandInputProps } from "../types";
 import { useCommandContext } from "./CommandPalette";
 import { styles } from "../styles";
-import { Icon } from "../../../primitives/Icon";
+import { Icon } from "../../../primitives/Icon/Icon.native";
 import { useTheme } from "@sanchay/theme-provider";
 
 export const CommandInput = ({ placeholder, ...props }: CommandInputProps) => {

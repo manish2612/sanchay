@@ -13,6 +13,7 @@ import {
   MenuBarItem,
   MenuBarSeparator,
   MenuBarCheckboxItem,
+  Icon,
   Modal,
   ModalTrigger,
   ModalContent,
@@ -377,7 +378,11 @@ export default function Home() {
                       {/* With Icon Left */}
                       <TextInput.Root>
                         <TextInput.Slot side="left">
-                          <Text>🔍</Text>
+                          <Icon
+                            name="search"
+                            size={20}
+                            color={t.colors.mutedForeground}
+                          />
                         </TextInput.Slot>
                         <TextInput.Input placeholder="Search..." />
                       </TextInput.Root>
@@ -386,7 +391,11 @@ export default function Home() {
                       <TextInput.Root variant="error">
                         <TextInput.Input placeholder="Error State" />
                         <TextInput.Slot side="right">
-                          <Text>⚠️</Text>
+                          <Icon
+                            name="error"
+                            size={20}
+                            color={t.colors.destructive}
+                          />
                         </TextInput.Slot>
                       </TextInput.Root>
                     </View>

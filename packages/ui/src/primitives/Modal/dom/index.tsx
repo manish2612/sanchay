@@ -3,7 +3,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import { cn } from "../../../utils";
 import { contentVariants, overlayVariants, closeVariants } from "./styles";
-import { Icon } from "../../Icon"; // Use our Icon primitive
+import { Icon } from "../../Icon/Icon.dom"; // Use our Icon primitive
 
 const Modal = DialogPrimitive.Root;
 

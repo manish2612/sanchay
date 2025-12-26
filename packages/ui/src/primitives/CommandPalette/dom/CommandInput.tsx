@@ -4,7 +4,7 @@ import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 import { CommandInputProps } from "../types";
 import { cn } from "../../../utils";
-import { Icon } from "../../../primitives/Icon";
+import { Icon } from "../../../primitives/Icon/Icon.dom";
 
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,

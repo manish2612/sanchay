@@ -15,7 +15,7 @@ import {
 } from "./MenuBarSub.dom";
 import { MenuBarShortcut } from "./MenuBarShortcut.dom";
 import { UniversalLink } from "../../Link"; // Updated import to point to primitives/Link/index
-import { Icon } from "../../Icon"; // Assuming Icon usage needs standardizing, checking imports
+import { Icon } from "../../Icon/Icon.dom"; // Assuming Icon usage needs standardizing, checking imports
 
 export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
   return (

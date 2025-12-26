@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { Icon } from "../../Icon";
+import { Icon } from "../../Icon/Icon.dom";
 import { cn } from "../../../utils";
 import { menuBarStyles } from "./styles.dom";
 
