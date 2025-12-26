@@ -11,3 +11,4 @@ export * from './primitives/Shortcut';
 export * from './primitives/Modal';
 export * from './primitives/CommandPalette';
 export * from './primitives/ShortcutCheatSheet';
+export * from './primitives/Table';

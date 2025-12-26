@@ -14,6 +14,7 @@ import { TextInputDemo } from "./demos/TextInputDemo";
 import { MenuBarDemo } from "./demos/MenuBarDemo";
 import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
+import { TableDemo } from "./demos/TableDemo";
 
 export function ComponentDemos() {
   return (
@@ -59,6 +60,11 @@ export function ComponentDemos() {
               <ModalDemo />
             </div>
           </div>
+        </div>
+
+        {/* Full Width Demos */}
+        <div className="w-full max-w-7xl mt-8">
+          <TableDemo />
         </div>
       </div>
     </div>
