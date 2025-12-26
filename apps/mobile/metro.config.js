@@ -11,7 +11,7 @@ config.resolver.nodeModulesPaths = [
     path.resolve(projectRoot, 'node_modules'),
     path.resolve(workspaceRoot, 'node_modules'),
 ];
-// fixes "Unable to resolve module expo-router/entry-classic" error that was preventing the mobile app from running.
-// config.resolver.disableHierarchicalLookup = true;
+
+config.resolver.resolverMainFields = ['react-native', 'browser', 'main'];
 
 module.exports = config;

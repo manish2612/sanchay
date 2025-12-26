@@ -5,3 +5,4 @@ export { GridBackground } from './components/GridBackground';
 export * from './primitives/Link';
 export * from './examples/NavDemo.dom';
 export { Icon } from './primitives/Icon';
+export * from './hooks/useResponsive';

@@ -1,17 +1,14 @@
-import { UniversalLink } from "@sanchay/ui";
+"use client";
+
+import { LoginScreen } from "@sanchay/modules";
 
 export default function LoginPage() {
   return (
-    <div style={{ padding: 40, fontFamily: "var(--font-ibm-plex-sans)" }}>
-      <h1 style={{ fontSize: 32, marginBottom: 20 }}>Login Sanchay (Web)</h1>
-      <p style={{ marginBottom: 20 }}>This is a dummy login page.</p>
-
-      <UniversalLink
-        href="/"
-        style={{ color: "#007AFF", textDecorationLine: "underline" }}
-      >
-        &larr; Back to Home
-      </UniversalLink>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+      <LoginScreen
+        onLogin={(data) => console.log("Login", data)}
+        onForgotPassword={() => console.log("Forgot Password")}
+      />
     </div>
   );
 }
