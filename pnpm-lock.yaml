@@ -227,6 +227,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      react-hotkeys-hook:
+        specifier: ^5.2.1
+        version: 5.2.1(react-dom@19.2.3(react@19.1.4))(react@19.1.4)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -3834,6 +3837,12 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       react: '>=17.0.0'
+
+  react-hotkeys-hook@5.2.1:
+    resolution: {integrity: sha512-xbKh6zJxd/vJHT4Bw4+0pBD662Fk20V+VFhLqciCg+manTVO4qlqRqiwFOYelfHN9dBvWj9vxaPkSS26ZSIJGg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -9103,6 +9112,11 @@ snapshots:
   react-freeze@1.0.4(react@19.1.4):
     dependencies:
       react: 19.1.4
+
+  react-hotkeys-hook@5.2.1(react-dom@19.2.3(react@19.1.4))(react@19.1.4):
+    dependencies:
+      react: 19.1.4
+      react-dom: 19.2.3(react@19.1.4)
 
   react-is@17.0.2:
     optional: true

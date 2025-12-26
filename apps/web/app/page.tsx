@@ -26,6 +26,7 @@ import { useTheme } from "@sanchay/theme-provider/web";
 import { Density, Brand } from "@sanchay/design-tokens";
 import { useRouter } from "next/navigation";
 import { AppMenuBarExample } from "./components/AppMenuBarExample";
+import { ShortcutDemo } from "./components/ShortcutDemo";
 
 export default function Home() {
   const { mode, setMode, density, setDensity, brand, setBrand } = useTheme();
@@ -199,6 +200,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+        {/* 0. Shortcut Demo */}
+        <ShortcutDemo />
         {/* 0. Nav Demo */}
         <div className="bg-background rounded-lg border border-[#222222] overflow-hidden">
           <NavDemo onLoginPress={() => router.push("/login")} />
