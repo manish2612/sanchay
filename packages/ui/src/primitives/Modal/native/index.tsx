@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ViewStyle,
   TextStyle,
+  Pressable,
 } from "react-native";
 import { styles } from "./styles";
 import { Icon } from "../../Icon/Icon.native";
@@ -93,7 +94,7 @@ const ModalContent = ({
   style?: ViewStyle;
 }) => {
   const { open, onOpenChange } = useModalContext();
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   if (!open) return null;
 
@@ -118,13 +119,13 @@ const ModalContent = ({
                 style,
               ]}
             >
-              <TouchableOpacity
+              <Pressable
                 style={styles.closeButton}
                 onPress={() => onOpenChange(false)}
               >
                 {/* Explicitly using a known icon for close */}
-                <Icon name="x" size={20} color={theme.colors.foreground} />
-              </TouchableOpacity>
+                <Icon name="close" size={20} color={theme.colors.foreground} />
+              </Pressable>
               {children}
             </View>
           </TouchableWithoutFeedback>
@@ -207,17 +208,37 @@ const ModalDescription = ({
 };
 
 // No-op for Native since close button is built-in to Content, or explicit component
-const ModalClose = ({ children }: { children?: React.ReactNode }) => {
+// Replaced content below
+const ModalClose = ({
+  asChild,
+  children,
+  onPress,
+  ...props
+}: {
+  asChild?: boolean;
+  children?: React.ReactNode;
+  onPress?: () => void;
+}) => {
   const { onOpenChange } = useModalContext();
-  // If children provided, wraps them to trigger close
-  if (children) {
-    return (
-      <TouchableOpacity onPress={() => onOpenChange(false)}>
-        {children}
-      </TouchableOpacity>
-    );
+
+  const handlePress = () => {
+    onOpenChange(false);
+    if (onPress) onPress();
+  };
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      onPress: handlePress,
+      ...props,
+    });
   }
-  return null;
+
+  // Fallback if no child or not asChild (wrap in Pressable instead of TouchableOpacity to avoid crash)
+  return (
+    <Pressable onPress={handlePress} {...props}>
+      {children}
+    </Pressable>
+  );
 };
 
 export {

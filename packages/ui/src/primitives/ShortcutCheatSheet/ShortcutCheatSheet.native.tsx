@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { View, Text, ScrollView, TextInput } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import {
   Modal,
   ModalContent,
@@ -7,7 +7,7 @@ import {
   ModalTitle,
   ModalDescription,
 } from "../Modal";
-import { TextInput } from "../TextInput";
+import { TextInput } from "../TextInput/TextInput.native";
 import { ShortcutCheatSheetProps } from "./types";
 import { createStyles } from "./styles";
 import { useTheme } from "@sanchay/theme-provider";
@@ -22,7 +22,7 @@ export const ShortcutCheatSheet = ({
   const [searchQuery, setSearchQuery] = React.useState("");
 
   const filteredCategories = useMemo(() => {
-     if (!searchQuery) return categories;
+    if (!searchQuery) return categories;
 
     const lowerQuery = searchQuery.toLowerCase();
 
@@ -31,9 +31,9 @@ export const ShortcutCheatSheet = ({
         const categoryTitleMatches = category.title
           .toLowerCase()
           .includes(lowerQuery);
-        
+
         if (categoryTitleMatches) {
-           return category;
+          return category;
         }
 
         const filteredItems = category.items.filter((item) =>
@@ -47,7 +47,6 @@ export const ShortcutCheatSheet = ({
       })
       .filter((category) => category.items.length > 0);
   }, [categories, searchQuery]);
-
 
   // Transform keys for native display (symbols map)
   // For now, we render strings directly, but could add mapping if needed
@@ -64,41 +63,53 @@ export const ShortcutCheatSheet = ({
 
         <ScrollView style={styles.container}>
           <TextInput.Root style={{ marginBottom: theme.spacing[4] }}>
-             <TextInput.Input
-                placeholder="Search shortcuts..."
-                placeholderTextColor={theme.colors.muted.foreground}
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-             />
+            <TextInput.Input
+              placeholder="Search shortcuts..."
+              placeholderTextColor={
+                (theme.colors as any).mutedForeground || "#999"
+              }
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
           </TextInput.Root>
-          
+
           {filteredCategories.length === 0 ? (
-             <Text style={[styles.itemLabel, { textAlign: 'center', marginVertical: 20, color: theme.colors.muted.foreground }]}>
-               No shortcuts found.
-             </Text>
+            <Text
+              style={[
+                styles.itemLabel,
+                {
+                  textAlign: "center",
+                  marginVertical: 20,
+                  color: (theme.colors as any).mutedForeground || "#999",
+                },
+              ]}
+            >
+              No shortcuts found.
+            </Text>
           ) : (
-             filteredCategories.map((category) => (
-            <View key={category.title} style={styles.categoryContainer}>
-              <Text style={styles.categoryTitle}>{category.title}</Text>
+            filteredCategories.map((category) => (
+              <View key={category.title} style={styles.categoryContainer}>
+                <Text style={styles.categoryTitle}>{category.title}</Text>
 
-              {category.items.map((item) => (
-                <View key={item.id} style={styles.itemRow}>
-                  <Text style={styles.itemLabel}>{item.label}</Text>
+                {category.items.map((item) => (
+                  <View key={item.id} style={styles.itemRow}>
+                    <Text style={styles.itemLabel}>{item.label}</Text>
 
-                  <View style={styles.keysContainer}>
-                    {item.keys.map((key, index) => (
-                      <View
-                        key={`${item.id}-key-${index}`}
-                        style={styles.keyCap}
-                      >
-                        <Text style={styles.keyText}>{key}</Text>
-                      </View>
-                    ))}
+                    <View style={styles.keysContainer}>
+                      {item.keys.map((key, index) => (
+                        <View
+                          key={`${item.id}-key-${index}`}
+                          style={styles.keyCap}
+                        >
+                          <Text style={styles.keyText}>{key}</Text>
+                        </View>
+                      ))}
+                    </View>
                   </View>
-                </View>
-              ))}
-            </View>
-          ))}
+                ))}
+              </View>
+            ))
+          )}
         </ScrollView>
       </ModalContent>
     </Modal>

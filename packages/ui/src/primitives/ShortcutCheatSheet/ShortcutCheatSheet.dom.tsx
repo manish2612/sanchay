@@ -11,7 +11,7 @@ import {
 import { TextInput } from "../TextInput";
 import { Icon } from "../Icon/Icon.dom"; // Correct import path
 import { ShortcutCheatSheetProps } from "./types";
-import { cn } from "../../../utils";
+import { cn } from "../../utils";
 
 export const ShortcutCheatSheet = ({
   open,
