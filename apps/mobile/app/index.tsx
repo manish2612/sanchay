@@ -6,6 +6,13 @@ import {
   Text,
   useResponsiveValues,
   NavDemo,
+  MenuBar,
+  MenuBarMenu,
+  MenuBarTrigger,
+  MenuBarContent,
+  MenuBarItem,
+  MenuBarSeparator,
+  MenuBarCheckboxItem,
 } from "@sanchay/ui";
 import { useRouter } from "expo-router";
 import { useTheme } from "@sanchay/theme-provider";
@@ -377,7 +384,50 @@ export default function Home() {
                     </View>
                   </View>
                 </View>
-                {/* End Components Sub-Grid */}
+
+                {/* 5.3 MenuBar Section */}
+                <View style={{ width: componentsSubWidth, margin: 0 }}>
+                  <Text
+                    size="sm"
+                    color="mutedForeground"
+                    style={{ marginBottom: 8 }}
+                  >
+                    MenuBar (Simulated)
+                  </Text>
+                  <View style={{ gap: 12 }}>
+                    <MenuBar style={{ width: "100%" }}>
+                      <MenuBarMenu>
+                        <MenuBarTrigger>File</MenuBarTrigger>
+                        <MenuBarContent>
+                          <MenuBarItem>New File</MenuBarItem>
+                          <MenuBarItem>Open...</MenuBarItem>
+                          <MenuBarSeparator />
+                          <MenuBarItem>Exit</MenuBarItem>
+                        </MenuBarContent>
+                      </MenuBarMenu>
+                      <MenuBarMenu>
+                        <MenuBarTrigger>Edit</MenuBarTrigger>
+                        <MenuBarContent>
+                          <MenuBarItem>Undo</MenuBarItem>
+                          <MenuBarItem>Redo</MenuBarItem>
+                          <MenuBarItem disabled>Copy</MenuBarItem>
+                          <MenuBarItem disabled>Paste</MenuBarItem>
+                        </MenuBarContent>
+                      </MenuBarMenu>
+                      <MenuBarMenu>
+                        <MenuBarTrigger>View</MenuBarTrigger>
+                        <MenuBarContent>
+                          <MenuBarCheckboxItem checked>
+                            Show Toolbar
+                          </MenuBarCheckboxItem>
+                          <MenuBarCheckboxItem>
+                            Show Sidebar
+                          </MenuBarCheckboxItem>
+                        </MenuBarContent>
+                      </MenuBarMenu>
+                    </MenuBar>
+                  </View>
+                </View>
               </View>
             </View>
           </View>
