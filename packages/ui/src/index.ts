@@ -7,3 +7,4 @@ export * from './examples/NavDemo.dom';
 export { Icon } from './primitives/Icon';
 export * from './primitives/MenuBar';
 export * from './primitives/Shortcut';
+export * from './primitives/Modal';

@@ -9,3 +9,4 @@ export * from './primitives/Link/Link.native';
 export * from './primitives/Link/types';
 export * from './examples/NavDemo.native';
 export * from './primitives/MenuBar';
+export * from './primitives/Modal/index.native';

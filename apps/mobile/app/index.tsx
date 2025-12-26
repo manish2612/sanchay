@@ -13,6 +13,14 @@ import {
   MenuBarItem,
   MenuBarSeparator,
   MenuBarCheckboxItem,
+  Modal,
+  ModalTrigger,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+  ModalClose,
 } from "@sanchay/ui";
 import { useRouter } from "expo-router";
 import { useTheme } from "@sanchay/theme-provider";
@@ -426,6 +434,63 @@ export default function Home() {
                         </MenuBarContent>
                       </MenuBarMenu>
                     </MenuBar>
+                  </View>
+                </View>
+              </View>
+
+              {/* 5.4 Modal Section */}
+              <View
+                style={{
+                  padding: 20,
+                  backgroundColor: t.colors.background,
+                  borderRadius: 8,
+                  borderColor: "#222222",
+                  borderWidth: 1,
+                }}
+              >
+                <View style={{ width: componentsSubWidth, margin: 0 }}>
+                  <Text
+                    size="sm"
+                    color="mutedForeground"
+                    style={{ marginBottom: 8 }}
+                  >
+                    Modal
+                  </Text>
+                  <View style={{ gap: 12 }}>
+                    <Modal>
+                      <ModalTrigger asChild>
+                        <Button variant="outline">Open Modal</Button>
+                      </ModalTrigger>
+                      <ModalContent>
+                        <ModalHeader>
+                          <ModalTitle>Edit Profile</ModalTitle>
+                          <ModalDescription>
+                            Make changes to your profile here. Click save when
+                            you're done.
+                          </ModalDescription>
+                        </ModalHeader>
+                        <View style={{ gap: 16, marginVertical: 16 }}>
+                          <View>
+                            <Text style={{ marginBottom: 8 }}>Name</Text>
+                            <TextInput.Root>
+                              <TextInput.Input placeholder="Pedro Duarte" />
+                            </TextInput.Root>
+                          </View>
+                          <View>
+                            <Text style={{ marginBottom: 8 }}>Username</Text>
+                            <TextInput.Root>
+                              <TextInput.Input placeholder="@peduarte" />
+                            </TextInput.Root>
+                          </View>
+                        </View>
+                        <ModalFooter>
+                          <ModalClose>
+                            <Button variant="ghost">Cancel</Button>
+                          </ModalClose>
+                          <Button>Save Changes</Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </Modal>
                   </View>
                 </View>
               </View>

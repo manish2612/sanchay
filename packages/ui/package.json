@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@expo/vector-icons": "^15.0.3",
+        "@radix-ui/react-dialog": "^1.1.15",
         "@radix-ui/react-menubar": "^1.1.16",
         "@radix-ui/react-slot": "^1.2.4",
         "@sanchay/design-tokens": "workspace:*",
