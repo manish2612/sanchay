@@ -1,11 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { useShortcut, Button, Text } from "@sanchay/ui";
+import {
+  useShortcut,
+  Button,
+  Text,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandSeparator,
+  CommandShortcut,
+} from "@sanchay/ui";
 
 export const ShortcutDemo = () => {
   const [triggered, setTriggered] = useState<string | null>(null);
-  const [scope, setScope] = useState("global");
+  const [open, setOpen] = useState(false);
 
   // Global shortcut
   useShortcut(
@@ -19,14 +31,11 @@ export const ShortcutDemo = () => {
     }
   );
 
-  // Scoped shortcut - only active when simulated scope is active?
-  // Note: changing 'scope' variable here doesn't actually change the context scope unless we use a Scope provider/manager.
-  // For this demo, we'll just show basic triggering.
-
+  // Toggle Command Palette
   useShortcut("meta+k", (e) => {
     e.preventDefault();
-    setTriggered("Command Palette (Cmd+K)");
-    console.log("Open Command Palette");
+    setOpen((open) => !open);
+    setTriggered("Command Palette Toggled (Cmd+K)");
   });
 
   return (
@@ -45,7 +54,7 @@ export const ShortcutDemo = () => {
           <code className="bg-zinc-100 dark:bg-zinc-800 px-1 py-0.5 rounded">
             Cmd + K
           </code>
-          : Logs to console (Simulated Command Palette)
+          : Toggle Command Palette
         </li>
       </ul>
 
@@ -55,9 +64,76 @@ export const ShortcutDemo = () => {
         </div>
       )}
 
-      <div className="mt-4">
-        <Button onClick={() => setTriggered(null)}>Clear Log</Button>
+      <div className="mt-4 flex gap-2">
+        <Button onClick={() => setTriggered(null)} variant="outline">
+          Clear Log
+        </Button>
+        <Button onClick={() => setOpen(true)}>Open Command Palette</Button>
       </div>
+
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            <CommandItem
+              onSelect={() => {
+                setTriggered("Selected: Calendar");
+                setOpen(false);
+              }}
+            >
+              Calendar
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setTriggered("Selected: Search Emoji");
+                setOpen(false);
+              }}
+            >
+              Search Emoji
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setTriggered("Selected: Calculator");
+                setOpen(false);
+              }}
+            >
+              Calculator
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem
+              value="settings"
+              onSelect={() => {
+                setTriggered("Selected: Settings");
+                setOpen(false);
+              }}
+            >
+              Settings
+              <CommandShortcut>⌘S</CommandShortcut>
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setTriggered("Selected: Profile");
+                setOpen(false);
+              }}
+            >
+              Profile
+              <CommandShortcut>⌘P</CommandShortcut>
+            </CommandItem>
+            <CommandItem
+              onSelect={() => {
+                setTriggered("Selected: Billing");
+                setOpen(false);
+              }}
+            >
+              Billing
+              <CommandShortcut>⌘B</CommandShortcut>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </div>
   );
 };
