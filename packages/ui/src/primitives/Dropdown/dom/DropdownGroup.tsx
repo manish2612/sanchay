@@ -2,10 +2,9 @@
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import React from "react";
-import {
-  dropdownLabelClassName,
-  dropdownSeparatorClassName,
-} from "./styles.dom";
+import { dropdownLabelStyle, dropdownSeparatorStyle } from "./styles.dom";
+import { useDensity } from "../../../contexts/DensityContext";
+import { cn } from "../../../utils";
 
 const DropdownGroup = DropdownMenuPrimitive.Group;
 
@@ -13,10 +12,11 @@ const DropdownLabel = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className, style, ...props }, ref) => {
+  const density = useDensity();
   return (
     <DropdownMenuPrimitive.Label
       ref={ref}
-      className={`${dropdownLabelClassName} ${className || ""}`}
+      className={cn(dropdownLabelStyle({ density }), className)}
       style={style}
       {...props}
     />
@@ -28,10 +28,11 @@ const DropdownSeparator = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Separator>
 >(({ className, style, ...props }, ref) => {
+  const density = useDensity();
   return (
     <DropdownMenuPrimitive.Separator
       ref={ref}
-      className={`${dropdownSeparatorClassName} ${className || ""}`}
+      className={cn(dropdownSeparatorStyle({ density }), className)}
       style={style}
       {...props}
     />

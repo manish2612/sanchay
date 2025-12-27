@@ -18,9 +18,10 @@ const DropdownMenu = ({
   children,
   searchable = false,
   align = "end",
+  density,
 }: DropdownMenuProps) => {
   return (
-    <DropdownRoot>
+    <DropdownRoot density={density}>
       <DropdownTrigger asChild>
         {children ? (
           children

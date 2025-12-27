@@ -4,6 +4,7 @@ import React from "react";
 import { DropdownBasic } from "./DropdownBasic";
 import { DropdownSearchable } from "./DropdownSearchable";
 import { DropdownMenuDemoExample } from "./DropdownMenuDemoExample";
+import { DropdownDensityDemo } from "./DropdownDensityDemo";
 
 export const DropdownDemo = () => {
   return (
@@ -27,6 +28,12 @@ export const DropdownDemo = () => {
             High-Level: DropdownMenu
           </h3>
           <DropdownMenuDemoExample />
+        </div>
+        <div className="space-y-2">
+          <h3 className="tex-lg font-semibold text-muted-foreground">
+            Density Support
+          </h3>
+          <DropdownDensityDemo />
         </div>
       </div>
     </div>

@@ -5,8 +5,10 @@ import React from "react";
 import { Icon } from "../../Icon/Icon.dom";
 import {
   dropdownSubContentClassName,
-  dropdownSubTriggerClassName,
+  dropdownSubTriggerStyle,
 } from "./styles.dom";
+import { useDensity } from "../../../contexts/DensityContext";
+import { cn } from "../../../utils";
 
 const DropdownSub = DropdownMenuPrimitive.Sub;
 
@@ -16,10 +18,11 @@ const DropdownSubTrigger = React.forwardRef<
     inset?: boolean;
   }
 >(({ className, children, style, ...props }, ref) => {
+  const density = useDensity();
   return (
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
-      className={`${dropdownSubTriggerClassName} ${className || ""}`}
+      className={cn(dropdownSubTriggerStyle({ density }), className)}
       style={style}
       {...props}
     >

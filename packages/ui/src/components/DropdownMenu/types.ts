@@ -1,3 +1,5 @@
+import { Density } from '../../types/density';
+
 export interface DropdownMenuItem {
   id: string;
   label: string;
@@ -13,4 +15,5 @@ export interface DropdownMenuProps {
     children?: React.ReactNode; // Can be used as custom trigger
     searchable?: boolean;
     align?: "start" | "center" | "end";
+    density?: Density;
 }

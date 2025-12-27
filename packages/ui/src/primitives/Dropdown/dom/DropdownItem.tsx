@@ -4,10 +4,9 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import React from "react";
 import { useTheme } from "@sanchay/theme-provider";
 import { useDropdownContext } from "./DropdownRoot";
-import {
-  dropdownItemClassName,
-  dropdownItemContentClassName,
-} from "./styles.dom";
+import { dropdownItemStyle, dropdownItemContentClassName } from "./styles.dom";
+import { useDensity } from "../../../contexts/DensityContext";
+import { cn } from "../../../utils";
 
 interface DropdownItemProps extends React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Item
@@ -21,6 +20,7 @@ const DropdownItem = React.forwardRef<
 >(({ className, children, shortcut, style, ...props }, ref) => {
   // Removed useTheme
   const context = useDropdownContext();
+  const density = useDensity();
   const searchQuery = context?.searchQuery?.toLowerCase() || "";
 
   // Filter logic: Check if children text content contains search query
@@ -45,7 +45,7 @@ const DropdownItem = React.forwardRef<
       ref={ref}
       style={style}
       // Added standard Tailwind data attributes for Radix UI focus/highlight state matching MenuBar styles
-      className={`${dropdownItemClassName} ${className || ""}`}
+      className={cn(dropdownItemStyle({ density }), className)}
       onKeyDown={(e) => {
         if (e.key === "ArrowUp") {
           // Check if we are the first item
@@ -74,9 +74,7 @@ const DropdownItem = React.forwardRef<
       {/* Group content (Icon + Label) to properly align left */}
       <span className={dropdownItemContentClassName}>{children}</span>
 
-      {shortcut && (
-        <span className="ml-auto text-xs opacity-60">{shortcut}</span>
-      )}
+      {shortcut && <span className="ml-auto opacity-60">{shortcut}</span>}
     </DropdownMenuPrimitive.Item>
   );
 });

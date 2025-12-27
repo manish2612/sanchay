@@ -20,6 +20,7 @@ const DropdownMenu = ({
   triggerLabel,
   children,
   searchable = false,
+  density, // Native might not support density yet, but we accept it for API consistency
 }: DropdownMenuProps) => {
   return (
     <DropdownRoot>

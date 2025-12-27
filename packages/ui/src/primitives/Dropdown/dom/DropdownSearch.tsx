@@ -5,15 +5,18 @@ import { useDropdownContext } from "./DropdownRoot";
 import { TextInput } from "../../TextInput/TextInput.dom";
 import { Icon } from "../../Icon/Icon.dom";
 import {
-  dropdownSearchClassName,
+  dropdownSearchStyle,
   dropdownSearchContainerClassName,
 } from "./styles.dom";
+import { useDensity } from "../../../contexts/DensityContext";
+import { cn } from "../../../utils";
 
 interface DropdownSearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
   ({ style, className, ...props }, ref) => {
     const context = useDropdownContext();
+    const density = useDensity();
     // Removed useTheme
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,7 +26,9 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
 
     return (
       <div className={dropdownSearchContainerClassName} style={style}>
-        <TextInput.Root className={dropdownSearchClassName}>
+        <TextInput.Root
+          className={cn(dropdownSearchStyle({ density }), className)}
+        >
           <TextInput.Slot side="left">
             <Icon name="search" size={16} className="text-muted-foreground" />
           </TextInput.Slot>
