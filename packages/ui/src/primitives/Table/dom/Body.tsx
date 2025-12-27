@@ -66,7 +66,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
           orientation="vertical"
           className="flex select-none touch-none p-0.5 bg-secondary data-[orientation=vertical]:w-3 z-50"
         >
-          <ScrollAreaPrimitive.Thumb className="flex-1 bg-primary/15 rounded relative" />
+          <ScrollAreaPrimitive.Thumb className="flex-1 bg-primary/20 rounded relative" />
         </ScrollAreaPrimitive.Scrollbar>
       </ScrollAreaPrimitive.Root>
     );

@@ -47,23 +47,23 @@ export function TableRoot<TData>({
 
   const totalWidth = table.getTotalSize();
 
+  /* 
+     Sync Virtualizer scroll with focused row.
+     This ensures consistent scrolling even if key presses are rapid.
+  */
+  React.useEffect(() => {
+    virtualizer.scrollToIndex(focusedRowIndex, { align: "auto" });
+  }, [focusedRowIndex, virtualizer]);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (rows.length === 0) return;
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setFocusedRowIndex((prev) => {
-        const next = Math.min(prev + 1, rows.length - 1);
-        virtualizer.scrollToIndex(next);
-        return next;
-      });
+      setFocusedRowIndex((prev) => Math.min(prev + 1, rows.length - 1));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setFocusedRowIndex((prev) => {
-        const next = Math.max(prev - 1, 0);
-        virtualizer.scrollToIndex(next);
-        return next;
-      });
+      setFocusedRowIndex((prev) => Math.max(prev - 1, 0));
     } else if (e.key === "Enter") {
       e.preventDefault();
       onRowClick?.(rows[focusedRowIndex]);
