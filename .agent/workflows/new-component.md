@@ -21,7 +21,9 @@ description: Development rules and workflow for UI components.
 6. **Primitive Usage**:
    - CHECK for existing primitives (in `packages/ui/src/primitives/`) before creating new ones.
    - USE existing primitives if available.
-   - **ASK PERMISSION** if a new primitive is needed.
+7. **Native Interactions**:
+   - **ALWAYS** use `Pressable` from `react-native` instead of `TouchableOpacity` or `TouchableHighlight`.
+   - **MANDATORY CHECK**: Inspect code for `TouchableOpacity` and replace with `Pressable` if found.
 
 ---
 
@@ -43,6 +45,7 @@ description: Development rules and workflow for UI components.
    - **Styling**:
      - For Web: Apply Tailwind. If classes > 5, create `styles.dom.ts`.
      - For Native: Create `styles.ts` with `getStyles(theme)` pattern immediately.
+   - **Interactions**: Ensure `Pressable` is used for all tappable elements in Native files.
 
 3. **Refactor Check (Rule 5)**:
    - Count the total `.dom.tsx` and `.native.tsx` files.
@@ -57,3 +60,4 @@ description: Development rules and workflow for UI components.
 4. **Final Verification**:
    - Check all `import` / `export` statements in `index.ts` and component files are correct.
    - Verify no inline styles exist.
+   - **Verify NO `TouchableOpacity`** is imported or used. Replacing it with `Pressable` is mandatory.
