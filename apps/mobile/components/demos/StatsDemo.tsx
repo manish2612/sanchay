@@ -1,0 +1,25 @@
+import React from "react";
+import { View } from "react-native";
+import { Text } from "@sanchay/ui";
+import { useTheme } from "@sanchay/theme-provider";
+
+export function StatsDemo() {
+  const { theme } = useTheme();
+  const t = theme as any;
+
+  return (
+    <View
+      style={{
+        padding: t.spacing[4],
+        backgroundColor: t.colors.background,
+        borderRadius: 8,
+      }}
+    >
+      <Text weight="bold" style={{ marginBottom: 5 }}>
+        Resolved Tokens:
+      </Text>
+      <Text>Button Height: {t.sizes.buttonHeight}px</Text>
+      <Text>Base Spacing (4): {t.spacing[4]}px</Text>
+    </View>
+  );
+}

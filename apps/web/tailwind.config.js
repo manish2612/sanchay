@@ -8,7 +8,9 @@ const webTheme = getWebTheme(rawTheme);
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'class',
     content: [
+
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
         "../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}",
         "../../packages/modules/src/**/*.{js,ts,jsx,tsx,mdx}",
