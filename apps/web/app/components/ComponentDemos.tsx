@@ -15,6 +15,7 @@ import { MenuBarDemo } from "./demos/MenuBarDemo";
 import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { TableDemo } from "./demos/TableDemo/index";
+import { DropdownDemo } from "./demos/DropdownDemo";
 
 export function ComponentDemos() {
   return (
@@ -58,6 +59,7 @@ export function ComponentDemos() {
               <TextInputDemo />
               <MenuBarDemo />
               <ModalDemo />
+              <DropdownDemo />
             </div>
           </div>
         </div>
