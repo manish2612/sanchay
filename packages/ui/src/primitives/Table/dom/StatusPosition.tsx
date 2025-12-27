@@ -15,12 +15,16 @@ export const TableStatusPosition = React.forwardRef<
 
   if (virtualRows.length === 0) return null;
 
-  let count = 0;
-
   // Use scrollOffset (or fallback to ref) to detect actual visual position
   // ignoring overscanned items.
   const scrollOffset = virtualizer.scrollOffset ?? 0;
   const viewportHeight = scrollRef.current?.clientHeight ?? 0;
+  const totalHeight = virtualizer.getTotalSize();
+
+  // Hide status bar if there is no scrollable content (all rows fit in viewport)
+  if (totalHeight <= viewportHeight && data.length > 0) return null;
+
+  let count = 0;
 
   if (position === "top") {
     // First row whose TOP is visible (start >= scrollTop)

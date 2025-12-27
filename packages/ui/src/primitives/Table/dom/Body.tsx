@@ -20,6 +20,20 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
       useTableContext();
     const { rows } = table.getRowModel();
 
+    if (rows.length === 0) {
+      return (
+        <div
+          className={cn(
+            "flex-1 w-full min-h-[200px] flex items-center justify-center text-muted-foreground border border-dashed rounded-md m-2",
+            className
+          )}
+          {...props}
+        >
+          No Data Available
+        </div>
+      );
+    }
+
     return (
       <ScrollAreaPrimitive.Root
         className={cn("flex-1 w-full min-h-0", className)}
