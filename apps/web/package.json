@@ -11,8 +11,10 @@
     },
     "dependencies": {
         "@fontsource/material-icons": "^5.2.7",
+        "@sanchay/api": "workspace:*",
         "@sanchay/config": "workspace:*",
         "@sanchay/design-tokens": "workspace:*",
+        "@sanchay/services": "workspace:*",
         "@sanchay/theme-adapters": "workspace:*",
         "@sanchay/theme-provider": "workspace:*",
         "@sanchay/ui": "workspace:*",

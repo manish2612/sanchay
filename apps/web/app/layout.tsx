@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 import { ThemeProvider } from "@sanchay/theme-provider/web";
 import { LinkProvider, ShortcutProvider } from "@sanchay/ui";
 import { NextLinkAdapter } from "../providers/NextLinkAdapter";
+import { ApiProvider } from "../providers/ApiProvider";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
 import "@fontsource/material-icons";
 
@@ -42,7 +43,9 @@ export default function RootLayout({
         />
         <ThemeProvider initialBrand="default" initialMode="system">
           <ShortcutProvider>
-            <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>
+            <ApiProvider>
+              <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>
+            </ApiProvider>
           </ShortcutProvider>
         </ThemeProvider>
       </body>
