@@ -35,6 +35,45 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                 position: "relative",
               }}
             >
+              {/* Animated Highlight Row */}
+              {(() => {
+                const virtualRows = virtualizer.getVirtualItems();
+                const focusedVirtualRow = virtualRows.find(
+                  (row: any) => row.index === focusedRowIndex
+                );
+
+                if (!focusedVirtualRow) return null;
+
+                const scrollOffset = virtualizer.scrollOffset ?? 0;
+                const viewportHeight = scrollRef.current?.clientHeight ?? 0;
+
+                // Visual Position relative to viewport top
+                const rowTop = focusedVirtualRow.start - scrollOffset;
+                const rowBottom = focusedVirtualRow.end - scrollOffset;
+
+                // Check if row is physically at the edges of the viewport
+                // Use a threshold (e.g., 5px or 1/2 row height)
+                const isAtTopEdge = rowTop < 10;
+                const isAtBottomEdge = rowBottom > viewportHeight - 10;
+
+                const isAtEdge = isAtTopEdge || isAtBottomEdge;
+
+                return (
+                  <div
+                    className={cn(
+                      "absolute left-0 w-full bg-primary/10 rounded-sm pointer-events-none border border-primary/20 will-change-transform",
+                      !isAtEdge &&
+                        "transition-transform duration-200 ease-in-out"
+                    )}
+                    style={{
+                      height: `${focusedVirtualRow.size}px`,
+                      transform: `translateY(${focusedVirtualRow.start}px)`,
+                      zIndex: 0,
+                    }}
+                  />
+                );
+              })()}
+
               {virtualizer.getVirtualItems().map((virtualRow: any) => {
                 const row = rows[virtualRow.index];
                 const isFocused = virtualRow.index === focusedRowIndex;
@@ -52,6 +91,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                       width: "100%",
                       height: `${virtualRow.size}px`,
                       transform: `translateY(${virtualRow.start}px)`,
+                      zIndex: 1, // Ensure row content (text/clicks) is above highlight
                     }}
                     onClick={() => handleRowClick(virtualRow.index)}
                   >

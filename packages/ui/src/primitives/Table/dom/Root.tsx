@@ -42,7 +42,7 @@ export function TableRoot<TData>({
     count: rows.length,
     getScrollElement: () => scrollRef.current,
     estimateSize: () => 35,
-    overscan: 5,
+    overscan: 20,
   });
 
   const totalWidth = table.getTotalSize();
