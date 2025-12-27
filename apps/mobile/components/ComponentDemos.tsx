@@ -13,6 +13,7 @@ import { MenuBarDemo } from "./demos/MenuBarDemo";
 import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { ShortcutDemo } from "./demos/ShortcutDemo";
+import { DropdownDemo } from "./demos/DropdownDemo";
 
 export function ComponentDemos() {
   const { theme } = useTheme();
@@ -123,6 +124,11 @@ export function ComponentDemos() {
               {/* Modal Section */}
               <View style={{ marginTop: 16 }}>
                 <ModalDemo />
+              </View>
+
+              {/* Dropdown Section */}
+              <View style={{ marginTop: 16 }}>
+                <DropdownDemo />
               </View>
             </View>
           </View>
