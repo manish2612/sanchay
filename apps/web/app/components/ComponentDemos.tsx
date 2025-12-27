@@ -14,7 +14,7 @@ import { TextInputDemo } from "./demos/TextInputDemo";
 import { MenuBarDemo } from "./demos/MenuBarDemo";
 import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
-import { TableDemo } from "./demos/TableDemo";
+import { TableDemo } from "./demos/TableDemo/index";
 
 export function ComponentDemos() {
   return (
