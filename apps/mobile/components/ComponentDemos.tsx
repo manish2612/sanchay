@@ -3,6 +3,8 @@ import { View, ScrollView } from "react-native";
 import { Text, useResponsiveValues, GridBackground } from "@sanchay/ui";
 import { APP_NAME } from "@sanchay/config";
 import { useTheme } from "@sanchay/theme-provider";
+import { useRouter } from "expo-router";
+import { Button } from "@sanchay/ui";
 
 import { ThemeControls } from "./demos/ThemeControls";
 import { StatsDemo } from "./demos/StatsDemo";
@@ -17,6 +19,7 @@ import { DropdownDemo } from "./demos/DropdownDemo";
 
 export function ComponentDemos() {
   const { theme } = useTheme();
+  const router = useRouter();
   const t = theme as any;
 
   const {
@@ -61,6 +64,13 @@ export function ComponentDemos() {
         <Text style={{ marginBottom: 30 }} variant="body">
           Density & Theme Demo
         </Text>
+
+        <View style={{ marginBottom: 20 }}>
+          {/* Using sanchay/ui Button */}
+          <Button variant="primary" onPress={() => router.push("/test-api")}>
+            Open API Test
+          </Button>
+        </View>
 
         <ThemeControls />
 

@@ -2,6 +2,7 @@ import { Slot } from "expo-router";
 import { ThemeProvider } from "@sanchay/theme-provider";
 import { LinkProvider } from "@sanchay/ui";
 import { ExpoLinkAdapter } from "../providers/ExpoLinkAdapter";
+import { ApiProvider } from "../providers/ApiProvider";
 import {
   useFonts,
   IBMPlexSans_300Light,
@@ -43,9 +44,11 @@ export default function Layout() {
 
   return (
     <ThemeProvider initialBrand="default" initialMode="system">
-      <LinkProvider value={ExpoLinkAdapter}>
-        <Slot />
-      </LinkProvider>
+      <ApiProvider>
+        <LinkProvider value={ExpoLinkAdapter}>
+          <Slot />
+        </LinkProvider>
+      </ApiProvider>
     </ThemeProvider>
   );
 }
