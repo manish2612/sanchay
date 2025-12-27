@@ -13,3 +13,6 @@ export * from './primitives/CommandPalette';
 export * from './primitives/ShortcutCheatSheet';
 export * from './primitives/Table';
 export * from './utils';
+export * from './primitives/Dropdown';
+export * from './components/DropdownMenu';
+
