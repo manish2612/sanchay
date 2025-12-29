@@ -1,5 +1,5 @@
-import { ComponentDemos } from "../components/ComponentDemos";
+import ImagePickerDemo from "./image-picker-demo";
 
 export default function Home() {
-  return <ComponentDemos />;
+  return <ImagePickerDemo />;
 }

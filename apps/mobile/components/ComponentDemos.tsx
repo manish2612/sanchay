@@ -1,5 +1,6 @@
 import React from "react";
 import { View, ScrollView } from "react-native";
+import { useRouter } from "expo-router";
 import { Text, useResponsiveValues, GridBackground } from "@sanchay/ui";
 import { APP_NAME } from "@sanchay/config";
 import { useTheme } from "@sanchay/theme-provider";
@@ -14,8 +15,10 @@ import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { ShortcutDemo } from "./demos/ShortcutDemo";
 import { DropdownDemo } from "./demos/DropdownDemo";
+import { Button } from "@sanchay/ui";
 
 export function ComponentDemos() {
+  const router = useRouter();
   const { theme } = useTheme();
   const t = theme as any;
 
@@ -57,6 +60,17 @@ export function ComponentDemos() {
         >
           Welcome to {APP_NAME} Mobile
         </Text>
+
+        <View style={{ marginBottom: 20, width: "100%", alignItems: "center" }}>
+          <Button
+            variant="primary"
+            size="lg"
+            onPress={() => router.push("/image-picker-demo")}
+            style={{ width: "100%", maxWidth: 300 }}
+          >
+            Open Ruby Tower Image Picker
+          </Button>
+        </View>
 
         <Text style={{ marginBottom: 30 }} variant="body">
           Density & Theme Demo
