@@ -94,6 +94,9 @@ importers:
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.7
+      babel-preset-expo:
+        specifier: ^54.0.9
+        version: 54.0.9(@babel/core@7.28.5)(@babel/runtime@7.28.4)(expo@54.0.30)(react-refresh@0.14.2)
 
   apps/web:
     dependencies:
@@ -6903,7 +6906,9 @@ snapshots:
       metro-runtime: 0.83.3
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
     optional: true
 
   '@react-native/normalize-colors@0.74.89': {}
