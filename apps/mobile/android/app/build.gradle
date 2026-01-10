@@ -17,6 +17,8 @@ react {
     /* Config for ABI Splits */
     def enableSeparateBuildPerCPUArchitecture = true
 
+
+
     enableBundleCompression = (findProperty('android.enableBundleCompression') ?: false).toBoolean()
     // Use Expo CLI to bundle the app, this ensures the Metro config
     // works correctly with Expo projects.
