@@ -64,26 +64,36 @@ export default function ImagePickerDemo() {
       {/* Custom Header */}
       <View
         style={{
+          padding: 16,
+          backgroundColor: "#fff",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          borderBottomWidth: 1,
-          borderBottomColor: t.colors.border,
-          backgroundColor: "#ffffff",
         }}
       >
-        <Text variant="heading" size="lg" weight="bold" color={"#303030"}>
-          Ruby Tower
-        </Text>
-        <Pressable onPress={toggleTheme} style={{ padding: 8 }}>
-          <Icon
-            name={isDark ? "wb-sunny" : "nightlight-round"}
-            size={24}
-            color={t.colors.text}
-          />
-        </Pressable>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            paddingHorizontal: 24,
+            paddingVertical: 12,
+            backgroundColor: "#f5f5f5",
+            flex: 1,
+            borderRadius: 12,
+          }}
+        >
+          <Text variant="heading" size="lg" weight="bold" color={"#303030"}>
+            Ruby Tower
+          </Text>
+          <Pressable onPress={toggleTheme} style={{ padding: 8 }}>
+            <Icon
+              name={isDark ? "wb-sunny" : "nightlight-round"}
+              size={24}
+              color={t.colors.text}
+            />
+          </Pressable>
+        </View>
       </View>
 
       <View style={[styles.container, { backgroundColor: "#ffffff" }]}>
@@ -100,9 +110,7 @@ export default function ImagePickerDemo() {
             ]}
           >
             {image ? (
-              <Text color={t.colors.border}>
-                Uploaded Image will be shown here
-              </Text>
+              <Image source={{ uri: image }} style={styles.image} />
             ) : (
               <Text color="#cccccc">Upload Image</Text>
             )}
@@ -114,7 +122,8 @@ export default function ImagePickerDemo() {
               onPress={pickImage}
               variant="primary"
               size="lg"
-              style={{ borderRadius: 12 }} // Subtle rounded corners
+              style={{ borderRadius: 8 }} // Subtle rounded corners
+              iconLeft="image"
             >
               {image ? "Change Image" : "Select Image"}
             </Button>

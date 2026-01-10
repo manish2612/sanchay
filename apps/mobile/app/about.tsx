@@ -23,7 +23,7 @@ export default function AboutScreen() {
     try {
       await Share.share({
         message:
-          "One tap to your office entry QR—no more searching, just scanning. Get Ruby Tower: https://rubytower.app",
+          "One tap to your office entry QR—no more searching, just scanning. Get Ruby Tower: https://drive.google.com/drive/folders/1jAx2eJ_XYoMhcZL2nMjqUjvxmvXhFhJM?usp=sharing",
       });
     } catch (error) {
       console.error(error);
