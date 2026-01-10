@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, StyleSheet, Pressable } from "react-native";
+import { UniversalLink } from "@sanchay/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -55,6 +56,8 @@ export default function ImagePickerDemo() {
   };
 
   const isDark = mode === "dark";
+  const footerBg = "#f5f5f5";
+  const footerText = "#666666";
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.colors.background }}>
@@ -117,6 +120,39 @@ export default function ImagePickerDemo() {
             </Button>
           </View>
         </View>
+      </View>
+
+      {/* Footer */}
+      <View
+        style={{
+          padding: 16,
+          backgroundColor: footerBg,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <UniversalLink
+          href="/about"
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+          }}
+        >
+          <View style={{ transform: [{ translateY: 3 }, { translateX: -3 }] }}>
+            <Icon name="info" size={18} color={footerText} />
+          </View>
+          <Text
+            variant="body"
+            size="md"
+            color={footerText}
+            weight="medium"
+            style={{ includeFontPadding: false, textAlignVertical: "center" }}
+          >
+            About
+          </Text>
+        </UniversalLink>
       </View>
     </SafeAreaView>
   );
