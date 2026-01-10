@@ -1,4 +1,11 @@
-import { View, Image, Linking, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Image,
+  Linking,
+  StyleSheet,
+  Pressable,
+  Share,
+} from "react-native";
 import { Text, Button, Icon } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider";
 import { useRouter } from "expo-router";
@@ -10,6 +17,17 @@ export default function AboutScreen() {
 
   const openGithub = () => {
     Linking.openURL("https://github.com/manish2612");
+  };
+
+  const onShare = async () => {
+    try {
+      await Share.share({
+        message:
+          "One tap to your office entry QR—no more searching, just scanning. Get Ruby Tower: https://rubytower.app",
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -47,6 +65,19 @@ export default function AboutScreen() {
           One tap to your office entry QR—no more searching, just scanning.
         </Text>
 
+        <Button variant="primary" size="lg" onPress={onShare} iconLeft="share">
+          Share
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onPress={() => router.back()}
+          iconLeft="chevron-left"
+          style={{ marginTop: 32 }}
+        >
+          Back
+        </Button>
+
         {/* GitHub Link */}
         <Pressable onPress={openGithub} style={styles.githubContainer}>
           <Text variant="body" size="md" style={{ opacity: 0.6 }}>
@@ -61,35 +92,6 @@ export default function AboutScreen() {
             @manish2612
           </Text>
         </Pressable>
-      </View>
-
-      {/* Footer / Back Navigation */}
-      <View style={styles.footer}>
-        <Button
-          variant="primary"
-          size="lg"
-          onPress={() => router.back()}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            paddingHorizontal: 32,
-          }}
-        >
-          <View style={{ transform: [{ translateY: 3 }, { translateX: -3 }] }}>
-            <Icon name="home" size={20} color="#ffffff" />
-          </View>
-          <Text
-            variant="body"
-            size="md"
-            color="#ffffff"
-            weight="medium"
-            style={{ includeFontPadding: false, textAlignVertical: "center" }}
-          >
-            Home
-          </Text>
-        </Button>
       </View>
     </View>
   );
@@ -114,6 +116,16 @@ const styles = StyleSheet.create({
   githubContainer: {
     alignItems: "center",
     padding: 12,
+    flexDirection: "row",
+    gap: 6,
+    position: "absolute",
+    bottom: 40,
+  },
+  shareButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    padding: 8,
   },
   footer: {
     padding: 24,
