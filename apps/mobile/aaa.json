@@ -1,0 +1,40 @@
+{
+    "name": "mobile",
+    "version": "0.0.0",
+    "private": true,
+    "main": "expo-router/entry",
+    "scripts": {
+        "start": "expo start",
+        "dev": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web",
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@expo-google-fonts/ibm-plex-sans": "^0.4.1",
+        "@expo-google-fonts/work-sans": "^0.4.2",
+        "@expo/metro-runtime": "~6.1.0",
+        "@react-native-async-storage/async-storage": "^2.2.0",
+        "@sanchay/config": "workspace:*",
+        "@sanchay/theme-provider": "workspace:*",
+        "@sanchay/ui": "workspace:*",
+        "expo": "54.0.30",
+        "expo-constants": "~18.0.0",
+        "expo-font": "^14.0.10",
+        "expo-image-picker": "^17.0.10",
+        "expo-linking": "~8.0.0",
+        "expo-router": "6.0.21",
+        "expo-status-bar": "~3.0.9",
+        "react": "19.1.4",
+        "react-dom": "19.1.4",
+        "react-native": "0.81.5",
+        "react-native-safe-area-context": "5.6.2",
+        "react-native-screens": "~4.16.0",
+        "react-native-web": "~0.21.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.20.0",
+        "@types/react": "^19.0.0"
+    }
+}

@@ -51,6 +51,9 @@ importers:
       expo:
         specifier: 54.0.30
         version: 54.0.30(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(graphql@15.8.0)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))(react@19.1.4)
+      expo-brightness:
+        specifier: ~14.0.8
+        version: 14.0.8(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))
       expo-constants:
         specifier: ~18.0.0
         version: 18.0.12(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))
@@ -91,6 +94,9 @@ importers:
       '@babel/core':
         specifier: ^7.20.0
         version: 7.28.5
+      '@react-native/metro-config':
+        specifier: ^0.83.1
+        version: 0.83.1(@babel/core@7.28.5)
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.7
@@ -2805,6 +2811,12 @@ packages:
     peerDependencies:
       expo: '*'
       react: '*'
+      react-native: '*'
+
+  expo-brightness@14.0.8:
+    resolution: {integrity: sha512-WOg3UxzkHFTKBW3XvROlrVRmnJmZLhGBGd1RdzTfrtt2/MdSzvVmCevqWh4bohkeLABh0Yc9YRo1vFgfT73DWw==}
+    peerDependencies:
+      expo: '*'
       react-native: '*'
 
   expo-constants@18.0.12:
@@ -6663,7 +6675,6 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
-    optional: true
 
   '@react-native/babel-preset@0.81.5(@babel/core@7.28.5)':
     dependencies:
@@ -6764,7 +6775,6 @@ snapshots:
       react-refresh: 0.14.2
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@react-native/codegen@0.81.5(@babel/core@7.28.5)':
     dependencies:
@@ -6795,7 +6805,6 @@ snapshots:
       invariant: 2.2.4
       nullthrows: 1.1.1
       yargs: 17.7.2
-    optional: true
 
   '@react-native/community-cli-plugin@0.81.5(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))':
     dependencies:
@@ -6885,8 +6894,7 @@ snapshots:
 
   '@react-native/js-polyfills@0.83.0': {}
 
-  '@react-native/js-polyfills@0.83.1':
-    optional: true
+  '@react-native/js-polyfills@0.83.1': {}
 
   '@react-native/metro-babel-transformer@0.83.1(@babel/core@7.28.5)':
     dependencies:
@@ -6896,7 +6904,6 @@ snapshots:
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@react-native/metro-config@0.83.1(@babel/core@7.28.5)':
     dependencies:
@@ -6909,7 +6916,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-    optional: true
 
   '@react-native/normalize-colors@0.74.89': {}
 
@@ -7917,6 +7923,11 @@ snapshots:
       react-native: 0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4)
     transitivePeerDependencies:
       - supports-color
+
+  expo-brightness@14.0.8(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4)):
+    dependencies:
+      expo: 54.0.30(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.21)(graphql@15.8.0)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4))(react@19.1.4)
+      react-native: 0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4)
 
   expo-constants@18.0.12(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@react-native-community/cli@12.1.1)(@react-native/metro-config@0.83.1(@babel/core@7.28.5))(@types/react@19.2.7)(react@19.1.4)):
     dependencies:

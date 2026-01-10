@@ -68,24 +68,22 @@ export default function ImagePickerDemo() {
           paddingVertical: 12,
           borderBottomWidth: 1,
           borderBottomColor: t.colors.border,
-          backgroundColor: t.colors.background,
+          backgroundColor: "#ffffff",
         }}
       >
-        <Text variant="heading" size="lg" weight="bold">
+        <Text variant="heading" size="lg" weight="bold" color={"#303030"}>
           Ruby Tower
         </Text>
         <Pressable onPress={toggleTheme} style={{ padding: 8 }}>
           <Icon
             name={isDark ? "wb-sunny" : "nightlight-round"}
             size={24}
-            color={t.colors.foreground}
+            color={t.colors.text}
           />
         </Pressable>
       </View>
 
-      <View
-        style={[styles.container, { backgroundColor: t.colors.background }]}
-      >
+      <View style={[styles.container, { backgroundColor: "#ffffff" }]}>
         <View style={styles.content}>
           {/* Image Container */}
           <View
@@ -93,14 +91,17 @@ export default function ImagePickerDemo() {
               styles.imageContainer,
               {
                 borderColor: t.colors.border,
-                backgroundColor: t.colors.surface || "#f0f0f0",
+                borderWidth: 1,
+                backgroundColor: "white",
               },
             ]}
           >
             {image ? (
-              <Image source={{ uri: image }} style={styles.image} />
+              <Text color={t.colors.border}>
+                Uploaded Image will be shown here
+              </Text>
             ) : (
-              <Icon name="image" size={64} color={t.colors.muted || "#ccc"} />
+              <Text color="#cccccc">Upload Image</Text>
             )}
           </View>
 
@@ -142,15 +143,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    // Shadow for elevation
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
   },
   image: {
     width: "100%",
