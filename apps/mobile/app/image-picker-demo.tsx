@@ -3,14 +3,17 @@ import { View, Image, StyleSheet, Pressable } from "react-native";
 import { UniversalLink } from "@sanchay/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from "expo-file-system/legacy";
 import { useTheme } from "@sanchay/theme-provider";
 import { Text, Button, Icon } from "@sanchay/ui";
 
-const STORAGE_KEY = "user_selected_image_uri";
+const PROFILE_IMAGE_FILENAME = "user_profile_image.jpg";
 
 export default function ImagePickerDemo() {
   const [image, setImage] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<string>("");
+  const [isDebugVisible, setIsDebugVisible] = useState(false);
+  const [tapCount, setTapCount] = useState(0);
   const { theme, setMode, mode } = useTheme();
   const t = theme as any;
 
@@ -22,20 +25,22 @@ export default function ImagePickerDemo() {
 
   const loadSavedImage = async () => {
     try {
-      const savedImage = await AsyncStorage.getItem(STORAGE_KEY);
-      if (savedImage) {
-        setImage(savedImage);
+      if (!FileSystem.documentDirectory) {
+        console.warn("FileSystem.documentDirectory is null");
+        return;
+      }
+      const destinationUri =
+        FileSystem.documentDirectory + PROFILE_IMAGE_FILENAME;
+      setDebugInfo(`Checking: ${destinationUri}`);
+      const fileInfo = await FileSystem.getInfoAsync(destinationUri);
+      if (fileInfo.exists) {
+        setImage(`${destinationUri}?t=${Date.now()}`);
+        setDebugInfo((prev) => prev + `\nLoaded: ${destinationUri}`);
+      } else {
+        setDebugInfo((prev) => prev + `\nFile does not exist`);
       }
     } catch (e) {
       console.error("Failed to load image", e);
-    }
-  };
-
-  const saveImage = async (uri: string) => {
-    try {
-      await AsyncStorage.setItem(STORAGE_KEY, uri);
-    } catch (e) {
-      console.error("Failed to save image", e);
     }
   };
 
@@ -49,15 +54,54 @@ export default function ImagePickerDemo() {
     });
 
     if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      setImage(uri);
-      saveImage(uri);
+      try {
+        if (!FileSystem.documentDirectory) {
+          throw new Error("FileSystem.documentDirectory is null");
+        }
+
+        const sourceUri = result.assets[0].uri;
+        const destinationUri =
+          FileSystem.documentDirectory + PROFILE_IMAGE_FILENAME;
+
+        // Check if file exists and delete to ensure overwrite works cleanly
+        const fileInfo = await FileSystem.getInfoAsync(destinationUri);
+        if (fileInfo.exists) {
+          await FileSystem.deleteAsync(destinationUri, { idempotent: true });
+        }
+
+        await FileSystem.copyAsync({ from: sourceUri, to: destinationUri });
+
+        // Add timestamp to force reload
+        const newUri = `${destinationUri}?t=${Date.now()}`;
+        setImage(newUri);
+        setDebugInfo(
+          `Source: ${sourceUri}\nSaved to: ${destinationUri}\nTimestamp: ${Date.now()}`,
+        );
+      } catch (e) {
+        console.error("Failed to save/copy image", e);
+      }
     }
   };
 
   const isDark = mode === "dark";
   const footerBg = "#f5f5f5";
   const footerText = "#666666";
+
+  const handleDebugToggle = () => {
+    if (isDebugVisible) {
+      setIsDebugVisible(false);
+      setTapCount(0);
+    } else {
+      const newCount = tapCount + 1;
+      setTapCount(newCount);
+      if (newCount >= 5) {
+        setIsDebugVisible(true);
+        setTapCount(0);
+      }
+    }
+  };
+
+  console.log(">>>> debugInfo ", debugInfo || "NA");
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.colors.background }}>
@@ -99,7 +143,8 @@ export default function ImagePickerDemo() {
       <View style={[styles.container, { backgroundColor: "#ffffff" }]}>
         <View style={styles.content}>
           {/* Image Container */}
-          <View
+          <Pressable
+            onPress={handleDebugToggle}
             style={[
               styles.imageContainer,
               {
@@ -114,7 +159,7 @@ export default function ImagePickerDemo() {
             ) : (
               <Text color="#cccccc">Upload Image</Text>
             )}
-          </View>
+          </Pressable>
 
           {/* Selection Button */}
           <View style={styles.buttonContainer}>
@@ -128,6 +173,18 @@ export default function ImagePickerDemo() {
               {image ? "Change Image" : "Select Image"}
             </Button>
           </View>
+
+          {/* Debug Info */}
+          {isDebugVisible && (
+            <View style={{ padding: 10, width: "100%" }}>
+              <Text size="xs" color="#999">
+                Debug Info:
+              </Text>
+              <Text size="xs" color="#333" style={{ fontFamily: "monospace" }}>
+                {debugInfo}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
 
