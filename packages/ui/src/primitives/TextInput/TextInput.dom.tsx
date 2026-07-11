@@ -5,16 +5,16 @@ import { TextInputRootProps, TextInputSlotProps, WebTextInputProps } from './typ
 
 // --- Styles ---
 const rootVariants = cva(
-  "flex h-10 w-full items-center rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+  "flex h-10 w-full items-center rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2",
   {
     variants: {
       variant: {
         default: "border-input",
-        error: "border-destructive focus-within:ring-destructive",
+        error: "border-danger focus-within:ring-danger",
         success: "border-success focus-within:ring-success",
       },
       disabled: {
-        true: "opacity-50 cursor-not-allowed",
+        true: "opacity-50 cursor-not-allowed bg-surface-variant",
       }
     },
     defaultVariants: {

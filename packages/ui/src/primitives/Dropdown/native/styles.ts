@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
 
 export const getDropdownThemeStyles = (theme: any) => ({
   content: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.popover,
     borderColor: theme.colors.border,
   },
   itemText: {

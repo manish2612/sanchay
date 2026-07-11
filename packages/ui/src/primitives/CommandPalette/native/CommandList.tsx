@@ -76,7 +76,7 @@ export const CommandItem = ({
       onPress={() => !disabled && onSelect?.(value || "")}
       style={({ pressed }) => [
         styles.item,
-        { backgroundColor: pressed ? theme.colors.accent : "transparent" },
+        { backgroundColor: pressed ? theme.colors.surfaceHover : "transparent" },
         disabled && { opacity: 0.5 },
       ]}
       disabled={disabled}

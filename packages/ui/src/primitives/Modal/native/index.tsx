@@ -113,7 +113,7 @@ const ModalContent = ({
               style={[
                 styles.content,
                 {
-                  backgroundColor: theme.colors.background,
+                  backgroundColor: theme.colors.popover,
                   borderColor: theme.colors.border,
                 },
                 style,

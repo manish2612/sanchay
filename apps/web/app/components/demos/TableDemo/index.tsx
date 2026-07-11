@@ -50,11 +50,11 @@ export function TableDemo() {
   const [activeScenarioId, setActiveScenarioId] =
     React.useState<Scenario>("full-1000");
   const ActiveComponent = SCENARIOS.find(
-    (s) => s.id === activeScenarioId
+    (s) => s.id === activeScenarioId,
   )!.Component;
 
   return (
-    <div className="w-full p-4 border rounded-lg bg-card text-card-foreground shadow-sm space-y-4">
+    <div className="w-full p-4 border border-[#222222] rounded-lg bg-surface shadow-sm text-card-foreground space-y-4">
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">Advanced Virtual Table Demo</h2>
 

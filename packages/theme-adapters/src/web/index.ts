@@ -8,17 +8,14 @@ import { Theme } from '@sanchay/design-tokens';
  */
 const flattenTheme = (obj: any, prefix = ''): Record<string, string> => {
     return Object.keys(obj).reduce((acc, k) => {
+        const kebabKey = k.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
         const pre = prefix.length ? prefix + '-' : '';
         const value = obj[k];
 
         if (value && typeof value === 'object' && !Array.isArray(value)) {
-            Object.assign(acc, flattenTheme(value, pre + k));
+            Object.assign(acc, flattenTheme(value, pre + kebabKey));
         } else {
-            // It's a string or number value.
-            // We just convert to string.
-            // Special handling: if value is number, we keep it as is (no px appended).
-            // But our tokens are mostly strings now.
-            acc[pre + k] = String(value);
+            acc[pre + kebabKey] = String(value);
         }
         return acc;
     }, {} as Record<string, string>);
@@ -28,8 +25,9 @@ const processThemeForWeb = (obj: any, prefix = ''): any => {
     if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
         const result: any = {};
         for (const k of Object.keys(obj)) {
+            const kebabKey = k.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
             const pre = prefix.length ? prefix + '-' : '';
-            result[k] = processThemeForWeb(obj[k], pre + k);
+            result[kebabKey] = processThemeForWeb(obj[k], pre + kebabKey);
         }
         return result;
     }

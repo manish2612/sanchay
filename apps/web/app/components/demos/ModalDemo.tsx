@@ -16,7 +16,7 @@ import {
 
 export function ModalDemo() {
   return (
-    <div className="p-5 bg-background rounded-lg border border-[#222222]">
+    <div className="p-5 bg-surface shadow-sm rounded-lg border border-[#222222]">
       <strong className="text-foreground block mb-4 text-sm font-bold font-heading border-b border-[#333333] pb-2">
         Modal Primitive:
       </strong>

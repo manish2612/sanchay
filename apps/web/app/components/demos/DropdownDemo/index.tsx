@@ -7,7 +7,7 @@ import { DropdownMenuDemoExample } from "./DropdownMenuDemoExample";
 
 export const DropdownDemo = () => {
   return (
-    <div className="p-6 border rounded-lg bg-card text-card-foreground">
+    <div className="p-6 border border-[#222222] rounded-lg text-card-foreground bg-surface shadow-sm">
       <h2 className="text-2xl font-bold mb-4">Dropdown Demos</h2>
       <div className="flex flex-col gap-8">
         <div className="space-y-2">

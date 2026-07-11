@@ -8,7 +8,7 @@ export function ThemeControls() {
   const { mode, setMode, density, setDensity, brand, setBrand } = useTheme();
 
   return (
-    <div className="w-full flex flex-col gap-6 p-6 rounded-xl border border-[#333333] shadow-2xl relative bg-background mb-8">
+    <div className="w-full flex flex-col gap-6 p-6 rounded-xl border border-[#333333] shadow-2xl relative bg-surface shadow-sm mb-8">
       {/* Glow behind card */}
       <div className="absolute -inset-1 bg-linear-to-r from-primary/20 to-purple-500/20 blur-xl opacity-100 -z-10 rounded-xl filter-[blur(60px)]" />
 
@@ -17,7 +17,7 @@ export function ThemeControls() {
         <span className="font-bold text-base text-foreground font-heading">
           Theme Mode
         </span>
-        <div className="flex bg-background p-1 rounded-lg border border-[#333333] ">
+        <div className="flex bg-surface shadow-sm p-1 rounded-lg border border-[#333333] ">
           <Button
             onClick={() => setMode("light")}
             variant={mode === "light" ? "primary" : "ghost"}
@@ -37,7 +37,7 @@ export function ThemeControls() {
         <span className="font-bold text-base text-foreground font-heading">
           Brand
         </span>
-        <div className="flex bg-background p-1 rounded-lg border border-[#333333] gap-2">
+        <div className="flex bg-surface shadow-sm p-1 rounded-lg border border-[#333333] gap-2">
           {(["default", "orange"] as Brand[]).map((b) => (
             <Button
               key={b}
@@ -67,7 +67,7 @@ export function ThemeControls() {
         </div>
       </div>
       {/* 3. Current State Box */}
-      <div className="mt-2 p-5 bg-background rounded-lg border border-[#222222]">
+      <div className="mt-2 p-5 bg-surface shadow-sm rounded-lg border border-[#222222]">
         <strong className="text-foreground block mb-3 text-sm font-bold font-heading">
           Current State:
         </strong>
