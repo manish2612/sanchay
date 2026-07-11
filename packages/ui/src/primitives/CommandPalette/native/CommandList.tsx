@@ -108,12 +108,12 @@ export const CommandShortcut = ({
 };
 
 export const CommandSeparator = () => {
-  const theme = useTheme();
+  const { colors } = useTheme();
   return (
     <View
       style={{
         height: 1,
-        backgroundColor: theme.colors.border,
+        backgroundColor: colors.border,
         marginVertical: 4,
       }}
     />

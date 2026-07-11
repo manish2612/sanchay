@@ -8,7 +8,7 @@ import { useTheme } from "@sanchay/theme-provider";
 
 export const CommandInput = ({ placeholder, ...props }: CommandInputProps) => {
   const { search, setSearch } = useCommandContext();
-  const theme = useTheme();
+  const { theme } = useTheme() as any;
 
   return (
     <View
