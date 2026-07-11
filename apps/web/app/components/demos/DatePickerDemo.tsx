@@ -48,6 +48,33 @@ export function DatePickerDemo() {
             placeholder="Disabled Picker" 
           />
         </div>
+
+        {/* Nepali Calendar */}
+        <div className="space-y-1">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
+            Nepali Calendar (English Script)
+          </span>
+          <DatePicker 
+            calendarType="nepali"
+            date={date1} 
+            onDateChange={setDate1} 
+            placeholder="Select BS Date" 
+          />
+        </div>
+
+        {/* Nepali Calendar (Nepali Script) */}
+        <div className="space-y-1">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
+            Nepali Calendar (Nepali Script)
+          </span>
+          <DatePicker 
+            calendarType="nepali"
+            nepaliLanguage="nepali"
+            date={date1} 
+            onDateChange={setDate1} 
+            placeholder="Nepali BS Date" 
+          />
+        </div>
       </div>
     </div>
   );

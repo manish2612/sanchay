@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
-import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { cn } from "../../utils";
 import { Icon } from "../Icon/Icon.dom";
@@ -11,15 +10,33 @@ import { DatePickerProps } from "./types";
 import "react-day-picker/dist/style.css";
 import "./DatePicker.css";
 
+import { GregorianCalendarEngine } from "./GregorianCalendarEngine.dom";
+import { NepaliCalendarEngine } from "./NepaliCalendarEngine.dom";
+import NepaliDate from "nepali-datetime";
+
 export function DatePicker({
   date,
   onDateChange,
   placeholder = "Select Date",
   className,
   disabled,
+  calendarType = 'gregorian',
+  nepaliLanguage = 'english',
   dayPickerProps,
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Format the display text in the trigger
+  let displayDate = placeholder;
+  if (date) {
+    if (calendarType === 'nepali') {
+      const nd = new NepaliDate(date);
+      // Format to English representation of Nepali Date e.g., 2080-01-01
+      displayDate = nd.format('YYYY-MM-DD'); 
+    } else {
+      displayDate = format(date, "PPP");
+    }
+  }
 
   return (
     <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -34,7 +51,7 @@ export function DatePicker({
             className,
           )}
         >
-          <span>{date ? format(date, "PPP") : placeholder}</span>
+          <span>{displayDate}</span>
           <Icon name="event" size={20} className="text-muted-foreground" />
         </button>
       </Popover.Trigger>
@@ -42,7 +59,7 @@ export function DatePicker({
         <Popover.Content
           align="start"
           className={cn(
-            "z-50 rounded-md border border-border bg-popover p-3 text-popover-foreground shadow-lg outline-none",
+            "z-50 rounded-md border border-border bg-popover text-popover-foreground shadow-lg outline-none overflow-hidden",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           )}
         >
@@ -73,41 +90,23 @@ export function DatePicker({
             "--rdp-selected-font": "bold",
             "--rdp-today-color": "var(--colors-foreground, #000)",
           } as React.CSSProperties}>
-            <DayPicker
-              mode="single"
-              selected={date}
-              defaultMonth={date}
-              onSelect={(d) => {
-                onDateChange?.(d);
-                setIsOpen(false);
-              }}
-              captionLayout="dropdown"
-              startMonth={new Date(1950, 0)}
-              endMonth={new Date(2100, 11)}
-              className="p-3 sanchay-date-picker"
-              classNames={{
-                ...dayPickerProps?.classNames,
-              }}
-              components={{
-                Chevron: (props) => {
-                  if (props.orientation === 'left') {
-                    return <Icon name="chevron_left" size={18} />;
-                  }
-                  if (props.orientation === 'right') {
-                    return <Icon name="chevron_right" size={18} />;
-                  }
-                  if (props.orientation === 'down') {
-                    return <Icon name="expand_more" size={18} />;
-                  }
-                  if (props.orientation === 'up') {
-                    return <Icon name="expand_less" size={18} />;
-                  }
-                  return <Icon name="chevron_right" size={18} />;
-                },
-                ...dayPickerProps?.components,
-              }}
-              {...dayPickerProps}
-            />
+            
+            {calendarType === 'nepali' ? (
+              <NepaliCalendarEngine
+                date={date}
+                onDateChange={onDateChange}
+                nepaliLanguage={nepaliLanguage}
+                setIsOpen={setIsOpen}
+              />
+            ) : (
+              <GregorianCalendarEngine
+                date={date}
+                onDateChange={onDateChange}
+                dayPickerProps={dayPickerProps}
+                setIsOpen={setIsOpen}
+              />
+            )}
+
           </div>
         </Popover.Content>
       </Popover.Portal>

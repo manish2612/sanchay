@@ -1,10 +1,18 @@
 import type { DayPickerProps } from 'react-day-picker';
 
 export interface DatePickerProps {
+  /** The currently selected date */
   date?: Date;
+  /** Callback fired when a date is selected */
   onDateChange?: (date?: Date) => void;
+  /** Placeholder text when no date is selected */
   placeholder?: string;
   className?: string;
   disabled?: boolean;
-  dayPickerProps?: Omit<DayPickerProps, "mode" | "selected" | "onSelect">;
+  /** The underlying calendar system to use. Defaults to gregorian */
+  calendarType?: 'gregorian' | 'nepali';
+  /** If using calendarType='nepali', controls whether to display the text in English or Nepali script. Defaults to english. */
+  nepaliLanguage?: 'english' | 'nepali';
+  /** Optional props strictly for the underlying react-day-picker (only applies when calendarType is gregorian) */
+  dayPickerProps?: Omit<DayPickerProps, 'mode' | 'selected' | 'onSelect'>;
 }
