@@ -14,7 +14,7 @@ export * from './primitives/MenuBar';
 export * from './primitives/Modal/index.native';
 export * from './primitives/CommandPalette';
 export * from './primitives/ShortcutCheatSheet/ShortcutCheatSheet.native';
+export * from './primitives/AutoSuggest';
 export * from './primitives/Dropdown/native';
 export * from './components/DropdownMenu/index.native';
 export * from './primitives/DatePicker/index.native';
-

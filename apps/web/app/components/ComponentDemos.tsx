@@ -17,6 +17,7 @@ import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { TableDemo } from "./demos/TableDemo/index";
 import { DropdownDemo } from "./demos/DropdownDemo";
+import { AutoSuggestDemo } from "./demos/AutoSuggestDemo";
 
 export function ComponentDemos() {
   return (
@@ -58,6 +59,7 @@ export function ComponentDemos() {
             <div className="space-y-6">
               <ButtonDemo />
               <TextInputDemo />
+              <AutoSuggestDemo />
               <DatePickerDemo />
               <MenuBarDemo />
               <ModalDemo />
