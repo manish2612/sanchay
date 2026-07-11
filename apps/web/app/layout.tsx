@@ -35,7 +35,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ibmPlexSans.variable} ${workSans.variable}`}>
+      <body className={`${ibmPlexSans.variable} ${workSans.variable} sanchay-density-comfortable`}>
         <style
           dangerouslySetInnerHTML={{
             __html: `:root { --font-material-icons: 'Material Icons'; }`,
