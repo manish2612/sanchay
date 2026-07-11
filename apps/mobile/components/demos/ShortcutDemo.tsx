@@ -35,7 +35,7 @@ export const ShortcutDemo = () => {
     <View
       style={{
         width, // Use responsive width
-        padding: t.spacing?.[4] || 16,
+        padding: t.space?.[4] || 16,
         borderColor: t.colors.border,
         borderWidth: 1,
         borderRadius: 8,

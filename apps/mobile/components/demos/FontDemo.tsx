@@ -10,7 +10,7 @@ export function FontDemo() {
   return (
     <View
       style={{
-        padding: t.spacing[4],
+        padding: t.space[4],
         backgroundColor: t.colors.background,
         borderRadius: 8,
         marginTop: 20,

@@ -94,13 +94,13 @@ export function ThemeControls() {
           <li>
             Body Font:{" "}
             <span className="text-foreground">
-              var(--typography-fontFamily-body)
+              var(--fonts-body)
             </span>
           </li>
           <li>
             Heading Font:{" "}
             <span className="text-foreground">
-              var(--typography-fontFamily-heading)
+              var(--fonts-heading)
             </span>
           </li>
         </ul>

@@ -48,7 +48,7 @@ const Input = React.forwardRef<RNTextInput, NativeTextInputProps>(
                     styles.input,
                     { 
                         color: t.colors.foreground,
-                        fontSize: t.typography.fontSize.sm,
+                        fontSize: t.fontSizes.sm,
                     },
                     style
                 ]}

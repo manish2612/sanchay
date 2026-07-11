@@ -79,10 +79,10 @@ const InnerProvider = ({
         --font-work-sans: 'Work Sans';
       }
       body {
-        font-family: var(--typography-fontFamily-body);
+        font-family: var(--fonts-body);
       }
       h1, h2, h3, h4, h5, h6 {
-        font-family: var(--typography-fontFamily-heading);
+        font-family: var(--fonts-heading);
       }
     `;
 

@@ -9,18 +9,16 @@ import { motion } from '../../tokens/motion';
 import { zIndex } from '../../tokens/z-index';
 
 const shared = {
-    spacing,
+    space: spacing,
     sizes,
-    typography: {
-        fontFamily,
-        fontSize,
-        fontWeight,
-        lineHeight,
-    },
+    fonts: fontFamily,
+    fontSizes: fontSize,
+    fontWeights: fontWeight,
+    lineHeights: lineHeight,
     radii,
     shadows,
-    motion,
-    zIndex,
+    transitions: motion,
+    zIndices: zIndex,
 };
 
 const light = {

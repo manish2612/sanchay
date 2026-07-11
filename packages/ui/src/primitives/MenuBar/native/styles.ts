@@ -6,7 +6,7 @@ export const getMenuBarStyles = (t: any) => StyleSheet.create({
     backgroundColor: t.colors.background,
     borderBottomWidth: 1,
     borderBottomColor: t.colors.border,
-    paddingHorizontal: t.spacing[2],
+    paddingHorizontal: t.space[2],
     height: 40,
     alignItems: 'center',
     zIndex: 10,
@@ -16,8 +16,8 @@ export const getMenuBarStyles = (t: any) => StyleSheet.create({
     zIndex: 20,
   },
   trigger: {
-    paddingHorizontal: t.spacing[3],
-    paddingVertical: t.spacing[2],
+    paddingHorizontal: t.space[3],
+    paddingVertical: t.space[2],
     borderRadius: t.radii.md,
     backgroundColor: 'transparent',
   },
@@ -36,7 +36,7 @@ export const getMenuBarStyles = (t: any) => StyleSheet.create({
     minWidth: 200,
     backgroundColor: t.colors.popover || t.colors.background,
     borderRadius: t.radii.md,
-    padding: t.spacing[1],
+    padding: t.space[1],
     borderWidth: 1,
     borderColor: t.colors.border,
     shadowColor: '#000',
@@ -49,8 +49,8 @@ export const getMenuBarStyles = (t: any) => StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: t.spacing[2],
-    paddingHorizontal: t.spacing[2],
+    paddingVertical: t.space[2],
+    paddingHorizontal: t.space[2],
     borderRadius: t.radii.sm,
   },
   itemPressed: {
@@ -67,7 +67,7 @@ export const getMenuBarStyles = (t: any) => StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: t.colors.muted,
-    marginVertical: t.spacing[1],
+    marginVertical: t.space[1],
   },
   label: {
     fontSize: 12,

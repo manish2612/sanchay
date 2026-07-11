@@ -18,13 +18,13 @@ module.exports = {
     theme: {
         extend: {
             colors: webTheme.colors,
-            fontSize: webTheme.typography.fontSize,
-            fontFamily: webTheme.typography.fontFamily,
-            fontWeight: webTheme.typography.fontWeight,
-            lineHeight: webTheme.typography.lineHeight,
+            fontSize: webTheme.fontSizes,
+            fontFamily: webTheme.fonts,
+            fontWeight: webTheme.fontWeights,
+            lineHeight: webTheme.lineHeights,
             borderRadius: webTheme.radii,
             boxShadow: webTheme.shadows,
-            spacing: webTheme.spacing,
+            spacing: webTheme.space,
         },
     },
     plugins: [],

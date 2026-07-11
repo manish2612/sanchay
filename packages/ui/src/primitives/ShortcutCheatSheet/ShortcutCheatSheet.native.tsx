@@ -62,7 +62,7 @@ export const ShortcutCheatSheet = ({
         </ModalHeader>
 
         <ScrollView style={styles.container}>
-          <TextInput.Root style={{ marginBottom: theme.spacing[4] }}>
+          <TextInput.Root style={{ marginBottom: theme.space[4] }}>
             <TextInput.Input
               placeholder="Search shortcuts..."
               placeholderTextColor={

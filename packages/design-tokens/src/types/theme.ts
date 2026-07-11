@@ -15,16 +15,14 @@ export interface Theme {
         mode: 'light' | 'dark';
     };
     colors: typeof colors;
-    spacing: typeof spacing['comfortable'];
+    space: typeof spacing['comfortable'];
     sizes: typeof sizes['comfortable'];
-    typography: {
-        fontFamily: typeof fontFamily;
-        fontSize: typeof fontSize;
-        fontWeight: typeof fontWeight;
-        lineHeight: typeof lineHeight;
-    };
+    fonts: typeof fontFamily;
+    fontSizes: typeof fontSize;
+    fontWeights: typeof fontWeight;
+    lineHeights: typeof lineHeight;
     radii: typeof radii;
     shadows: typeof shadows;
-    motion: typeof motion;
-    zIndex: typeof zIndex;
+    transitions: typeof motion;
+    zIndices: typeof zIndex;
 }

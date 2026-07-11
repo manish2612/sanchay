@@ -19,10 +19,10 @@ export const Text = ({
 
   // Resolve styles from theme
   // Note: The theme adapter returns processed values (numbers for sizes, strings for colors/fonts)
-  const fontFamily = t.typography?.fontFamily?.[variant];
-  const fontSize = t.typography?.fontSize?.[size];
-  const fontWeightValue = t.typography?.fontWeight?.[weight];
-  const lineHeight = t.typography?.lineHeight?.normal; // Default to normal line height
+  const fontFamily = t.fonts?.[variant];
+  const fontSize = t.fontSizes?.[size];
+  const fontWeightValue = t.fontWeights?.[weight];
+  const lineHeight = t.lineHeights?.normal; // Default to normal line height
 
   // Resolve color
   // Check if the provided color prop is a key in the theme's colors object

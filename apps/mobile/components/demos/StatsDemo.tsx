@@ -10,7 +10,7 @@ export function StatsDemo() {
   return (
     <View
       style={{
-        padding: t.spacing[4],
+        padding: t.space[4],
         backgroundColor: t.colors.background,
         borderRadius: 8,
       }}
@@ -19,7 +19,7 @@ export function StatsDemo() {
         Resolved Tokens:
       </Text>
       <Text>Button Height: {t.sizes.buttonHeight}px</Text>
-      <Text>Base Spacing (4): {t.spacing[4]}px</Text>
+      <Text>Base Spacing (4): {t.space[4]}px</Text>
     </View>
   );
 }

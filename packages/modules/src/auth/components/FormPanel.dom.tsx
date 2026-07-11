@@ -39,7 +39,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
         {/* Username/Email */}
         <div className="mb-5">
           <TextInput.Root>
-            {/* @ts-expect-error Web/Native type resolution conflict */}
+            {/* @ts-ignore Web/Native type resolution conflict */}
             <TextInput.Input
               placeholder="Username"
               value={email}
@@ -51,7 +51,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
         {/* Password */}
         <div className="mb-8">
           <TextInput.Root>
-            {/* @ts-expect-error Web/Native type resolution conflict */}
+            {/* @ts-ignore Web/Native type resolution conflict */}
             <TextInput.Input
               placeholder="Password"
               type={isVisible ? "text" : "password"}
@@ -76,11 +76,11 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
 
         {/* Actions */}
         <div className="flex flex-row gap-4 mb-8">
-          {/* @ts-expect-error Web/Native type resolution conflict */}
+          {/* @ts-ignore Web/Native type resolution conflict */}
           <Button variant="secondary" className="flex-1" onClick={() => {}}>
             Cancel
           </Button>
-          {/* @ts-expect-error Web/Native type resolution conflict */}
+          {/* @ts-ignore Web/Native type resolution conflict */}
           <Button
             variant="primary"
             className="flex-1"

@@ -36,7 +36,7 @@ export function ComponentDemos() {
     // Components: XL=SideBySide, LG=Stacked
     componentsSubDirection: { base: "column", xl: "row" } as const,
     componentsSubWidth: { base: "100%", xl: "48%" } as const,
-    rootPadding: { base: t.spacing[16], md: t.spacing[2] } as const,
+    rootPadding: { base: t.space[16], md: t.space[2] } as const,
   });
 
   return (
@@ -46,7 +46,7 @@ export function ComponentDemos() {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: t.colors.background,
-        padding: t.spacing[6] || 24,
+        padding: t.space[6] || 24,
         paddingVertical: rootPadding,
       }}
     >
@@ -56,7 +56,7 @@ export function ComponentDemos() {
           size="2xl"
           weight="bold"
           align="center"
-          style={{ marginBottom: t.spacing[2] }}
+          style={{ marginBottom: t.space[2] }}
         >
           Welcome to {APP_NAME} Mobile
         </Text>

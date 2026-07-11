@@ -19,7 +19,7 @@ export function ThemeControls() {
     <View
       style={{
         width: "100%",
-        padding: t.spacing[6],
+        padding: t.space[6],
         backgroundColor: t.colors.surface || "#eee",
         borderRadius: t.radii.lg || 12,
       }}
@@ -141,7 +141,7 @@ export function ThemeControls() {
       {/* Stats */}
       <View
         style={{
-          padding: t.spacing[4],
+          padding: t.space[4],
           backgroundColor: t.colors.background,
           borderRadius: 8,
         }}
@@ -150,7 +150,7 @@ export function ThemeControls() {
           Resolved Tokens:
         </Text>
         <Text>Button Height: {t.sizes.buttonHeight}px</Text>
-        <Text>Base Spacing (4): {t.spacing[4]}px</Text>
+        <Text>Base Spacing (4): {t.space[4]}px</Text>
       </View>
     </View>
   );

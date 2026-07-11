@@ -25,14 +25,14 @@ export const getTheme = (brand: Brand, mode: Mode, density: Density = 'comfortab
     const rawTheme = brands[brand][mode];
 
     // Resolve Spacing
-    const resolvedSpacing = rawTheme.spacing[density] || rawTheme.spacing.comfortable;
+    const resolvedSpacing = rawTheme.space[density] || rawTheme.space.comfortable;
 
     // Resolve Sizes
     const resolvedSizes = rawTheme.sizes[density] || rawTheme.sizes.comfortable;
 
     return {
         ...rawTheme,
-        spacing: resolvedSpacing,
+        space: resolvedSpacing,
         sizes: resolvedSizes,
     };
 };

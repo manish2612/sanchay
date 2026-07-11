@@ -47,15 +47,15 @@ export const getSizeStyles = (t: any, size: ButtonProps['size']) => {
         case 'sm':
             return {
                 height: t.sizes.buttonHeightSm || 32, // Fallback if token missing
-                paddingHorizontal: t.spacing[3],
-                fontSize: t.typography.fontSize.xs,
+                paddingHorizontal: t.space[3],
+                fontSize: t.fontSizes.xs,
                 iconSize: 14,
             };
         case 'lg':
             return {
                 height: t.sizes.buttonHeightLg || 48,
-                paddingHorizontal: t.spacing[8],
-                fontSize: t.typography.fontSize.md,
+                paddingHorizontal: t.space[8],
+                fontSize: t.fontSizes.md,
                 iconSize: 20,
             };
         case 'icon':
@@ -64,15 +64,15 @@ export const getSizeStyles = (t: any, size: ButtonProps['size']) => {
                 height: iconHeight,
                 width: iconHeight,
                 paddingHorizontal: 0,
-                fontSize: t.typography.fontSize.sm,
+                fontSize: t.fontSizes.sm,
                 iconSize: 18,
             }
         case 'default':
         default:
             return {
                 height: t.sizes.buttonHeight || 40,
-                paddingHorizontal: t.spacing[4],
-                fontSize: t.typography.fontSize.sm,
+                paddingHorizontal: t.space[4],
+                fontSize: t.fontSizes.sm,
                 iconSize: 18,
             };
     }
