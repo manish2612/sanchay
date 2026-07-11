@@ -16,4 +16,5 @@ export * from './primitives/Table';
 export * from './utils';
 export * from './primitives/Dropdown';
 export * from './components/DropdownMenu';
+export * from './primitives/DatePicker';
 

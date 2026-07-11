@@ -1,0 +1,11 @@
+.sanchay-date-picker .rdp-selected .rdp-day_button {
+  background-color: var(--colors-primary) !important;
+  color: var(--colors-primary-foreground, #fff) !important;
+  border: none !important;
+}
+
+.sanchay-date-picker .rdp-today:not(.rdp-selected) .rdp-day_button {
+  background-color: var(--colors-secondary, #eee) !important;
+  color: var(--colors-secondary-foreground, #000) !important;
+  border: none !important;
+}

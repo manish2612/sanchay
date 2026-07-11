@@ -11,6 +11,7 @@ import { ThemeControls } from "./demos/ThemeControls";
 import { FontDemo } from "./demos/FontDemo";
 import { ButtonDemo } from "./demos/ButtonDemo";
 import { TextInputDemo } from "./demos/TextInputDemo";
+import { DatePickerDemo } from "./demos/DatePickerDemo";
 import { MenuBarDemo } from "./demos/MenuBarDemo";
 import { ModalDemo } from "./demos/ModalDemo";
 import { NavDemoWrapper } from "./demos/NavDemoWrapper";
@@ -57,6 +58,7 @@ export function ComponentDemos() {
             <div className="space-y-6">
               <ButtonDemo />
               <TextInputDemo />
+              <DatePickerDemo />
               <MenuBarDemo />
               <ModalDemo />
               <DropdownDemo />
