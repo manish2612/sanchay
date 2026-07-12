@@ -1,5 +1,5 @@
 
-import { colors } from '../tokens/colors';
+import { colors } from '../themes/classic/colors';
 import { spacing } from '../tokens/spacing';
 import { sizes } from '../tokens/sizes';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../tokens/typography';

@@ -1,5 +1,6 @@
-
-import { colorsOrangeLight, colorsOrangeDark } from '../../tokens/colors-orange';
+import { Theme } from '../../types/theme';
+import { colors } from './colors';
+import { colorsDark } from './colors-dark';
 import { spacing } from '../../tokens/spacing';
 import { sizes } from '../../tokens/sizes';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../../tokens/typography';
@@ -23,21 +24,21 @@ const shared = {
 
 const light = {
     meta: {
-        name: 'Orange Brand',
+        name: 'Executive Blue',
         version: '1.0.0',
         mode: 'light' as const,
     },
-    colors: colorsOrangeLight,
+    colors,
     ...shared,
 };
 
 const dark = {
     meta: {
-        name: 'Orange Brand',
+        name: 'Executive Blue',
         version: '1.0.0',
         mode: 'dark' as const,
     },
-    colors: colorsOrangeDark,
+    colors: colorsDark,
     ...shared,
 };
 

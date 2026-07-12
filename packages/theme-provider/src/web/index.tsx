@@ -128,7 +128,7 @@ const InnerProvider = ({
 
 export const ThemeProvider = ({
   children,
-  initialBrand = "default",
+  initialBrand = "classic",
   initialMode,
   initialDensity = "comfortable",
 }: ThemeProviderProps) => {

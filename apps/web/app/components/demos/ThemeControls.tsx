@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button } from "@sanchay/ui";
+import { Button, Icon, DropdownRoot, DropdownTrigger, DropdownContent, DropdownItem } from "@sanchay/ui";
 import { useTheme } from "@sanchay/theme-provider/web";
 import { Density, Brand } from "@sanchay/design-tokens";
 
@@ -35,18 +35,33 @@ export function ThemeControls() {
       {/* 1.1 Brand Control Row */}
       <div className="flex justify-between items-center h-10 mt-2">
         <span className="font-bold text-base text-foreground font-heading">
-          Brand
+          Theme Palette
         </span>
-        <div className="flex bg-surface shadow-sm p-1 rounded-lg border border-[#333333] gap-2">
-          {(["default", "orange"] as Brand[]).map((b) => (
-            <Button
-              key={b}
-              onClick={() => setBrand(b)}
-              variant={brand === b ? "primary" : "ghost"}
-            >
-              {b.charAt(0).toUpperCase() + b.slice(1)}
-            </Button>
-          ))}
+        <div className="flex bg-surface shadow-sm p-1 rounded-lg border border-[#333333]">
+          <DropdownRoot>
+            <DropdownTrigger asChild>
+              <Button variant="outline" className="h-8 text-sm px-2 border-none">
+                {brand === 'classic' ? 'Classic' : brand === 'vibrant-orange' ? 'Vibrant Orange' : brand === 'prosperity-green' ? 'Prosperity Green' : 'Executive Blue'}
+                <Icon name="expand_more" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownContent align="end">
+              {[
+                { id: "classic", label: "Classic" },
+                { id: "vibrant-orange", label: "Vibrant Orange" },
+                { id: "prosperity-green", label: "Prosperity Green" },
+                { id: "executive-blue", label: "Executive Blue" },
+              ].map((b) => (
+                <DropdownItem
+                  key={b.id}
+                  onClick={() => setBrand(b.id as Brand)}
+                  data-state={brand === b.id ? "checked" : "unchecked"}
+                >
+                  {b.label}
+                </DropdownItem>
+              ))}
+            </DropdownContent>
+          </DropdownRoot>
         </div>
       </div>
       {/* 2. Density Control Row */}

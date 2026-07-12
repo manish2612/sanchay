@@ -1,7 +1,6 @@
-
 import { Theme } from '../../types/theme';
-import { colors } from '../../tokens/colors';
-import { colorsDark } from '../../tokens/colors-dark';
+import { colors } from './colors';
+import { colorsDark } from './colors-dark';
 import { spacing } from '../../tokens/spacing';
 import { sizes } from '../../tokens/sizes';
 import { fontFamily, fontSize, fontWeight, lineHeight } from '../../tokens/typography';
@@ -25,17 +24,17 @@ const shared = {
 
 const light = {
     meta: {
-        name: 'ERP Default',
+        name: 'Vibrant Orange',
         version: '1.0.0',
         mode: 'light' as const,
     },
-    colors, // In a real app we would have light/dark sets. Using the default set for now.
+    colors,
     ...shared,
 };
 
 const dark = {
     meta: {
-        name: 'ERP Default',
+        name: 'Vibrant Orange',
         version: '1.0.0',
         mode: 'dark' as const,
     },

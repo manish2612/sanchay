@@ -6,7 +6,7 @@ import { ThemeProviderProps, UseThemeResult } from '../types';
 
 const ThemeContext = createContext<UseThemeResult | null>(null);
 
-export const ThemeProvider = ({ children, initialBrand = 'default', initialMode = 'system', initialDensity = 'comfortable' }: ThemeProviderProps) => {
+export const ThemeProvider = ({ children, initialBrand = 'classic', initialMode = 'system', initialDensity = 'comfortable' }: ThemeProviderProps) => {
   const systemScheme = useColorScheme();
   const [mode, setMode] = useState<Mode | 'system'>(initialMode as Mode | 'system');
   const [brand, setBrand] = useState<Brand>(initialBrand);
