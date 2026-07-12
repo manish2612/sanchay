@@ -6,7 +6,7 @@ export const tableStyles = {
     header: cva("flex w-full bg-surface-variant text-surface-variant-foreground font-medium text-sm"), // Removed sticky top-0
     headerRow: cva("flex w-full items-center border-b border-border p-0"),
     headerCell: cva("flex-1 px-4 py-3 h-10 items-center justify-start text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"),
-    body: cva("w-full h-full"), // Removed relative, ensured full height
+    body: cva("w-full h-full [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-surface-hover [&::-webkit-scrollbar-thumb]:bg-muted-foreground hover:[&::-webkit-scrollbar-thumb]:bg-foreground/50"), // Removed relative, ensured full height
     row: cva(
         "flex w-full h-full items-stretch border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted data-[focused=true]:text-foreground outline-none cursor-default",
         {

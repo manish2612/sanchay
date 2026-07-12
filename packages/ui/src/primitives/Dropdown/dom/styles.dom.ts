@@ -3,7 +3,7 @@ export const dropdownContentClassName =
 
 // Combined base styles + interactive states for Item
 export const dropdownItemClassName =
-  "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-secondary focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-secondary data-[highlighted]:text-foreground";
+  "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-surface-hover focus:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[highlighted]:bg-surface-hover data-[highlighted]:text-foreground data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground";
 
 export const dropdownItemContentClassName = "flex items-center gap-2";
 

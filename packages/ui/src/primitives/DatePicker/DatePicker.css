@@ -9,6 +9,12 @@
   outline-offset: 2px !important;
 }
 
+.sanchay-date-picker .rdp-day_button:focus-visible:not(.rdp-selected .rdp-day_button) {
+  outline: 2px solid var(--colors-focus-ring, #3b82f6) !important;
+  outline-offset: 2px !important;
+  z-index: 10;
+}
+
 .sanchay-date-picker .rdp-today:not(.rdp-selected) .rdp-day_button {
   background-color: var(--colors-secondary, #eee) !important;
   color: var(--colors-secondary-foreground, #000) !important;
