@@ -18,16 +18,20 @@ import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { TableDemo } from "./demos/TableDemo/index";
 import { DropdownDemo } from "./demos/DropdownDemo";
 import { AutoSuggestDemo } from "./demos/AutoSuggestDemo";
+import { Sidebar } from "../../features/Navigation/components/Sidebar";
 
 export function ComponentDemos() {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-background text-foreground selection:bg-primary/30">
-      {/* App Menu Bar - Top Placement */}
-      <div className="sticky top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
-        <div className="px-4 py-2">
-          <AppMenuBarExample />
-        </div>
-      </div>
+    <div className="min-h-screen flex bg-background text-foreground selection:bg-primary/30">
+      {/* Navigation Sidebar */}
+      <Sidebar 
+        appName={APP_NAME} 
+        user={{ name: "Admin User", email: "admin@example.com" }} 
+        onLogout={() => console.log("Logout clicked")}
+      />
+      
+      <div className="flex flex-col flex-1 relative overflow-hidden">
+        {/* App Menu Bar - Top Placement */}
 
       {/* Background Grid & Glow */}
       <GridBackground className="opacity-60 fixed inset-0 z-0 pointer-events-none" />
@@ -72,6 +76,7 @@ export function ComponentDemos() {
         <div className="w-full max-w-7xl mt-8">
           <TableDemo />
         </div>
+      </div>
       </div>
     </div>
   );
