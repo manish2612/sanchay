@@ -114,13 +114,14 @@ const AutoSuggestInner = <T extends boolean = false>(
     );
   };
 
-
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <CommandPrimitive
         shouldFilter={virtualized || exactMatchSelected ? false : !isControlledInput}
         className={cn("w-full relative", className)}
+        ref={containerRef}
       >
         <Popover.Anchor asChild>
           <TextInput.Root variant={variant} disabled={disabled} className="w-full flex-wrap h-auto min-h-10 py-1">
@@ -213,8 +214,8 @@ const AutoSuggestInner = <T extends boolean = false>(
             onOpenAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => {
               if (
-                e.target instanceof Element &&
-                e.target.closest("[cmdk-input]")
+                e.target instanceof Node &&
+                containerRef.current?.contains(e.target)
               ) {
                 e.preventDefault();
               }
