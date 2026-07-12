@@ -1,6 +1,6 @@
 "use client";
 
-import { Table, flexRender } from "@sanchay/ui";
+import { Table, flexRender } from "@prime/ui";
 import * as React from "react";
 import { columns, generateData } from "./shared";
 

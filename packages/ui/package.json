@@ -1,5 +1,5 @@
 {
-    "name": "@sanchay/ui",
+    "name": "@prime/ui",
     "version": "0.0.0",
     "main": "./src/index.ts",
     "react-native": "src/index.native.ts",
@@ -18,8 +18,8 @@
         "@radix-ui/react-popover": "^1.1.19",
         "@radix-ui/react-scroll-area": "^1.2.10",
         "@radix-ui/react-slot": "^1.2.4",
-        "@sanchay/design-tokens": "workspace:*",
-        "@sanchay/theme-provider": "workspace:*",
+        "@prime/design-tokens": "workspace:*",
+        "@prime/theme-provider": "workspace:*",
         "@tanstack/react-table": "^8.21.3",
         "@tanstack/react-virtual": "^3.13.13",
         "class-variance-authority": "^0.7.1",

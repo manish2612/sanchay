@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useState } from "react";
-import { LoginScreen } from "@sanchay/modules";
-import { createClient } from "@sanchay/api";
+import { LoginScreen } from "@prime/modules";
+import { createClient } from "@prime/api";
 
 export default function LoginScreenPage() {
   const [responseMsg, setResponseMsg] = useState<string | null>(null);

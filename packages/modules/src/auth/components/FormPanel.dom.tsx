@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { TextInput, Button, Icon } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { TextInput, Button, Icon } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 import { LoginData } from "../types";
 
 interface FormPanelProps {

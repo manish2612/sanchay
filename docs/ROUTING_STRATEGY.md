@@ -44,7 +44,7 @@ This is the preferred pattern for most "app-like" interactions.
     Injects `next/navigation`.
     ```tsx
     import { useRouter } from 'next/navigation';
-    import { UserList } from '@sanchay/modules/user';
+    import { UserList } from '@prime/modules/user';
     
     export default function UsersPage() {
       const router = useRouter();
@@ -56,7 +56,7 @@ This is the preferred pattern for most "app-like" interactions.
     Injects `expo-router`.
     ```tsx
     import { useRouter } from 'expo-router';
-    import { UserList } from '@sanchay/modules/user';
+    import { UserList } from '@prime/modules/user';
     
     export default function UsersScreen() {
       const router = useRouter();
@@ -111,7 +111,7 @@ Even for **authenticated/internal apps**, this is critical for:
 2.  **Next.js Implementation (`apps/web/providers/AppProvider.tsx`)**:
     ```tsx
     import Link from 'next/link';
-    import { LinkProvider } from '@sanchay/ui';
+    import { LinkProvider } from '@prime/ui';
 
     const NextLinkAdapter = ({ href, children, ...props }: any) => (
       <Link href={href} {...props}>{children}</Link>
@@ -128,7 +128,7 @@ Even for **authenticated/internal apps**, this is critical for:
     Works for both Native and Expo Web.
     ```tsx
     import { Link } from 'expo-router';
-    import { LinkProvider } from '@sanchay/ui';
+    import { LinkProvider } from '@prime/ui';
 
     const ExpoLinkAdapter = ({ href, children, ...props }: any) => (
          // asChild matches usual Expo/Radix patterns if needed
@@ -148,13 +148,13 @@ Even for **authenticated/internal apps**, this is critical for:
 
 To share logic effectively, both apps should strive for **symmetrical URL structures** where possible.
 
--   **Web**: `https://app.sanchay.com/invoices/123`
+-   **Web**: `https://app.prime.com/invoices/123`
 -   **Mobile Integration**: Configure `scheme` and `linking` in `apps/mobile/app.json`.
 
 ```json
 {
   "expo": {
-    "scheme": "sanchay",
+    "scheme": "prime",
     "web": {
       "bundler": "metro"
     }

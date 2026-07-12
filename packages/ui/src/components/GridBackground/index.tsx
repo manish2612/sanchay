@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

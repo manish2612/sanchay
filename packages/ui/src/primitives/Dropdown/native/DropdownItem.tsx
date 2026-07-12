@@ -3,7 +3,7 @@ import { Pressable, View } from "react-native";
 import { Text } from "../../Text/Text.native";
 import { useDropdownContext } from "./DropdownRoot";
 import { getDropdownThemeStyles, styles } from "./styles";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 const DropdownItem = ({
   children,

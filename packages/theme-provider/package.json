@@ -1,5 +1,5 @@
 {
-    "name": "@sanchay/theme-provider",
+    "name": "@prime/theme-provider",
     "version": "0.0.0",
     "private": true,
     "sideEffects": false,
@@ -27,8 +27,8 @@
         "clean": "rm -rf dist .turbo node_modules"
     },
     "dependencies": {
-        "@sanchay/theme-adapters": "workspace:^",
-        "@sanchay/design-tokens": "workspace:^",
+        "@prime/theme-adapters": "workspace:^",
+        "@prime/design-tokens": "workspace:^",
         "next-themes": "^0.2.1"
     },
     "peerDependencies": {

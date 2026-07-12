@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { apiClient } from "@sanchay/services";
+import { apiClient } from "@prime/services";
 import { Stack } from "expo-router";
 
 export default function TestApiScreen() {

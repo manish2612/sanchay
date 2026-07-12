@@ -1,6 +1,6 @@
 # Font Architecture & Migration Guide
 
-This document explains the font architecture in the Sanchay ERP system and provides step-by-step instructions for migrating to different technology stacks in the future.
+This document explains the font architecture in the Prime ERP system and provides step-by-step instructions for migrating to different technology stacks in the future.
 
 ## Architecture
 

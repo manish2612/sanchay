@@ -15,7 +15,7 @@ import {
   MenuBarRadioGroup,
   MenuBarRadioItem,
   MenuBarShortcut,
-} from "@sanchay/ui";
+} from "@prime/ui";
 
 export function MenuBarDemo() {
   return (

@@ -1,4 +1,4 @@
-import { Brand, Mode, Theme, Density } from '@sanchay/design-tokens';
+import { Brand, Mode, Theme, Density } from '@prime/design-tokens';
 
 export interface ThemeProviderProps {
     children: React.ReactNode;

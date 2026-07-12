@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, ViewStyle } from "react-native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 export function MenuBarLabel({
   children,

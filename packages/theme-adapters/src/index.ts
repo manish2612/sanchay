@@ -1,5 +1,5 @@
 
-import { getTheme, Brand, Mode, Theme, Density } from '@sanchay/design-tokens';
+import { getTheme, Brand, Mode, Theme, Density } from '@prime/design-tokens';
 import { generateWebCSSVariables, getWebTheme } from './web';
 import { getNativeTheme } from './native';
 

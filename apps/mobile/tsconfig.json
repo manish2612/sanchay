@@ -3,10 +3,10 @@
     "compilerOptions": {
         "strict": true,
         "paths": {
-            "@sanchay/ui": [
+            "@prime/ui": [
                 "../../packages/ui/src/index.native.ts"
             ],
-            "@sanchay/*": [
+            "@prime/*": [
                 "../../packages/*"
             ]
         }

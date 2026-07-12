@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Pressable, Text } from "react-native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 import { MaterialIcons } from "@expo/vector-icons";
 import { getMenuBarStyles } from "./styles";
 

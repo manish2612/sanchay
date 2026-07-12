@@ -1,6 +1,6 @@
-# Sanchay ERP
+# Prime ERP
 
-Welcome to the Sanchay ERP Monorepo. This project is a modern, high-performance web and mobile application suite built with a "Write Once, Run Everywhere" philosophy.
+Welcome to the Prime ERP Monorepo. This project is a modern, high-performance web and mobile application suite built with a "Write Once, Run Everywhere" philosophy.
 
 ## 🏗 Architecture
 
@@ -71,7 +71,7 @@ We use **Turborepo** to orchestrate tasks and cache builds.
 - **Scoping**: Run commands for specific parts of the app.
   ```bash
   pnpm --filter web dev        # Dev only web
-  pnpm --filter @sanchay/ui build # Build only UI package
+  pnpm --filter @prime/ui build # Build only UI package
   ```
 
 ## ⚡️ Developer Cheat Sheet
@@ -94,7 +94,7 @@ Run commands only for specific packages/apps using `--filter`:
 pnpm --filter web dev
 
 # Lint only the UI package
-pnpm --filter @sanchay/ui lint
+pnpm --filter @prime/ui lint
 
 # Build web and its dependencies
 pnpm --filter web... build

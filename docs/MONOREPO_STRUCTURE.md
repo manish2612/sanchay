@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the **physical and logical structure** of the Sanchay ERP frontend monorepo.
+This document defines the **physical and logical structure** of the Prime ERP frontend monorepo.
 
 The structure is designed to:
 - Enforce architectural boundaries
@@ -14,7 +14,7 @@ The structure is designed to:
 
 ## Top-Level Layout
 
-sanchay/
+prime/
 - apps/
 - packages/
 - tooling/
@@ -56,7 +56,7 @@ Some of the responsibilities:
 Rules:
 - May import from `packages/*`
 - Must not export logic back to packages
-- Must not contain Sanchay ERP business rules
+- Must not contain Prime ERP business rules
 
 ---
 
@@ -69,7 +69,7 @@ Some of the responsibilities:
 
 Rules:
 - Same rules as web app
-- No Sanchay ERP logic
+- No Prime ERP logic
 - No shared state ownership
 
 ---
@@ -116,7 +116,7 @@ Rules:
 ## packages/modules/
 
 Purpose:
-- Sanchay ERP business domains
+- Prime ERP business domains
 
 Sample Structure:
 modules/
@@ -170,7 +170,7 @@ Some of the includes:
 
 Rules:
 - Platform differences handled via adapters
-- Sanchay ERP modules consume services, not implementations
+- Prime ERP modules consume services, not implementations
 
 ---
 
@@ -204,7 +204,7 @@ Contains:
 - Conflict resolution strategies
 
 Rules:
-- Must be invisible to Sanchay ERP modules
+- Must be invisible to Prime ERP modules
 - Must be disabled by default
 - Must introduce zero overhead when disabled
 

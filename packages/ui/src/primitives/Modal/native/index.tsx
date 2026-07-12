@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import { Icon } from "../../Icon/Icon.native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 interface ModalContextType {
   open: boolean;

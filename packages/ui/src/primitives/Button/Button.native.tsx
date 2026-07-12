@@ -8,7 +8,7 @@ import {
   PressableProps
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 import { styles, getVariantStyles, getSizeStyles } from './styles';
 
 export interface ButtonProps extends PressableProps {

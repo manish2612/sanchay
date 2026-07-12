@@ -11,8 +11,8 @@ import {
   ThemeProvider as NextThemesProvider,
   useTheme as useNextTheme,
 } from "next-themes";
-import { useThemeAdapter } from "@sanchay/theme-adapters";
-import { Brand, Mode, Density } from "@sanchay/design-tokens";
+import { useThemeAdapter } from "@prime/theme-adapters";
+import { Brand, Mode, Density } from "@prime/design-tokens";
 import { ThemeProviderProps, UseThemeResult } from "../types";
 
 const ThemeContext = createContext<UseThemeResult | null>(null);
@@ -49,7 +49,7 @@ const InnerProvider = ({
       densities.forEach((d) => {
         const result = useThemeAdapter(brand, m, d, "web");
         // Selector strategy:
-        // [data-theme='light'] .sanchay-density-comfortable
+        // [data-theme='light'] .prime-density-comfortable
         // And also handle the case where the class is on the body/html itself if needed,
         // but standard nesting rules apply.
         // Note: next-themes applies data-theme to HTML.
@@ -57,7 +57,7 @@ const InnerProvider = ({
 
         // Selector: Inside a matching theme container, find the density class OR if the density class IS the container.
         // Broadest selector logic:
-        const selector = `[data-theme='${m}'] .sanchay-density-${d}, [data-theme='${m}'].sanchay-density-${d}`;
+        const selector = `[data-theme='${m}'] .prime-density-${d}, [data-theme='${m}'].prime-density-${d}`;
 
         // Special case for Default Density (Comfortable) - make it the default for the theme if no density class is present?
         // Actually, for simplicity, we REQUIRE the density class.
@@ -92,15 +92,15 @@ const InnerProvider = ({
   // Apply density class to body to ensure Portals (like MenuBar) inherit variables
   useEffect(() => {
     const classes = [
-      "sanchay-density-compact",
-      "sanchay-density-comfortable",
-      "sanchay-density-spacious",
+      "prime-density-compact",
+      "prime-density-comfortable",
+      "prime-density-spacious",
     ];
     document.body.classList.remove(...classes);
-    document.body.classList.add(`sanchay-density-${density}`);
+    document.body.classList.add(`prime-density-${density}`);
 
     return () => {
-      document.body.classList.remove(`sanchay-density-${density}`);
+      document.body.classList.remove(`prime-density-${density}`);
     };
   }, [density]);
 

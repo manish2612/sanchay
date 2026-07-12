@@ -1,4 +1,4 @@
-# Sanchay ERP Frontend Architecture Overview
+# Prime ERP Frontend Architecture Overview
 
 ## Purpose
 
@@ -52,7 +52,7 @@ This document is the **entry point** for all architectural decisions.
    ↓
    App Shell (Web / Mobile)
    ↓
-   Sanchay ERP Modules
+   Prime ERP Modules
    ↓
    Shared Services (API, State, Storage)
    ↓
@@ -83,11 +83,11 @@ Apps are **replaceable**.
 ---
 
 ### 2. Packages Layer (`packages/`)
-This is where Sanchay ERP actually lives.
+This is where Prime ERP actually lives.
 
 Includes:
 - UI system
-- Sanchay ERP modules (Sales, Accounting, Inventory, etc.)
+- Prime ERP modules (Sales, Accounting, Inventory, etc.)
 - API & service abstractions
 - State management
 - Offline engine (optional)
@@ -134,7 +134,7 @@ Go backend (service layer integration)
 Offline-first is treated as **infrastructure**, not a feature.
 
 Rules:
-- Sanchay ERP modules never branch on offline logic
+- Prime ERP modules never branch on offline logic
 - API client decides online vs offline
 - Storage and network are adapter-based
 - Offline can be enabled or disabled per app
@@ -189,7 +189,7 @@ Complexity is:
 - Optional
 - Replaceable
 
-This is **right-sized engineering for Sanchay ERP**, not premature abstraction.
+This is **right-sized engineering for Prime ERP**, not premature abstraction.
 
 ---
 

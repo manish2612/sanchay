@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button, Icon } from "@sanchay/ui";
+import { Button, Icon } from "@prime/ui";
 
 export function ButtonDemo() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { ApiService } from "@sanchay/services";
+import { ApiService } from "@prime/services";
 import { ReactNode, useEffect, useRef } from "react";
 
 const API_BASE_URL = "https://jsonplaceholder.typicode.com";

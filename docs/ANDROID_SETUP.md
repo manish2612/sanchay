@@ -1,6 +1,6 @@
 # Android Development Setup Guide (Mac Apple Silicon / M-Series)
 
-This guide outlines the steps to set up the Android development environment on a Mac with Apple Silicon (M1/M2/M3/M4 chips) for the Sanchay ERP Mobile App.
+This guide outlines the steps to set up the Android development environment on a Mac with Apple Silicon (M1/M2/M3/M4 chips) for the Prime ERP Mobile App.
 
 ## 1. Install Java Development Kit (JDK)
 

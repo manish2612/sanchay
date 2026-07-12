@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { DatePicker } from "@sanchay/ui";
+import { DatePicker } from "@prime/ui";
 import { addDays } from "date-fns";
 
 export function DatePickerDemo() {

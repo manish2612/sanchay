@@ -1,5 +1,5 @@
 {
-  "name": "@sanchay/services",
+  "name": "@prime/services",
   "version": "0.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -10,7 +10,7 @@
     "clean": "rm -rf .turbo node_modules"
   },
   "dependencies": {
-    "@sanchay/api": "workspace:*"
+    "@prime/api": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

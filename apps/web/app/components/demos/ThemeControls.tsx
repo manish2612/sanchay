@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import { Button, Icon, DropdownRoot, DropdownTrigger, DropdownContent, DropdownItem } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider/web";
-import { Density, Brand } from "@sanchay/design-tokens";
+import { Button, Icon, DropdownRoot, DropdownTrigger, DropdownContent, DropdownItem } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider/web";
+import { Density, Brand } from "@prime/design-tokens";
 
 export function ThemeControls() {
   const { mode, setMode, density, setDensity, brand, setBrand } = useTheme();

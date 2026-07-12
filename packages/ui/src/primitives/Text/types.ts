@@ -1,4 +1,4 @@
-import { Theme } from '@sanchay/design-tokens';
+import { Theme } from '@prime/design-tokens';
 import { TextProps as RNTextProps, TextStyle } from 'react-native';
 
 export type TextVariant = keyof Theme['fonts'];

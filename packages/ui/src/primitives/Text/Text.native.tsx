@@ -1,6 +1,6 @@
 import React from "react";
 import { Text as RNText, TextStyle, StyleSheet } from "react-native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 import { TextProps, TextColor } from "./types";
 
 export const Text = ({

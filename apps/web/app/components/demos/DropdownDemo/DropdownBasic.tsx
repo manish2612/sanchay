@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import * as DropdownPrimitive from "@sanchay/ui";
-import { Button } from "@sanchay/ui";
+import * as DropdownPrimitive from "@prime/ui";
+import { Button } from "@prime/ui";
 
 export const DropdownBasic = () => {
   return (

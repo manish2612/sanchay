@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import { Theme } from '@sanchay/design-tokens';
+import { Theme } from '@prime/design-tokens';
 
 export type NativeTheme = any; // Ideally we mirror Theme but with numbers instead of strings. 
 // For now, using 'any' or we could construct a mapped type. 

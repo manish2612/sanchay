@@ -148,7 +148,7 @@ Implementation Detail:
 #### 1. Web (Next.js)
 Using CSS Variables (Zero Runtime Cost):
 ```tsx
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 
 // Usage in Standard Web Component
 export const WebCard = () => {
@@ -173,7 +173,7 @@ export const WebCard = () => {
 Using Run-Time Numbers:
 ```tsx
 import { View, StyleSheet } from 'react-native';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 
 export const NativeCard = () => {
   const { theme } = useTheme();
@@ -198,7 +198,7 @@ export const NativeCard = () => {
 Using `react-native-web` (Shared Code):
 ```tsx
 import { View } from 'react-native';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 
 export const UniversalCard = () => {
   const { theme } = useTheme();
@@ -257,7 +257,7 @@ To ensure the codebase can migrate between frameworks (e.g., Next.js → TanStac
 **The Trap:** Accessing `process.env.NEXT_PUBLIC_*` or `import.meta.env.*` directly throughout the UI code locks you into a specific bundler.
 
 **The Solution:**
-Centralize all environment access in `@sanchay/config`.
+Centralize all environment access in `@prime/config`.
 - **DO NOT** use `process.env` in `packages/ui`.
 - **DO** import from a shared config object.
 
@@ -269,7 +269,7 @@ export const Env = {
 };
 
 // Usage
-import { Env } from '@sanchay/config';
+import { Env } from '@prime/config';
 console.log(Env.API_URL);
 ```
 

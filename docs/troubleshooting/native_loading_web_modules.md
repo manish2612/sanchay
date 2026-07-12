@@ -10,7 +10,7 @@ or errors related to HTML elements like `div`, `span`, or `script` not being val
 ## Root Cause
 The Native bundler (Metro) key was resolving imports to the Web implementation of a package instead of the Native implementation. This happened because:
 1.  **`package.json` Misconfiguration**: The `react-native` field pointed to a generic entry point (e.g., `./src/index.ts`) which the bundler resolved to the Web-default export.
-2.  **`tsconfig.json` Paths Override**: The `apps/mobile/tsconfig.json` had a path alias (e.g., `"@sanchay/*": ["../../packages/*/src/index.ts"]`) that forced resolution to a specific file, bypassing the `package.json` resolution logic entirely.
+2.  **`tsconfig.json` Paths Override**: The `apps/mobile/tsconfig.json` had a path alias (e.g., `"@prime/*": ["../../packages/*/src/index.ts"]`) that forced resolution to a specific file, bypassing the `package.json` resolution logic entirely.
 
 ## Solution
 
@@ -38,9 +38,9 @@ Update `apps/mobile/tsconfig.json` to point to the package **directory** instead
 {
   "compilerOptions": {
     "paths": {
-      "@sanchay/*": ["../../packages/*"]
+      "@prime/*": ["../../packages/*"]
     }
   }
 }
 ```
-*Incorrect:* `"@sanchay/*": ["../../packages/*/src/index.ts"]`
+*Incorrect:* `"@prime/*": ["../../packages/*/src/index.ts"]`

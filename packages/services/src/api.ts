@@ -1,4 +1,4 @@
-import { createClient, HttpClient, APIConfig } from '@sanchay/api';
+import { createClient, HttpClient, APIConfig } from '@prime/api';
 
 class ApiService {
   private static instance: HttpClient;

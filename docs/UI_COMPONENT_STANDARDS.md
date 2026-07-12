@@ -1,6 +1,6 @@
 # UI Component Standards
 
-To ensure cross-platform compatibility and clear separation of concerns in the `@sanchay/ui` package, we follow this Strict Multi-File Strategy.
+To ensure cross-platform compatibility and clear separation of concerns in the `@prime/ui` package, we follow this Strict Multi-File Strategy.
 
 ## Directory Structure
 
@@ -31,7 +31,7 @@ packages/ui/src/primitives/ComponentName/
 
 ### 3. `ComponentName.native.tsx` (Native / Universal)
 - **Framework**: React Native.
-- **Styling**: `StyleSheet` (imported from `styles.ts`), `@sanchay/theme-provider`.
+- **Styling**: `StyleSheet` (imported from `styles.ts`), `@prime/theme-provider`.
 - **Primitives**: `View`, `Text`, `Pressable`, `TextInput`.
 - **Usage**: Used by iOS, Android, AND Expo Web (via `react-native-web`).
 
@@ -69,7 +69,7 @@ The package configures the main entry points to respect this split:
 ## Component Usage Guidelines
 
 ### Text and Typography
-Always use the `Text` primitive from `@sanchay/ui` instead of raw HTML elements (`<p>`, `<h1>`, `<span>`) or React Native `<Text>`.
+Always use the `Text` primitive from `@prime/ui` instead of raw HTML elements (`<p>`, `<h1>`, `<span>`) or React Native `<Text>`.
 
 - **Why?**: properly handles dynamic theming, density, and responsive font sizing.
 - **Web**: Uses `asChild` for semantic HTML (e.g. `<Text asChild><h1>Title</h1></Text>`).

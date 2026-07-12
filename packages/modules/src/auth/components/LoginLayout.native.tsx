@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, Platform } from "react-native";
-import { useResponsiveValue } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { useResponsiveValue } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 import { getLoginLayoutStyles } from "./styles";
 
 interface LoginLayoutProps {

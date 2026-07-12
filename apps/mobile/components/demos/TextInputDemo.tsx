@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { TextInput, Icon, Text, useResponsiveValues } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { TextInput, Icon, Text, useResponsiveValues } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 
 export function TextInputDemo() {
   const { theme } = useTheme();

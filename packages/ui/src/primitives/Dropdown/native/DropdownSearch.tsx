@@ -2,7 +2,7 @@ import React from "react";
 import { TextInput, View } from "react-native";
 import { useDropdownContext } from "./DropdownRoot";
 import { styles, getDropdownThemeStyles } from "./styles";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 import { Icon } from "../../Icon/Icon.native";
 
 const DropdownSearch = ({ ...props }) => {

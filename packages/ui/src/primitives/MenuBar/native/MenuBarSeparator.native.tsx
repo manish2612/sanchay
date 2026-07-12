@@ -1,6 +1,6 @@
 import React from "react";
 import { View, ViewStyle } from "react-native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 import { getMenuBarStyles } from "./styles";
 
 export function MenuBarSeparator({ style }: { style?: ViewStyle }) {

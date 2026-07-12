@@ -1,6 +1,6 @@
 "use client";
 
-import { Table, TextInput, flexRender, ColumnDef, DropdownMenu, DatePicker, Icon } from "@sanchay/ui";
+import { Table, TextInput, flexRender, ColumnDef, DropdownMenu, DatePicker, Icon } from "@prime/ui";
 import * as React from "react";
 import { Invoice, generateData } from "./shared";
 

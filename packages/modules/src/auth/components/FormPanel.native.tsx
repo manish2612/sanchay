@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { View, Pressable, StyleProp, ViewStyle } from "react-native";
-import { Text, TextInput, Button, Icon } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { Text, TextInput, Button, Icon } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 import { LoginData } from "../types";
 import { getFormPanelStyles } from "./styles";
 

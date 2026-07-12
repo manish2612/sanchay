@@ -1,7 +1,7 @@
 import { View, StyleSheet, ViewStyle, TextStyle, Alert } from "react-native";
 
-import { DropdownMenu, Text } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { DropdownMenu, Text } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 
 export const DropdownDemo = () => {
   const { theme } = useTheme();

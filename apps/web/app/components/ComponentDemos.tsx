@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { GridBackground } from "@sanchay/ui";
-import { APP_NAME } from "@sanchay/config";
+import { GridBackground } from "@prime/ui";
+import { APP_NAME } from "@prime/config";
 
 import { AppMenuBarExample } from "./AppMenuBarExample";
 import { ShortcutDemo } from "./ShortcutDemo";

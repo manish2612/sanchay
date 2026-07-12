@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AutoSuggest } from "@sanchay/ui";
+import { AutoSuggest } from "@prime/ui";
 
 const US_STATES = [
   { value: "ca", label: "California" },

@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "../../Text/Text.native";
 import { styles } from "./styles";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 const DropdownGroup = ({ children }: { children: React.ReactNode }) => {
   return <View>{children}</View>;

@@ -1,17 +1,17 @@
-# Sanchay ERP Modules Guide
+# Prime ERP Modules Guide
 
 ## Purpose
 
-This document defines how Sanchay ERP business domains are modeled, structured, and governed
+This document defines how Prime ERP business domains are modeled, structured, and governed
 inside the frontend monorepo.
 
-Sanchay ERP ERP modules are the **core value units** of the system.
+Prime ERP ERP modules are the **core value units** of the system.
 
 ---
 
-## What Is a Sanchay ERP Module?
+## What Is a Prime ERP Module?
 
-An Sanchay ERP module represents a **business domain**, for example:
+An Prime ERP module represents a **business domain**, for example:
 - Auth
 - Sales
 - Accounting
@@ -27,7 +27,7 @@ Each module is:
 
 ## Module Responsibilities (Illustrative)
 
-A Sanchay ERP module may include:
+A Prime ERP module may include:
 - Domain-specific API usage
 - Domain state
 - Domain components

@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import { Button, Text, useResponsiveValues } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
-import { Density } from "@sanchay/design-tokens";
+import { Button, Text, useResponsiveValues } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
+import { Density } from "@prime/design-tokens";
 
 export function ThemeControls() {
   const { mode, setMode, density, setDensity, brand, setBrand, theme } =

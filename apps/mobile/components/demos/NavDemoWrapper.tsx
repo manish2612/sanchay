@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { NavDemo } from "@sanchay/ui";
+import { NavDemo } from "@prime/ui";
 import { useRouter } from "expo-router";
 
 export function NavDemoWrapper() {

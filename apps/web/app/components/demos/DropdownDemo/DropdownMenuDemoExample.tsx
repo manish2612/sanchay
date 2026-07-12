@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { DropdownMenu } from "@sanchay/ui";
+import { DropdownMenu } from "@prime/ui";
 
 export const DropdownMenuDemoExample = () => {
   return (

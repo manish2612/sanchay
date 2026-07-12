@@ -14,7 +14,7 @@ import {
   CommandSeparator,
   CommandShortcut,
   ShortcutCheatSheet,
-} from "@sanchay/ui";
+} from "@prime/ui";
 
 export const ShortcutDemo = () => {
   const [triggered, setTriggered] = useState<string | null>(null);

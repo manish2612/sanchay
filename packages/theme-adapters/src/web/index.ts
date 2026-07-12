@@ -1,5 +1,5 @@
 
-import { Theme } from '@sanchay/design-tokens';
+import { Theme } from '@prime/design-tokens';
 
 /**
  * Flattens a nested object into a single-level object with hyphenated keys.

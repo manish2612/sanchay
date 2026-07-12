@@ -1,5 +1,5 @@
 {
-    "name": "@sanchay/theme-adapters",
+    "name": "@prime/theme-adapters",
     "version": "1.0.0",
     "main": "dist/index.js",
     "react-native": "src/index.ts",
@@ -10,7 +10,7 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "@sanchay/design-tokens": "workspace:*"
+        "@prime/design-tokens": "workspace:*"
     },
     "peerDependencies": {
         "react": "*"

@@ -1,5 +1,5 @@
-const { getTheme } = require("@sanchay/design-tokens");
-const { getWebTheme } = require("@sanchay/theme-adapters");
+const { getTheme } = require("@prime/design-tokens");
+const { getWebTheme } = require("@prime/theme-adapters");
 
 // Get the default theme to generate configuration
 // In the app, the ThemeProvider will handle swapping CSS variables for modes/brands

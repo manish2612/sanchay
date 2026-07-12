@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { TextInput, Icon } from "@sanchay/ui";
+import { TextInput, Icon } from "@prime/ui";
 
 export function TextInputDemo() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, Button } from "@sanchay/ui";
+import { cn, Button } from "@prime/ui";
 import * as React from "react";
 import { TableBare60 } from "./TableBare60";
 import { TableFull1000 } from "./TableFull1000";

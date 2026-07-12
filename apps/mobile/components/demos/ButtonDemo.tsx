@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { Button, Text, useResponsiveValues } from "@sanchay/ui";
+import { Button, Text, useResponsiveValues } from "@prime/ui";
 
 export function ButtonDemo() {
   const { width } = useResponsiveValues({

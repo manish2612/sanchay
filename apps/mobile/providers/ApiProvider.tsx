@@ -1,4 +1,4 @@
-import { ApiService } from "@sanchay/services";
+import { ApiService } from "@prime/services";
 import { ReactNode, useRef } from "react";
 
 // In a real mobile app, this might come from expo-constants or react-native-dotenv

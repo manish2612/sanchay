@@ -10,7 +10,7 @@ import {
 import { TextInput } from "../TextInput/TextInput.native";
 import { ShortcutCheatSheetProps } from "./types";
 import { createStyles } from "./styles";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 export const ShortcutCheatSheet = ({
   open,

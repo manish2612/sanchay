@@ -3,7 +3,7 @@ import { View, Text, Pressable, FlatList, ScrollView } from "react-native";
 import { CommandListProps, CommandItemProps } from "../types";
 import { useCommandContext } from "./CommandPalette";
 import { styles } from "../styles";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 export const CommandList = ({ children, ...props }: CommandListProps) => {
   // In native, children are typically passed directly.

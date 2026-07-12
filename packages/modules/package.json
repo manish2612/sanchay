@@ -1,13 +1,13 @@
 {
-    "name": "@sanchay/modules",
+    "name": "@prime/modules",
     "version": "0.0.0",
     "main": "./src/index.ts",
     "react-native": "./src/index.native.ts",
     "types": "./src/index.ts",
     "dependencies": {
-        "@sanchay/ui": "workspace:*",
-        "@sanchay/theme-provider": "workspace:*",
-        "@sanchay/config": "workspace:*"
+        "@prime/ui": "workspace:*",
+        "@prime/theme-provider": "workspace:*",
+        "@prime/config": "workspace:*"
     },
     "peerDependencies": {
         "react": "^19.0.0",

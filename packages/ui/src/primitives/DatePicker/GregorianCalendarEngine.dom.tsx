@@ -62,7 +62,7 @@ export function GregorianCalendarEngine({
 
   return (
     <div 
-      className="p-3 sanchay-date-picker"
+      className="p-3 prime-date-picker"
       onKeyDownCapture={(e) => {
         if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
         

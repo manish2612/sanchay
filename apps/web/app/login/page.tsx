@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { LoginScreen } from "@sanchay/modules";
-import { createClient } from "@sanchay/api";
+import { LoginScreen } from "@prime/modules";
+import { createClient } from "@prime/api";
 
 export default function LoginPage() {
   const [responseMsg, setResponseMsg] = useState<string | null>(null);

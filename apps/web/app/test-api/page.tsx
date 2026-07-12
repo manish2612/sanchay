@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { apiClient } from "@sanchay/services";
+import { apiClient } from "@prime/services";
 
 export default function TestApiPage() {
   const [result, setResult] = useState<any>(null);

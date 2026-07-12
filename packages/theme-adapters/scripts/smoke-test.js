@@ -1,6 +1,6 @@
 
 const { useThemeAdapter, generateWebCSSVariables, getNativeTheme } = require('../dist');
-const { getTheme } = require('@sanchay/design-tokens');
+const { getTheme } = require('@prime/design-tokens');
 
 // Quick manual smoke test since we don't have a test runner set up yet
 const run = () => {

@@ -13,8 +13,8 @@ import {
   Button,
   TextInput,
   useResponsiveValues,
-} from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+} from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 
 export function ModalDemo() {
   const { theme } = useTheme();

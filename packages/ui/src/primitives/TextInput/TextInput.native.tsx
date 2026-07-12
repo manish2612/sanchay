@@ -5,7 +5,7 @@ import {
     StyleSheet, 
     Pressable 
 } from 'react-native';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 import { styles, getRootStyles } from './styles';
 import { TextInputRootProps, TextInputSlotProps, NativeTextInputProps } from './types';
 

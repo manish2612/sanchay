@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, ViewStyle } from "react-native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 import { MenuBarContext } from "./contexts.native";
 import { getMenuBarStyles } from "./styles";
 

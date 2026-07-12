@@ -12,7 +12,7 @@ import {
   Button,
   TextInput,
   Text,
-} from "@sanchay/ui";
+} from "@prime/ui";
 
 export function ModalDemo() {
   return (

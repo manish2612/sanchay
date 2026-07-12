@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { useTheme } from '@sanchay/theme-provider';
+import { useTheme } from '@prime/theme-provider';
 
 export const GridBackground = () => {
     const { theme } = useTheme();

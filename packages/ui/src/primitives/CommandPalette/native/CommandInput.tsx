@@ -4,7 +4,7 @@ import { CommandInputProps } from "../types";
 import { useCommandContext } from "./CommandPalette";
 import { styles } from "../styles";
 import { Icon } from "../../../primitives/Icon/Icon.native";
-import { useTheme } from "@sanchay/theme-provider";
+import { useTheme } from "@prime/theme-provider";
 
 export const CommandInput = ({ placeholder, ...props }: CommandInputProps) => {
   const { search, setSearch } = useCommandContext();

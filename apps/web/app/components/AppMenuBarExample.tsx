@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { AppMenuBar } from "@sanchay/ui";
-import { MenuColumn } from "@sanchay/ui";
+import { AppMenuBar } from "@prime/ui";
+import { MenuColumn } from "@prime/ui";
 import { useRouter } from "next/navigation";
 
 // Define the menu structure (could come from backend/config)

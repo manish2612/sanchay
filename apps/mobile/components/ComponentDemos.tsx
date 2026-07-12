@@ -1,10 +1,10 @@
 import React from "react";
 import { View, ScrollView } from "react-native";
-import { Text, useResponsiveValues, GridBackground } from "@sanchay/ui";
-import { APP_NAME } from "@sanchay/config";
-import { useTheme } from "@sanchay/theme-provider";
+import { Text, useResponsiveValues, GridBackground } from "@prime/ui";
+import { APP_NAME } from "@prime/config";
+import { useTheme } from "@prime/theme-provider";
 import { useRouter } from "expo-router";
-import { Button } from "@sanchay/ui";
+import { Button } from "@prime/ui";
 
 import { ThemeControls } from "./demos/ThemeControls";
 import { StatsDemo } from "./demos/StatsDemo";
@@ -66,7 +66,7 @@ export function ComponentDemos() {
         </Text>
 
         <View style={{ marginBottom: 20 }}>
-          {/* Using sanchay/ui Button */}
+          {/* Using prime/ui Button */}
           <Button variant="primary" onPress={() => router.push("/test-api")}>
             Open API Test
           </Button>

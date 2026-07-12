@@ -25,7 +25,7 @@ An app shell is responsible for:
 - Bootstrapping the runtime
 - Wiring providers
 - Handling platform-specific lifecycle
-- Rendering Sanchay modules
+- Rendering Prime modules
 
 An app shell does **not** define business behavior.
 
@@ -48,7 +48,7 @@ The web app typically handles:
 ### Explicit Non-Responsibilities
 
 The web app **must not**:
-- Contain Sanchay business logic
+- Contain Prime business logic
 - Own global business state
 - Perform API logic directly
 - Implement feature rules
@@ -85,7 +85,7 @@ The mobile app typically handles:
 ### Explicit Non-Responsibilities
 
 The mobile app **must not**:
-- Implement Sanchay rules
+- Implement Prime rules
 - Own shared business state
 - Perform API logic
 - Implement offline logic directly

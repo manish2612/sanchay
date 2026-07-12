@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useColorScheme } from 'react-native';
-import { useThemeAdapter } from '@sanchay/theme-adapters';
-import { Brand, Mode, Density } from '@sanchay/design-tokens';
+import { useThemeAdapter } from '@prime/theme-adapters';
+import { Brand, Mode, Density } from '@prime/design-tokens';
 import { ThemeProviderProps, UseThemeResult } from '../types';
 
 const ThemeContext = createContext<UseThemeResult | null>(null);

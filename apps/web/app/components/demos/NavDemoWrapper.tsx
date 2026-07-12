@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { NavDemo } from "@sanchay/ui";
+import { NavDemo } from "@prime/ui";
 import { useRouter } from "next/navigation";
 
 export function NavDemoWrapper() {

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, StyleProp, ViewStyle } from "react-native";
-import { Text, useResponsiveValue } from "@sanchay/ui";
-import { useTheme } from "@sanchay/theme-provider";
+import { Text, useResponsiveValue } from "@prime/ui";
+import { useTheme } from "@prime/theme-provider";
 import { getBrandPanelStyles } from "./styles";
 
 interface BrandPanelProps {
@@ -41,7 +41,7 @@ export function BrandPanel({ style }: BrandPanelProps) {
           variant={"heading"}
           size={"2xl"}
         >
-          Sanchay
+          Prime
         </Text>
         <Text
           style={styles.welcome}

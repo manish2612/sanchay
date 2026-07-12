@@ -1,6 +1,6 @@
 import { Slot } from "expo-router";
-import { ThemeProvider } from "@sanchay/theme-provider";
-import { LinkProvider } from "@sanchay/ui";
+import { ThemeProvider } from "@prime/theme-provider";
+import { LinkProvider } from "@prime/ui";
 import { ExpoLinkAdapter } from "../providers/ExpoLinkAdapter";
 import { ApiProvider } from "../providers/ApiProvider";
 import {
@@ -43,7 +43,7 @@ export default function Layout() {
   }
 
   return (
-    <ThemeProvider initialBrand="default" initialMode="system">
+    <ThemeProvider initialBrand="classic" initialMode="system">
       <ApiProvider>
         <LinkProvider value={ExpoLinkAdapter}>
           <Slot />

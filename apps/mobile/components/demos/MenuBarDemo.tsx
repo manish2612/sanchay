@@ -10,7 +10,7 @@ import {
   MenuBarSeparator,
   MenuBarCheckboxItem,
   useResponsiveValues,
-} from "@sanchay/ui";
+} from "@prime/ui";
 
 export function MenuBarDemo() {
   const { width } = useResponsiveValues({

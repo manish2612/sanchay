@@ -1,5 +1,5 @@
 {
-    "name": "@sanchay/design-tokens",
+    "name": "@prime/design-tokens",
     "version": "0.0.0",
     "main": "./dist/index.js",
     "react-native": "./src/index.ts",

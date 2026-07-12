@@ -10,7 +10,7 @@ import {
   TextInput,
   Button,
   Text
-} from "@sanchay/ui"
+} from "@prime/ui"
 
 const formSchema = z.object({
   departmentName: z.string().min(2, "Department name must be at least 2 characters."),
@@ -46,8 +46,8 @@ export function FormDemo() {
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-8">
       <div>
-        <Text variant="heading1">RHF Composition Demo</Text>
-        <Text variant="body1" className="text-gray-500 mt-2">
+        <Text variant="heading">RHF Composition Demo</Text>
+        <Text variant="body" className="text-gray-500 mt-2">
           This form demonstrates the highly-performant composition pattern using React Hook Form, Zod validation, and UI primitives.
         </Text>
       </div>
@@ -77,7 +77,7 @@ export function FormDemo() {
 
             {/* Dynamic Array / Table-like Structure */}
             <div>
-              <Text variant="heading4" className="mb-4">Employees (Dynamic Rows)</Text>
+              <Text variant="heading" className="mb-4">Employees (Dynamic Rows)</Text>
               
               <div className="space-y-4">
                 {fields.map((field, index) => (

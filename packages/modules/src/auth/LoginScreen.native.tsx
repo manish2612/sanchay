@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { useResponsiveValue } from "@sanchay/ui";
+import { useResponsiveValue } from "@prime/ui";
 import { LoginScreenProps } from "./types";
 import { LoginLayout } from "./components/LoginLayout.native";
 import { BrandPanel } from "./components/BrandPanel.native";

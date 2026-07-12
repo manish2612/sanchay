@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { LinkProps } from "@sanchay/ui";
+import { LinkProps } from "@prime/ui";
 
 /**
  * Adapts next/link to the UniversalLink interface.
@@ -14,7 +14,7 @@ export const NextLinkAdapter = ({
   style,
   ...props
 }: LinkProps) => {
-  // Using LinkProps from @sanchay/ui ensures compatibility
+  // Using LinkProps from @prime/ui ensures compatibility
   return (
     <Link
       href={href}

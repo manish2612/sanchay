@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Theme } from '@sanchay/design-tokens';
+import { Theme } from '@prime/design-tokens';
 
 export const createStyles = (theme: Theme) => StyleSheet.create({
   container: {

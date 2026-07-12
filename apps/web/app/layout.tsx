@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Sanchay ERP",
+  title: "Prime ERP",
   description: "Pro grade ERP",
 };
 
-import { ThemeProvider } from "@sanchay/theme-provider/web";
-import { LinkProvider, ShortcutProvider } from "@sanchay/ui";
+import { ThemeProvider } from "@prime/theme-provider/web";
+import { LinkProvider, ShortcutProvider } from "@prime/ui";
 import { NextLinkAdapter } from "../providers/NextLinkAdapter";
 import { ApiProvider } from "../providers/ApiProvider";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
@@ -35,13 +35,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ibmPlexSans.variable} ${workSans.variable} sanchay-density-comfortable`}>
+      <body className={`${ibmPlexSans.variable} ${workSans.variable} prime-density-comfortable`}>
         <style
           dangerouslySetInnerHTML={{
             __html: `:root { --font-material-icons: 'Material Icons'; }`,
           }}
         />
-        <ThemeProvider initialBrand="default" initialMode="system">
+        <ThemeProvider initialBrand="classic" initialMode="system">
           <ShortcutProvider>
             <ApiProvider>
               <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>

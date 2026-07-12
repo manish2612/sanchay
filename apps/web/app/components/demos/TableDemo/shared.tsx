@@ -1,4 +1,4 @@
-import { ColumnDef } from "@sanchay/ui";
+import { ColumnDef } from "@prime/ui";
 import * as React from "react";
 
 export type Invoice = {
