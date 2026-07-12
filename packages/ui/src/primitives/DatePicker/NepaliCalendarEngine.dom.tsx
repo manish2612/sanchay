@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NepaliDate from "nepali-datetime";
 import { Icon } from "../Icon/Icon.dom";
 import { DatePickerProps } from "./types";
-import { cn } from "../../utils";
+import { DatePickerDropdown } from "./DatePickerDropdown.dom";
 
 const BS_MONTHS = {
   english: ['Baisakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'],
@@ -33,14 +33,28 @@ const getDaysInBSMonth = (year: number, month: number) => {
 export function NepaliCalendarEngine({
   date,
   onDateChange,
+  minDate,
+  maxDate,
   nepaliLanguage = 'english',
   setIsOpen,
 }: DatePickerProps & { setIsOpen: (open: boolean) => void }) {
-  // If date is provided, initialize to that BS date, otherwise current BS date
-  const initialDate = date ? new NepaliDate(date) : new NepaliDate();
+  const minNd = minDate ? new NepaliDate(minDate) : null;
+  const maxNd = maxDate ? new NepaliDate(maxDate) : null;
+
+  const clampNepali = (nd: NepaliDate) => {
+    if (minNd && (nd.getYear() * 100 + nd.getMonth()) < (minNd.getYear() * 100 + minNd.getMonth())) {
+      return new NepaliDate(minNd.getYear(), minNd.getMonth(), 1);
+    }
+    if (maxNd && (nd.getYear() * 100 + nd.getMonth()) > (maxNd.getYear() * 100 + maxNd.getMonth())) {
+      return new NepaliDate(maxNd.getYear(), maxNd.getMonth(), 1);
+    }
+    return nd;
+  };
+
+  const initialNd = clampNepali(date ? new NepaliDate(date) : new NepaliDate());
   
-  const [currentYear, setCurrentYear] = useState(initialDate.getYear());
-  const [currentMonth, setCurrentMonth] = useState(initialDate.getMonth());
+  const [currentYear, setCurrentYear] = useState(initialNd.getYear());
+  const [currentMonth, setCurrentMonth] = useState(initialNd.getMonth());
   const [focusedDate, setFocusedDate] = useState<number | null>(null);
 
   const dayRefs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -48,30 +62,35 @@ export function NepaliCalendarEngine({
   // Reset view when external date changes
   useEffect(() => {
     if (date) {
-      const nd = new NepaliDate(date);
+      const nd = clampNepali(new NepaliDate(date));
       setCurrentYear(nd.getYear());
       setCurrentMonth(nd.getMonth());
       setFocusedDate(nd.getDate());
     }
-  }, [date]);
+  }, [date, minDate, maxDate]);
+
+  const updateCalendar = (y: number, m: number) => {
+    let clamped = clampNepali(new NepaliDate(y, m, 1));
+    setCurrentYear(clamped.getYear());
+    setCurrentMonth(clamped.getMonth());
+  };
 
   const handleNextMonth = () => {
-    if (currentMonth === 11) {
-      setCurrentMonth(0);
-      setCurrentYear((y) => y + 1);
-    } else {
-      setCurrentMonth((m) => m + 1);
-    }
+    let y = currentYear;
+    let m = currentMonth + 1;
+    if (m > 11) { m = 0; y += 1; }
+    updateCalendar(y, m);
   };
 
   const handlePrevMonth = () => {
-    if (currentMonth === 0) {
-      setCurrentMonth(11);
-      setCurrentYear((y) => y - 1);
-    } else {
-      setCurrentMonth((m) => m - 1);
-    }
+    let y = currentYear;
+    let m = currentMonth - 1;
+    if (m < 0) { m = 11; y -= 1; }
+    updateCalendar(y, m);
   };
+
+  const isPrevDisabled = Boolean(minNd && (currentYear < minNd.getYear() || (currentYear === minNd.getYear() && currentMonth <= minNd.getMonth())));
+  const isNextDisabled = Boolean(maxNd && (currentYear > maxNd.getYear() || (currentYear === maxNd.getYear() && currentMonth >= maxNd.getMonth())));
 
   const daysInMonth = getDaysInBSMonth(currentYear, currentMonth);
 
@@ -98,9 +117,17 @@ export function NepaliCalendarEngine({
       newDate = getDaysInBSMonth(newYear, newMonth) + newDate;
     }
 
+    try {
+      const targetTime = new NepaliDate(newYear, newMonth, newDate).getDateObject().getTime();
+      if (minNd && targetTime < minNd.getDateObject().getTime()) return;
+      if (maxNd && targetTime > maxNd.getDateObject().getTime()) return;
+    } catch (err) {
+      // Invalid date block (e.g. out of BS 2000-2099 bounds)
+      return; 
+    }
+
     if (newMonth !== currentMonth || newYear !== currentYear) {
-      setCurrentMonth(newMonth);
-      setCurrentYear(newYear);
+      updateCalendar(newYear, newMonth);
       setFocusedDate(newDate);
       setTimeout(() => dayRefs.current[newDate]?.focus(), 0);
     } else {
@@ -125,8 +152,10 @@ export function NepaliCalendarEngine({
   const displayMonths = BS_MONTHS[nepaliLanguage];
   const displayDays = BS_DAYS[nepaliLanguage];
   
-  // Year range (typical safe range for libraries)
-  const years = Array.from({ length: 100 }, (_, i) => 2000 + i);
+  // nepali-datetime supports strictly BS 2000 to 2099. We must not exceed these bounds.
+  const MIN_BS_YEAR = 2000;
+  const MAX_BS_YEAR = 2099;
+  const years = Array.from({ length: MAX_BS_YEAR - MIN_BS_YEAR + 1 }, (_, i) => MIN_BS_YEAR + i);
 
   // Roving tabindex target resolution
   const getTabTargetDate = () => {
@@ -137,48 +166,50 @@ export function NepaliCalendarEngine({
   };
   const tabTargetDate = getTabTargetDate();
 
+  const monthOptions = displayMonths.map((m, idx) => {
+    let disabled = false;
+    if (minNd) {
+      if (currentYear < minNd.getYear()) disabled = true;
+      if (currentYear === minNd.getYear() && idx < minNd.getMonth()) disabled = true;
+    }
+    if (maxNd) {
+      if (currentYear > maxNd.getYear()) disabled = true;
+      if (currentYear === maxNd.getYear() && idx > maxNd.getMonth()) disabled = true;
+    }
+    return { label: m, value: idx, disabled };
+  });
+
+  const yearOptions = years.map(y => ({
+    label: nepaliLanguage === 'nepali' ? toNepaliNumber(y) : String(y),
+    value: y,
+    disabled: (minNd && y < minNd.getYear()) || (maxNd && y > maxNd.getYear())
+  })).filter(o => !o.disabled);
+
   return (
     <div className="p-3">
       {/* Navigation Header */}
       <div className="flex justify-between items-center mb-4">
         
         {/* Month / Year Selectors */}
-        <div className="flex gap-2 items-center">
-          <div className="relative inline-flex items-center">
-            <select
-              value={currentMonth}
-              onChange={(e) => setCurrentMonth(parseInt(e.target.value))}
-              className="appearance-none bg-transparent font-bold text-sm pr-4 cursor-pointer z-10 focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-sm"
-            >
-              {displayMonths.map((m, idx) => (
-                <option key={m} value={idx}>{m}</option>
-              ))}
-            </select>
-            <Icon name="expand_more" size={16} className="absolute right-0 pointer-events-none" />
-          </div>
-
-          <div className="relative inline-flex items-center">
-            <select
-              value={currentYear}
-              onChange={(e) => setCurrentYear(parseInt(e.target.value))}
-              className="appearance-none bg-transparent font-bold text-sm pr-4 cursor-pointer z-10 focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-sm"
-            >
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {nepaliLanguage === 'nepali' ? toNepaliNumber(y) : y}
-                </option>
-              ))}
-            </select>
-            <Icon name="expand_more" size={16} className="absolute right-0 pointer-events-none" />
-          </div>
+        <div className="flex gap-1 items-center">
+          <DatePickerDropdown
+            value={currentMonth}
+            onChange={(val) => updateCalendar(currentYear, val)}
+            options={monthOptions}
+          />
+          <DatePickerDropdown
+            value={currentYear}
+            onChange={(val) => updateCalendar(val, currentMonth)}
+            options={yearOptions}
+          />
         </div>
 
         {/* Prev / Next Arrows */}
         <div className="flex gap-1">
-          <button type="button" onClick={handlePrevMonth} className="h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring">
+          <button type="button" disabled={isPrevDisabled} onClick={handlePrevMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
             <Icon name="chevron_left" size={18} />
           </button>
-          <button type="button" onClick={handleNextMonth} className="h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring">
+          <button type="button" disabled={isNextDisabled} onClick={handleNextMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
             <Icon name="chevron_right" size={18} />
           </button>
         </div>
@@ -201,31 +232,37 @@ export function NepaliCalendarEngine({
               {Array.from({ length: 7 }).map((_, col) => {
                 const dayIndex = row * 7 + col;
                 const d = dayIndex - startDayOfWeek + 1;
-                const isOutOfRange = d < 1 || d > daysInMonth;
+                
+                const isOutOfBounds = 
+                  (minNd && (currentYear < minNd.getYear() || (currentYear === minNd.getYear() && currentMonth < minNd.getMonth()) || (currentYear === minNd.getYear() && currentMonth === minNd.getMonth() && d < minNd.getDate()))) ||
+                  (maxNd && (currentYear > maxNd.getYear() || (currentYear === maxNd.getYear() && currentMonth > maxNd.getMonth()) || (currentYear === maxNd.getYear() && currentMonth === maxNd.getMonth() && d > maxNd.getDate())));
 
-                if (isOutOfRange) {
+                const isInvalid = d < 1 || d > daysInMonth;
+
+                if (isInvalid) {
                   return <td key={col} className="p-0 text-center w-9 h-9" />;
                 }
 
                 const isTodayDate = isToday(d);
                 const isSelectedDate = isSelected(d);
 
-                let btnClasses = "hover:bg-surface-variant text-foreground";
+                let btnClasses = "hover:bg-surface-variant text-foreground focus:ring-focus-ring";
                 if (isSelectedDate) {
-                  btnClasses = "bg-primary text-primary-foreground font-bold hover:bg-primary hover:text-primary-foreground";
+                  btnClasses = "bg-primary text-primary-foreground font-bold hover:opacity-90 focus:ring-foreground";
                 } else if (isTodayDate) {
-                  btnClasses = "bg-secondary text-secondary-foreground hover:bg-secondary";
+                  btnClasses = "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-focus-ring";
                 }
 
                 return (
                   <td key={col} className={`p-0 text-center`}>
                     <button
                       type="button"
+                      disabled={Boolean(isOutOfBounds)}
                       ref={el => dayRefs.current[d] = el}
                       tabIndex={d === tabTargetDate ? 0 : -1}
                       onKeyDown={(e) => handleGridKeyDown(e, d)}
                       onClick={() => handleSelectDate(d)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors mx-auto text-sm focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 focus:ring-offset-popover ${btnClasses}`}
+                      className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors mx-auto text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
                     >
                       {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
                     </button>

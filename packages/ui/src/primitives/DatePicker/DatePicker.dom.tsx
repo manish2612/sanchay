@@ -20,26 +20,39 @@ export function DatePicker({
   placeholder = "Select Date",
   className,
   disabled,
-  calendarType = 'gregorian',
-  nepaliLanguage = 'english',
+  calendarType = "gregorian",
+  nepaliLanguage = "english",
   dayPickerProps,
+  minDate,
+  maxDate,
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Format the display text in the trigger
   let displayDate = placeholder;
   if (date) {
-    if (calendarType === 'nepali') {
+    if (calendarType === "nepali") {
       const nd = new NepaliDate(date);
       // Format to English representation of Nepali Date e.g., 2080-01-01
-      displayDate = nd.format('YYYY-MM-DD'); 
+      displayDate = nd.format("YYYY-MM-DD");
     } else {
       displayDate = format(date, "PPP");
     }
   }
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Popover.Root
+      open={isOpen}
+      onOpenChange={(newOpen) => {
+        // If Radix is trying to close the Popover, but a DropdownMenu is open,
+        // it means we caught a global Escape key or outside click that the nested
+        // DropdownMenu should have handled alone. We abort closing the Popover!
+        if (!newOpen && document.querySelector("[data-radix-menu-content]")) {
+          return;
+        }
+        setIsOpen(newOpen);
+      }}
+    >
       <Popover.Trigger asChild>
         <button
           disabled={disabled}
@@ -63,7 +76,7 @@ export function DatePicker({
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           )}
         >
-          <div 
+          <div
             onKeyDown={(e) => {
               // Allow Enter key to open native select dropdowns (Month/Year)
               if (e.key === "Enter") {
@@ -71,7 +84,7 @@ export function DatePicker({
                 if (target.tagName === "SELECT") {
                   e.preventDefault();
                   try {
-                    if ('showPicker' in target) {
+                    if ("showPicker" in target) {
                       (target as HTMLSelectElement).showPicker();
                     }
                   } catch (err) {
@@ -80,21 +93,27 @@ export function DatePicker({
                 }
               }
             }}
-            style={{
-            "--rdp-accent-color": "var(--colors-primary, #3b82f6)",
-            "--rdp-background-color": "var(--colors-surface-variant, #f1f5f9)",
-            "--rdp-accent-color-dark": "var(--colors-primary, #3b82f6)",
-            "--rdp-background-color-dark": "var(--colors-surface-variant, #1e293b)",
-            "--rdp-outline": "2px solid var(--colors-focus-ring, #3b82f6)",
-            "--rdp-outline-selected": "none",
-            "--rdp-selected-font": "bold",
-            "--rdp-today-color": "var(--colors-foreground, #000)",
-          } as React.CSSProperties}>
-            
-            {calendarType === 'nepali' ? (
+            style={
+              {
+                "--rdp-accent-color": "var(--colors-primary, #3b82f6)",
+                "--rdp-background-color":
+                  "var(--colors-surface-variant, #f1f5f9)",
+                "--rdp-accent-color-dark": "var(--colors-primary, #3b82f6)",
+                "--rdp-background-color-dark":
+                  "var(--colors-surface-variant, #1e293b)",
+                "--rdp-outline": "2px solid var(--colors-focus-ring, #3b82f6)",
+                "--rdp-outline-selected": "none",
+                "--rdp-selected-font": "bold",
+                "--rdp-today-color": "var(--colors-foreground, #000)",
+              } as React.CSSProperties
+            }
+          >
+            {calendarType === "nepali" ? (
               <NepaliCalendarEngine
                 date={date}
                 onDateChange={onDateChange}
+                minDate={minDate}
+                maxDate={maxDate}
                 nepaliLanguage={nepaliLanguage}
                 setIsOpen={setIsOpen}
               />
@@ -102,11 +121,12 @@ export function DatePicker({
               <GregorianCalendarEngine
                 date={date}
                 onDateChange={onDateChange}
+                minDate={minDate}
+                maxDate={maxDate}
                 dayPickerProps={dayPickerProps}
                 setIsOpen={setIsOpen}
               />
             )}
-
           </div>
         </Popover.Content>
       </Popover.Portal>

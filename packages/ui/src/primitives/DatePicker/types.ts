@@ -9,10 +9,14 @@ export interface DatePickerProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  /** The minimum selectable date (global boundary) */
+  minDate?: Date;
+  /** The maximum selectable date (global boundary) */
+  maxDate?: Date;
   /** The underlying calendar system to use. Defaults to gregorian */
   calendarType?: 'gregorian' | 'nepali';
   /** If using calendarType='nepali', controls whether to display the text in English or Nepali script. Defaults to english. */
   nepaliLanguage?: 'english' | 'nepali';
   /** Optional props strictly for the underlying react-day-picker (only applies when calendarType is gregorian) */
-  dayPickerProps?: Omit<DayPickerProps, 'mode' | 'selected' | 'onSelect'>;
+  dayPickerProps?: Omit<DayPickerProps, 'mode' | 'selected' | 'onSelect' | 'fromDate' | 'toDate'>;
 }

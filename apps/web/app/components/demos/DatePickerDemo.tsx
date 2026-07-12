@@ -49,6 +49,20 @@ export function DatePickerDemo() {
           />
         </div>
 
+        {/* Min / Max Constraints (Gregorian) */}
+        <div className="space-y-1">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
+            Min/Max Dates (Gregorian)
+          </span>
+          <DatePicker 
+            date={date1} 
+            onDateChange={setDate1} 
+            minDate={new Date(2023, 0, 1)}
+            maxDate={new Date(2023, 11, 31)}
+            placeholder="Only 2023 allowed" 
+          />
+        </div>
+
         {/* Nepali Calendar */}
         <div className="space-y-1">
           <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
@@ -59,6 +73,21 @@ export function DatePickerDemo() {
             date={date1} 
             onDateChange={setDate1} 
             placeholder="Select BS Date" 
+          />
+        </div>
+
+        {/* Min / Max Constraints (Nepali) */}
+        <div className="space-y-1">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
+            Min/Max Dates (Nepali)
+          </span>
+          <DatePicker 
+            calendarType="nepali"
+            date={date1} 
+            onDateChange={setDate1} 
+            minDate={new Date('2024-04-13')} // roughly start of BS 2081
+            maxDate={new Date('2025-04-13')} // roughly end of BS 2081
+            placeholder="Only BS 2081 allowed" 
           />
         </div>
 
