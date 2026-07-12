@@ -8,7 +8,7 @@ export const tableStyles = {
     headerCell: cva("flex-1 px-4 py-3 h-10 items-center justify-start text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"),
     body: cva("w-full h-full"), // Removed relative, ensured full height
     row: cva(
-        "flex w-full items-center border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted data-[focused=true]:text-foreground outline-none cursor-default",
+        "flex w-full h-full items-stretch border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted data-[focused=true]:text-foreground outline-none cursor-default",
         {
             variants: {
                 variant: {

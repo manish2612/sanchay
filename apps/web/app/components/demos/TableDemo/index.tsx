@@ -9,6 +9,8 @@ import { TableNoChrome1000 } from "./TableNoChrome1000";
 import { TableNoChrome6 } from "./TableNoChrome6";
 import { TableNoData } from "./TableNoData";
 
+import { TableEditable } from "./TableEditable";
+
 // Re-export individual components
 export {
   TableBare60,
@@ -17,6 +19,7 @@ export {
   TableNoChrome1000,
   TableNoChrome6,
   TableNoData,
+  TableEditable,
 };
 
 // --- Main Demo Component with Toggle ---
@@ -27,13 +30,15 @@ type Scenario =
   | "no-chrome-1000"
   | "no-chrome-6"
   | "bare-60"
-  | "no-data";
+  | "no-data"
+  | "editable";
 
 const SCENARIOS: {
   id: Scenario;
   label: string;
   Component: React.ComponentType;
 }[] = [
+  { id: "editable", label: "Editable Rows", Component: TableEditable },
   { id: "full-1000", label: "Full (1000 rows)", Component: TableFull1000 },
   { id: "full-5", label: "Full (5 rows)", Component: TableFull5 },
   {
@@ -48,7 +53,7 @@ const SCENARIOS: {
 
 export function TableDemo() {
   const [activeScenarioId, setActiveScenarioId] =
-    React.useState<Scenario>("full-1000");
+    React.useState<Scenario>("editable");
   const ActiveComponent = SCENARIOS.find(
     (s) => s.id === activeScenarioId,
   )!.Component;

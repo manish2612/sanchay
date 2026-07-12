@@ -71,11 +71,17 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                 const isAtBottomEdge = rowBottom > viewportHeight - 10;
 
                 const isAtEdge = isAtTopEdge || isAtBottomEdge;
+                
+                const successRowIndex = table.options.meta?.successRowIndex;
+                const isSuccess = successRowIndex === focusedVirtualRow.index;
 
                 return (
                   <div
                     className={cn(
-                      "absolute left-0 w-full bg-primary/10 rounded-sm pointer-events-none border border-primary/20 will-change-transform",
+                      "absolute left-0 w-full rounded-sm pointer-events-none border will-change-transform",
+                      isSuccess 
+                        ? "bg-green-500/20 border-green-500/30 transition-colors duration-300"
+                        : "bg-primary/10 border-primary/20",
                       !isAtEdge &&
                         "transition-transform duration-200 ease-in-out"
                     )}
@@ -107,7 +113,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                       transform: `translateY(${virtualRow.start}px)`,
                       zIndex: 1, // Ensure row content (text/clicks) is above highlight
                     }}
-                    onClick={() => handleRowClick(virtualRow.index)}
+                    onClick={(e) => handleRowClick(virtualRow.index, e)}
                   >
                     {renderedRow}
                   </div>
