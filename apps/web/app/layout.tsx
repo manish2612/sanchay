@@ -12,6 +12,7 @@ import { NextLinkAdapter } from "../providers/NextLinkAdapter";
 import { ApiProvider } from "../providers/ApiProvider";
 import { AppLayout } from "./components/AppLayout";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
+import { cookies } from "next/headers";
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -28,15 +29,20 @@ const workSans = Work_Sans({
   display: "swap",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const initialBrand = (cookieStore.get("prime-brand")?.value || "classic") as any;
+  const initialDensity = (cookieStore.get("prime-density")?.value || "comfortable") as any;
+  const initialMode = (cookieStore.get("prime-mode")?.value || "system") as any;
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${ibmPlexSans.variable} ${workSans.variable} prime-density-comfortable`}>
-        <ThemeProvider initialBrand="classic" initialMode="system">
+      <body className={`${ibmPlexSans.variable} ${workSans.variable} prime-density-${initialDensity}`}>
+        <ThemeProvider initialBrand={initialBrand} initialMode={initialMode} initialDensity={initialDensity}>
           <ShortcutProvider>
             <ApiProvider>
               <LinkProvider value={NextLinkAdapter}>
