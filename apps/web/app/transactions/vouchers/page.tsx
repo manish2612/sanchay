@@ -30,7 +30,7 @@ export default function VouchersPage() {
     <div className="flex flex-col h-full bg-background min-h-screen">
       {/* Header / Document Meta Section Wrapper */}
       <div className="flex border-b border-border bg-surface relative overflow-hidden">
-        <section className="flex-1 px-4 py-4 flex flex-col gap-2">
+        <section className="flex-1 px-4 py-3 flex flex-col gap-2">
           {/* Form Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-2 items-end">
             {/* Group 1: Primary Details */}
