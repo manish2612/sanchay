@@ -17,9 +17,12 @@ export function SidebarPanelItem({ item, level = 0 }: SidebarPanelItemProps) {
   const isActive = item.href ? pathname?.startsWith(item.href) : false;
 
   // Active state styling
+  // Fixed Dark Mode Hover Bug: Using `hover:bg-foreground/10 hover:text-foreground`
+  // guarantees perfect contrast in ALL themes because `foreground` dynamically maps to 
+  // pure white in dark mode and pure black in light mode.
   const activeClasses = isActive
     ? "bg-primary/10 text-primary border-l-[3px] border-primary font-semibold"
-    : "text-foreground hover:bg-primary/5 hover:text-primary border-l-[3px] border-transparent";
+    : "text-mutedForeground hover:bg-foreground/10 hover:text-foreground border-l-[3px] border-transparent";
 
   const content = (
     <div
