@@ -18,3 +18,4 @@ export * from './primitives/AutoSuggest';
 export * from './primitives/Dropdown/native';
 export * from './components/DropdownMenu/index.native';
 export * from './primitives/DatePicker/index.native';
+export * from './primitives/Switch/index.native';
