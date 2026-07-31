@@ -26,9 +26,24 @@ const InnerProvider = ({
   initialBrand: Brand;
   initialDensity: Density;
 }) => {
-  const { theme: userPreference, setTheme: setMode, resolvedTheme } = useNextTheme();
-  const [brand, setBrand] = useState<Brand>(initialBrand);
-  const [density, setDensity] = useState<Density>(initialDensity);
+  const { theme: userPreference, setTheme: setNextThemeMode, resolvedTheme } = useNextTheme();
+  const [brand, setBrandState] = useState<Brand>(initialBrand);
+  const [density, setDensityState] = useState<Density>(initialDensity);
+
+  const setBrand = React.useCallback((newBrand: Brand) => {
+    setBrandState(newBrand);
+    document.cookie = `prime-brand=${newBrand}; path=/; max-age=31536000`;
+  }, []);
+
+  const setDensity = React.useCallback((newDensity: Density) => {
+    setDensityState(newDensity);
+    document.cookie = `prime-density=${newDensity}; path=/; max-age=31536000`;
+  }, []);
+
+  const setMode = React.useCallback((newMode: Mode | "system") => {
+    setNextThemeMode(newMode);
+    document.cookie = `prime-mode=${newMode}; path=/; max-age=31536000`;
+  }, [setNextThemeMode]);
 
   // Determine current effective mode for tokens
   // next-themes can return 'system' for resolvedTheme during SSR before mounting.
@@ -98,7 +113,7 @@ const InnerProvider = ({
       mode: (userPreference as Mode | "system") || "system",
       brand,
       density,
-      setMode: (m: Mode | "system") => setMode(m),
+      setMode,
       setBrand,
       setDensity,
       isDark: currentMode === "dark",
