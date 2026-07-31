@@ -106,7 +106,7 @@ const AutoSuggestInner = <T extends boolean = false>(
             )}
             {option.label}
             {isSelected && (
-              <Icon name="check" size={14} className="ml-auto text-primary" />
+              <Icon name="Check" size={14} className="ml-auto text-primary" />
             )}
           </>
         )}
@@ -149,7 +149,7 @@ const AutoSuggestInner = <T extends boolean = false>(
                             e.preventDefault();
                           }}
                         >
-                          <Icon name="close" size={12} />
+                          <Icon name="X" size={12} />
                         </div>
                       )}
                     </span>
@@ -186,7 +186,7 @@ const AutoSuggestInner = <T extends boolean = false>(
               <TextInput.Slot side="right" className="flex items-center gap-2 pr-1 ml-auto shrink-0">
                 {isLoading && (
                   <Icon
-                    name="loader"
+                    name="Loader"
                     className="animate-spin text-muted-foreground"
                     size={16}
                   />
@@ -198,7 +198,7 @@ const AutoSuggestInner = <T extends boolean = false>(
                     onClick={handleClear}
                     className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-sm hover:bg-secondary"
                   >
-                    <Icon name="close" size={14} />
+                    <Icon name="X" size={14} />
                   </div>
                 )}
               </TextInput.Slot>
@@ -301,7 +301,7 @@ const AutoSuggestInner = <T extends boolean = false>(
                       "hover:bg-secondary hover:text-secondary-foreground text-primary font-medium mt-1 border-t border-border pt-2"
                     )}
                   >
-                    <Icon name="add" size={16} className="mr-2" />
+                    <Icon name="Plus" size={16} className="mr-2" />
                     {createLabel.replace("{query}", currentInputValue.trim())}
                   </CommandPrimitive.Item>
                 )}

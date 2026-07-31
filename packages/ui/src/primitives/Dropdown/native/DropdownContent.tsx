@@ -47,7 +47,7 @@ const DropdownContent = ({ children, style }: any) => {
                   })}
                 >
                   <Icon
-                    name="close"
+                    name="X"
                     size={20}
                     color={theme.colors.mutedForeground}
                   />

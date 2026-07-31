@@ -12,7 +12,7 @@ const CommandInput = React.forwardRef<
 >(({ className, placeholder, ...props }, ref) => (
   <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
     <div className="flex items-center justify-center mr-2 h-4 w-4 shrink-0 opacity-50">
-      <Icon name="search" size={16} />
+      <Icon name="Search" size={16} />
     </div>
     <CommandPrimitive.Input
       ref={ref}

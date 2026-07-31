@@ -16,7 +16,7 @@ const DropdownSearch = ({ ...props }) => {
         getDropdownThemeStyles(theme).searchContainer,
       ]}
     >
-      <Icon name="search" size={20} color={theme.colors.mutedForeground} />
+      <Icon name="Search" size={20} color={theme.colors.mutedForeground} />
       <TextInput
         style={[
           styles.searchInput,

@@ -207,10 +207,10 @@ export function NepaliCalendarEngine({
         {/* Prev / Next Arrows */}
         <div className="flex gap-1">
           <button type="button" disabled={isPrevDisabled} onClick={handlePrevMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
-            <Icon name="chevron_left" size={18} />
+            <Icon name="ChevronLeft" size={18} />
           </button>
           <button type="button" disabled={isNextDisabled} onClick={handleNextMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
-            <Icon name="chevron_right" size={18} />
+            <Icon name="ChevronRight" size={18} />
           </button>
         </div>
       </div>

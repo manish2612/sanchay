@@ -24,7 +24,7 @@ const DropdownSubTrigger = React.forwardRef<
       {...props}
     >
       {children}
-      <Icon name="chevron_right" size={16} className="ml-auto" />
+      <Icon name="ChevronRight" size={16} className="ml-auto" />
     </DropdownMenuPrimitive.SubTrigger>
   );
 });

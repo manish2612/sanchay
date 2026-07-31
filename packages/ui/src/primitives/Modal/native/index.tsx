@@ -124,7 +124,7 @@ const ModalContent = ({
                 onPress={() => onOpenChange(false)}
               >
                 {/* Explicitly using a known icon for close */}
-                <Icon name="close" size={20} color={theme.colors.foreground} />
+                <Icon name="X" size={20} color={theme.colors.foreground} />
               </Pressable>
               {children}
             </View>

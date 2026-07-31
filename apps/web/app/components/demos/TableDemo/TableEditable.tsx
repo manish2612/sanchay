@@ -69,7 +69,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
           onKeyDown={handleKeyDown}
           className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none"
         >
-          {value as string} <Icon name="expand_more" size={16} />
+          {value as string} <Icon name="ChevronDown" size={16} />
         </button>
       </DropdownMenu>
     );

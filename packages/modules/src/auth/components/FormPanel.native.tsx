@@ -32,7 +32,7 @@ export function FormPanel({
     <View style={styles.card}>
       {/* Company Header */}
       <View style={styles.companyHeader}>
-        <Icon name="business" size={24} color={t.colors.foreground} />
+        <Icon name="Briefcase" size={24} color={t.colors.foreground} />
         <View style={styles.footerTextContainer}>
           <Text style={styles.footerLabel}>Company</Text>
           <Text style={styles.footerName}>Egrow Tech Private limited</Text>
@@ -69,7 +69,7 @@ export function FormPanel({
               style={styles.passwordToggle}
             >
               <Icon
-                name={isVisible ? "visibility" : "visibility-off"}
+                name={isVisible ? "Eye" : "EyeOff"}
                 size={20}
                 color={t.colors.mutedForeground}
               />

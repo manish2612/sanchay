@@ -13,20 +13,20 @@ export const DropdownMenuDemoExample = () => {
           id: "1",
           label: "Profile",
           onSelect: () => alert("Profile"),
-          icon: "person",
+          icon: "User",
         },
         {
           id: "2",
           label: "Settings",
           onSelect: () => alert("Settings"),
-          icon: "settings",
+          icon: "Settings",
           shortcut: "⌘S",
         },
         {
           id: "3",
           label: "Logout",
           onSelect: () => alert("Logout"),
-          icon: "logout",
+          icon: "LogOut",
         },
       ]}
     />

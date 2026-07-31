@@ -42,7 +42,7 @@ export function ThemeControls() {
             <DropdownTrigger asChild>
               <Button variant="outline" className="h-8 text-sm px-2 border-none">
                 {brand === 'classic' ? 'Classic' : brand === 'vibrant-orange' ? 'Vibrant Orange' : brand === 'prosperity-green' ? 'Prosperity Green' : 'Executive Blue'}
-                <Icon name="expand_more" />
+                <Icon name="ChevronDown" />
               </Button>
             </DropdownTrigger>
             <DropdownContent align="end">

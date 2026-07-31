@@ -65,7 +65,7 @@ export function DatePicker({
           )}
         >
           <span>{displayDate}</span>
-          <Icon name="event" size={20} className="text-muted-foreground" />
+          <Icon name="Calendar" size={20} className="text-muted-foreground" />
         </button>
       </Popover.Trigger>
       <Popover.Portal>

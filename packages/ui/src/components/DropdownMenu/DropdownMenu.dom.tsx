@@ -27,7 +27,7 @@ const DropdownMenu = ({
         ) : (
           <Button variant="outline">
             {triggerLabel || "Open Menu"}
-            <Icon name="expand_more" />
+            <Icon name="ChevronDown" />
           </Button>
         )}
       </DropdownTrigger>

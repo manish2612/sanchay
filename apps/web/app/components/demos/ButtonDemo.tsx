@@ -35,7 +35,7 @@ export function ButtonDemo() {
             <Button size="default">Default</Button>
             <Button size="lg">Large</Button>
             <Button size="icon" variant="outline">
-              <Icon name="add" size={20} />
+              <Icon name="Plus" size={20} />
             </Button>
           </div>
         </div>

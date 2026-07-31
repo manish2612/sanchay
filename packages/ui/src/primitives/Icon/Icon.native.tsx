@@ -1,11 +1,16 @@
 import React from "react";
-import { MaterialIcons } from "@expo/vector-icons";
-import { IconProps } from "./types";
+import * as icons from "lucide-react-native";
+import { IconProps, IconName } from "./types";
 
 export function Icon({ name, size = 24, color, style }: IconProps) {
+  const LucideIcon = icons[name as IconName] as React.ElementType;
+
+  if (!LucideIcon) {
+    return null;
+  }
+
   return (
-    <MaterialIcons
-      name={name as keyof typeof MaterialIcons.glyphMap}
+    <LucideIcon
       size={size}
       color={color}
       style={style}

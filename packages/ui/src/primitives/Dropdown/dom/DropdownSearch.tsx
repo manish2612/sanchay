@@ -25,7 +25,7 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
       <div className={dropdownSearchContainerClassName} style={style}>
         <TextInput.Root className={dropdownSearchClassName}>
           <TextInput.Slot side="left">
-            <Icon name="search" size={16} className="text-muted-foreground" />
+            <Icon name="Search" size={16} className="text-muted-foreground" />
           </TextInput.Slot>
           <TextInput.Input
             ref={ref}

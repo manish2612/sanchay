@@ -23,13 +23,13 @@ export const DropdownDemo = () => {
               {
                 id: "1",
                 label: "Edit Profile",
-                icon: "edit",
+                icon: "Pencil",
                 onSelect: () => Alert.alert("Edit Profile"),
               },
               {
                 id: "2",
                 label: "Preferences",
-                icon: "settings",
+                icon: "Settings",
                 onSelect: () => Alert.alert("Preferences"),
               },
             ]}
@@ -48,25 +48,25 @@ export const DropdownDemo = () => {
               {
                 id: "1",
                 label: "Alice Johnson",
-                icon: "person",
+                icon: "User",
                 onSelect: () => Alert.alert("Selected Alice"),
               },
               {
                 id: "2",
                 label: "Bob Smith",
-                icon: "person",
+                icon: "User",
                 onSelect: () => Alert.alert("Selected Bob"),
               },
               {
                 id: "3",
                 label: "Charlie Brown",
-                icon: "person",
+                icon: "User",
                 onSelect: () => Alert.alert("Selected Charlie"),
               },
               {
                 id: "4",
                 label: "David Williams",
-                icon: "person",
+                icon: "User",
                 onSelect: () => Alert.alert("Selected David"),
               },
             ]}

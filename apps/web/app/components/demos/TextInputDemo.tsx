@@ -27,7 +27,7 @@ export function TextInputDemo() {
           </span>
           <TextInput.Root>
             <TextInput.Slot side="left">
-              <Icon name="search" size={18} />
+              <Icon name="Search" size={18} />
             </TextInput.Slot>
             <TextInput.Input placeholder="Search..." />
           </TextInput.Root>
@@ -37,7 +37,7 @@ export function TextInputDemo() {
           <TextInput.Root>
             <TextInput.Input placeholder="Email address" />
             <TextInput.Slot side="right">
-              <Icon name="mail" size={18} />
+              <Icon name="Mail" size={18} />
             </TextInput.Slot>
           </TextInput.Root>
         </div>
@@ -49,7 +49,7 @@ export function TextInputDemo() {
           </span>
           <TextInput.Root variant="error">
             <TextInput.Slot side="left">
-              <Icon name="error" size={18} />
+              <Icon name="CircleAlert" size={18} />
             </TextInput.Slot>
             <TextInput.Input placeholder="Invalid input" />
           </TextInput.Root>

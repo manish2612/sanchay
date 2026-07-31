@@ -1,11 +1,14 @@
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { icons } from 'lucide-react';
+
+export type IconName = keyof typeof icons;
 
 export interface IconProps {
   /**
    * The name of the icon.
-   * For usage, see: https://fonts.google.com/icons
+   * For usage, see: https://lucide.dev/icons/
    */
-  name: string; // We use string to support both potential generic string and literal types. Ideally this should be a union.
+  name: IconName;
 
   /**
    * Size of the icon.

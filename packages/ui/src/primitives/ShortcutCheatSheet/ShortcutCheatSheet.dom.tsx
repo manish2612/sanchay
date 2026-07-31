@@ -64,7 +64,7 @@ export const ShortcutCheatSheet = ({
         <div className="px-1 mt-4">
           <TextInput.Root>
             <TextInput.Slot side="left">
-              <Icon name="search" size={16} />
+              <Icon name="Search" size={16} />
             </TextInput.Slot>
             <TextInput.Input
               placeholder="Search shortcuts..."

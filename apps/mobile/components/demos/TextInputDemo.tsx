@@ -24,7 +24,7 @@ export function TextInputDemo() {
         {/* With Icon Left */}
         <TextInput.Root>
           <TextInput.Slot side="left">
-            <Icon name="search" size={20} color={t.colors.mutedForeground} />
+            <Icon name="Search" size={20} color={t.colors.mutedForeground} />
           </TextInput.Slot>
           <TextInput.Input placeholder="Search..." />
         </TextInput.Root>
@@ -33,7 +33,7 @@ export function TextInputDemo() {
         <TextInput.Root variant="error">
           <TextInput.Input placeholder="Error State" />
           <TextInput.Slot side="right">
-            <Icon name="error" size={20} color={t.colors.destructive} />
+            <Icon name="CircleAlert" size={20} color={t.colors.destructive} />
           </TextInput.Slot>
         </TextInput.Root>
       </View>

@@ -38,7 +38,7 @@ const ModalContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close className={cn(closeVariants())}>
-        <Icon name="close" size={16} />
+        <Icon name="X" size={16} />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>

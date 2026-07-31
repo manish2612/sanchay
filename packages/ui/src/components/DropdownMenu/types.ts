@@ -1,8 +1,10 @@
+import { IconName } from "../../primitives/Icon/types";
+
 export interface DropdownMenuItem {
   id: string;
   label: string;
   onSelect: () => void;
-  icon?: string;
+  icon?: IconName;
   shortcut?: string;
   disabled?: boolean;
 }

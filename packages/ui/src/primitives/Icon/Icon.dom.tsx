@@ -1,30 +1,22 @@
 import React from "react";
+import * as icons from "lucide-react";
 import { cn } from "../../utils";
-import { IconProps } from "./types";
+import { IconProps, IconName } from "./types";
 
 export function Icon({ name, size = 24, color, className, style }: IconProps) {
+  const LucideIcon = icons[name as IconName] as React.ElementType;
+
+  if (!LucideIcon) {
+    return null;
+  }
+
   return (
-    <span
-      className={cn("material-icons select-none", className)}
-      style={{
-        fontFamily: "var(--font-material-icons)",
-        fontSize: size,
-        color: color,
-        // Ensure proper rendering details
-        fontWeight: "normal",
-        fontStyle: "normal",
-        lineHeight: 1,
-        letterSpacing: "normal",
-        textTransform: "none",
-        display: "inline-block",
-        whiteSpace: "nowrap",
-        wordWrap: "normal",
-        direction: "ltr",
-        ...(style as React.CSSProperties),
-      }}
+    <LucideIcon
+      size={size}
+      color={color}
+      className={cn("select-none", className)}
+      style={style as React.CSSProperties}
       aria-hidden="true"
-    >
-      {name}
-    </span>
+    />
   );
 }

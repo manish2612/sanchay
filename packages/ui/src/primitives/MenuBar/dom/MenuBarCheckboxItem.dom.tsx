@@ -18,7 +18,7 @@ const MenuBarCheckboxItem = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <MenubarPrimitive.ItemIndicator>
-        <Icon name="check" size={16} />
+        <Icon name="Check" size={16} />
       </MenubarPrimitive.ItemIndicator>
     </span>
     {children}

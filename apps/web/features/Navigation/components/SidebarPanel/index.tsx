@@ -35,7 +35,7 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
                 onClick={() => setPanelOpen(false)}
                 className="w-8 h-8 flex items-center justify-center rounded-md text-mutedForeground hover:text-foreground hover:bg-surfaceHover transition-all cursor-pointer"
               >
-                <Icon name="menu_open" className="text-[22px]" />
+                <Icon name="PanelLeftClose" className="text-[22px]" />
               </button>
               {/* Custom Tooltip */}
               <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-[13px] rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-[100] font-medium pointer-events-none">

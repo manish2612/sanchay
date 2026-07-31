@@ -24,7 +24,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
       <div className="bg-background rounded-xl p-10 w-full max-w-[440px] shadow-lg border border-border">
         {/* Company Footer */}
         <div className="bg-muted p-4 rounded-lg flex flex-row items-center gap-3 mb-8">
-          <Icon name="business" size={24} className="text-foreground" />
+          <Icon name="Briefcase" size={24} className="text-foreground" />
           <div>
             <p className="text-[13px] text-muted-foreground m-0">Company</p>
             <p className="font-semibold text-foreground m-0">
@@ -65,7 +65,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
                 className="bg-transparent border-none cursor-pointer p-0 flex items-center"
               >
                 <Icon
-                  name={isVisible ? "visibility" : "visibility_off"}
+                  name={isVisible ? "Eye" : "EyeOff"}
                   size={20}
                   className="text-muted-foreground"
                 />

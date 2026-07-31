@@ -1,7 +1,9 @@
+import { IconName } from "@prime/ui";
+
 export type NavItemConfig = {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconName | (string & {});
   href?: string;
   children?: NavItemConfig[];
 };
@@ -10,13 +12,13 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "dashboard",
     label: "Dashboard",
-    icon: "dashboard",
+    icon: "LayoutDashboard",
     href: "/dashboard",
   },
   {
     id: "company-settings",
     label: "Company Settings",
-    icon: "business",
+    icon: "Briefcase",
     children: [
       { id: "company-profile", label: "Company Profile", href: "/settings/profile" },
       { id: "user-management", label: "User Management", href: "/settings/users" },
@@ -26,7 +28,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "chart-of-accounts",
     label: "Chart of Accounts",
-    icon: "account_balance",
+    icon: "Landmark",
     children: [
       {
         id: "accounting-masters",
@@ -51,7 +53,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "transactions",
     label: "Transactions",
-    icon: "receipt_long",
+    icon: "ReceiptText",
     children: [
       {
         id: "sales",
@@ -77,7 +79,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "reporting",
     label: "Reporting",
-    icon: "analytics",
+    icon: "LineChart",
     children: [
       { id: "ird-reports", label: "IRD Reports", href: "/reports/ird" },
       { id: "balance-sheet", label: "Balance Sheet", href: "/reports/balance-sheet" },
@@ -89,7 +91,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "configuration",
     label: "Configuration",
-    icon: "settings",
+    icon: "Settings",
     children: [
       { id: "voucher-settings", label: "Voucher Settings", href: "/config/vouchers" },
       { id: "statutory-settings", label: "Statutory Settings", href: "/config/statutory" },
@@ -100,7 +102,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
   {
     id: "help-support",
     label: "Help & Support",
-    icon: "help_outline",
+    icon: "CircleHelp",
     children: [
       { id: "documentation", label: "Documentation", href: "/support/docs" },
       { id: "contact-support", label: "Contact Support", href: "/support/contact" },

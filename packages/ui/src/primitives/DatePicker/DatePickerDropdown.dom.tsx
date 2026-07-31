@@ -30,7 +30,7 @@ export function DatePickerDropdown({ value, onChange, options, className, align 
           className={`flex items-center gap-1 hover:bg-surface-variant transition-colors rounded-md px-2 py-1 font-bold text-sm outline-none focus-visible:ring-2 focus-visible:ring-focus-ring ${className || ''}`}
         >
           {selectedOption ? selectedOption.label : value}
-          <Icon name="expand_more" size={16} className="text-muted-foreground" />
+          <Icon name="ChevronDown" size={16} className="text-muted-foreground" />
         </button>
       </DropdownTrigger>
       

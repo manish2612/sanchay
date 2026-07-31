@@ -67,13 +67,13 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
         <div className="relative flex items-center justify-center w-full h-full rounded-xl bg-white/10 text-white shadow-sm transition-all duration-200 overflow-hidden">
           {/* Logo is always present, but fades out on hover IF panel is closed */}
           <Icon 
-            name="layers" 
+            name="Layers" 
             className={`text-[24px] absolute transition-opacity duration-200 ${!isPanelActuallyOpen ? "group-hover:opacity-0" : "opacity-100"}`} 
           />
           {/* Menu icon fades in on hover IF panel is closed */}
           {!isPanelActuallyOpen && (
             <Icon 
-              name="menu" 
+              name="Menu" 
               className="text-[26px] absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200" 
             />
           )}
@@ -101,7 +101,7 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
                     : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <Icon name={item.icon || "folder"} className="text-[24px]" />
+                <Icon name={(item.icon as any) || "Folder"} className="text-[24px]" />
               </button>
               
               {/* Custom Tooltip */}
@@ -121,7 +121,7 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
           <button
             className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
           >
-            <Icon name="settings" className="text-[22px]" />
+            <Icon name="Settings" className="text-[22px]" />
           </button>
           <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-gray-900 text-white text-[13px] rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-[100] font-medium pointer-events-none">
             Settings
@@ -149,7 +149,7 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
                 <div className="text-xs text-mutedForeground truncate">{user.email}</div>
               </div>
               <button className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left">
-                <Icon name="person" className="text-[18px] mr-2 text-mutedForeground" />
+                <Icon name="User" className="text-[18px] mr-2 text-mutedForeground" />
                 Profile & Account
               </button>
               {onLogout && (
@@ -157,7 +157,7 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
                   onClick={onLogout}
                   className="flex items-center px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors w-full text-left mt-1"
                 >
-                  <Icon name="logout" className="text-[18px] mr-2" />
+                  <Icon name="LogOut" className="text-[18px] mr-2" />
                   Sign Out
                 </button>
               )}

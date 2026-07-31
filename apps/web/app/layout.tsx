@@ -11,7 +11,6 @@ import { LinkProvider, ShortcutProvider } from "@prime/ui";
 import { NextLinkAdapter } from "../providers/NextLinkAdapter";
 import { ApiProvider } from "../providers/ApiProvider";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
-import "@fontsource/material-icons";
 
 const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -36,11 +35,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${ibmPlexSans.variable} ${workSans.variable} prime-density-comfortable`}>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `:root { --font-material-icons: 'Material Icons'; }`,
-          }}
-        />
         <ThemeProvider initialBrand="classic" initialMode="system">
           <ShortcutProvider>
             <ApiProvider>
