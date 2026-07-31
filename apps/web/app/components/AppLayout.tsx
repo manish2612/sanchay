@@ -40,9 +40,11 @@ export function AppLayout({ children }: AppLayoutProps) {
       />
 
       {/* Main Content Area */}
-      <div className="flex flex-col flex-1 relative overflow-hidden">
-        {children}
-      </div>
+      <main className="flex flex-col flex-1 relative overflow-hidden items-center bg-background">
+        <div className="w-full max-w-[1440px] flex-1 flex flex-col">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }
