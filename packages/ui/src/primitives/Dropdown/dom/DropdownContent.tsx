@@ -14,7 +14,7 @@ const DropdownContent = React.forwardRef<
         ref={ref}
         sideOffset={sideOffset}
         className={`${dropdownContentClassName} ${className || ""}`}
-        style={style}
+        style={{ minWidth: "var(--radix-dropdown-menu-trigger-width)", ...style }}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
