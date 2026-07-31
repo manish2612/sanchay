@@ -100,14 +100,15 @@ export function TableRoot<TData>({
 
     // Helper to focus input in the new row
     const focusNewRowInput = (newIndex: number, forceColIndex?: number) => {
-      let colIndex = 0;
+      let colIndex = -1;
+      
       if (forceColIndex !== undefined) {
         colIndex = forceColIndex;
-      } else if (target.tagName === "INPUT") {
-        const rowEl = target.closest('[role="row"]');
-        if (rowEl) {
-          const inputs = Array.from(rowEl.querySelectorAll("input"));
-          colIndex = inputs.indexOf(target as HTMLInputElement);
+      } else {
+        const cell = target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
+        if (cell && cell.parentElement) {
+          const cells = Array.from(cell.parentElement.children);
+          colIndex = cells.indexOf(cell as HTMLElement);
         }
       }
 
@@ -116,14 +117,22 @@ export function TableRoot<TData>({
           `[data-index="${newIndex}"]`
         );
         if (newRowEl) {
-          const inputs = newRowEl.querySelectorAll("input");
-          if (inputs && inputs.length > 0) {
-            let finalIndex = colIndex;
-            if (colIndex < 0) {
-              finalIndex = inputs.length + colIndex;
+          let elementToFocus: HTMLElement | null = null;
+          
+          if (colIndex !== -1) {
+            const targetCell = newRowEl.children[colIndex];
+            if (targetCell) {
+              elementToFocus = targetCell.querySelector("input, select, button, [tabindex='0']");
             }
-            const inputToFocus = inputs[finalIndex] || inputs[0];
-            (inputToFocus as HTMLInputElement).focus();
+          }
+          
+          // Fallback to first focusable element in the row if structural matching failed or forceColIndex=0 didn't find anything
+          if (!elementToFocus) {
+            elementToFocus = newRowEl.querySelector("input, select, button, [tabindex='0']");
+          }
+          
+          if (elementToFocus) {
+            elementToFocus.focus();
           }
         }
       }, 0);
