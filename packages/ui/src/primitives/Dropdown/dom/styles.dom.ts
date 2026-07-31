@@ -11,7 +11,7 @@ export const dropdownSearchContainerClassName =
   "flex w-full items-center border-b border-border";
 
 export const dropdownSearchClassName =
-  "flex h-9 flex-1 items-center rounded-none border-none bg-transparent py-0 text-sm focus-within:bg-secondary focus-within:text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50";
+  "flex h-9 flex-1 items-center rounded-none border-none bg-transparent py-0 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50";
 
 
 export const dropdownLabelClassName =
