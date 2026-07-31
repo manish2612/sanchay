@@ -18,19 +18,10 @@ import { NavDemoWrapper } from "./demos/NavDemoWrapper";
 import { TableDemo } from "./demos/TableDemo/index";
 import { DropdownDemo } from "./demos/DropdownDemo";
 import { AutoSuggestDemo } from "./demos/AutoSuggestDemo";
-import { Sidebar } from "../../features/Navigation/components/Sidebar";
 import { SwitchDemo } from "./demos/SwitchDemo";
 
 export function ComponentDemos() {
   return (
-    <div className="min-h-screen flex bg-background text-foreground selection:bg-primary/30">
-      {/* Navigation Sidebar */}
-      <Sidebar
-        appName={APP_NAME}
-        user={{ name: "Admin User", email: "admin@example.com" }}
-        onLogout={() => console.log("Logout clicked")}
-      />
-
       <div className="flex flex-col flex-1 relative overflow-hidden">
         {/* App Menu Bar - Top Placement */}
 
@@ -80,6 +71,5 @@ export function ComponentDemos() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

@@ -10,6 +10,7 @@ import { ThemeProvider } from "@prime/theme-provider/web";
 import { LinkProvider, ShortcutProvider } from "@prime/ui";
 import { NextLinkAdapter } from "../providers/NextLinkAdapter";
 import { ApiProvider } from "../providers/ApiProvider";
+import { AppLayout } from "./components/AppLayout";
 import { IBM_Plex_Sans, Work_Sans } from "next/font/google";
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -38,7 +39,9 @@ export default function RootLayout({
         <ThemeProvider initialBrand="classic" initialMode="system">
           <ShortcutProvider>
             <ApiProvider>
-              <LinkProvider value={NextLinkAdapter}>{children}</LinkProvider>
+              <LinkProvider value={NextLinkAdapter}>
+                <AppLayout>{children}</AppLayout>
+              </LinkProvider>
             </ApiProvider>
           </ShortcutProvider>
         </ThemeProvider>
