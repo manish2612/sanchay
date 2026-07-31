@@ -79,10 +79,22 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     return (
       <div className="w-full flex items-center" onKeyDown={handleKeyDown}>
         <DatePicker
-          date={value ? new Date(value as string) : undefined}
+          date={(() => {
+            if (!value) return undefined;
+            const strVal = value as string;
+            // Try forcing local midnight parsing for YYYY-MM-DD
+            const isoParsed = new Date(`${strVal}T00:00:00`);
+            if (!isNaN(isoParsed.getTime())) return isoParsed;
+            // Fallback to standard native parsing (for 'M/D/YYYY' etc.)
+            const parsed = new Date(strVal);
+            return isNaN(parsed.getTime()) ? undefined : parsed;
+          })()}
           onDateChange={(d) => {
             if (d) {
-              const formatted = d.toISOString().split('T')[0];
+              const year = d.getFullYear();
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const day = String(d.getDate()).padStart(2, '0');
+              const formatted = `${year}-${month}-${day}`;
               setValue(formatted);
               table.options.meta?.updateData?.(row.index, column.id, formatted);
             }

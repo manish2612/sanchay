@@ -4,8 +4,12 @@ import { DatePicker } from "@prime/ui";
 import { addDays } from "date-fns";
 
 export function DatePickerDemo() {
-  const [date1, setDate1] = useState<Date | undefined>(undefined);
-  const [date2, setDate2] = useState<Date | undefined>(addDays(new Date(), 5));
+  const [defaultDate, setDefaultDate] = useState<Date | undefined>(undefined);
+  const [initialDate, setInitialDate] = useState<Date | undefined>(addDays(new Date(), 5));
+  const [minMaxGregorianDate, setMinMaxGregorianDate] = useState<Date | undefined>(undefined);
+  const [nepaliEnglishDate, setNepaliEnglishDate] = useState<Date | undefined>(undefined);
+  const [minMaxNepaliDate, setMinMaxNepaliDate] = useState<Date | undefined>(undefined);
+  const [nepaliScriptDate, setNepaliScriptDate] = useState<Date | undefined>(undefined);
 
   return (
     <div className="p-5 bg-surface shadow-sm rounded-lg border border-[#222222]">
@@ -20,8 +24,8 @@ export function DatePickerDemo() {
             Default
           </span>
           <DatePicker 
-            date={date1} 
-            onDateChange={setDate1} 
+            date={defaultDate} 
+            onDateChange={setDefaultDate} 
             placeholder="Select Date" 
           />
         </div>
@@ -32,8 +36,8 @@ export function DatePickerDemo() {
             With Initial Date
           </span>
           <DatePicker 
-            date={date2} 
-            onDateChange={setDate2} 
+            date={initialDate} 
+            onDateChange={setInitialDate} 
             placeholder="Select Date" 
           />
         </div>
@@ -55,8 +59,8 @@ export function DatePickerDemo() {
             Min/Max Dates (Gregorian)
           </span>
           <DatePicker 
-            date={date1} 
-            onDateChange={setDate1} 
+            date={minMaxGregorianDate} 
+            onDateChange={setMinMaxGregorianDate} 
             minDate={new Date(2023, 0, 1)}
             maxDate={new Date(2023, 11, 31)}
             placeholder="Only 2023 allowed" 
@@ -70,8 +74,8 @@ export function DatePickerDemo() {
           </span>
           <DatePicker 
             calendarType="nepali"
-            date={date1} 
-            onDateChange={setDate1} 
+            date={nepaliEnglishDate} 
+            onDateChange={setNepaliEnglishDate} 
             placeholder="Select BS Date" 
           />
         </div>
@@ -83,8 +87,8 @@ export function DatePickerDemo() {
           </span>
           <DatePicker 
             calendarType="nepali"
-            date={date1} 
-            onDateChange={setDate1} 
+            date={minMaxNepaliDate} 
+            onDateChange={setMinMaxNepaliDate} 
             minDate={new Date('2024-04-13')} // roughly start of BS 2081
             maxDate={new Date('2025-04-13')} // roughly end of BS 2081
             placeholder="Only BS 2081 allowed" 
@@ -99,8 +103,8 @@ export function DatePickerDemo() {
           <DatePicker 
             calendarType="nepali"
             nepaliLanguage="nepali"
-            date={date1} 
-            onDateChange={setDate1} 
+            date={nepaliScriptDate} 
+            onDateChange={setNepaliScriptDate} 
             placeholder="Nepali BS Date" 
           />
         </div>
