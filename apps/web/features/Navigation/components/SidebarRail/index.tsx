@@ -193,7 +193,7 @@ export function SidebarRail({
                 </div>
                 <button className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left">
                   <Icon
-                    name="person"
+                    name="User"
                     className="text-[18px] mr-2 text-mutedForeground"
                   />
                   Profile & Account
@@ -203,7 +203,7 @@ export function SidebarRail({
                     onClick={onLogout}
                     className="flex items-center px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors w-full text-left mt-1"
                   >
-                    <Icon name="logout" className="text-[18px] mr-2" />
+                    <Icon name="LogOut" className="text-[18px] mr-2" />
                     Sign Out
                   </button>
                 )}
