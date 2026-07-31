@@ -262,7 +262,7 @@ export default function VouchersPage() {
 
         {/* Overlay Drawer (Covers exact same area as Primary Section, absolute positioning allows it to follow the button in DOM order) */}
         <div
-          className={`absolute inset-y-0 left-0 right-8 bg-surface shadow-[-10px_0_30px_-10px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-in-out z-10 flex flex-col overflow-y-auto ${
+          className={`absolute inset-y-0 left-0 right-8 bg-surface shadow-[-10px_0_5px_-5px_rgba(0,0,0,0.05)] transition-transform duration-300 ease-in-out z-10 flex flex-col overflow-y-auto ${
             isDrawerOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
