@@ -1,8 +1,10 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Icon } from "@prime/ui";
 import { NavItemConfig } from "../../data/navigationTree";
 import { useSidebar } from "../Sidebar/useSidebar";
+import { SidebarRailSettings } from "./SidebarRailSettings";
+import { SidebarRailUser } from "./SidebarRailUser";
 
 interface SidebarRailProps {
   appName: string;
@@ -23,8 +25,11 @@ export function SidebarRail({
 }: SidebarRailProps) {
   const { activeL1ItemId, setActiveL1ItemId, setPanelOpen, isPanelOpen } =
     useSidebar();
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Shared popover state to ensure only one is open at a time
+  const [openPopover, setOpenPopover] = useState<"settings" | "user" | null>(
+    null,
+  );
 
   // State for the robust fixed-position tooltip to escape overflow clipping
   const [tooltip, setTooltip] = useState<{
@@ -45,18 +50,8 @@ export function SidebarRail({
     }
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   const handleMouseEnter = (e: React.MouseEvent, text: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    // Position tooltip to the right of the hovered element, vertically centered
     setTooltip({
       text,
       top: rect.top + rect.height / 2,
@@ -67,20 +62,6 @@ export function SidebarRail({
   const handleMouseLeave = () => {
     setTooltip(null);
   };
-
-  // Close user popover when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
-        setIsUserMenuOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   return (
     <>
@@ -136,7 +117,7 @@ export function SidebarRail({
                     : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <Icon name={item.icon || "folder"} className="text-[24px]" />
+                <Icon name={item.icon || "Folder"} className="text-[24px]" />
               </button>
             );
           })}
@@ -144,72 +125,23 @@ export function SidebarRail({
 
         {/* Footer Controls */}
         <div className="flex flex-col items-center space-y-4 mt-auto pt-4 relative w-full">
-          {/* Settings */}
-          <button
-            onMouseEnter={(e) => handleMouseEnter(e, "Settings")}
+          <SidebarRailSettings
+            onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-          >
-            <Icon name="settings" className="text-[22px]" />
-          </button>
+            onPopoverToggle={(isOpen) =>
+              setOpenPopover(isOpen ? "settings" : null)
+            }
+            forceClose={openPopover === "user"}
+          />
 
-          {/* User Avatar with Popover */}
-          <div
-            className="relative flex justify-center w-full"
-            ref={userMenuRef}
-          >
-            <button
-              onClick={() => {
-                setIsUserMenuOpen(!isUserMenuOpen);
-                setTooltip(null); // hide tooltip when popover opens
-              }}
-              onMouseEnter={(e) =>
-                !isUserMenuOpen && handleMouseEnter(e, user.name)
-              }
-              onMouseLeave={handleMouseLeave}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 text-white text-sm font-bold shadow-sm hover:ring-2 hover:ring-white/50 transition-all"
-            >
-              {user.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={user.name}
-                  className="w-full h-full rounded-full object-cover"
-                />
-              ) : (
-                getInitials(user.name)
-              )}
-            </button>
-
-            {/* Popover Menu */}
-            {isUserMenuOpen && (
-              <div className="absolute left-full ml-4 bottom-0 w-[240px] bg-surface border border-border shadow-xl rounded-lg p-2 z-[100] flex flex-col">
-                <div className="px-3 py-3 border-b border-border mb-1">
-                  <div className="font-bold text-sm text-foreground truncate">
-                    {user.name}
-                  </div>
-                  <div className="text-xs text-mutedForeground truncate">
-                    {user.email}
-                  </div>
-                </div>
-                <button className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left">
-                  <Icon
-                    name="User"
-                    className="text-[18px] mr-2 text-mutedForeground"
-                  />
-                  Profile & Account
-                </button>
-                {onLogout && (
-                  <button
-                    onClick={onLogout}
-                    className="flex items-center px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-md transition-colors w-full text-left mt-1"
-                  >
-                    <Icon name="LogOut" className="text-[18px] mr-2" />
-                    Sign Out
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+          <SidebarRailUser
+            user={user}
+            onLogout={onLogout}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onPopoverToggle={(isOpen) => setOpenPopover(isOpen ? "user" : null)}
+            forceClose={openPopover === "settings"}
+          />
         </div>
       </div>
 
@@ -220,7 +152,7 @@ export function SidebarRail({
           style={{
             top: tooltip.top,
             left: tooltip.left,
-            transform: "translateY(-50%)", // Vertically center relative to the top coordinate
+            transform: "translateY(-50%)",
           }}
         >
           {tooltip.text}

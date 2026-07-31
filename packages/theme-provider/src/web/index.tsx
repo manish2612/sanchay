@@ -26,16 +26,21 @@ const InnerProvider = ({
   initialBrand: Brand;
   initialDensity: Density;
 }) => {
-  const { theme: mode, setTheme: setMode, resolvedTheme } = useNextTheme();
+  const { theme: userPreference, setTheme: setMode, resolvedTheme } = useNextTheme();
   const [brand, setBrand] = useState<Brand>(initialBrand);
   const [density, setDensity] = useState<Density>(initialDensity);
 
-  // Determine current effective mode
-  const currentMode = (resolvedTheme as Mode) || "light";
+  // Determine current effective mode for tokens
+  // next-themes can return 'system' for resolvedTheme during SSR before mounting.
+  // We MUST enforce it to be either 'light' or 'dark' to prevent token crashes.
+  let currentMode = (resolvedTheme as Mode) || "light";
+  if (currentMode !== "light" && currentMode !== "dark") {
+    currentMode = "light";
+  }
 
   // Get current raw theme object using the adapter
   const adapterResult = useMemo(() => {
-    return useThemeAdapter(brand, currentMode, density, "web");
+    return useThemeAdapter(brand, currentMode as Mode, density, "web");
   }, [brand, currentMode, density]);
 
   // Generate Global CSS for all Mode x Density combinations
@@ -48,31 +53,12 @@ const InnerProvider = ({
     modes.forEach((m) => {
       densities.forEach((d) => {
         const result = useThemeAdapter(brand, m, d, "web");
-        // Selector strategy:
-        // [data-theme='light'] .prime-density-comfortable
-        // And also handle the case where the class is on the body/html itself if needed,
-        // but standard nesting rules apply.
-        // Note: next-themes applies data-theme to HTML.
-        // We apply density class to a wrapper or body.
-
-        // Selector: Inside a matching theme container, find the density class OR if the density class IS the container.
-        // Broadest selector logic:
         const selector = `[data-theme='${m}'] .prime-density-${d}, [data-theme='${m}'].prime-density-${d}`;
-
-        // Special case for Default Density (Comfortable) - make it the default for the theme if no density class is present?
-        // Actually, for simplicity, we REQUIRE the density class.
-        // The InnerProvider will wrap children in the active density class.
-
         const block = (result.webCSSVariables || "").replace(":root", selector);
         css += block + "\n";
       });
     });
 
-    // Apply global font basics to the body and headings
-    // Apply global font basics to the body and headings
-    // IMPORTANT: We fallback-define the font variables for Expo Web (where next/font is not present).
-    // On Next.js, the 'next/font' class on body will override these with the hashed font family.
-    // On Expo Web, these point to the font loaded by expo-font.
     css += `
       :root {
         --font-ibm-plex-sans: 'IBM Plex Sans';
@@ -89,7 +75,7 @@ const InnerProvider = ({
     return css;
   }, [brand]);
 
-  // Apply density class to body to ensure Portals (like MenuBar) inherit variables
+  // Apply density class to body
   useEffect(() => {
     const classes = [
       "prime-density-compact",
@@ -107,7 +93,9 @@ const InnerProvider = ({
   const value = useMemo<UseThemeResult>(
     () => ({
       theme: adapterResult.theme,
-      mode: currentMode,
+      // We must expose the user's PREFERENCE (e.g., 'system'), not the resolved currentMode, 
+      // so that UI toggles correctly reflect if 'system' is selected.
+      mode: (userPreference as Mode | "system") || "system",
       brand,
       density,
       setMode: (m: Mode | "system") => setMode(m),
@@ -115,7 +103,7 @@ const InnerProvider = ({
       setDensity,
       isDark: currentMode === "dark",
     }),
-    [adapterResult.theme, currentMode, brand, density, setMode]
+    [adapterResult.theme, userPreference, brand, density, setMode, currentMode]
   );
 
   return (

@@ -74,6 +74,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
         ],
       },
       { id: "journal-entries", label: "Journal Entries", href: "/transactions/journals" },
+      { id: "vouchers", label: "Vouchers", href: "/transactions/vouchers" },
     ],
   },
   {
