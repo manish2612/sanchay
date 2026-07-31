@@ -42,12 +42,13 @@ export function DatePicker({
 
   return (
     <Popover.Root
+      modal={true}
       open={isOpen}
       onOpenChange={(newOpen) => {
-        // If Radix is trying to close the Popover, but a DropdownMenu is open,
+        // If Radix is trying to close the Popover, but a DropdownMenu is actively open,
         // it means we caught a global Escape key or outside click that the nested
-        // DropdownMenu should have handled alone. We abort closing the Popover!
-        if (!newOpen && document.querySelector("[data-radix-menu-content]")) {
+        // DropdownMenu should handle alone. We abort closing the Popover!
+        if (!newOpen && document.querySelector("[data-radix-menu-content][data-state='open']")) {
           return;
         }
         setIsOpen(newOpen);
