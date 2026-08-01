@@ -9,8 +9,9 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
   const initialValue = getValue();
   const [value, setValue] = React.useState(initialValue);
   const isEditing = table.options.meta?.editingRowIndex === row.index;
+  const isPhantom = row.original.isPhantom;
 
-  const [error, setError] = React.useState(false);
+  const error = table.options.meta?.rowErrors?.[row.index] || false;
 
   React.useEffect(() => {
     setValue(initialValue);
@@ -22,26 +23,8 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") {
-      // Basic mock validation for the Amount column
-      if (column.id === "amount") {
-        const val = value as string;
-        // Strip non-numeric characters (except . and -)
-        const numeric = Number(val.replace(/[^0-9.-]+/g, ""));
-        if (isNaN(numeric) || val.trim() === "") {
-          e.stopPropagation(); // Prevent Table.Root from exiting edit mode
-          setError(true);
-          setTimeout(() => setError(false), 500); // Clear error state after animation finishes
-          return;
-        }
-      }
-      setError(false);
-    }
-  };
-
   if (!isEditing) {
-    // Read-only text - match the padding and height of the input to avoid layout jumping
+    // Read-only text
     return (
       <span className="px-3 w-full h-full flex items-center text-sm border border-transparent">
         {value as string}
@@ -64,12 +47,11 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         ];
 
     return (
-      <DropdownMenu items={options} triggerLabel={value as string}>
+      <DropdownMenu items={options} triggerLabel={value as string || (column.id === 'status' ? 'Status' : 'Method')}>
         <button 
-          onKeyDown={handleKeyDown}
           className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none"
         >
-          {value as string} <Icon name="ChevronDown" size={16} />
+          {value as string || <span className="text-muted-foreground">Select...</span>} <Icon name="ChevronDown" size={16} />
         </button>
       </DropdownMenu>
     );
@@ -77,15 +59,13 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 
   if (column.id === "date") {
     return (
-      <div className="w-full flex items-center" onKeyDown={handleKeyDown}>
+      <div className="w-full flex items-center">
         <DatePicker
           date={(() => {
             if (!value) return undefined;
             const strVal = value as string;
-            // Try forcing local midnight parsing for YYYY-MM-DD
             const isoParsed = new Date(`${strVal}T00:00:00`);
             if (!isNaN(isoParsed.getTime())) return isoParsed;
-            // Fallback to standard native parsing (for 'M/D/YYYY' etc.)
             const parsed = new Date(strVal);
             return isNaN(parsed.getTime()) ? undefined : parsed;
           })()}
@@ -115,10 +95,9 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         value={value as string}
         onChange={(e) => {
           setValue(e.target.value);
-          if (error) setError(false); // Clear error on typing
         }}
-        onKeyDown={handleKeyDown}
         onBlur={onBlur}
+        placeholder={isPhantom ? "Enter amount..." : ""}
         className="text-sm px-3 h-full"
       />
     </TextInput.Root>
@@ -160,7 +139,10 @@ export const editableColumns: ColumnDef<Invoice>[] = [
 ];
 
 export function TableEditable() {
-  const [data, setData] = React.useState(() => generateData(10));
+  const [data, setData] = React.useState<Invoice[]>(() => [
+    { id: "INV-1", date: "", status: "Pending", method: "Credit Card", amount: "", isPhantom: true }
+  ]);
+  const [rowErrors, setRowErrors] = React.useState<Record<number, boolean>>({});
 
   const updateData = (rowIndex: number, columnId: string, value: unknown) => {
     setData((old) =>
@@ -176,6 +158,53 @@ export function TableEditable() {
     );
   };
 
+  const onRowCommit = (rowIndex: number, columnId?: string, cellValue?: string) => {
+    let row = data[rowIndex];
+    
+    // If the user pressed enter while actively typing in a field, sync that value immediately!
+    if (columnId && cellValue !== undefined) {
+      row = { ...row, [columnId]: cellValue };
+      updateData(rowIndex, columnId, cellValue);
+    }
+    
+    // Custom Validation: Amount must be numeric
+    const numeric = Number(row.amount.replace(/[^0-9.-]+/g, ""));
+    if (isNaN(numeric) || row.amount.trim() === "") {
+      setRowErrors(prev => ({ ...prev, [rowIndex]: true }));
+      setTimeout(() => {
+        setRowErrors(prev => ({ ...prev, [rowIndex]: false }));
+      }, 500);
+      return "STAY"; // Block commit, stay in edit mode
+    }
+
+    // Success! If it's a phantom row, convert it and spawn a new one
+    if (row.isPhantom) {
+      setData(old => {
+        const newData = [...old];
+        // Ensure the last-second cellValue is merged in the new array too, in case updateData was batched
+        const committedRow = columnId && cellValue !== undefined 
+          ? { ...newData[rowIndex]!, [columnId]: cellValue, isPhantom: false }
+          : { ...newData[rowIndex]!, isPhantom: false };
+          
+        newData[rowIndex] = committedRow;
+        
+        // Append new phantom row at the bottom
+        newData.push({
+          id: `INV-${newData.length + 1}`,
+          date: "",
+          status: "Pending",
+          method: "Credit Card",
+          amount: "",
+          isPhantom: true
+        });
+        return newData;
+      });
+      return "ADVANCE"; // Move focus to the newly spawned phantom row
+    }
+
+    return "EXIT"; 
+  };
+
   return (
     <div className="border border-[#222222] rounded-md h-[400px]">
       <Table.Root
@@ -185,6 +214,8 @@ export function TableEditable() {
         tableOptions={{
           meta: {
             updateData,
+            onRowCommit,
+            rowErrors,
           },
         }}
       >
@@ -214,26 +245,42 @@ export function TableEditable() {
         </Table.Header>
 
         <Table.Body>
-          {(row, isFocused) => (
-            <Table.Row
-              key={row.id}
-              data-state={row.getIsSelected() ? "selected" : undefined}
-              data-focused={isFocused}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <Table.Cell
-                  key={cell.id}
-                  style={{
-                    width: cell.column.getSize(),
-                    flex: `${cell.column.getSize()} 0 auto`,
-                  }}
-                  className="py-0" // Remove vertical padding to perfectly fit the 44px virtual row height, but keep horizontal padding
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          )}
+          {(row, isFocused) => {
+            const isPhantomActionState = row.original.isPhantom && !isFocused;
+
+            return (
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? "selected" : undefined}
+                data-focused={isFocused}
+                className={isPhantomActionState ? "bg-primary/5 hover:bg-primary/10 border-t border-dashed border-primary/20 cursor-pointer" : undefined}
+              >
+                {isPhantomActionState ? (
+                  <Table.Cell
+                    style={{ width: "100%", flex: "1 1 100%" }}
+                    className="py-0 flex items-center justify-center text-primary text-sm font-medium transition-colors"
+                  >
+                    <Icon name="Plus" size={16} className="mr-2" />
+                    Add New Invoice 
+                    <span className="ml-2 text-primary/80 font-normal text-xs">(Press Ctrl+N)</span>
+                  </Table.Cell>
+                ) : (
+                  row.getVisibleCells().map((cell) => (
+                    <Table.Cell
+                      key={cell.id}
+                      style={{
+                        width: cell.column.getSize(),
+                        flex: `${cell.column.getSize()} 0 auto`,
+                      }}
+                      className="py-0" // Remove vertical padding to perfectly fit the 44px virtual row height, but keep horizontal padding
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Table.Cell>
+                  ))
+                )}
+              </Table.Row>
+            );
+          }}
         </Table.Body>
       </Table.Root>
     </div>

@@ -19,6 +19,7 @@ export const useShortcut = (
     enabled = true,
     preventDefault = true,
     stopPropagation = true,
+    enableOnFormTags = false,
     scopes = ['*'], // Default to all scopes/global if not specified.
     description,
   } = options;
@@ -32,11 +33,11 @@ export const useShortcut = (
     {
       enabled,
       preventDefault,
-      enableOnFormTags: false, // Default: don't trigger inside inputs unless specified
+      enableOnFormTags,
       // scopes, // Library support for scopes
       // We might want to pass scopes if we use the Provider's scope management.
       // For now, simpler is better.
     },
-    [enabled, preventDefault, stopPropagation, JSON.stringify(scopes)]
+    [enabled, preventDefault, stopPropagation, enableOnFormTags, JSON.stringify(scopes)]
   );
 };

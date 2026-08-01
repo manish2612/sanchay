@@ -23,6 +23,11 @@ export interface ShortcutOptions {
   scopes?: string[];
   
   /**
+   * Whether to enable the shortcut when focused inside form elements (input, textarea, select).
+   */
+  enableOnFormTags?: boolean;
+
+  /**
    * Description for the shortcut, used for displaying a help dialog.
    */
   description?: string;

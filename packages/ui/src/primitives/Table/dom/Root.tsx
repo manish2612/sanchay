@@ -76,8 +76,52 @@ export function TableRoot<TData>({
     }
   }, [focusedRowIndex, virtualizer]);
 
+  const focusNewRowInput = React.useCallback((newIndex: number, colIndex: number = -1, retries = 5) => {
+    setTimeout(() => {
+      const newRowEl = scrollRef.current?.querySelector(
+        `[data-index="${newIndex}"]`
+      );
+      if (newRowEl) {
+        let elementToFocus: HTMLElement | null = null;
+        
+        if (colIndex !== -1) {
+          const targetCell = newRowEl.children[colIndex];
+          if (targetCell) {
+            elementToFocus = targetCell.querySelector("input, select, button, [tabindex='0']");
+          }
+        }
+        
+        if (!elementToFocus) {
+          elementToFocus = newRowEl.querySelector("input, select, button, [tabindex='0']");
+        }
+        
+        if (elementToFocus) {
+          elementToFocus.focus();
+        }
+      } else if (retries > 0) {
+        // Virtualizer hasn't rendered it yet, retry
+        focusNewRowInput(newIndex, colIndex, retries - 1);
+      }
+    }, 50);
+  }, []);
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (rows.length === 0) return;
+
+    // Hotkey: CTRL+N to jump to Phantom Row
+    if (e.ctrlKey && !e.metaKey && e.key.toLowerCase() === "n") {
+      e.preventDefault();
+      
+      const phantomIndex = rows.findIndex(r => (r.original as any).isPhantom);
+      const targetIndex = phantomIndex !== -1 ? phantomIndex : rows.length - 1;
+      
+      if (targetIndex >= 0) {
+        setFocusedRowIndex(targetIndex);
+        setEditingRowIndex(targetIndex);
+        focusNewRowInput(targetIndex, 0); 
+      }
+      return;
+    }
 
     // Do not intercept keys if the user is interacting with an input or dropdown inside the table
     const target = e.target as HTMLElement;
@@ -98,54 +142,24 @@ export function TableRoot<TData>({
       return;
     }
 
-    // Helper to focus input in the new row
-    const focusNewRowInput = (newIndex: number, forceColIndex?: number) => {
-      let colIndex = -1;
-      
-      if (forceColIndex !== undefined) {
-        colIndex = forceColIndex;
-      } else {
-        const cell = target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
-        if (cell && cell.parentElement) {
-          const cells = Array.from(cell.parentElement.children);
-          colIndex = cells.indexOf(cell as HTMLElement);
-        }
+    // Helper to extract the column index from the currently focused cell
+    const getColIndex = () => {
+      const cell = target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
+      if (cell && cell.parentElement) {
+        const cells = Array.from(cell.parentElement.children);
+        return cells.indexOf(cell as HTMLElement);
       }
-
-      setTimeout(() => {
-        const newRowEl = scrollRef.current?.querySelector(
-          `[data-index="${newIndex}"]`
-        );
-        if (newRowEl) {
-          let elementToFocus: HTMLElement | null = null;
-          
-          if (colIndex !== -1) {
-            const targetCell = newRowEl.children[colIndex];
-            if (targetCell) {
-              elementToFocus = targetCell.querySelector("input, select, button, [tabindex='0']");
-            }
-          }
-          
-          // Fallback to first focusable element in the row if structural matching failed or forceColIndex=0 didn't find anything
-          if (!elementToFocus) {
-            elementToFocus = newRowEl.querySelector("input, select, button, [tabindex='0']");
-          }
-          
-          if (elementToFocus) {
-            elementToFocus.focus();
-          }
-        }
-      }, 0);
+      return -1;
     };
 
     if (e.key === "Tab" && target.tagName === "INPUT") {
       const rowEl = target.closest('[role="row"]');
       if (rowEl) {
         const inputs = Array.from(rowEl.querySelectorAll("input"));
-        const colIndex = inputs.indexOf(target as HTMLInputElement);
+        const colIndexForTab = inputs.indexOf(target as HTMLInputElement);
 
         // Forward wraparound
-        if (!e.shiftKey && colIndex === inputs.length - 1) {
+        if (!e.shiftKey && colIndexForTab === inputs.length - 1) {
           e.preventDefault();
           const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
           const newIndex = Math.min(currentIndex + 1, rows.length - 1);
@@ -163,7 +177,7 @@ export function TableRoot<TData>({
       if (newIndex !== focusedRowIndex) {
         setFocusedRowIndex(newIndex);
         setEditingRowIndex(newIndex);
-        focusNewRowInput(newIndex);
+        focusNewRowInput(newIndex, getColIndex());
       }
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
@@ -173,17 +187,54 @@ export function TableRoot<TData>({
       if (newIndex !== focusedRowIndex) {
         setFocusedRowIndex(newIndex);
         setEditingRowIndex(newIndex);
-        focusNewRowInput(newIndex);
+        focusNewRowInput(newIndex, getColIndex());
       }
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (target.tagName === "INPUT") {
-        setEditingRowIndex(-1); // Exit edit mode
-        setSuccessRowIndex(focusedRowIndex);
-        setTimeout(() => setSuccessRowIndex(null), 400);
-        rootRef.current?.focus(); // Return focus to the table grid
+        if (table.options.meta?.onRowCommit) {
+          // Find the column index to pass to onRowCommit
+          let colIndex = -1;
+          const cell = target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
+          if (cell && cell.parentElement) {
+             const cells = Array.from(cell.parentElement.children);
+             colIndex = cells.indexOf(cell as HTMLElement);
+          }
+          
+          const columnId = colIndex !== -1 ? table.getVisibleLeafColumns()[colIndex]?.id : undefined;
+          const cellValue = target.tagName === "INPUT" ? (target as HTMLInputElement).value : undefined;
+
+          // Delegate to consumer
+          const action = table.options.meta.onRowCommit(focusedRowIndex, columnId, cellValue);
+          
+          if (action === "ADVANCE") {
+            setSuccessRowIndex(focusedRowIndex);
+            setTimeout(() => setSuccessRowIndex(null), 400);
+
+            // Wait a tick for React state to process the new row appending
+            setTimeout(() => {
+              const newIndex = focusedRowIndex + 1;
+              setFocusedRowIndex(newIndex);
+              setEditingRowIndex(newIndex);
+              focusNewRowInput(newIndex, colIndex);
+            }, 0);
+          } else if (action === "EXIT") {
+            setEditingRowIndex(-1);
+            setSuccessRowIndex(focusedRowIndex);
+            setTimeout(() => setSuccessRowIndex(null), 400);
+            rootRef.current?.focus(); // Return focus to the table grid
+          } else if (action === "STAY") {
+            // Do nothing, consumer handles error state
+          }
+        } else {
+          // Default old behavior: Exit edit mode
+          setEditingRowIndex(-1);
+          setSuccessRowIndex(focusedRowIndex);
+          setTimeout(() => setSuccessRowIndex(null), 400);
+          rootRef.current?.focus(); // Return focus to the table grid
+        }
       } else {
-        // Toggle edit mode on Enter if not inside an input
+        // Toggle edit mode on Enter if not inside an input (e.g. focused on a standard cell)
         setEditingRowIndex(focusedRowIndex);
         onRowClick?.(rows[focusedRowIndex]);
       }
@@ -223,7 +274,14 @@ export function TableRoot<TData>({
               );
               if (newRowEl) {
                 const targetCell = newRowEl.children[colIndex];
-                const focusable = targetCell?.querySelector("input, select, button, [tabindex='0']");
+                let focusable = targetCell?.querySelector("input, select, button, [tabindex='0']");
+                
+                // Fallback to first focusable element in the entire row if the clicked cell doesn't have one 
+                // (e.g. clicking a read-only colSpan action row)
+                if (!focusable) {
+                  focusable = newRowEl.querySelector("input, select, button, [tabindex='0']");
+                }
+                
                 if (focusable) {
                   (focusable as HTMLElement).focus();
                 } else {
