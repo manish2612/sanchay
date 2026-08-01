@@ -46,7 +46,8 @@ export function useTableNavigation<TData>({
           let elementToFocus: HTMLElement | null = null;
 
           if (colIndex !== -1) {
-            const targetCell = newRowEl.children[colIndex];
+            const rowBody = newRowEl.firstElementChild || newRowEl;
+            const targetCell = rowBody.children[colIndex];
             if (targetCell) {
               elementToFocus = targetCell.querySelector("input, select, button, [tabindex='0']");
             }
@@ -100,15 +101,30 @@ export function useTableNavigation<TData>({
       // Escape Hatch: Do not intercept keys if the user is interacting with an internal component
       // that needs its own keyboard events (like a DropdownMenu, DatePicker, or Combobox).
       const target = e.target as HTMLElement;
-      if (
-        target.tagName === "SELECT" ||
-        target.isContentEditable ||
-        target.closest('[role="combobox"]') ||
-        target.closest('[role="listbox"]') ||
-        target.closest('[role="menu"]') ||
-        target.closest('[role="dialog"]')
-      ) {
-        return; // Surrender control to the child component
+      
+      const isCombobox = target.closest('[role="combobox"]');
+      const isComboboxExpanded = isCombobox?.hasAttribute("data-expanded") 
+        ? isCombobox.getAttribute("data-expanded") === "true"
+        : isCombobox?.getAttribute("aria-expanded") === "true";
+
+      // If it's a closed combobox and the user is pressing ArrowUp/ArrowDown, 
+      // bypass the escape hatch to allow the grid to move between rows!
+      const isNavigatingClosedCombobox = 
+        Boolean(isCombobox) && 
+        !isComboboxExpanded && 
+        (e.key === "ArrowDown" || e.key === "ArrowUp");
+
+      if (!isNavigatingClosedCombobox) {
+        if (
+          target.tagName === "SELECT" ||
+          target.isContentEditable ||
+          isCombobox ||
+          target.closest('[role="listbox"]') ||
+          target.closest('[role="menu"]') ||
+          target.closest('[role="dialog"]')
+        ) {
+          return; // Surrender control to the child component
+        }
       }
 
       // Escape Hatch: Allow standard buttons to handle Enter/Space natively (e.g., triggering a popover)
@@ -288,7 +304,8 @@ export function useTableNavigation<TData>({
                   `[data-index="${index}"]`
                 );
                 if (newRowEl) {
-                  const targetCell = newRowEl.children[colIndex];
+                  const rowBody = newRowEl.firstElementChild || newRowEl;
+                  const targetCell = rowBody.children[colIndex];
                   let focusable = targetCell?.querySelector(
                     "input, select, button, [tabindex='0']"
                   );
