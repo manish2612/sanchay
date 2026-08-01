@@ -80,7 +80,7 @@ export function TableRoot<TData>({
     }
   }, [focusedRowIndex, virtualizer]);
 
-  const { handleKeyDown, handleRowClick } = useTableNavigation({
+  const { handleKeyDown, handleRowClick, focusNewRowInput } = useTableNavigation({
     table,
     rows,
     focusedRowIndex,
@@ -116,6 +116,24 @@ export function TableRoot<TData>({
         )}
         tabIndex={0}
         onKeyDown={handleKeyDown}
+        onFocus={(e) => {
+          // If the focus was placed directly on the root div (e.g. via Tab navigation from outside)
+          if (e.target === rootRef.current) {
+            // Prevent the ping-pong trap! If they Shift+Tabbed OUT of an inner input, 
+            // e.relatedTarget will be that inner input. We should politely let them leave.
+            if (e.relatedTarget && rootRef.current.contains(e.relatedTarget as Node)) {
+              return;
+            }
+
+            // Wake up the phantom row by explicitly setting the focused row state
+            const targetIndex = Math.max(0, focusedRowIndex);
+            setFocusedRowIndex(targetIndex);
+            setEditingRowIndex(targetIndex);
+            
+            // Drop focus seamlessly into the grid inputs for a fluid UX
+            focusNewRowInput(targetIndex, 0, 5);
+          }
+        }}
         role="grid"
         {...props}
       >
