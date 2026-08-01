@@ -41,6 +41,7 @@ export interface AutoSuggestInputProps extends React.InputHTMLAttributes<HTMLInp
   labelClassName?: string;
   isLoading?: boolean;
   className?: string;
+  inputClassName?: string;
 }
 
 export interface AutoSuggestContentProps {
