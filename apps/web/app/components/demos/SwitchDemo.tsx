@@ -21,35 +21,71 @@ export function SwitchDemo() {
             Sizes (Scaling with Density)
           </span>
           <div className="flex items-center flex-wrap gap-6">
-            <div className="flex items-center space-x-2">
-              <Switch 
-                id="switch-sm" 
-                size="sm" 
-                checked={checkedSm}
-                onCheckedChange={setCheckedSm}
-              />
-              <label htmlFor="switch-sm" className="text-sm cursor-pointer select-none">Small (sm)</label>
-            </div>
+            <Switch 
+              id="switch-sm" 
+              size="sm" 
+              label="Small (sm)"
+              checked={checkedSm}
+              onCheckedChange={setCheckedSm}
+            />
             
-            <div className="flex items-center space-x-2">
-              <Switch 
-                id="switch-default" 
-                size="default" 
-                checked={checkedDefault}
-                onCheckedChange={setCheckedDefault}
-              />
-              <label htmlFor="switch-default" className="text-sm cursor-pointer select-none">Default</label>
-            </div>
+            <Switch 
+              id="switch-default" 
+              size="default" 
+              label="Default"
+              checked={checkedDefault}
+              onCheckedChange={setCheckedDefault}
+            />
 
-            <div className="flex items-center space-x-2">
-              <Switch 
-                id="switch-lg" 
-                size="lg" 
-                checked={checkedLg}
-                onCheckedChange={setCheckedLg}
-              />
-              <label htmlFor="switch-lg" className="text-sm cursor-pointer select-none">Large (lg)</label>
-            </div>
+            <Switch 
+              id="switch-lg" 
+              size="lg" 
+              label="Large (lg)"
+              checked={checkedLg}
+              onCheckedChange={setCheckedLg}
+            />
+          </div>
+        </div>
+
+        {/* Label Variants */}
+        <div className="space-y-2">
+          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
+            Label Variants
+          </span>
+          <div className="flex flex-col gap-6">
+            <Switch 
+              id="switch-label-default" 
+              labelVariant="default"
+              label="Default (Stacked) Label"
+              checked={checkedDefault}
+              onCheckedChange={setCheckedDefault}
+            />
+            
+            <Switch 
+              id="switch-label-inline" 
+              labelVariant="inline"
+              labelPosition="right"
+              label="Right Label (Forms)"
+              checked={checkedDefault}
+              onCheckedChange={setCheckedDefault}
+            />
+
+            <Switch 
+              id="switch-label-left" 
+              labelVariant="inline"
+              labelPosition="left"
+              label="Left Label (Settings)"
+              checked={checkedDefault}
+              onCheckedChange={setCheckedDefault}
+            />
+
+            <Switch 
+              id="switch-label-hidden" 
+              labelVariant="hidden"
+              label="Hidden Screen Reader Label"
+              checked={checkedDefault}
+              onCheckedChange={setCheckedDefault}
+            />
           </div>
         </div>
 
@@ -59,20 +95,15 @@ export function SwitchDemo() {
             States (Disabled)
           </span>
           <div className="flex items-center flex-wrap gap-6">
-            <div className="flex items-center space-x-2">
-              <Switch id="switch-disabled-off" disabled />
-              <label htmlFor="switch-disabled-off" className="text-sm opacity-50 cursor-not-allowed select-none">Disabled Off</label>
-            </div>
+            <Switch id="switch-disabled-off" disabled label="Disabled Off" />
             
-            <div className="flex items-center space-x-2">
-              <Switch 
-                id="switch-disabled-on" 
-                disabled 
-                checked={checkedDisabled}
-                onCheckedChange={setCheckedDisabled}
-              />
-              <label htmlFor="switch-disabled-on" className="text-sm opacity-50 cursor-not-allowed select-none">Disabled On</label>
-            </div>
+            <Switch 
+              id="switch-disabled-on" 
+              disabled 
+              label="Disabled On"
+              checked={checkedDisabled}
+              onCheckedChange={setCheckedDisabled}
+            />
           </div>
         </div>
       </div>

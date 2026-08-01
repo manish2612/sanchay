@@ -41,6 +41,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       disabled,
       label,
       labelVariant = "default",
+      labelClassName,
       leftSlot,
       rightSlot,
       prefixContent,
@@ -118,7 +119,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
             {label && (
               <label
                 htmlFor={id}
-                className="text-[10px] uppercase text-muted-foreground font-semibold leading-none tracking-wider cursor-text w-full mb-0.5"
+                className={cn("text-[10px] uppercase text-muted-foreground font-semibold leading-none tracking-wider cursor-text w-full mb-0.5", labelClassName)}
               >
                 {label}
               </label>
@@ -138,11 +139,13 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       return (
         <div className="flex items-center w-full gap-3">
           {label && (
-            <label
+              <label
               htmlFor={id}
               className={cn(
-                "text-sm font-medium leading-none shrink-0 w-[120px]",
+                "text-sm font-medium leading-none shrink-0",
+                !labelClassName?.includes("w-") && "w-[120px]", // Default width if none specified
                 disabled && "cursor-not-allowed opacity-70",
+                labelClassName
               )}
             >
               {label}
@@ -175,6 +178,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
             className={cn(
               "text-sm font-medium leading-none",
               disabled && "cursor-not-allowed opacity-70",
+              labelClassName
             )}
           >
             {label}

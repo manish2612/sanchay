@@ -38,20 +38,90 @@ const switchThumbVariants = cva(
 export interface SwitchProps
   extends
     React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>,
-    VariantProps<typeof switchRootVariants> {}
+    VariantProps<typeof switchRootVariants> {
+  label?: string;
+  labelVariant?: "default" | "in-field" | "inline" | "hidden";
+  labelPosition?: "left" | "right";
+}
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
   SwitchProps
->(({ className, size, ...props }, ref) => (
-  <SwitchPrimitives.Root
-    className={cn(switchRootVariants({ size, className }))}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb className={cn(switchThumbVariants({ size }))} />
-  </SwitchPrimitives.Root>
-));
+>(({ className, size, label, labelVariant = "inline", labelPosition = "right", id: idProp, disabled, ...props }, ref) => {
+  const switchId = React.useId();
+  const id = idProp || switchId;
+
+  const switchElement = (
+    <SwitchPrimitives.Root
+      id={id}
+      disabled={disabled}
+      className={cn(switchRootVariants({ size, className }))}
+      {...props}
+      ref={ref}
+    >
+      <SwitchPrimitives.Thumb className={cn(switchThumbVariants({ size }))} />
+    </SwitchPrimitives.Root>
+  );
+
+  if (!label) return switchElement;
+
+  if (labelVariant === "hidden") {
+    return (
+      <div className="flex items-center">
+        <label htmlFor={id} className="sr-only">
+          {label}
+        </label>
+        {switchElement}
+      </div>
+    );
+  }
+
+  if (labelVariant === "inline" || labelVariant === "in-field") {
+    return (
+      <div className={cn("flex items-center gap-3", labelPosition === "left" && "justify-between w-full")}>
+        {labelPosition === "left" && (
+          <label
+            htmlFor={id}
+            className={cn(
+              "text-sm font-medium leading-none cursor-pointer select-none",
+              disabled && "cursor-not-allowed opacity-70"
+            )}
+          >
+            {label}
+          </label>
+        )}
+        {switchElement}
+        {labelPosition === "right" && (
+          <label
+            htmlFor={id}
+            className={cn(
+              "text-sm font-medium leading-none cursor-pointer select-none",
+              disabled && "cursor-not-allowed opacity-70"
+            )}
+          >
+            {label}
+          </label>
+        )}
+      </div>
+    );
+  }
+
+  // Default vertical stacking
+  return (
+    <div className="flex w-full flex-col gap-1.5">
+      <label
+        htmlFor={id}
+        className={cn(
+          "text-sm font-medium leading-none cursor-pointer select-none",
+          disabled && "cursor-not-allowed opacity-70"
+        )}
+      >
+        {label}
+      </label>
+      {switchElement}
+    </div>
+  );
+});
 Switch.displayName = SwitchPrimitives.Root.displayName;
 
 export { Switch };

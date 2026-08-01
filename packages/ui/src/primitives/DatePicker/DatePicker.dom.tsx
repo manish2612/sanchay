@@ -25,6 +25,8 @@ export function DatePicker({
   dayPickerProps,
   minDate,
   maxDate,
+  label,
+  labelVariant = "default",
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,6 +42,85 @@ export function DatePicker({
     }
   }
 
+  const triggerElement = (
+    <Popover.Trigger asChild>
+      <button
+        disabled={disabled}
+        className={cn(
+          "flex w-full items-center justify-between font-normal text-sm focus:outline-none",
+          labelVariant === "in-field"
+            ? "h-auto border-none px-0 py-0 shadow-none ring-0 hover:bg-transparent hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 disabled:bg-transparent"
+            : "h-10 rounded-md border border-input bg-transparent px-3 py-2 shadow-sm ring-offset-background focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-surface-variant disabled:opacity-50",
+          !date && "text-muted-foreground",
+          className
+        )}
+      >
+        <span className="truncate">{displayDate}</span>
+        <Icon name="Calendar" size={20} className="text-muted-foreground shrink-0 ml-2" />
+      </button>
+    </Popover.Trigger>
+  );
+
+  const renderTriggerWrapper = () => {
+    if (labelVariant === "in-field") {
+      return (
+        <div className={cn(
+          "flex min-h-[48px] w-full items-center rounded-md border border-input bg-transparent px-3 py-1.5 shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2",
+          disabled && "cursor-not-allowed opacity-50 bg-surface-variant"
+        )}>
+          <div className="flex min-w-0 flex-1 flex-col justify-center">
+            {label && (
+              <label className="mb-0.5 w-full cursor-text text-[10px] font-semibold uppercase leading-none tracking-wider text-muted-foreground">
+                {label}
+              </label>
+            )}
+            {triggerElement}
+          </div>
+        </div>
+      );
+    }
+
+    if (labelVariant === "inline") {
+      return (
+        <div className="flex w-full items-center gap-3">
+          {label && (
+            <label className={cn(
+              "w-[120px] shrink-0 text-sm font-medium leading-none",
+              disabled && "cursor-not-allowed opacity-70"
+            )}>
+              {label}
+            </label>
+          )}
+          <div className="flex-1">{triggerElement}</div>
+        </div>
+      );
+    }
+
+    if (labelVariant === "hidden") {
+      return (
+        <div className="w-full">
+          {label && <label className="sr-only">{label}</label>}
+          {triggerElement}
+        </div>
+      );
+    }
+
+    // Default
+    return (
+      <div className="flex w-full flex-col gap-1.5">
+        {label && (
+          <label className={cn(
+            "text-sm font-medium leading-none",
+            disabled && "cursor-not-allowed opacity-70"
+          )}>
+            {label}
+          </label>
+        )}
+        {triggerElement}
+      </div>
+    );
+  };
+
   return (
     <Popover.Root
       modal={true}
@@ -54,21 +135,7 @@ export function DatePicker({
         setIsOpen(newOpen);
       }}
     >
-      <Popover.Trigger asChild>
-        <button
-          disabled={disabled}
-          className={cn(
-            "flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background",
-            "focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2",
-            "disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-surface-variant",
-            !date && "text-muted-foreground",
-            className,
-          )}
-        >
-          <span className="truncate">{displayDate}</span>
-          <Icon name="Calendar" size={20} className="text-muted-foreground shrink-0 ml-2" />
-        </button>
-      </Popover.Trigger>
+      {renderTriggerWrapper()}
       <Popover.Portal>
         <Popover.Content
           align="start"

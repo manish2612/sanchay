@@ -7,6 +7,7 @@ export interface TextInputBaseProps {
     variant?: TextInputVariant;
     label?: string;
     labelVariant?: LabelVariant;
+    labelClassName?: string;
     leftSlot?: React.ReactNode;
     rightSlot?: React.ReactNode;
     prefixContent?: React.ReactNode;
