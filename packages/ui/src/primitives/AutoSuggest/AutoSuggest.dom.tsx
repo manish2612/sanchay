@@ -30,6 +30,8 @@ const AutoSuggestInner = <T extends boolean = false>(
     success,
     renderItem,
     className,
+    label,
+    labelVariant,
   }: AutoSuggestProps<T>,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
@@ -124,86 +126,90 @@ const AutoSuggestInner = <T extends boolean = false>(
         ref={containerRef}
       >
         <Popover.Anchor asChild>
-          <TextInput.Root variant={variant} disabled={disabled} className="w-full flex-wrap h-auto min-h-10 py-1">
-            {multiple && Array.isArray(currentValue) && currentValue.length > 0 && (
-              <div className="flex flex-wrap gap-1 mr-1 items-center">
-                {currentValue.map((v) => {
-                  const opt = flatOptions.find((o) => o.value === v);
-                  return (
-                    <span
-                      key={v}
-                      className="bg-secondary text-secondary-foreground rounded px-1.5 py-0.5 text-xs flex items-center gap-1"
-                    >
-                      {opt ? opt.label : v}
-                      {!disabled && (
-                        <div
-                          role="button"
-                          className="cursor-pointer opacity-70 hover:opacity-100 flex items-center"
-                          onPointerDown={(e: React.PointerEvent) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            handleRemove(v);
-                          }}
-                          onClick={(e: React.MouseEvent) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                          }}
-                        >
-                          <Icon name="X" size={12} />
-                        </div>
-                      )}
-                    </span>
-                  );
-                })}
-              </div>
-            )}
-
-            <CommandPrimitive.Input
-              asChild
-              value={currentInputValue}
-              onValueChange={handleInputChange}
-            >
-              <TextInput.Input
-                ref={ref}
-                placeholder={
-                  multiple && Array.isArray(currentValue) && currentValue.length > 0
-                    ? ""
-                    : placeholder
+          <CommandPrimitive.Input
+            asChild
+            value={currentInputValue}
+            onValueChange={handleInputChange}
+          >
+            <TextInput
+              ref={ref}
+              variant={variant}
+              disabled={disabled}
+              label={label}
+              labelVariant={labelVariant}
+              className={cn("w-full h-auto", labelVariant !== 'in-field' && "py-1 min-h-10")}
+              inputClassName="min-w-[60px]"
+              placeholder={
+                multiple && Array.isArray(currentValue) && currentValue.length > 0
+                  ? ""
+                  : placeholder
+              }
+              onFocus={(e) => {
+                setOpen(true);
+                if (exactMatchSelected) {
+                  e.target.select();
                 }
-                disabled={disabled}
-                onFocus={(e) => {
-                  setOpen(true);
-                  if (exactMatchSelected) {
-                    e.target.select();
-                  }
-                }}
-                onKeyDown={handleKeyDown}
-                className="min-w-[60px]" // ensure input doesn't collapse too much in multi-select
-              />
-            </CommandPrimitive.Input>
-
-            {(isLoading || (clearable && hasValue)) && (
-              <TextInput.Slot side="right" className="flex items-center gap-2 pr-1 ml-auto shrink-0">
-                {isLoading && (
-                  <Icon
-                    name="Loader"
-                    className="animate-spin text-muted-foreground"
-                    size={16}
-                  />
-                )}
-                {clearable && hasValue && !disabled && (
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleClear}
-                    className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-sm hover:bg-secondary"
-                  >
-                    <Icon name="X" size={14} />
+              }}
+              onKeyDown={handleKeyDown}
+              prefixContent={
+                multiple && Array.isArray(currentValue) && currentValue.length > 0 ? (
+                  <div className="flex flex-wrap gap-1 mr-1 items-center">
+                    {currentValue.map((v) => {
+                      const opt = flatOptions.find((o) => o.value === v);
+                      return (
+                        <span
+                          key={v}
+                          className="bg-secondary text-secondary-foreground rounded px-1.5 py-0.5 text-xs flex items-center gap-1"
+                        >
+                          {opt ? opt.label : v}
+                          {!disabled && (
+                            <div
+                              role="button"
+                              className="cursor-pointer opacity-70 hover:opacity-100 flex items-center"
+                              onPointerDown={(e: React.PointerEvent) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleRemove(v);
+                              }}
+                              onClick={(e: React.MouseEvent) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                              }}
+                            >
+                              <Icon name="X" size={12} />
+                            </div>
+                          )}
+                        </span>
+                      );
+                    })}
                   </div>
-                )}
-              </TextInput.Slot>
-            )}
-          </TextInput.Root>
+                ) : null
+              }
+              rightSlot={
+                (isLoading || (clearable && hasValue)) ? (
+                  <div className="flex items-center gap-2 pr-1 ml-auto shrink-0">
+                    {isLoading && (
+                      <Icon
+                        name="Loader"
+                        className="animate-spin text-muted-foreground"
+                        size={16}
+                      />
+                    )}
+                    {clearable && hasValue && !disabled && (
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={handleClear}
+                        className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors p-0.5 rounded-sm hover:bg-secondary"
+                      >
+                        <Icon name="X" size={14} />
+                      </div>
+                    )}
+                  </div>
+                ) : null
+              }
+            />
+          </CommandPrimitive.Input>
         </Popover.Anchor>
 
         <Popover.Portal>

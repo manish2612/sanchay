@@ -16,6 +16,8 @@ const AutoSuggest = React.forwardRef<any, AutoSuggestProps>(
       disabled,
       error,
       success,
+      label,
+      labelVariant,
       // React Native specific props can be passed here or extracted
     },
     ref
@@ -36,16 +38,16 @@ const AutoSuggest = React.forwardRef<any, AutoSuggestProps>(
 
     return (
       <View style={{ width: "100%" }}>
-        <TextInput.Root variant={variant}>
-           {/* @ts-ignore - native input props */}
-          <TextInput.Input
-            ref={ref}
-            value={currentInputValue}
-            onChangeText={handleTextChange}
-            placeholder={placeholder}
-            editable={!disabled}
-          />
-        </TextInput.Root>
+        <TextInput
+          ref={ref}
+          variant={variant}
+          label={label}
+          labelVariant={labelVariant}
+          value={currentInputValue}
+          onChangeText={handleTextChange}
+          placeholder={placeholder}
+          editable={!disabled}
+        />
         <Text style={{ fontSize: 10, color: "gray", marginTop: 4 }}>
           [AutoSuggest Dropdown Native Stub - Not Implemented]
         </Text>
