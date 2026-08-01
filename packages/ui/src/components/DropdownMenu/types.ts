@@ -1,4 +1,5 @@
 import { IconName } from "../../primitives/Icon/types";
+import { LabelVariant } from "../../primitives/TextInput/types";
 
 export interface DropdownMenuItem {
   id: string;
@@ -15,4 +16,6 @@ export interface DropdownMenuProps {
     children?: React.ReactNode; // Can be used as custom trigger
     searchable?: boolean;
     align?: "start" | "center" | "end";
+    label?: string;
+    labelVariant?: LabelVariant;
 }
