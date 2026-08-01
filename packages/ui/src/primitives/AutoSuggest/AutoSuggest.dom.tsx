@@ -103,6 +103,7 @@ export const AutoSuggestInput = React.forwardRef<
       handleClear,
       handleInputChange,
       handleKeyDown,
+      open,
     } = useAutoSuggestContext();
 
     const variant = error ? "error" : success ? "success" : "default";
@@ -139,6 +140,7 @@ export const AutoSuggestInput = React.forwardRef<
               }
             }}
             onKeyDown={handleKeyDown}
+            data-expanded={open ? "true" : "false"}
             prefixContent={
               multiple &&
               Array.isArray(currentValue) &&
