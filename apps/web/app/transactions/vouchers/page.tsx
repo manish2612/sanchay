@@ -74,6 +74,50 @@ export default function VouchersPage() {
 
             <div className="lg:col-span-1">
               <DropdownMenu
+                label="Payment Mode"
+                labelVariant="in-field"
+                triggerLabel={paymentMode}
+                items={[
+                  {
+                    id: "Credit",
+                    label: "Credit",
+                    onSelect: () => setPaymentMode("Credit"),
+                  },
+                  {
+                    id: "Cash",
+                    label: "Cash",
+                    onSelect: () => setPaymentMode("Cash"),
+                  },
+                ]}
+              />
+            </div>
+
+            <div className="lg:col-span-1">
+              <DatePicker
+                label="Miti (bs)"
+                labelVariant="in-field"
+                date={mitiDate}
+                onDateChange={setMitiDate}
+                calendarType="nepali"
+                placeholder="Select Miti"
+                className=""
+              />
+            </div>
+
+            <div className="lg:col-span-1">
+              <DatePicker
+                label="Date (ad)"
+                labelVariant="in-field"
+                date={adDate}
+                onDateChange={setAdDate}
+                calendarType="gregorian"
+                placeholder="Select Date"
+                className=""
+              />
+            </div>
+
+            <div className="lg:col-span-1">
+              <DropdownMenu
                 label="Apply Tax"
                 labelVariant="in-field"
                 triggerLabel={applyTax}
@@ -112,50 +156,7 @@ export default function VouchersPage() {
               />
             </div>
 
-            <div className="lg:col-span-1">
-              <DropdownMenu
-                label="Payment Mode"
-                labelVariant="in-field"
-                triggerLabel={paymentMode}
-                items={[
-                  {
-                    id: "Credit",
-                    label: "Credit",
-                    onSelect: () => setPaymentMode("Credit"),
-                  },
-                  {
-                    id: "Cash",
-                    label: "Cash",
-                    onSelect: () => setPaymentMode("Cash"),
-                  },
-                ]}
-              />
-            </div>
-
             {/* Group 2: Date & Account Details */}
-            <div className="lg:col-span-1">
-              <DatePicker
-                label="Miti (bs)"
-                labelVariant="in-field"
-                date={mitiDate}
-                onDateChange={setMitiDate}
-                calendarType="nepali"
-                placeholder="Select Miti"
-                className=""
-              />
-            </div>
-
-            <div className="lg:col-span-1">
-              <DatePicker
-                label="Date (ad)"
-                labelVariant="in-field"
-                date={adDate}
-                onDateChange={setAdDate}
-                calendarType="gregorian"
-                placeholder="Select Date"
-                className=""
-              />
-            </div>
 
             <div className="lg:col-span-1">
               <AutoSuggest
