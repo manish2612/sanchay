@@ -34,11 +34,11 @@ export default function VouchersPage() {
           {/* Form Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-2 items-end">
             {/* Group 1: Primary Details */}
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Voucher Type
-              </label>
+            <div className="lg:col-span-1">
               <DropdownMenu
+                label="Voucher Type"
+                labelVariant="in-field"
+                triggerLabel={voucherType}
                 items={[
                   {
                     id: "Sales",
@@ -56,23 +56,13 @@ export default function VouchersPage() {
                     onSelect: () => setVoucherType("Receipt"),
                   },
                 ]}
-              >
-                <button className={inputClasses}>
-                  <span className="font-semibold truncate">{voucherType}</span>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    className="text-muted-foreground shrink-0 ml-2"
-                  />
-                </button>
-              </DropdownMenu>
+              />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Voucher No.
-              </label>
+            <div className="lg:col-span-1">
               <TextInput
+                label="Voucher No."
+                labelVariant="in-field"
                 disabled
                 tabIndex={-1}
                 className="pointer-events-none"
@@ -82,11 +72,11 @@ export default function VouchersPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Apply Tax
-              </label>
+            <div className="lg:col-span-1">
               <DropdownMenu
+                label="Apply Tax"
+                labelVariant="in-field"
+                triggerLabel={applyTax}
                 items={[
                   {
                     id: "Item Level",
@@ -99,23 +89,14 @@ export default function VouchersPage() {
                     onSelect: () => setApplyTax("Invoice Level"),
                   },
                 ]}
-              >
-                <button className={inputClasses}>
-                  <span className="truncate">{applyTax}</span>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    className="text-muted-foreground shrink-0 ml-2"
-                  />
-                </button>
-              </DropdownMenu>
+              />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Mode
-              </label>
+            <div className="lg:col-span-1">
               <DropdownMenu
+                label="Mode"
+                labelVariant="in-field"
+                triggerLabel={mode}
                 items={[
                   {
                     id: "Item Mode",
@@ -128,23 +109,14 @@ export default function VouchersPage() {
                     onSelect: () => setMode("Account Mode"),
                   },
                 ]}
-              >
-                <button className={inputClasses}>
-                  <span className="truncate">{mode}</span>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    className="text-muted-foreground shrink-0 ml-2"
-                  />
-                </button>
-              </DropdownMenu>
+              />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Payment Mode
-              </label>
+            <div className="lg:col-span-1">
               <DropdownMenu
+                label="Payment Mode"
+                labelVariant="in-field"
+                triggerLabel={paymentMode}
                 items={[
                   {
                     id: "Credit",
@@ -157,25 +129,14 @@ export default function VouchersPage() {
                     onSelect: () => setPaymentMode("Cash"),
                   },
                 ]}
-              >
-                <button className={inputClasses}>
-                  <span className="truncate">{paymentMode}</span>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    className="text-muted-foreground shrink-0 ml-2"
-                  />
-                </button>
-              </DropdownMenu>
+              />
             </div>
 
             {/* Group 2: Date & Account Details */}
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                Miti{" "}
-                <span className="opacity-60 font-normal lowercase">(bs)</span>
-              </label>
+            <div className="lg:col-span-1">
               <DatePicker
+                label="Miti (bs)"
+                labelVariant="in-field"
                 date={mitiDate}
                 onDateChange={setMitiDate}
                 calendarType="nepali"
@@ -184,12 +145,10 @@ export default function VouchersPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                Date{" "}
-                <span className="opacity-60 font-normal lowercase">(ad)</span>
-              </label>
+            <div className="lg:col-span-1">
               <DatePicker
+                label="Date (ad)"
+                labelVariant="in-field"
                 date={adDate}
                 onDateChange={setAdDate}
                 calendarType="gregorian"
@@ -198,26 +157,41 @@ export default function VouchersPage() {
               />
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-2">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Party A/C
-              </label>
+            <div className="lg:col-span-1">
               <AutoSuggest
                 inputValue={partyQuery}
                 onInputChange={setPartyQuery}
-                placeholder="Search party account..."
                 options={[
                   { label: "Cash", value: "cash" },
                   { label: "Bank", value: "bank" },
                 ]}
-              />
+              >
+                <AutoSuggest.Input
+                  label="Party A/C"
+                  labelVariant="in-field"
+                  placeholder="Search party account..."
+                />
+                <AutoSuggest.Content>
+                  <AutoSuggest.List>
+                    <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
+                    {[
+                      { label: "Cash", value: "cash" },
+                      { label: "Bank", value: "bank" },
+                    ].map((opt) => (
+                      <AutoSuggest.Item key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </AutoSuggest.Item>
+                    ))}
+                  </AutoSuggest.List>
+                </AutoSuggest.Content>
+              </AutoSuggest>
             </div>
 
-            <div className="flex flex-col gap-1 lg:col-span-1">
-              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Sales A/C
-              </label>
+            <div className="lg:col-span-1">
               <DropdownMenu
+                label="Sales A/C"
+                labelVariant="in-field"
+                triggerLabel={salesAc}
                 items={[
                   {
                     id: "13% Sales",
@@ -230,16 +204,7 @@ export default function VouchersPage() {
                     onSelect: () => setSalesAc("Exempt Sales"),
                   },
                 ]}
-              >
-                <button className={inputClasses}>
-                  <span className="truncate">{salesAc}</span>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    className="text-muted-foreground shrink-0 ml-2"
-                  />
-                </button>
-              </DropdownMenu>
+              />
             </div>
           </div>
         </section>
@@ -264,12 +229,10 @@ export default function VouchersPage() {
         >
           <div className="p-4 flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-2 gap-y-2 items-end">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                  Ref. Miti{" "}
-                  <span className="opacity-60 font-normal lowercase">(bs)</span>
-                </label>
+              <div>
                 <DatePicker
+                  label="Ref. Miti (bs)"
+                  labelVariant="in-field"
                   date={refMitiDate}
                   onDateChange={setRefMitiDate}
                   calendarType="nepali"
@@ -278,12 +241,10 @@ export default function VouchersPage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                  Ref. Date{" "}
-                  <span className="opacity-60 font-normal lowercase">(ad)</span>
-                </label>
+              <div>
                 <DatePicker
+                  label="Ref. Date (ad)"
+                  labelVariant="in-field"
                   date={refAdDate}
                   onDateChange={setRefAdDate}
                   calendarType="gregorian"
@@ -292,11 +253,12 @@ export default function VouchersPage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Ref. No.
-                </label>
-                <TextInput placeholder="Reference number..." />
+              <div>
+                <TextInput
+                  label="Ref. No."
+                  labelVariant="in-field"
+                  placeholder="Reference number..."
+                />
               </div>
             </div>
           </div>
