@@ -62,16 +62,15 @@ export const ShortcutCheatSheet = ({
         </ModalHeader>
 
         <ScrollView style={styles.container}>
-          <TextInput.Root style={{ marginBottom: theme.space[4] }}>
-            <TextInput.Input
-              placeholder="Search shortcuts..."
-              placeholderTextColor={
-                (theme.colors as any).mutedForeground || "#999"
-              }
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-          </TextInput.Root>
+          <TextInput
+            style={{ marginBottom: theme.space[4] }}
+            placeholder="Search shortcuts..."
+            placeholderTextColor={
+              (theme.colors as any).mutedForeground || "#999"
+            }
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
 
           {filteredCategories.length === 0 ? (
             <Text
