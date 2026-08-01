@@ -21,6 +21,7 @@ export function LedgerEntryTable() {
               isPhantom: (row) => row.original.isPhantom,
               actionText: "Add New Entry",
             },
+            isRowEmpty: (row: any) => row.original.name.trim() === "",
           },
         }}
       >

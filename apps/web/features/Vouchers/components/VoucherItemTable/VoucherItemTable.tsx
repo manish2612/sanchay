@@ -21,6 +21,7 @@ export function VoucherItemTable() {
               isPhantom: (row) => row.original.isPhantom,
               actionText: "Add New Row",
             },
+            isRowEmpty: (row: any) => row.original.item.trim() === "",
           },
         }}
       >
