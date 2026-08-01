@@ -17,25 +17,30 @@ export function TextInputDemo() {
       </Text>
       <View style={{ gap: 12 }}>
         {/* Default */}
-        <TextInput.Root>
-          <TextInput.Input placeholder="Default Input" />
-        </TextInput.Root>
+        <TextInput label="Default Label" placeholder="Default Input" />
 
-        {/* With Icon Left */}
-        <TextInput.Root>
-          <TextInput.Slot side="left">
-            <Icon name="Search" size={20} color={t.colors.mutedForeground} />
-          </TextInput.Slot>
-          <TextInput.Input placeholder="Search..." />
-        </TextInput.Root>
+        {/* In-field Variant with Icon */}
+        <TextInput 
+          label="In-field Label"
+          labelVariant="in-field"
+          placeholder="Search..." 
+          leftSlot={<Icon name="Search" size={20} color={t.colors.mutedForeground} />} 
+        />
+
+        {/* Inline Variant with Icon */}
+        <TextInput 
+          label="Inline Label"
+          labelVariant="inline"
+          placeholder="Email address" 
+          rightSlot={<Icon name="Mail" size={20} color={t.colors.mutedForeground} />} 
+        />
 
         {/* Error State */}
-        <TextInput.Root variant="error">
-          <TextInput.Input placeholder="Error State" />
-          <TextInput.Slot side="right">
-            <Icon name="CircleAlert" size={20} color={t.colors.destructive} />
-          </TextInput.Slot>
-        </TextInput.Root>
+        <TextInput 
+          variant="error" 
+          placeholder="Error State" 
+          rightSlot={<Icon name="CircleAlert" size={20} color={t.colors.destructive} />} 
+        />
       </View>
     </View>
   );

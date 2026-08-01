@@ -12,56 +12,55 @@ export function TextInputDemo() {
       <div className="space-y-4 max-w-sm">
         {/* Default */}
         <div className="space-y-1">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
-            Default
-          </span>
-          <TextInput.Root>
-            <TextInput.Input placeholder="Enter text..." />
-          </TextInput.Root>
+          <TextInput label="Default Label" placeholder="Enter text..." />
+          <TextInput
+            className="my-4"
+            label="In-field Label"
+            placeholder="Enter text..."
+            labelVariant="in-field"
+          />
+          <TextInput
+            label="Inline Label"
+            placeholder="Enter text..."
+            labelVariant="inline"
+          />
+          <TextInput
+            label="Hidden Label"
+            placeholder="Enter text..."
+            labelVariant="hidden"
+          />
         </div>
 
-        {/* With Icons */}
+        {/* With Icons & Variants */}
         <div className="space-y-1">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
-            With Icons
-          </span>
-          <TextInput.Root>
-            <TextInput.Slot side="left">
-              <Icon name="Search" size={18} />
-            </TextInput.Slot>
-            <TextInput.Input placeholder="Search..." />
-          </TextInput.Root>
+          <TextInput
+            label="In-field with left icon"
+            labelVariant="in-field"
+            placeholder="Search..."
+            leftSlot={<Icon name="Search" size={18} />}
+          />
         </div>
 
         <div className="space-y-1">
-          <TextInput.Root>
-            <TextInput.Input placeholder="Email address" />
-            <TextInput.Slot side="right">
-              <Icon name="Mail" size={18} />
-            </TextInput.Slot>
-          </TextInput.Root>
+          <TextInput
+            label="Inline with right icon"
+            labelVariant="inline"
+            placeholder="Email address"
+            rightSlot={<Icon name="Mail" size={18} />}
+          />
         </div>
 
         {/* States */}
         <div className="space-y-1">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
-            Error State
-          </span>
-          <TextInput.Root variant="error">
-            <TextInput.Slot side="left">
-              <Icon name="CircleAlert" size={18} />
-            </TextInput.Slot>
-            <TextInput.Input placeholder="Invalid input" />
-          </TextInput.Root>
+          <TextInput
+            variant="error"
+            placeholder="Invalid input"
+            leftSlot={<Icon name="CircleAlert" size={18} />}
+          />
         </div>
 
         <div className="space-y-1">
-          <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold opacity-70">
-            Disabled
-          </span>
-          <TextInput.Root disabled>
-            <TextInput.Input placeholder="Disabled" disabled />
-          </TextInput.Root>
+          <TextInput disabled placeholder="Disabled" />
         </div>
       </div>
     </div>

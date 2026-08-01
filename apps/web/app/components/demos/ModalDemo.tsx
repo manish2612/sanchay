@@ -35,15 +35,11 @@ export function ModalDemo() {
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Text className="text-right">Name</Text>
-                <TextInput.Root className="col-span-3">
-                  <TextInput.Input defaultValue="Pedro Duarte" />
-                </TextInput.Root>
+                <TextInput className="col-span-3" defaultValue="Pedro Duarte" />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Text className="text-right">Username</Text>
-                <TextInput.Root className="col-span-3">
-                  <TextInput.Input defaultValue="@peduarte" />
-                </TextInput.Root>
+                <TextInput className="col-span-3" defaultValue="@peduarte" />
               </div>
             </div>
             <ModalFooter>

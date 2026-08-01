@@ -93,10 +93,9 @@ export function AutoSuggestDemo() {
 
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-foreground">
-            Multi-Select (Phase 5)
-          </label>
           <AutoSuggest
+            label="Multi-Select (Phase 5)"
+            labelVariant="in-field"
             options={US_STATES}
             value={multiValue}
             onChange={setMultiValue}
@@ -112,10 +111,9 @@ export function AutoSuggestDemo() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-foreground">
-            Virtualization (10,000 items) (Phase 4)
-          </label>
           <AutoSuggest
+            label="Virtualization (10,000 items) (Phase 4)"
+            labelVariant="inline"
             options={VIRTUAL_ITEMS}
             value={virtualValue}
             onChange={setVirtualValue}
@@ -130,10 +128,9 @@ export function AutoSuggestDemo() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm font-medium text-foreground">
-            Static Options (Uncontrolled Input)
-          </label>
           <AutoSuggest
+            label="Static Options (Uncontrolled Input)"
+            labelVariant="in-field"
             options={US_STATES}
             value={value}
             onChange={setValue}

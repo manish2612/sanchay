@@ -163,21 +163,18 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
   }
 
   return (
-    <TextInput.Root
+    <TextInput
       className={`h-8 w-full my-auto bg-surface transition-all ${
         error ? "ring-2 ring-destructive ring-offset-1 animate-shake" : ""
       }`}
-    >
-      <TextInput.Input
-        value={value as string}
-        onChange={(e) => {
-          setValue(e.target.value);
-        }}
-        onBlur={onBlur}
-        placeholder={isPhantom ? "Enter amount..." : ""}
-        className="text-sm px-3 h-full"
-      />
-    </TextInput.Root>
+      inputClassName="text-sm px-3 h-full"
+      value={value as string}
+      onChange={(e) => {
+        setValue(e.target.value);
+      }}
+      onBlur={onBlur}
+      placeholder={isPhantom ? "Enter amount..." : ""}
+    />
   );
 };
 
