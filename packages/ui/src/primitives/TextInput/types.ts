@@ -1,27 +1,25 @@
 import type { TextInputProps as RNTextInputProps } from 'react-native';
 
 export type TextInputVariant = 'default' | 'error' | 'success';
+export type LabelVariant = 'default' | 'in-field' | 'inline' | 'hidden';
 
-export interface TextInputRootProps {
-    children: React.ReactNode;
+export interface TextInputBaseProps {
     variant?: TextInputVariant;
-    className?: string; // For Web overrides
-    style?: any; // For Native overrides
-}
-
-export interface TextInputSlotProps {
-    children: React.ReactNode;
-    className?: string;
-    style?: any;
-    side?: 'left' | 'right';
+    label?: string;
+    labelVariant?: LabelVariant;
+    leftSlot?: React.ReactNode;
+    rightSlot?: React.ReactNode;
+    prefixContent?: React.ReactNode;
+    id?: string;
 }
 
 // Web Input Props
-export interface WebTextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    // Add any specific web props here if needed
+export interface WebTextInputProps extends React.InputHTMLAttributes<HTMLInputElement>, TextInputBaseProps {
+    inputClassName?: string;
 }
 
 // Native Input Props
-export interface NativeTextInputProps extends RNTextInputProps {
-    // Add any specific native props here if needed
+export interface NativeTextInputProps extends RNTextInputProps, TextInputBaseProps {
+    className?: string; // Sometimes passed by cross-platform wrappers
+    inputStyle?: any;
 }
