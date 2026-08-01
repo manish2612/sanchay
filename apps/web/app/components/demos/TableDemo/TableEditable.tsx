@@ -1,6 +1,14 @@
 "use client";
 
-import { Table, TextInput, flexRender, ColumnDef, DropdownMenu, DatePicker, Icon } from "@prime/ui";
+import {
+  Table,
+  TextInput,
+  flexRender,
+  ColumnDef,
+  DropdownMenu,
+  DatePicker,
+  Icon,
+} from "@prime/ui";
 import * as React from "react";
 import { Invoice, generateData } from "./shared";
 
@@ -34,24 +42,93 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 
   // Edit mode input based on column
   if (column.id === "status" || column.id === "method") {
-    const options = column.id === "status" 
-      ? [
-          { id: "Pending", label: "Pending", onSelect: () => { setValue("Pending"); table.options.meta?.updateData?.(row.index, column.id, "Pending"); } },
-          { id: "Paid", label: "Paid", onSelect: () => { setValue("Paid"); table.options.meta?.updateData?.(row.index, column.id, "Paid"); } },
-          { id: "Unpaid", label: "Unpaid", onSelect: () => { setValue("Unpaid"); table.options.meta?.updateData?.(row.index, column.id, "Unpaid"); } },
-        ]
-      : [
-          { id: "Credit Card", label: "Credit Card", onSelect: () => { setValue("Credit Card"); table.options.meta?.updateData?.(row.index, column.id, "Credit Card"); } },
-          { id: "PayPal", label: "PayPal", onSelect: () => { setValue("PayPal"); table.options.meta?.updateData?.(row.index, column.id, "PayPal"); } },
-          { id: "Bank Transfer", label: "Bank Transfer", onSelect: () => { setValue("Bank Transfer"); table.options.meta?.updateData?.(row.index, column.id, "Bank Transfer"); } },
-        ];
+    const options =
+      column.id === "status"
+        ? [
+            {
+              id: "Pending",
+              label: "Pending",
+              onSelect: () => {
+                setValue("Pending");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Pending",
+                );
+              },
+            },
+            {
+              id: "Paid",
+              label: "Paid",
+              onSelect: () => {
+                setValue("Paid");
+                table.options.meta?.updateData?.(row.index, column.id, "Paid");
+              },
+            },
+            {
+              id: "Unpaid",
+              label: "Unpaid",
+              onSelect: () => {
+                setValue("Unpaid");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Unpaid",
+                );
+              },
+            },
+          ]
+        : [
+            {
+              id: "Credit Card",
+              label: "Credit Card",
+              onSelect: () => {
+                setValue("Credit Card");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Credit Card",
+                );
+              },
+            },
+            {
+              id: "PayPal",
+              label: "PayPal",
+              onSelect: () => {
+                setValue("PayPal");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "PayPal",
+                );
+              },
+            },
+            {
+              id: "Bank Transfer",
+              label: "Bank Transfer",
+              onSelect: () => {
+                setValue("Bank Transfer");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Bank Transfer",
+                );
+              },
+            },
+          ];
 
     return (
-      <DropdownMenu items={options} triggerLabel={value as string || (column.id === 'status' ? 'Status' : 'Method')}>
-        <button 
-          className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none"
-        >
-          {value as string || <span className="text-muted-foreground">Select...</span>} <Icon name="ChevronDown" size={16} />
+      <DropdownMenu
+        items={options}
+        triggerLabel={
+          (value as string) || (column.id === "status" ? "Status" : "Method")
+        }
+      >
+        <button className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none">
+          {(value as string) || (
+            <span className="text-muted-foreground">Select...</span>
+          )}{" "}
+          <Icon name="ChevronDown" size={16} />
         </button>
       </DropdownMenu>
     );
@@ -72,8 +149,8 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
           onDateChange={(d) => {
             if (d) {
               const year = d.getFullYear();
-              const month = String(d.getMonth() + 1).padStart(2, '0');
-              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, "0");
+              const day = String(d.getDate()).padStart(2, "0");
               const formatted = `${year}-${month}-${day}`;
               setValue(formatted);
               table.options.meta?.updateData?.(row.index, column.id, formatted);
@@ -86,7 +163,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
   }
 
   return (
-    <TextInput.Root 
+    <TextInput.Root
       className={`h-8 w-full my-auto bg-surface transition-all ${
         error ? "ring-2 ring-destructive ring-offset-1 animate-shake" : ""
       }`}
@@ -110,7 +187,11 @@ export const editableColumns: ColumnDef<Invoice>[] = [
     header: "Invoice",
     size: 100,
     // Typically ID is not editable
-    cell: (info) => <span className="px-3 w-full h-full flex items-center text-sm text-muted-foreground font-medium border border-transparent">{info.getValue() as string}</span>,
+    cell: (info) => (
+      <span className="px-3 w-full h-full flex items-center text-sm text-muted-foreground font-medium border border-transparent">
+        {info.getValue() as string}
+      </span>
+    ),
   },
   {
     accessorKey: "date",
@@ -140,7 +221,14 @@ export const editableColumns: ColumnDef<Invoice>[] = [
 
 export function TableEditable() {
   const [data, setData] = React.useState<Invoice[]>(() => [
-    { id: "INV-1", date: "", status: "Pending", method: "Credit Card", amount: "", isPhantom: true }
+    {
+      id: "INV-1",
+      date: "",
+      status: "Pending",
+      method: "Credit Card",
+      amount: "",
+      isPhantom: true,
+    },
   ]);
   const [rowErrors, setRowErrors] = React.useState<Record<number, boolean>>({});
 
@@ -154,40 +242,45 @@ export function TableEditable() {
           };
         }
         return row;
-      })
+      }),
     );
   };
 
-  const onRowCommit = (rowIndex: number, columnId?: string, cellValue?: string) => {
+  const onRowCommit = (
+    rowIndex: number,
+    columnId?: string,
+    cellValue?: string,
+  ) => {
     let row = data[rowIndex];
-    
+
     // If the user pressed enter while actively typing in a field, sync that value immediately!
     if (columnId && cellValue !== undefined) {
       row = { ...row, [columnId]: cellValue };
       updateData(rowIndex, columnId, cellValue);
     }
-    
+
     // Custom Validation: Amount must be numeric
     const numeric = Number(row.amount.replace(/[^0-9.-]+/g, ""));
     if (isNaN(numeric) || row.amount.trim() === "") {
-      setRowErrors(prev => ({ ...prev, [rowIndex]: true }));
+      setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
       setTimeout(() => {
-        setRowErrors(prev => ({ ...prev, [rowIndex]: false }));
+        setRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
       }, 500);
       return "STAY"; // Block commit, stay in edit mode
     }
 
     // Success! If it's a phantom row, convert it and spawn a new one
     if (row.isPhantom) {
-      setData(old => {
+      setData((old) => {
         const newData = [...old];
         // Ensure the last-second cellValue is merged in the new array too, in case updateData was batched
-        const committedRow = columnId && cellValue !== undefined 
-          ? { ...newData[rowIndex]!, [columnId]: cellValue, isPhantom: false }
-          : { ...newData[rowIndex]!, isPhantom: false };
-          
+        const committedRow =
+          columnId && cellValue !== undefined
+            ? { ...newData[rowIndex]!, [columnId]: cellValue, isPhantom: false }
+            : { ...newData[rowIndex]!, isPhantom: false };
+
         newData[rowIndex] = committedRow;
-        
+
         // Append new phantom row at the bottom
         newData.push({
           id: `INV-${newData.length + 1}`,
@@ -195,14 +288,14 @@ export function TableEditable() {
           status: "Pending",
           method: "Credit Card",
           amount: "",
-          isPhantom: true
+          isPhantom: true,
         });
         return newData;
       });
       return "ADVANCE"; // Move focus to the newly spawned phantom row
     }
 
-    return "EXIT"; 
+    return "EXIT";
   };
 
   return (
@@ -216,6 +309,10 @@ export function TableEditable() {
             updateData,
             onRowCommit,
             rowErrors,
+            phantomRowConfig: {
+              isPhantom: (row) => row.original.isPhantom,
+              actionText: "Add New Invoice",
+            },
           },
         }}
       >
@@ -234,7 +331,7 @@ export function TableEditable() {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </Table.Head>
                   ))}
@@ -245,42 +342,26 @@ export function TableEditable() {
         </Table.Header>
 
         <Table.Body>
-          {(row, isFocused) => {
-            const isPhantomActionState = row.original.isPhantom && !isFocused;
-
-            return (
-              <Table.Row
-                key={row.id}
-                data-state={row.getIsSelected() ? "selected" : undefined}
-                data-focused={isFocused}
-                className={isPhantomActionState ? "bg-primary/5 hover:bg-primary/10 border-t border-dashed border-primary/20 cursor-pointer" : undefined}
-              >
-                {isPhantomActionState ? (
-                  <Table.Cell
-                    style={{ width: "100%", flex: "1 1 100%" }}
-                    className="py-0 flex items-center justify-center text-primary text-sm font-medium transition-colors"
-                  >
-                    <Icon name="Plus" size={16} className="mr-2" />
-                    Add New Invoice 
-                    <span className="ml-2 text-primary/80 font-normal text-xs">(Press Ctrl+N)</span>
-                  </Table.Cell>
-                ) : (
-                  row.getVisibleCells().map((cell) => (
-                    <Table.Cell
-                      key={cell.id}
-                      style={{
-                        width: cell.column.getSize(),
-                        flex: `${cell.column.getSize()} 0 auto`,
-                      }}
-                      className="py-0" // Remove vertical padding to perfectly fit the 44px virtual row height, but keep horizontal padding
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Cell>
-                  ))
-                )}
-              </Table.Row>
-            );
-          }}
+          {(row, isFocused) => (
+            <Table.Row
+              key={row.id}
+              data-state={row.getIsSelected() ? "selected" : undefined}
+              data-focused={isFocused}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell
+                  key={cell.id}
+                  style={{
+                    width: cell.column.getSize(),
+                    flex: `${cell.column.getSize()} 0 auto`,
+                  }}
+                  className="py-0" // Remove vertical padding to perfectly fit the 44px virtual row height, but keep horizontal padding
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          )}
         </Table.Body>
       </Table.Root>
     </div>
