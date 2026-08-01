@@ -72,18 +72,14 @@ export default function VouchersPage() {
               <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Voucher No.
               </label>
-              <TextInput.Root
+              <TextInput
                 disabled
                 tabIndex={-1}
                 className="pointer-events-none"
-              >
-                <TextInput.Input
-                  value="8384/003"
-                  readOnly
-                  tabIndex={-1}
-                  className="font-mono font-medium pointer-events-none"
-                />
-              </TextInput.Root>
+                inputClassName="font-mono font-medium pointer-events-none"
+                value="8384/003"
+                readOnly
+              />
             </div>
 
             <div className="flex flex-col gap-1 lg:col-span-1">
@@ -300,9 +296,7 @@ export default function VouchersPage() {
                 <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   Ref. No.
                 </label>
-                <TextInput.Root>
-                  <TextInput.Input placeholder="Reference number..." />
-                </TextInput.Root>
+                <TextInput placeholder="Reference number..." />
               </div>
             </div>
           </div>
