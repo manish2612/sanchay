@@ -53,15 +53,11 @@ export function ModalDemo() {
               <View style={{ gap: 16, marginVertical: 16 }}>
                 <View>
                   <Text style={{ marginBottom: 8 }}>Name</Text>
-                  <TextInput.Root>
-                    <TextInput.Input placeholder="Pedro Duarte" />
-                  </TextInput.Root>
+                  <TextInput placeholder="Pedro Duarte" />
                 </View>
                 <View>
                   <Text style={{ marginBottom: 8 }}>Username</Text>
-                  <TextInput.Root>
-                    <TextInput.Input placeholder="@peduarte" />
-                  </TextInput.Root>
+                  <TextInput placeholder="@peduarte" />
                 </View>
               </View>
               <ModalFooter>

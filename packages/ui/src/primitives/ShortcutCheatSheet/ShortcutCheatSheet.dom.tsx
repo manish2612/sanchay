@@ -62,16 +62,12 @@ export const ShortcutCheatSheet = ({
         </ModalHeader>
 
         <div className="px-1 mt-4">
-          <TextInput.Root>
-            <TextInput.Slot side="left">
-              <Icon name="Search" size={16} />
-            </TextInput.Slot>
-            <TextInput.Input
-              placeholder="Search shortcuts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </TextInput.Root>
+          <TextInput
+            leftSlot={<Icon name="Search" size={16} />}
+            placeholder="Search shortcuts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
 
         <div className="flex flex-col gap-6 mt-4">

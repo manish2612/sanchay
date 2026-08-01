@@ -23,52 +23,43 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
 
     return (
       <div className={dropdownSearchContainerClassName} style={style}>
-        <TextInput.Root className={dropdownSearchClassName}>
-          <TextInput.Slot side="left">
-            <Icon name="Search" size={16} className="text-muted-foreground" />
-          </TextInput.Slot>
-          <TextInput.Input
-            ref={ref}
-            placeholder="Search..."
-            value={context?.searchQuery}
-            className="rounded-none"
-            onChange={handleChange}
-            autoFocus
-            onKeyDown={(e) => {
-              // Fix for Keyboard Navigation:
-              // Manually handle moving focus from Input to the first Menu Item.
-              // Radix might not automatically transition from a non-Item input to the list.
-              if (e.key === "ArrowDown") {
-                e.preventDefault();
-                const content = e.currentTarget.closest('[role="menu"]');
-                if (content) {
-                  const items = content.querySelectorAll(
-                    '[role="menuitem"]:not([aria-disabled="true"])'
-                  );
-                  if (items.length > 0) {
-                    (items[0] as HTMLElement).focus();
-                  }
+        <TextInput
+          className={dropdownSearchClassName}
+          leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
+          ref={ref}
+          placeholder="Search..."
+          value={context?.searchQuery}
+          inputClassName="rounded-none"
+          onChange={handleChange}
+          autoFocus
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              const content = e.currentTarget.closest('[role="menu"]');
+              if (content) {
+                const items = content.querySelectorAll(
+                  '[role="menuitem"]:not([aria-disabled="true"])'
+                );
+                if (items.length > 0) {
+                  (items[0] as HTMLElement).focus();
                 }
-                return;
               }
+              return;
+            }
 
-              if (e.key === "ArrowUp") {
-                // Usually nothing to do if at top, but preventing default avoids cursor move
-                e.preventDefault();
-                return;
-              }
+            if (e.key === "ArrowUp") {
+              e.preventDefault();
+              return;
+            }
 
-              // Allow Enter/Escape for selection/closing
-              if (e.key === "Enter" || e.key === "Escape") {
-                return;
-              }
+            if (e.key === "Enter" || e.key === "Escape") {
+              return;
+            }
 
-              // Stop propagation for other keys (typing) so they don't trigger Radix mnemonics
-              e.stopPropagation();
-            }}
-            {...props}
-          />
-        </TextInput.Root>
+            e.stopPropagation();
+          }}
+          {...props}
+        />
       </div>
     );
   }

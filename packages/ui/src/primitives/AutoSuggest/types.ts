@@ -39,4 +39,6 @@ export interface AutoSuggestProps<T extends boolean = false> {
     success?: boolean; // Maps to variant="success"
     
     className?: string;
+    label?: string;
+    labelVariant?: 'default' | 'in-field' | 'inline' | 'hidden';
 }

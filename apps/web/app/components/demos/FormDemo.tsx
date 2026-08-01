@@ -64,9 +64,7 @@ export function FormDemo() {
                 <Form.Item>
                   <Form.Label>Department Name</Form.Label>
                   <Form.Control>
-                    <TextInput.Root>
-                      <TextInput.Input placeholder="e.g. Engineering" {...field} />
-                    </TextInput.Root>
+                    <TextInput placeholder="e.g. Engineering" {...field} />
                   </Form.Control>
                   <Form.Message />
                 </Form.Item>
@@ -90,9 +88,7 @@ export function FormDemo() {
                           <Form.Item>
                             <Form.Label>First Name</Form.Label>
                             <Form.Control>
-                              <TextInput.Root>
-                                <TextInput.Input placeholder="John" {...field} />
-                              </TextInput.Root>
+                              <TextInput placeholder="John" {...field} />
                             </Form.Control>
                             <Form.Message />
                           </Form.Item>
@@ -107,9 +103,7 @@ export function FormDemo() {
                           <Form.Item>
                             <Form.Label>Role</Form.Label>
                             <Form.Control>
-                              <TextInput.Root>
-                                <TextInput.Input placeholder="Developer" {...field} />
-                              </TextInput.Root>
+                              <TextInput placeholder="Developer" {...field} />
                             </Form.Control>
                             <Form.Message />
                           </Form.Item>
