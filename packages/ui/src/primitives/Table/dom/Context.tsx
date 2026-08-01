@@ -17,6 +17,7 @@ declare module '@tanstack/react-table' {
       actionIcon?: React.ReactNode;
       renderRestState?: (row: Row<TData>) => React.ReactNode;
     };
+    isRowEmpty?: (row: Row<TData>) => boolean;
   }
 }
 

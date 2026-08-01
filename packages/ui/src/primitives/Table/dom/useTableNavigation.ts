@@ -9,8 +9,8 @@ interface UseTableNavigationProps<TData> {
   setFocusedRowIndex: (index: number) => void;
   setEditingRowIndex: (index: number | null) => void;
   setSuccessRowIndex: (index: number | null) => void;
-  scrollRef: React.RefObject<HTMLDivElement>;
-  rootRef: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  rootRef: React.RefObject<HTMLDivElement | null>;
   onRowClick?: (row: Row<TData>) => void;
 }
 
@@ -156,14 +156,72 @@ export function useTableNavigation<TData>({
           // Forward Wraparound: If Tab is pressed on the very last input of a row,
           // intercept it and smoothly wrap focus to the very first input of the next row.
           if (!e.shiftKey && colIndexForTab === inputs.length - 1) {
-            e.preventDefault();
             const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
-            const newIndex = Math.min(currentIndex + 1, rows.length - 1);
-            if (newIndex !== focusedRowIndex) {
+            const isLastRow = currentIndex === rows.length - 1;
+            
+            const isPhantomFn = table.options.meta?.phantomRowConfig?.isPhantom;
+            const currentRow = rows[currentIndex];
+            const isPhantom = currentRow ? (isPhantomFn ? isPhantomFn(currentRow) : (currentRow.original as any)?.isPhantom) : false;
+
+            const isRowEmptyFn = (table.options.meta as any)?.isRowEmpty;
+            const isRowEmpty = isRowEmptyFn && currentRow ? isRowEmptyFn(currentRow) : false;
+
+            const shouldExitNatively = isLastRow && isPhantom && isRowEmpty;
+
+            if (!shouldExitNatively) {
+              e.preventDefault();
+
+              if (table.options.meta?.onRowCommit) {
+                const columnId = table.getVisibleLeafColumns()[colIndexForTab]?.id;
+                const cellValue = target.value;
+
+                const action = table.options.meta.onRowCommit(
+                  currentIndex,
+                  columnId,
+                  cellValue
+                );
+
+                if (action === "ADVANCE") {
+                  setSuccessRowIndex(currentIndex);
+                  setTimeout(() => setSuccessRowIndex(null), 400);
+
+                  setTimeout(() => {
+                    const newIndex = currentIndex + 1;
+                    setFocusedRowIndex(newIndex);
+                    setEditingRowIndex(newIndex);
+                    focusNewRowInput(newIndex, 0);
+                  }, 0);
+                } else if (action === "EXIT") {
+                  setEditingRowIndex(-1);
+                  setSuccessRowIndex(currentIndex);
+                  setTimeout(() => setSuccessRowIndex(null), 400);
+                  rootRef.current?.focus();
+                }
+              } else {
+                const newIndex = Math.min(currentIndex + 1, rows.length - 1);
+                if (newIndex !== focusedRowIndex) {
+                  setFocusedRowIndex(newIndex);
+                  setEditingRowIndex(newIndex);
+                  focusNewRowInput(newIndex, 0); // Reset horizontal position to column 0
+                }
+              }
+            }
+          }
+
+          // Backward Wraparound: If Shift+Tab is pressed on the very first input of a row
+          if (e.shiftKey && colIndexForTab === 0) {
+            const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
+            if (currentIndex > 0) {
+              e.preventDefault();
+              const newIndex = currentIndex - 1;
               setFocusedRowIndex(newIndex);
               setEditingRowIndex(newIndex);
-              focusNewRowInput(newIndex, 0); // Reset horizontal position to column 0
+              
+              // Try to focus the last column of the previous row
+              const lastColIndex = table.getVisibleLeafColumns().length - 1;
+              focusNewRowInput(newIndex, lastColIndex);
             }
+            // If currentIndex === 0, DO NOT preventDefault! Let the browser natively Shift+Tab out.
           }
         }
       } else if (e.key === "ArrowDown") {
@@ -337,5 +395,5 @@ export function useTableNavigation<TData>({
     [rows, setFocusedRowIndex, setEditingRowIndex, onRowClick, scrollRef, rootRef]
   );
 
-  return { handleKeyDown, handleRowClick };
+  return { handleKeyDown, handleRowClick, focusNewRowInput };
 }
