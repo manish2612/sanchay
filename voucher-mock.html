@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voucher Entry — Sanchay ERP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS  (Prosperity Green / Light)
+    ───────────────────────────────────────────── */
+    :root {
+      /* Colors */
+      --bg:               #F6F7ED;
+      --fg:               #001F3F;
+      --surface:          #FFFFFF;
+      --surface-variant:  #F0F2E6;
+      --surface-hover:    #E9ECE0;
+      --surface-active:   #E0E3D6;
+      --surface-border:   #DCE0D1;
+      --muted:            #F0F2E6;
+      --muted-fg:         #5C6E80;
+      --border:           #DCE0D1;
+      --input:            #DCE0D1;
+      --focus-ring:       #DBE64C;
+      --outline:          #C9CFBD;
+      --disabled:         #E9ECE0;
+      --disabled-fg:      #8A9BA8;
+
+      /* Primary (Picture Book Green) */
+      --primary:          #00804C;
+      --primary-hover:    #006B3F;
+      --primary-active:   #005633;
+      --primary-fg:       #FFFFFF;
+
+      /* Secondary (Mantis) */
+      --secondary:        #74C365;
+      --secondary-hover:  #62B852;
+      --secondary-fg:     #001F3F;
+
+      /* Semantic */
+      --success:          #74C365;
+      --success-fg:       #001F3F;
+      --warning:          #DBE64C;
+      --warning-fg:       #001F3F;
+      --danger:           #E74C3C;
+      --danger-fg:        #FFFFFF;
+      --info:             #3498DB;
+      --info-fg:          #FFFFFF;
+
+      /* Typography */
+      --font-body:   "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      --font-head:   "Work Sans", sans-serif;
+      --font-mono:   ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      /* Font sizes */
+      --text-xs:    11px;
+      --text-sm:    12px;
+      --text-md:    14px;
+      --text-base:  14px;
+      --text-lg:    16px;
+      --text-xl:    18px;
+      --text-2xl:   22px;
+
+      /* Radii */
+      --radius-sm:  4px;
+      --radius-md:  6px;
+      --radius-lg:  8px;
+      --radius-xl:  12px;
+
+      /* Shadows */
+      --shadow-sm:  0 1px 2px 0 rgba(0,0,0,0.06);
+      --shadow-md:  0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.05);
+      --shadow-lg:  0 10px 20px -5px rgba(0,0,0,0.12);
+
+      /* Sidebar */
+      --sidebar-w: 52px;
+
+      /* Layout */
+      --header-h: 52px;
+    }
+
+    /* ─────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─────────────────────────────────────────────
+       SCROLLBAR
+    ───────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 99px; }
+
+    /* ─────────────────────────────────────────────
+       APP SHELL
+    ───────────────────────────────────────────── */
+    .app-shell {
+      display: flex;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 4px;
+      flex-shrink: 0;
+      z-index: 20;
+    }
+    .sidebar-logo {
+      width: 32px; height: 32px;
+      background: var(--primary-fg);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      flex-shrink: 0;
+    }
+    .sidebar-logo svg { color: var(--primary); }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+    .sidebar-item {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.65);
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .sidebar-item.active {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+    .sidebar-item.active::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      width: 3px; height: 20px;
+      background: var(--focus-ring);
+      border-radius: 0 2px 2px 0;
+    }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .avatar-chip {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--focus-ring);
+      color: var(--fg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px;
+      font-family: var(--font-head);
+      font-weight: 700;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       PAGE HEADER BAR
+    ───────────────────────────────────────────── */
+    .page-header {
+      height: var(--header-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .page-header-crumb {
+      font-family: var(--font-head);
+      font-size: var(--text-sm);
+      color: var(--muted-fg);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .page-header-crumb .sep { opacity: 0.4; }
+    .page-header-title {
+      font-family: var(--font-head);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .header-spacer { flex: 1; }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full, 9999px);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      background: #FFF3CD;
+      color: #7A5A00;
+      border: 1px solid #F0D070;
+    }
+    .header-badge.creation { background: #E8F5E9; color: var(--primary); border-color: var(--secondary); }
+
+    /* ─────────────────────────────────────────────
+       PAGE BODY
+    ───────────────────────────────────────────── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 0;
+      gap: 0;
+      min-height: 0;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 1 — DOCUMENT HEADER
+    ───────────────────────────────────────────── */
+    .doc-header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px 12px;
+      flex-shrink: 0;
+    }
+
+    /* Primary row: Voucher Type + No + dates + mode + apply-tax */
+    .doc-header-row {
+      display: grid;
+      gap: 10px;
+      align-items: end;
+    }
+    .doc-header-row.primary {
+      grid-template-columns: 180px 140px 1fr 1fr 1fr 1fr 1fr;
+    }
+    .doc-header-row.secondary {
+      margin-top: 10px;
+      grid-template-columns: 160px 180px 180px 1fr 1fr;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .field-label {
+      font-size: var(--text-xs);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    /* ─────────────────────────────────────────────
+       FORM CONTROLS (Mock)
+    ───────────────────────────────────────────── */
+    .ctrl {
+      height: 32px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      font-family: var(--font-body);
+      font-size: var(--text-md);
+      color: var(--fg);
+      padding: 0 10px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .ctrl:hover { border-color: var(--primary); }
+    .ctrl:focus, .ctrl.focused {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0,128,76,0.15);
+    }
+    .ctrl input, .ctrl select {
+      background: none;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .ctrl-icon {
+      color: var(--muted-fg);
+      flex-shrink: 0;
+      margin-left: 6px;
+    }
+    .ctrl-chevron {
+      position: absolute; right: 8px;
+      color: var(--muted-fg);
+      pointer-events: none;
+    }
+
+    /* Voucher Type — primary select with accent */
+    .ctrl.voucher-type {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--primary-fg);
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: var(--text-md);
+    }
+    .ctrl.voucher-type .ctrl-chevron { color: rgba(255,255,255,0.7); }
+    .ctrl.voucher-type select { color: var(--primary-fg); }
+    .ctrl.voucher-type option { color: var(--fg); background: var(--surface); }
+    .ctrl.voucher-type:hover { background: var(--primary-hover); border-color: var(--primary-hover); }
+
+    /* Apply Tax — badge style */
+    .ctrl.apply-tax {
+      background: var(--warning);
+      border-color: #c4cf00;
+      color: var(--fg);
+      font-weight: 500;
+      font-size: var(--text-sm);
+    }
+    .ctrl.apply-tax .ctrl-chevron { color: var(--fg); opacity: 0.5; }
+
+    /* Number field readonly */
+    .ctrl.field-number {
+      background: var(--muted);
+      cursor: default;
+      font-weight: 500;
+      color: var(--muted-fg);
+    }
+
+    /* Textarea */
+    .ctrl.is-textarea {
+      height: auto;
+      min-height: 68px;
+      padding: 8px 10px;
+      align-items: flex-start;
+      resize: none;
+    }
+    .ctrl.is-textarea textarea {
+      resize: none;
+      width: 100%;
+      min-height: 52px;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      outline: none;
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 2 — TABLES PLACEHOLDER AREA
+    ───────────────────────────────────────────── */
+    .tables-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      overflow: hidden;
+      min-height: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tables-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      padding: 8px 20px 6px;
+      background: var(--surface-variant);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tables-label-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: inline-block;
+    }
+
+    /* Two table placeholders stacked */
+    .tables-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .table-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .table-placeholder + .table-placeholder {
+      border-top: 2px dashed var(--border);
+    }
+
+    .table-ph-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 20px;
+      background: var(--surface-variant);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .table-ph-title {
+      font-family: var(--font-head);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .table-ph-pill {
+      font-size: var(--text-xs);
+      font-weight: 500;
+      padding: 1px 8px;
+      border-radius: 9999px;
+      background: var(--muted);
+      color: var(--muted-fg);
+      border: 1px solid var(--border);
+    }
+    .table-ph-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Skeleton column header row */
+    .table-ph-cols {
+      display: grid;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .table-ph-cols.item-cols {
+      grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;
+    }
+    .table-ph-cols.ledger-cols {
+      grid-template-columns: 40px 2fr 1.5fr 90px 80px;
+    }
+    .table-ph-col {
+      padding: 6px 12px;
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .table-ph-col:last-child { border-right: none; }
+    .table-ph-col.right { text-align: right; }
+
+    /* Skeleton rows */
+    .table-ph-rows { }
+    .table-ph-row {
+      display: grid;
+      gap: 0;
+      border-bottom: 1px solid var(--surface-variant);
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+    .table-ph-row:hover { background: var(--surface-hover); }
+    .table-ph-row.active-row {
+      background: #E8F5EE;
+      border-left: 3px solid var(--primary);
+    }
+    .table-ph-cols.item-cols ~ .table-ph-rows .table-ph-row {
+      grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;
+    }
+    .table-ph-cols.ledger-cols ~ .table-ph-rows .table-ph-row {
+      grid-template-columns: 40px 2fr 1.5fr 90px 80px;
+    }
+    .table-ph-cell {
+      padding: 7px 12px;
+      font-size: var(--text-md);
+      border-right: 1px solid var(--surface-variant);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+    }
+    .table-ph-cell:last-child { border-right: none; }
+    .table-ph-cell.right { justify-content: flex-end; font-variant-numeric: tabular-nums; }
+    .table-ph-cell.num { color: var(--fg); font-weight: 400; }
+    .table-ph-cell.muted-val { color: var(--muted-fg); }
+    .table-ph-cell.row-num {
+      font-size: var(--text-xs);
+      color: var(--muted-fg);
+      justify-content: center;
+    }
+
+    /* Empty add row */
+    .table-ph-addrow {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      color: var(--primary);
+      font-size: var(--text-md);
+      cursor: pointer;
+      transition: background 0.12s;
+      border-bottom: 1px dashed var(--border);
+    }
+    .table-ph-addrow:hover { background: var(--surface-hover); }
+    .table-ph-addrow svg { opacity: 0.7; }
+
+    /* Empty state */
+    .table-ph-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      gap: 6px;
+      color: var(--muted-fg);
+      font-size: var(--text-sm);
+      flex: 1;
+    }
+
+    /* ─────────────────────────────────────────────
+       SECTION 3 — FOOTER
+    ───────────────────────────────────────────── */
+    .page-footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+      flex-shrink: 0;
+    }
+
+    /* Left: narration + actions */
+    .footer-left { display: flex; flex-direction: column; gap: 8px; }
+    .narration-label {
+      font-size: var(--text-xs);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+    }
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    /* ─────────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────────── */
+    .btn {
+      height: 32px;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: var(--text-md);
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+      white-space: nowrap;
+      text-decoration: none;
+      user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--primary-fg);
+      border-color: var(--primary);
+    }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); box-shadow: 0 2px 8px rgba(0,128,76,0.25); }
+    .btn-primary:active { background: var(--primary-active); }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--secondary-fg);
+      border-color: var(--secondary);
+    }
+    .btn-secondary:hover { background: var(--secondary-hover); border-color: var(--secondary-hover); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--fg);
+      border-color: var(--border);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,128,76,0.04); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted-fg);
+      border-color: transparent;
+    }
+    .btn-ghost:hover { background: var(--surface-hover); color: var(--fg); }
+
+    .btn-danger {
+      background: var(--danger);
+      color: var(--danger-fg);
+      border-color: var(--danger);
+    }
+    .btn-danger:hover { background: #c0392b; border-color: #c0392b; }
+
+    .btn-icon {
+      width: 32px; height: 32px;
+      padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* Divider between action groups */
+    .btn-divider {
+      width: 1px; height: 20px;
+      background: var(--border);
+      margin: 0 2px;
+      align-self: center;
+    }
+
+    /* ─────────────────────────────────────────────
+       SUMMARY PANEL (Right side)
+    ───────────────────────────────────────────── */
+    .summary-panel {
+      min-width: 300px;
+      max-width: 340px;
+      background: var(--surface-variant);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .summary-header {
+      padding: 8px 14px 7px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .summary-header-title {
+      font-family: var(--font-head);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: 0.02em;
+    }
+    .summary-rows {
+      padding: 6px 0;
+    }
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 14px;
+      font-size: var(--text-md);
+      transition: background 0.12s;
+    }
+    .summary-row:hover { background: var(--surface-hover); }
+    .summary-row .s-label { color: var(--muted-fg); }
+    .summary-row .s-val {
+      font-variant-numeric: tabular-nums;
+      font-weight: 400;
+      color: var(--fg);
+    }
+    .summary-row.discount .s-label { display: flex; align-items: center; gap: 6px; }
+    .discount-input {
+      width: 48px; height: 20px;
+      border: 1px solid var(--input);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      padding: 0 4px;
+      font-size: var(--text-sm);
+      font-family: var(--font-mono);
+      color: var(--fg);
+      outline: none;
+      text-align: right;
+      transition: border-color 0.15s;
+    }
+    .discount-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(0,128,76,0.12); }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 14px;
+    }
+
+    /* NET TOTAL — hero row */
+    .summary-net-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px 8px;
+      background: linear-gradient(135deg, #00804C 0%, #005633 100%);
+      border-top: 1px solid #006640;
+      margin-top: 2px;
+    }
+    .net-total-label {
+      font-family: var(--font-head);
+      font-size: var(--text-md);
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .net-total-val {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+    }
+    .net-total-currency {
+      font-size: var(--text-sm);
+      font-weight: 400;
+      color: rgba(255,255,255,0.65);
+      margin-right: 3px;
+    }
+
+    /* ─────────────────────────────────────────────
+       MISC UTILITIES
+    ───────────────────────────────────────────── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: var(--text-xs);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .chip-mode {
+      background: #E1ECF4;
+      color: #2980b9;
+      border: 1px solid #b8d4e8;
+    }
+
+    /* Dropdown popover (demo) */
+    .dropdown-popover {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 160px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      z-index: 99;
+      padding: 4px;
+      display: none;
+    }
+    .dropdown-popover.open { display: block; }
+    .dropdown-item {
+      padding: 7px 10px;
+      border-radius: var(--radius-sm);
+      font-size: var(--text-md);
+      color: var(--fg);
+      cursor: pointer;
+      transition: background 0.12s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dropdown-item:hover { background: var(--surface-hover); }
+    .dropdown-item.active { background: #E8F5EE; color: var(--primary); font-weight: 500; }
+
+    /* Tooltip */
+    [data-tooltip] { position: relative; }
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--fg);
+      color: #fff;
+      font-size: var(--text-xs);
+      font-family: var(--font-body);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.92;
+    }
+
+    /* Responsive: collapse to single column on small */
+    @media (max-width: 900px) {
+      .doc-header-row.primary { grid-template-columns: 1fr 1fr 1fr; }
+      .doc-header-row.secondary { grid-template-columns: 1fr 1fr 1fr; }
+      .page-footer { grid-template-columns: 1fr; }
+      .summary-panel { max-width: 100%; }
+    }
+
+    /* Hover shimmer for table rows */
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .table-ph-row { animation: fadeInRow 0.18s ease-out both; }
+    .table-ph-row:nth-child(1) { animation-delay: 0ms; }
+    .table-ph-row:nth-child(2) { animation-delay: 30ms; }
+    .table-ph-row:nth-child(3) { animation-delay: 60ms; }
+    .table-ph-row:nth-child(4) { animation-delay: 90ms; }
+    .table-ph-row:nth-child(5) { animation-delay: 120ms; }
+    .table-ph-row:nth-child(6) { animation-delay: 150ms; }
+    .table-ph-row:nth-child(7) { animation-delay: 180ms; }
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar" aria-label="Main navigation">
+    <div class="sidebar-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <div class="sidebar-nav">
+      <div class="sidebar-item" data-tooltip="Dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Company Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8l-2 4h12l-2-4z"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Chart of Accounts">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="sidebar-item active" data-tooltip="Transactions">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Reporting">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Configuration">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Help & Support">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-item" data-tooltip="Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="avatar-chip">AU</div>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-crumb">
+        <span>Transactions</span>
+        <span class="sep">›</span>
+        <span>Vouchers</span>
+      </div>
+      <span class="sep" style="color:var(--border)">|</span>
+      <span class="page-header-title">Voucher Entry</span>
+      <span class="header-badge creation">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Creation Mode
+      </span>
+      <div class="header-spacer"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="chip chip-mode">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/></svg>
+          Item Mode
+        </span>
+        <button class="btn btn-ghost btn-icon" data-tooltip="Keyboard shortcuts" aria-label="Keyboard shortcuts">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+      <!-- ═══════════════════════════════════════
+           SECTION 1 — DOCUMENT HEADER
+      ════════════════════════════════════════ -->
+      <section class="doc-header" aria-label="Document details">
+
+        <!-- Primary Row -->
+        <div class="doc-header-row primary">
+
+          <!-- Voucher Type (Primary Dropdown) -->
+          <div class="field-group">
+            <label class="field-label" for="vtype">Voucher Type</label>
+            <div class="ctrl voucher-type" style="position:relative;">
+              <select id="vtype" style="appearance:none;padding-right:24px;background:transparent;border:none;outline:none;color:inherit;font-family:inherit;font-weight:600;font-size:14px;width:100%;cursor:pointer;">
+                <option>Sales</option>
+                <option>Purchase</option>
+                <option>Receipt</option>
+                <option>Payment</option>
+                <option>Journal</option>
+                <option>Credit Note</option>
+                <option>Debit Note</option>
+              </select>
+              <span class="ctrl-chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Voucher No -->
+          <div class="field-group">
+            <label class="field-label" for="vno">Voucher No.</label>
+            <div class="ctrl field-number">
+              <input id="vno" type="text" value="8384/003" readonly style="font-weight:500;font-family:var(--font-mono);font-size:13px;color:var(--muted-fg);" />
+            </div>
+          </div>
+
+          <!-- Apply Tax -->
+          <div class="field-group">
+            <label class="field-label" for="vtax">Apply Tax</label>
+            <div class="ctrl apply-tax" style="position:relative;">
+              <select id="vtax" style="appearance:none;padding-right:24px;background:transparent;border:none;outline:none;font-family:inherit;font-weight:500;font-size:13px;width:100%;cursor:pointer;">
+                <option>Item Level</option>
+                <option>Invoice Level</option>
+                <option>No Tax</option>
+              </select>
+              <span class="ctrl-chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Mode -->
+          <div class="field-group">
+            <label class="field-label" for="vmode">Mode</label>
+            <div class="ctrl" style="position:relative;">
+              <select id="vmode" style="appearance:none;padding-right:24px;background:transparent;border:none;outline:none;font-family:inherit;font-size:14px;width:100%;cursor:pointer;color:var(--fg);">
+                <option>Item Mode</option>
+                <option>Account Mode</option>
+              </select>
+              <span class="ctrl-chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Miti (BS Calendar) -->
+          <div class="field-group">
+            <label class="field-label" for="vmiti">
+              Miti
+              <span style="font-size:9px;font-weight:400;text-transform:none;margin-left:3px;color:var(--muted-fg);opacity:0.7;">(BS)</span>
+            </label>
+            <div class="ctrl" style="gap:0;">
+              <input id="vmiti" type="text" placeholder="2083-04-14" value="2083-04-14" style="font-family:var(--font-mono);font-size:13px;width:calc(100% - 28px);" />
+              <span class="ctrl-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Date (AD Calendar) -->
+          <div class="field-group">
+            <label class="field-label" for="vdate">
+              Date
+              <span style="font-size:9px;font-weight:400;text-transform:none;margin-left:3px;color:var(--muted-fg);opacity:0.7;">(AD)</span>
+            </label>
+            <div class="ctrl" style="gap:0;">
+              <input id="vdate" type="date" value="2026-07-30" style="font-family:var(--font-mono);font-size:13px;width:calc(100% - 28px);" />
+            </div>
+          </div>
+
+          <!-- Payment Mode -->
+          <div class="field-group">
+            <label class="field-label" for="vpaymode">Payment Mode</label>
+            <div class="ctrl" style="position:relative;">
+              <select id="vpaymode" style="appearance:none;padding-right:24px;background:transparent;border:none;outline:none;font-family:inherit;font-size:14px;width:100%;cursor:pointer;color:var(--fg);">
+                <option>Credit</option>
+                <option>Cash</option>
+                <option>Bank Transfer</option>
+                <option>Cheque</option>
+              </select>
+              <span class="ctrl-chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary Row -->
+        <div class="doc-header-row secondary">
+
+          <!-- Ref No -->
+          <div class="field-group">
+            <label class="field-label" for="vrefno">Ref. No.</label>
+            <div class="ctrl">
+              <input id="vrefno" type="text" placeholder="Reference number…" />
+            </div>
+          </div>
+
+          <!-- Ref Miti -->
+          <div class="field-group">
+            <label class="field-label" for="vrefmiti">
+              Ref. Miti
+              <span style="font-size:9px;font-weight:400;text-transform:none;margin-left:3px;color:var(--muted-fg);opacity:0.7;">(BS)</span>
+            </label>
+            <div class="ctrl" style="gap:0;">
+              <input id="vrefmiti" type="text" placeholder="2083-04-14" value="2083-04-14" style="font-family:var(--font-mono);font-size:13px;width:calc(100% - 28px);" />
+              <span class="ctrl-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Ref Date -->
+          <div class="field-group">
+            <label class="field-label" for="vrefdate">
+              Ref. Date
+              <span style="font-size:9px;font-weight:400;text-transform:none;margin-left:3px;color:var(--muted-fg);opacity:0.7;">(AD)</span>
+            </label>
+            <div class="ctrl" style="gap:0;">
+              <input id="vrefdate" type="date" value="2026-07-30" style="font-family:var(--font-mono);font-size:13px;width:100%;" />
+            </div>
+          </div>
+
+          <!-- Party A/C -->
+          <div class="field-group">
+            <label class="field-label" for="vparty">Party A/C</label>
+            <div class="ctrl" style="gap:0;">
+              <input id="vparty" type="text" placeholder="Search party account…" value="Cash" style="flex:1;" />
+              <span class="ctrl-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Sales A/C -->
+          <div class="field-group">
+            <label class="field-label" for="vsales">Sales A/C</label>
+            <div class="ctrl" style="position:relative;">
+              <select id="vsales" style="appearance:none;padding-right:24px;background:transparent;border:none;outline:none;font-family:inherit;font-size:14px;width:100%;cursor:pointer;color:var(--fg);">
+                <option>13% Sales</option>
+                <option>0% Sales</option>
+                <option>Exempt Sales</option>
+              </select>
+              <span class="ctrl-chevron">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 2 — TABLE PLACEHOLDERS
+      ════════════════════════════════════════ -->
+      <section class="tables-section" aria-label="Line items">
+        <div class="tables-container">
+
+          <!-- TABLE 1: Item Entry -->
+          <div class="table-placeholder">
+            <div class="table-ph-header">
+              <span class="table-ph-title">Item Lines</span>
+              <span class="table-ph-pill">7 rows min</span>
+              <div style="flex:1;"></div>
+              <span style="font-size:11px;color:var(--muted-fg);">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:3px;"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                ↑↓ Arrow keys to navigate
+              </span>
+            </div>
+
+            <div class="table-ph-body">
+              <!-- Column Headers -->
+              <div class="table-ph-cols item-cols" role="row">
+                <div class="table-ph-col" style="text-align:center;">#</div>
+                <div class="table-ph-col">Name of Item</div>
+                <div class="table-ph-col">Godown / Batch</div>
+                <div class="table-ph-col right">Qty</div>
+                <div class="table-ph-col right">Free Qty</div>
+                <div class="table-ph-col right">Net Rate</div>
+                <div class="table-ph-col right">Rate</div>
+                <div class="table-ph-col right">Disc %</div>
+                <div class="table-ph-col right">Amount</div>
+                <div class="table-ph-col right">VAT Amt</div>
+              </div>
+
+              <!-- Data Rows -->
+              <div class="table-ph-rows">
+                <div class="table-ph-row active-row item-cols" style="grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;" role="row">
+                  <div class="table-ph-cell row-num">1</div>
+                  <div class="table-ph-cell" style="color:var(--primary);font-weight:500;">Item 1</div>
+                  <div class="table-ph-cell muted-val">Main Godown</div>
+                  <div class="table-ph-cell right num">10.00</div>
+                  <div class="table-ph-cell right num">0.00</div>
+                  <div class="table-ph-cell right num">150.00</div>
+                  <div class="table-ph-cell right num">150.00</div>
+                  <div class="table-ph-cell right num">0.00</div>
+                  <div class="table-ph-cell right num">1,500.00</div>
+                  <div class="table-ph-cell right num">195.00</div>
+                </div>
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;" role="row">
+                  <div class="table-ph-cell row-num">2</div>
+                  <div class="table-ph-cell">Item 2</div>
+                  <div class="table-ph-cell muted-val">Main Godown</div>
+                  <div class="table-ph-cell right num">5.00</div>
+                  <div class="table-ph-cell right num">0.00</div>
+                  <div class="table-ph-cell right num">200.00</div>
+                  <div class="table-ph-cell right num">200.00</div>
+                  <div class="table-ph-cell right num">5.00</div>
+                  <div class="table-ph-cell right num">950.00</div>
+                  <div class="table-ph-cell right num">123.50</div>
+                </div>
+                <!-- Empty rows for visual density (min 7) -->
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;opacity:0.4;" role="row">
+                  <div class="table-ph-cell row-num">3</div>
+                  <div class="table-ph-cell muted-val" style="font-style:italic;font-size:12px;">—</div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                </div>
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;opacity:0.25;" role="row">
+                  <div class="table-ph-cell row-num">4</div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                </div>
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1fr 80px 80px 90px 80px 80px 80px 90px;opacity:0.15;" role="row">
+                  <div class="table-ph-cell row-num">5</div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                </div>
+              </div>
+
+              <div class="table-ph-addrow" role="button" tabindex="0" aria-label="Add new item line">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Line
+              </div>
+            </div>
+          </div>
+
+          <!-- TABLE 2: Ledger / Tax / Charges -->
+          <div class="table-placeholder">
+            <div class="table-ph-header">
+              <span class="table-ph-title">Ledger / Tax &amp; Charges</span>
+              <span class="table-ph-pill">Placeholder</span>
+              <div style="flex:1;"></div>
+              <span style="font-size:11px;color:var(--muted-fg);">Layout & columns to be decided</span>
+            </div>
+
+            <div class="table-ph-body">
+              <!-- Column Headers -->
+              <div class="table-ph-cols ledger-cols" role="row">
+                <div class="table-ph-col" style="text-align:center;">#</div>
+                <div class="table-ph-col">Ledger Account</div>
+                <div class="table-ph-col">Narration / Ref</div>
+                <div class="table-ph-col right">Dr / Cr</div>
+                <div class="table-ph-col right">Amount</div>
+              </div>
+
+              <div class="table-ph-rows">
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1.5fr 90px 80px;" role="row">
+                  <div class="table-ph-cell row-num">1</div>
+                  <div class="table-ph-cell muted-val" style="font-style:italic;font-size:12px;">—</div>
+                  <div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div>
+                </div>
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1.5fr 90px 80px;opacity:0.4;" role="row">
+                  <div class="table-ph-cell row-num">2</div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                </div>
+                <div class="table-ph-row" style="grid-template-columns: 40px 2fr 1.5fr 90px 80px;opacity:0.2;" role="row">
+                  <div class="table-ph-cell row-num">3</div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                  <div class="table-ph-cell"></div><div class="table-ph-cell"></div>
+                </div>
+              </div>
+
+              <div class="table-ph-addrow" role="button" tabindex="0" aria-label="Add ledger line">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Ledger Line
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════
+           SECTION 3 — FOOTER
+      ════════════════════════════════════════ -->
+      <footer class="page-footer" aria-label="Voucher actions and totals">
+
+        <!-- Left: Narration + Buttons -->
+        <div class="footer-left">
+          <label class="narration-label" for="narration">Narration / Notes</label>
+          <div class="ctrl is-textarea">
+            <textarea id="narration" placeholder="Enter additional notes, remarks, or narration for this voucher…" rows="3"></textarea>
+          </div>
+
+          <div class="footer-actions">
+            <!-- Primary -->
+            <button class="btn btn-primary" id="btn-save" aria-label="Save voucher">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save
+            </button>
+
+            <!-- Secondary actions -->
+            <div class="btn-divider"></div>
+            <button class="btn btn-outline" id="btn-preview" aria-label="Preview voucher">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Preview
+            </button>
+
+            <!-- Print with dropdown -->
+            <div style="position:relative;" id="print-wrapper">
+              <div style="display:flex;align-items:stretch;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+                <button class="btn btn-outline" style="border:none;border-radius:0;" aria-label="Print voucher">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Print
+                </button>
+                <button class="btn btn-outline" style="border:none;border-radius:0;border-left:1px solid var(--border);padding:0 8px;width:28px;" id="print-menu-btn" aria-label="Print options" aria-expanded="false" aria-haspopup="true">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+              </div>
+              <div class="dropdown-popover" id="print-popover" role="menu">
+                <div class="dropdown-item" role="menuitem">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Print (Default)
+                </div>
+                <div class="dropdown-item" role="menuitem">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Print Config…
+                </div>
+                <div class="dropdown-item" role="menuitem">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Export PDF
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-divider"></div>
+
+            <button class="btn btn-outline" id="btn-new" aria-label="New voucher">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New
+            </button>
+            <button class="btn btn-ghost" id="btn-back" aria-label="Go back">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              Back
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Summary Panel -->
+        <aside class="summary-panel" aria-label="Financial summary">
+          <div class="summary-header">
+            <span class="summary-header-title">Summary</span>
+            <span style="font-size:11px;color:var(--muted-fg);">NPR</span>
+          </div>
+          <div class="summary-rows">
+            <div class="summary-row">
+              <span class="s-label">Sub Total</span>
+              <span class="s-val">2,450.00</span>
+            </div>
+            <div class="summary-row discount">
+              <span class="s-label">
+                Discount
+                <input class="discount-input" type="number" value="0.00" min="0" step="0.01" aria-label="Discount amount" />
+              </span>
+              <span class="s-val">0.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">Taxable Amount</span>
+              <span class="s-val">2,450.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">Exempted Amount</span>
+              <span class="s-val">0.00</span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">VAT Amount (13%)</span>
+              <span class="s-val" style="color:var(--info);">318.50</span>
+            </div>
+            <div class="summary-row">
+              <span class="s-label">Rounding Off</span>
+              <span class="s-val">0.50</span>
+            </div>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-net-total" aria-label="Net total">
+            <span class="net-total-label">Net Total</span>
+            <span class="net-total-val">
+              <span class="net-total-currency">NPR</span>2,769.00
+            </span>
+          </div>
+        </aside>
+
+      </footer>
+    </div><!-- /page-body -->
+  </main>
+</div>
+
+<script>
+  // ── Print dropdown toggle ──
+  const printMenuBtn = document.getElementById('print-menu-btn');
+  const printPopover = document.getElementById('print-popover');
+
+  printMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = printPopover.classList.toggle('open');
+    printMenuBtn.setAttribute('aria-expanded', isOpen);
+  });
+  document.addEventListener('click', () => {
+    printPopover.classList.remove('open');
+    printMenuBtn.setAttribute('aria-expanded', 'false');
+  });
+
+  // ── Ctrl focus glow ──
+  document.querySelectorAll('.ctrl input, .ctrl select, .ctrl textarea').forEach(el => {
+    el.addEventListener('focus', () => el.closest('.ctrl').classList.add('focused'));
+    el.addEventListener('blur', () => el.closest('.ctrl').classList.remove('focused'));
+  });
+
+  // ── Save button feedback ──
+  document.getElementById('btn-save').addEventListener('click', function() {
+    const orig = this.innerHTML;
+    this.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><polyline points="20 6 9 17 4 12"/></svg> Saved!`;
+    this.style.background = 'var(--primary-active)';
+    setTimeout(() => {
+      this.innerHTML = orig;
+      this.style.background = '';
+    }, 1800);
+  });
+
+  // ── Table row active state toggle ──
+  document.querySelectorAll('.table-ph-row').forEach(row => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('.table-ph-row').forEach(r => r.classList.remove('active-row'));
+      row.classList.add('active-row');
+    });
+  });
+
+  // ── Add row interaction ──
+  document.querySelectorAll('.table-ph-addrow').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.textContent = '✓ Row will be added when implemented';
+      btn.style.color = 'var(--success)';
+      setTimeout(() => {
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Line`;
+        btn.style.color = '';
+      }, 2000);
+    });
+    btn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') btn.click(); });
+  });
+</script>
+</body>
+</html>

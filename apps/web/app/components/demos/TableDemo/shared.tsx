@@ -5,8 +5,9 @@ export type Invoice = {
   id: string;
   date: string;
   amount: string;
-  status: "paid" | "pending" | "failed";
-  method: "credit_card" | "paypal" | "bank_transfer";
+  status: "paid" | "pending" | "failed" | "Pending" | "Paid" | "Unpaid";
+  method: "credit_card" | "paypal" | "bank_transfer" | "Credit Card" | "PayPal" | "Bank Transfer";
+  isPhantom?: boolean;
 };
 
 // Helper to generate data

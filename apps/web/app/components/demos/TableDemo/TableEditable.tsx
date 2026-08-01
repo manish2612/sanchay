@@ -1,6 +1,14 @@
 "use client";
 
-import { Table, TextInput, flexRender, ColumnDef, DropdownMenu, DatePicker, Icon } from "@prime/ui";
+import {
+  Table,
+  TextInput,
+  flexRender,
+  ColumnDef,
+  DropdownMenu,
+  DatePicker,
+  Icon,
+} from "@prime/ui";
 import * as React from "react";
 import { Invoice, generateData } from "./shared";
 
@@ -9,8 +17,9 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
   const initialValue = getValue();
   const [value, setValue] = React.useState(initialValue);
   const isEditing = table.options.meta?.editingRowIndex === row.index;
+  const isPhantom = row.original.isPhantom;
 
-  const [error, setError] = React.useState(false);
+  const error = table.options.meta?.rowErrors?.[row.index] || false;
 
   React.useEffect(() => {
     setValue(initialValue);
@@ -22,26 +31,8 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === "Enter") {
-      // Basic mock validation for the Amount column
-      if (column.id === "amount") {
-        const val = value as string;
-        // Strip non-numeric characters (except . and -)
-        const numeric = Number(val.replace(/[^0-9.-]+/g, ""));
-        if (isNaN(numeric) || val.trim() === "") {
-          e.stopPropagation(); // Prevent Table.Root from exiting edit mode
-          setError(true);
-          setTimeout(() => setError(false), 500); // Clear error state after animation finishes
-          return;
-        }
-      }
-      setError(false);
-    }
-  };
-
   if (!isEditing) {
-    // Read-only text - match the padding and height of the input to avoid layout jumping
+    // Read-only text
     return (
       <span className="px-3 w-full h-full flex items-center text-sm border border-transparent">
         {value as string}
@@ -51,25 +42,93 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 
   // Edit mode input based on column
   if (column.id === "status" || column.id === "method") {
-    const options = column.id === "status" 
-      ? [
-          { id: "Pending", label: "Pending", onSelect: () => { setValue("Pending"); table.options.meta?.updateData?.(row.index, column.id, "Pending"); } },
-          { id: "Paid", label: "Paid", onSelect: () => { setValue("Paid"); table.options.meta?.updateData?.(row.index, column.id, "Paid"); } },
-          { id: "Unpaid", label: "Unpaid", onSelect: () => { setValue("Unpaid"); table.options.meta?.updateData?.(row.index, column.id, "Unpaid"); } },
-        ]
-      : [
-          { id: "Credit Card", label: "Credit Card", onSelect: () => { setValue("Credit Card"); table.options.meta?.updateData?.(row.index, column.id, "Credit Card"); } },
-          { id: "PayPal", label: "PayPal", onSelect: () => { setValue("PayPal"); table.options.meta?.updateData?.(row.index, column.id, "PayPal"); } },
-          { id: "Bank Transfer", label: "Bank Transfer", onSelect: () => { setValue("Bank Transfer"); table.options.meta?.updateData?.(row.index, column.id, "Bank Transfer"); } },
-        ];
+    const options =
+      column.id === "status"
+        ? [
+            {
+              id: "Pending",
+              label: "Pending",
+              onSelect: () => {
+                setValue("Pending");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Pending",
+                );
+              },
+            },
+            {
+              id: "Paid",
+              label: "Paid",
+              onSelect: () => {
+                setValue("Paid");
+                table.options.meta?.updateData?.(row.index, column.id, "Paid");
+              },
+            },
+            {
+              id: "Unpaid",
+              label: "Unpaid",
+              onSelect: () => {
+                setValue("Unpaid");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Unpaid",
+                );
+              },
+            },
+          ]
+        : [
+            {
+              id: "Credit Card",
+              label: "Credit Card",
+              onSelect: () => {
+                setValue("Credit Card");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Credit Card",
+                );
+              },
+            },
+            {
+              id: "PayPal",
+              label: "PayPal",
+              onSelect: () => {
+                setValue("PayPal");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "PayPal",
+                );
+              },
+            },
+            {
+              id: "Bank Transfer",
+              label: "Bank Transfer",
+              onSelect: () => {
+                setValue("Bank Transfer");
+                table.options.meta?.updateData?.(
+                  row.index,
+                  column.id,
+                  "Bank Transfer",
+                );
+              },
+            },
+          ];
 
     return (
-      <DropdownMenu items={options} triggerLabel={value as string}>
-        <button 
-          onKeyDown={handleKeyDown}
-          className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none"
-        >
-          {value as string} <Icon name="ChevronDown" size={16} />
+      <DropdownMenu
+        items={options}
+        triggerLabel={
+          (value as string) || (column.id === "status" ? "Status" : "Method")
+        }
+      >
+        <button className="h-8 w-full flex items-center justify-between px-3 text-sm bg-surface transition-all rounded-md border border-input shadow-sm focus:ring-2 focus:ring-primary focus:outline-none">
+          {(value as string) || (
+            <span className="text-muted-foreground">Select...</span>
+          )}{" "}
+          <Icon name="ChevronDown" size={16} />
         </button>
       </DropdownMenu>
     );
@@ -77,23 +136,21 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
 
   if (column.id === "date") {
     return (
-      <div className="w-full flex items-center" onKeyDown={handleKeyDown}>
+      <div className="w-full flex items-center">
         <DatePicker
           date={(() => {
             if (!value) return undefined;
             const strVal = value as string;
-            // Try forcing local midnight parsing for YYYY-MM-DD
             const isoParsed = new Date(`${strVal}T00:00:00`);
             if (!isNaN(isoParsed.getTime())) return isoParsed;
-            // Fallback to standard native parsing (for 'M/D/YYYY' etc.)
             const parsed = new Date(strVal);
             return isNaN(parsed.getTime()) ? undefined : parsed;
           })()}
           onDateChange={(d) => {
             if (d) {
               const year = d.getFullYear();
-              const month = String(d.getMonth() + 1).padStart(2, '0');
-              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, "0");
+              const day = String(d.getDate()).padStart(2, "0");
               const formatted = `${year}-${month}-${day}`;
               setValue(formatted);
               table.options.meta?.updateData?.(row.index, column.id, formatted);
@@ -106,7 +163,7 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
   }
 
   return (
-    <TextInput.Root 
+    <TextInput.Root
       className={`h-8 w-full my-auto bg-surface transition-all ${
         error ? "ring-2 ring-destructive ring-offset-1 animate-shake" : ""
       }`}
@@ -115,10 +172,9 @@ const EditableCell = ({ getValue, row, column, table }: any) => {
         value={value as string}
         onChange={(e) => {
           setValue(e.target.value);
-          if (error) setError(false); // Clear error on typing
         }}
-        onKeyDown={handleKeyDown}
         onBlur={onBlur}
+        placeholder={isPhantom ? "Enter amount..." : ""}
         className="text-sm px-3 h-full"
       />
     </TextInput.Root>
@@ -131,7 +187,11 @@ export const editableColumns: ColumnDef<Invoice>[] = [
     header: "Invoice",
     size: 100,
     // Typically ID is not editable
-    cell: (info) => <span className="px-3 w-full h-full flex items-center text-sm text-muted-foreground font-medium border border-transparent">{info.getValue() as string}</span>,
+    cell: (info) => (
+      <span className="px-3 w-full h-full flex items-center text-sm text-muted-foreground font-medium border border-transparent">
+        {info.getValue() as string}
+      </span>
+    ),
   },
   {
     accessorKey: "date",
@@ -160,7 +220,17 @@ export const editableColumns: ColumnDef<Invoice>[] = [
 ];
 
 export function TableEditable() {
-  const [data, setData] = React.useState(() => generateData(10));
+  const [data, setData] = React.useState<Invoice[]>(() => [
+    {
+      id: "INV-1",
+      date: "",
+      status: "Pending",
+      method: "Credit Card",
+      amount: "",
+      isPhantom: true,
+    },
+  ]);
+  const [rowErrors, setRowErrors] = React.useState<Record<number, boolean>>({});
 
   const updateData = (rowIndex: number, columnId: string, value: unknown) => {
     setData((old) =>
@@ -172,8 +242,60 @@ export function TableEditable() {
           };
         }
         return row;
-      })
+      }),
     );
+  };
+
+  const onRowCommit = (
+    rowIndex: number,
+    columnId?: string,
+    cellValue?: string,
+  ) => {
+    let row = data[rowIndex];
+
+    // If the user pressed enter while actively typing in a field, sync that value immediately!
+    if (columnId && cellValue !== undefined) {
+      row = { ...row, [columnId]: cellValue };
+      updateData(rowIndex, columnId, cellValue);
+    }
+
+    // Custom Validation: Amount must be numeric
+    const numeric = Number(row.amount.replace(/[^0-9.-]+/g, ""));
+    if (isNaN(numeric) || row.amount.trim() === "") {
+      setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
+      setTimeout(() => {
+        setRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
+      }, 500);
+      return "STAY"; // Block commit, stay in edit mode
+    }
+
+    // Success! If it's a phantom row, convert it and spawn a new one
+    if (row.isPhantom) {
+      setData((old) => {
+        const newData = [...old];
+        // Ensure the last-second cellValue is merged in the new array too, in case updateData was batched
+        const committedRow =
+          columnId && cellValue !== undefined
+            ? { ...newData[rowIndex]!, [columnId]: cellValue, isPhantom: false }
+            : { ...newData[rowIndex]!, isPhantom: false };
+
+        newData[rowIndex] = committedRow;
+
+        // Append new phantom row at the bottom
+        newData.push({
+          id: `INV-${newData.length + 1}`,
+          date: "",
+          status: "Pending",
+          method: "Credit Card",
+          amount: "",
+          isPhantom: true,
+        });
+        return newData;
+      });
+      return "ADVANCE"; // Move focus to the newly spawned phantom row
+    }
+
+    return "EXIT";
   };
 
   return (
@@ -185,6 +307,12 @@ export function TableEditable() {
         tableOptions={{
           meta: {
             updateData,
+            onRowCommit,
+            rowErrors,
+            phantomRowConfig: {
+              isPhantom: (row) => row.original.isPhantom,
+              actionText: "Add New Invoice",
+            },
           },
         }}
       >
@@ -203,7 +331,7 @@ export function TableEditable() {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </Table.Head>
                   ))}

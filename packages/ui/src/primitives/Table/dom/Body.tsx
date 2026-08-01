@@ -6,6 +6,7 @@ import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 import { cn } from "../../../utils";
 import { tableStyles } from "../styles";
 import { useTableContext } from "./Context";
+import { Icon } from "../../Icon/Icon.dom";
 
 interface TableBodyProps extends Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -25,7 +26,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
         <div
           className={cn(
             "flex-1 w-full min-h-[200px] flex items-center justify-center text-muted-foreground border border-dashed rounded-md m-2",
-            className
+            className,
           )}
           {...props}
         >
@@ -53,7 +54,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
               {(() => {
                 const virtualRows = virtualizer.getVirtualItems();
                 const focusedVirtualRow = virtualRows.find(
-                  (row: any) => row.index === focusedRowIndex
+                  (row: any) => row.index === focusedRowIndex,
                 );
 
                 if (!focusedVirtualRow) return null;
@@ -71,7 +72,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                 const isAtBottomEdge = rowBottom > viewportHeight - 10;
 
                 const isAtEdge = isAtTopEdge || isAtBottomEdge;
-                
+
                 const successRowIndex = table.options.meta?.successRowIndex;
                 const isSuccess = successRowIndex === focusedVirtualRow.index;
 
@@ -79,11 +80,11 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                   <div
                     className={cn(
                       "absolute left-0 w-full rounded-sm pointer-events-none border will-change-transform",
-                      isSuccess 
+                      isSuccess
                         ? "bg-green-500/20 border-green-500/30 transition-colors duration-300"
                         : "bg-primary/10 border-primary/20",
                       !isAtEdge &&
-                        "transition-transform duration-200 ease-in-out"
+                        "transition-transform duration-200 ease-in-out",
                     )}
                     style={{
                       height: `${focusedVirtualRow.size}px`,
@@ -97,7 +98,33 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
               {virtualizer.getVirtualItems().map((virtualRow: any) => {
                 const row = rows[virtualRow.index];
                 const isFocused = virtualRow.index === focusedRowIndex;
-                const renderedRow = children(row, isFocused);
+                const phantomConfig = table.options.meta?.phantomRowConfig;
+                const isPhantom = phantomConfig?.isPhantom?.(row);
+
+                let renderedRow;
+
+                if (isPhantom && !isFocused) {
+                  if (phantomConfig?.renderRestState) {
+                    renderedRow = phantomConfig.renderRestState(row);
+                  } else {
+                    renderedRow = (
+                      <div
+                        className="flex items-center justify-center text-primary text-sm font-medium transition-colors cursor-pointer bg-primary/5 hover:bg-primary/10 border-t border-dashed border-primary/20"
+                        style={{ width: "100%", height: "100%" }}
+                      >
+                        {phantomConfig?.actionIcon || (
+                          <Icon name="Plus" size={16} className="mr-2" />
+                        )}
+                        {phantomConfig?.actionText || "Add New Item"}
+                        <span className="ml-2 text-primary/80 font-normal text-xs">
+                          (Press Ctrl+N)
+                        </span>
+                      </div>
+                    );
+                  }
+                } else {
+                  renderedRow = children(row, isFocused);
+                }
 
                 return (
                   <div
@@ -114,6 +141,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                       zIndex: 1, // Ensure row content (text/clicks) is above highlight
                     }}
                     onClick={(e) => handleRowClick(virtualRow.index, e)}
+                    role="row"
                   >
                     {renderedRow}
                   </div>
@@ -130,6 +158,6 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
         </ScrollAreaPrimitive.Scrollbar>
       </ScrollAreaPrimitive.Root>
     );
-  }
+  },
 );
 TableBody.displayName = "Table.Body";
