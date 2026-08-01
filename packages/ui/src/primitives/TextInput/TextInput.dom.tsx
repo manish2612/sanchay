@@ -77,28 +77,29 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       </div>
     );
 
-    const inputElement = (
-      <div
+    const innerInput = (
+      <input
+        ref={ref}
+        id={id}
+        disabled={disabled}
+        onFocus={onFocus}
+        onBlur={onBlur}
         className={cn(
-          "flex flex-row flex-wrap items-center flex-1 w-full gap-1",
-          prefixContent && "py-0.5",
+          "flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed text-sm min-w-[60px]",
+          labelVariant === "in-field" && "leading-tight text-foreground",
+          inputClassName,
         )}
-      >
+        {...props}
+      />
+    );
+
+    const inputElement = prefixContent ? (
+      <div className="flex flex-row flex-wrap items-center flex-1 w-full gap-1 py-0.5">
         {prefixContent}
-        <input
-          ref={ref}
-          id={id}
-          disabled={disabled}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          className={cn(
-            "flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed text-sm min-w-[60px]",
-            labelVariant === "in-field" && "leading-tight text-foreground",
-            inputClassName,
-          )}
-          {...props}
-        />
+        {innerInput}
       </div>
+    ) : (
+      innerInput
     );
 
     if (labelVariant === "in-field") {
