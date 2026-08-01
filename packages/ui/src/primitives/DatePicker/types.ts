@@ -19,4 +19,6 @@ export interface DatePickerProps {
   nepaliLanguage?: 'english' | 'nepali';
   /** Optional props strictly for the underlying react-day-picker (only applies when calendarType is gregorian) */
   dayPickerProps?: Omit<DayPickerProps, 'mode' | 'selected' | 'onSelect' | 'fromDate' | 'toDate'>;
+  label?: string;
+  labelVariant?: "default" | "in-field" | "inline" | "hidden";
 }
