@@ -1,7 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
-import { AutoSuggestCell } from "./cells/AutoSuggestCell";
-import { NumericCell } from "./cells/NumericCell";
-import { TextCell } from "./cells/TextCell";
+import { AutoSuggestCell } from "../../../../components/TableCells/AutoSuggestCell";
+import { NumericCell } from "../../../../components/TableCells/NumericCell";
+import { TextCell } from "../../../../components/TableCells/TextCell";
 
 export type VoucherRow = {
   id: string;

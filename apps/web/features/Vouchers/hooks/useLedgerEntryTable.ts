@@ -1,24 +1,16 @@
 import { useState, useCallback } from "react";
-import { type VoucherRow } from "../components/VoucherTable/columns";
+import { type LedgerEntryRow } from "../components/LedgerEntryTable/columns";
 
-const generateEmptyRow = (id: string): VoucherRow => ({
+const generateEmptyRow = (id: string): LedgerEntryRow => ({
   id,
-  item: "",
-  qty: "",
-  freeQty: "",
-  altQty: "",
-  netRate: "",
-  rate: "",
-  per: "",
-  discPer: "",
-  discAmt: "",
+  name: "",
   amount: "",
   vatAmt: "",
   isPhantom: true,
 });
 
-export function useVoucherTable() {
-  const [data, setData] = useState<VoucherRow[]>([generateEmptyRow("row-1")]);
+export function useLedgerEntryTable() {
+  const [data, setData] = useState<LedgerEntryRow[]>([generateEmptyRow("row-1")]);
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
@@ -44,9 +36,8 @@ export function useVoucherTable() {
       updateData(rowIndex, columnId, cellValue);
     }
 
-    // Validation: Item must be selected, Qty must be valid
-    const qty = parseFloat(row.qty.replace(/[^0-9.-]+/g, ""));
-    const isValid = row.item.trim() !== "" && !isNaN(qty) && qty > 0;
+    // Validation: Name must be selected
+    const isValid = row.name.trim() !== "";
 
     if (!isValid) {
       setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));

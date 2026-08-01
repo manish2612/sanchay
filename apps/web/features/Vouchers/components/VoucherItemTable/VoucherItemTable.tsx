@@ -1,17 +1,17 @@
 import React from "react";
 import { Table, flexRender } from "@prime/ui";
 import { editableColumns } from "./columns";
-import { useVoucherTable } from "../../hooks/useVoucherTable";
+import { useVoucherItemTable } from "../../hooks/useVoucherItemTable";
 
-export function VoucherTable() {
-  const { data, rowErrors, updateData, onRowCommit } = useVoucherTable();
+export function VoucherItemTable() {
+  const { data, rowErrors, updateData, onRowCommit } = useVoucherItemTable();
 
   return (
-    <div className="flex-1 border-t border-border bg-surface overflow-hidden flex flex-col min-h-[300px]">
+    <div className="flex-1 border-t border-border bg-surface overflow-hidden flex flex-col max-h-[300px]">
       <Table.Root
         data={data}
         columns={editableColumns}
-        className="h-full flex-1"
+        className="h-full flex-1 rounded-none border-x-0"
         tableOptions={{
           meta: {
             updateData,
@@ -24,7 +24,7 @@ export function VoucherTable() {
           },
         }}
       >
-        <Table.Header className="bg-surface-variant/50 sticky top-0 z-10 shadow-sm border-b border-border">
+        <Table.Header className="bg-surface-variant/50 sticky top-0 z-10 shadow-sm border-b border-border h-8">
           {({ table }) => (
             <>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -36,11 +36,11 @@ export function VoucherTable() {
                         width: header.getSize(),
                         flex: `${header.getSize()} 0 auto`,
                       }}
-                      className="px-2 py-2 text-xs font-semibold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis"
+                      className="px-2 py-2 text-xs font-semibold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8"
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </Table.Head>
                   ))}
