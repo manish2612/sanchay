@@ -1,19 +1,19 @@
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { AutoSuggestProps, AutoSuggestOption } from "./types";
+import { AutoSuggestRootProps, AutoSuggestOption } from "./types";
 
 export function useAutoSuggest<T extends boolean = false>({
   value,
   onChange,
   inputValue,
   onInputChange,
-  options,
+  options = [],
   multiple,
   virtualized,
   creatable,
   onCreate,
 }: Pick<
-  AutoSuggestProps<T>,
+  AutoSuggestRootProps<T>,
   | "value"
   | "onChange"
   | "inputValue"
@@ -41,7 +41,7 @@ export function useAutoSuggest<T extends boolean = false>({
 
   // Helper to flatten grouped options
   const flatOptions = React.useMemo(() => {
-    return options.reduce<AutoSuggestOption[]>((acc, curr) => {
+    return (options || []).reduce<AutoSuggestOption[]>((acc, curr) => {
       if ("group" in curr) {
         return [...acc, ...curr.items];
       }
@@ -103,6 +103,10 @@ export function useAutoSuggest<T extends boolean = false>({
       if (selectedOption) {
         if (!isControlledInput) setInternalInputValue(selectedOption.label);
         if (onInputChange) onInputChange(selectedOption.label);
+      } else {
+         // Fallback if option wasn't in options array (e.g. creatable without static options)
+         if (!isControlledInput) setInternalInputValue(selectedValue);
+         if (onInputChange) onInputChange(selectedValue);
       }
 
       setOpen(false);
@@ -138,9 +142,11 @@ export function useAutoSuggest<T extends boolean = false>({
     }
   };
 
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handleClear = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
     if (!isControlledValue) setInternalValue(multiple ? [] : "");
     if (onChange) onChange((multiple ? [] : "") as any);
     if (!isControlledInput) setInternalInputValue("");
@@ -149,9 +155,10 @@ export function useAutoSuggest<T extends boolean = false>({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && currentInputValue === "" && multiple) {
-      e.preventDefault();
+      // Allow cmdk to process backspace if we aren't removing tags
       const currentArray = (currentValue as string[]) || [];
       if (currentArray.length > 0) {
+        e.preventDefault();
         handleRemove(currentArray[currentArray.length - 1]);
       }
     }
@@ -166,7 +173,7 @@ export function useAutoSuggest<T extends boolean = false>({
     );
 
   const hasValue = multiple
-    ? (currentValue as string[]).length > 0
+    ? Array.isArray(currentValue) && currentValue.length > 0
     : !!currentValue || currentInputValue.length > 0;
 
   return {
@@ -188,5 +195,10 @@ export function useAutoSuggest<T extends boolean = false>({
     showCreate,
     hasValue,
     isControlledInput,
+    multiple,
+    virtualized
   };
 }
+
+export type AutoSuggestContextValue = ReturnType<typeof useAutoSuggest>;
+

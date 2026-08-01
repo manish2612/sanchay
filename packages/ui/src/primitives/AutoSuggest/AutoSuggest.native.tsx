@@ -1,37 +1,32 @@
 import * as React from "react";
 import { View, Text } from "react-native";
-import { AutoSuggestProps } from "./types";
+import { AutoSuggestRootProps, AutoSuggestInputProps } from "./types";
 import { TextInput } from "../TextInput/TextInput.native";
 
-const AutoSuggest = React.forwardRef<any, AutoSuggestProps>(
+export const AutoSuggestRoot = React.forwardRef<any, AutoSuggestRootProps>(
+  ({ children }, ref) => {
+    return <View ref={ref}>{children}</View>;
+  }
+);
+AutoSuggestRoot.displayName = "AutoSuggestRoot";
+
+export const AutoSuggestInput = React.forwardRef<any, AutoSuggestInputProps>(
   (
     {
-      value,
-      onChange,
-      inputValue,
-      onInputChange,
-      options,
-      isLoading,
       placeholder = "Search...",
       disabled,
       error,
       success,
       label,
       labelVariant,
-      // React Native specific props can be passed here or extracted
+      labelClassName,
     },
     ref
   ) => {
-    // For now, React Native stub just renders a normal TextInput.
-    // In a future PR, this would implement a BottomSheet or Modal with a FlatList.
-
-    const isControlledInput = inputValue !== undefined;
-    const [internalInputValue, setInternalInputValue] = React.useState(inputValue || "");
-    const currentInputValue = isControlledInput ? inputValue : internalInputValue;
+    const [internalInputValue, setInternalInputValue] = React.useState("");
 
     const handleTextChange = (text: string) => {
-      if (!isControlledInput) setInternalInputValue(text);
-      if (onInputChange) onInputChange(text);
+      setInternalInputValue(text);
     };
 
     const variant = error ? "error" : success ? "success" : "default";
@@ -43,7 +38,8 @@ const AutoSuggest = React.forwardRef<any, AutoSuggestProps>(
           variant={variant}
           label={label}
           labelVariant={labelVariant}
-          value={currentInputValue}
+          labelClassName={labelClassName}
+          value={internalInputValue}
           onChangeText={handleTextChange}
           placeholder={placeholder}
           editable={!disabled}
@@ -55,7 +51,13 @@ const AutoSuggest = React.forwardRef<any, AutoSuggestProps>(
     );
   }
 );
+AutoSuggestInput.displayName = "AutoSuggestInput";
 
-AutoSuggest.displayName = "AutoSuggest";
+export const AutoSuggestContent = ({ children }: { children?: React.ReactNode }) => null;
+export const AutoSuggestList = ({ children }: { children?: React.ReactNode }) => null;
+export const AutoSuggestEmpty = ({ children }: { children?: React.ReactNode }) => null;
+export const AutoSuggestGroup = ({ children }: { children?: React.ReactNode; heading?: React.ReactNode }) => null;
+export const AutoSuggestItem = ({ children }: { children?: React.ReactNode; value?: string }) => null;
+export const AutoSuggestCreateItem = () => null;
+export const AutoSuggestVirtualizedList = () => null;
 
-export { AutoSuggest };
