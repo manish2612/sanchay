@@ -76,7 +76,7 @@ export function VoucherItemTable() {
                 key={row.id}
                 data-state={row.getIsSelected() ? "selected" : undefined}
                 data-focused={isFocused}
-                className={`transition-colors border-b border-border border-l-3 border-l-transparent group ${
+                className={`transition-colors border-b border-border last:border-b-0 border-l-3 border-l-transparent group ${
                   row.original.isPhantom
                     ? "bg-primary/5"
                     : isFocused

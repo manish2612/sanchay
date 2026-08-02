@@ -4,9 +4,12 @@ import { TextInput } from "@prime/ui";
 export const NumericCell = ({ getValue, row, column, table }: any) => {
   const initialValue = getValue() as string;
 
+  const allowNegative = (column.columnDef.meta as any)?.allowNegative ?? false;
+  const regex = allowNegative ? /[^0-9.-]/g : /[^0-9.]/g;
+
   const formatValue = (val: string) => {
     if (!val || val.trim() === "") return "0.00";
-    const numeric = parseFloat(val.replace(/[^0-9.-]+/g, ""));
+    const numeric = parseFloat(val.replace(regex, ""));
     if (isNaN(numeric)) return "0.00";
     return numeric.toFixed(2);
   };
@@ -32,8 +35,16 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   return (
     <TextInput
       value={value}
+      onKeyDown={(e) => {
+        // Block all invalid printable characters to prevent selection loss
+        // We use a non-global regex here because RegExp.test() with /g is stateful!
+        const testRegex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && testRegex.test(e.key)) {
+          e.preventDefault();
+        }
+      }}
       onChange={(e) => {
-        const val = e.target.value.replace(/[^0-9.-]/g, "");
+        const val = e.target.value.replace(regex, "");
         setValue(val);
         if (table.options.meta?.updateData) {
           table.options.meta.updateData(row.index, column.id, val);

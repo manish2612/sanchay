@@ -1,6 +1,6 @@
 import React from "react";
 import { type CellContext } from "@tanstack/react-table";
-import { TextInput } from "@prime/ui";
+import { TextInput, SegmentedControl } from "@prime/ui";
 import { useSmartDiscountCell } from "./useSmartDiscountCell";
 
 export function SmartDiscountCell<TData>(context: CellContext<TData, unknown>) {
@@ -21,6 +21,13 @@ export function SmartDiscountCell<TData>(context: CellContext<TData, unknown>) {
       <TextInput
         ref={inputRef}
         value={localValue}
+        onKeyDown={(e) => {
+          // Block all invalid printable characters to prevent selection loss
+          // We use a non-global regex here because RegExp.test() with /g is stateful!
+          if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && /[^0-9.]/.test(e.key)) {
+            e.preventDefault();
+          }
+        }}
         onChange={(e) => handleChange(e.target.value)}
         onBlur={handleBlur}
         onFocus={(e) => {
@@ -35,43 +42,34 @@ export function SmartDiscountCell<TData>(context: CellContext<TData, unknown>) {
             });
           }
         }}
-        className={`order-2 flex-1 min-w-0 h-8 bg-surface transition-all px-2 ${
+        className={`order-2 flex-1 min-w-0 h-8 bg-surface transition-all ${
           error ? "ring-2 ring-destructive ring-offset-1" : ""
         }`}
-        inputClassName="text-sm text-right h-full w-full"
+        inputClassName="text-sm px-1.5 text-right h-full w-full"
         placeholder="0.00"
       />
 
       {/* Segmented Control is SECOND in DOM, but visually ordered FIRST (left side) */}
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          mode === "PERCENT" ? setAmountMode() : setPercentMode();
+      <SegmentedControl.Root
+        value={mode}
+        onValueChange={(val) => {
+          if (val === "PERCENT") setPercentMode();
+          if (val === "AMOUNT") setAmountMode();
         }}
-        className="order-1 flex bg-surface p-0.5 rounded-md border border-primary/20 shadow-sm shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 hover:border-primary/40 transition-colors"
-        aria-label="Toggle discount mode"
+        size="xs"
+        className="order-1 shrink-0 w-auto bg-surface border border-border/60 shadow-sm p-[3px] rounded-md"
       >
-        <div
-          className={`px-1.5 py-0.5 text-[10px] font-medium rounded-sm transition-all flex items-center justify-center min-w-[20px] ${
-            mode === "PERCENT"
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-primary/70"
-          }`}
-        >
-          %
-        </div>
-        <div
-          className={`px-1.5 py-0.5 text-[10px] font-medium rounded-sm transition-all flex items-center justify-center min-w-[20px] ${
-            mode === "AMOUNT"
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-primary/70"
-          }`}
-        >
-          #
-        </div>
-      </button>
+        <SegmentedControl.Item
+          value="PERCENT"
+          label="%"
+          className="min-w-[24px] px-1.5 py-0.5 text-[11px] rounded-[4px] font-bold text-muted-foreground data-[state=checked]:text-primary-foreground"
+        />
+        <SegmentedControl.Item
+          value="AMOUNT"
+          label="#"
+          className="min-w-[24px] px-1.5 py-0.5 text-[11px] rounded-[4px] font-bold text-muted-foreground data-[state=checked]:text-primary-foreground"
+        />
+      </SegmentedControl.Root>
     </div>
   );
 }
