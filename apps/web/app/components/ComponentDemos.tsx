@@ -19,6 +19,7 @@ import { TableDemo } from "./demos/TableDemo/index";
 import { DropdownDemo } from "./demos/DropdownDemo";
 import { AutoSuggestDemo } from "./demos/AutoSuggestDemo";
 import { SwitchDemo } from "./demos/SwitchDemo";
+import { SegmentedControlDemo } from "./demos/SegmentedControlDemo";
 
 export function ComponentDemos() {
   return (
@@ -51,6 +52,7 @@ export function ComponentDemos() {
             {/* Column 2: Component Showcase */}
             <div className="flex flex-col gap-6">
               <SwitchDemo />
+              <SegmentedControlDemo />
               <FontDemo />
 
               <div className="space-y-6">
