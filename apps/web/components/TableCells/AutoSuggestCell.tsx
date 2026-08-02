@@ -2,23 +2,27 @@ import React, { useEffect, useState } from "react";
 import { AutoSuggest } from "@prime/ui";
 
 export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
+  const { inputConfig } = column.columnDef.meta || {};
+  const { placeholder = "Search item..." } = inputConfig || {};
+
+  const { state, actions } = table.options.meta || {};
+  const error = state?.rowErrors?.[row.index];
+  const { updateData, onRowCommit } = actions || {};
+
   const initialValue = getValue() as string;
   const [value, setValue] = useState(initialValue);
-  const error = table.options.meta?.rowErrors?.[row.index];
 
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
   const onBlur = () => {
-    if (table.options.meta?.updateData) {
-      table.options.meta.updateData(row.index, column.id, value);
-    }
+    updateData?.(row.index, column.id, value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      table.options.meta?.onRowCommit?.(row.index, column.id, value);
+      onRowCommit?.(row.index, column.id, value);
     }
   };
   const MOCK_ITEMS = [
@@ -38,21 +42,17 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
       inputValue={value}
       onInputChange={(val) => {
         setValue(val);
-        if (table.options.meta?.updateData) {
-          table.options.meta.updateData(row.index, column.id, val);
-        }
+        updateData?.(row.index, column.id, val);
       }}
       options={filteredOptions}
       creatable
       onCreate={(val) => {
         setValue(val);
-        if (table.options.meta?.updateData) {
-          table.options.meta.updateData(row.index, column.id, val);
-        }
+        updateData?.(row.index, column.id, val);
       }}
     >
       <AutoSuggest.Input
-        placeholder="Search item..."
+        placeholder={placeholder}
         className={`h-8 !min-h-8 !py-0 w-full my-auto bg-surface transition-all ${
           error ? "ring-2 ring-destructive ring-offset-1" : ""
         }`}

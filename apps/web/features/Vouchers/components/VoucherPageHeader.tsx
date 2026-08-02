@@ -13,12 +13,19 @@ export function VoucherPageHeader({
   entryMode = "Item Mode",
 }: VoucherPageHeaderProps) {
   return (
-    <header className="h-[52px] flex-shrink-0 bg-surface border-b border-border flex items-center px-5 gap-3">
+    <header className="h-12.5 shrink-0 bg-surface border-b border-border flex items-center px-5 gap-3">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium" aria-label="Breadcrumb">
-        <span className="hover:text-foreground transition-colors cursor-pointer">Transactions</span>
+      <nav
+        className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium"
+        aria-label="Breadcrumb"
+      >
+        <span className="hover:text-foreground transition-colors cursor-pointer">
+          Transactions
+        </span>
         <Icon name="ChevronRight" size={12} className="opacity-40" />
-        <span className="hover:text-foreground transition-colors cursor-pointer">Vouchers</span>
+        <span className="hover:text-foreground transition-colors cursor-pointer">
+          Vouchers
+        </span>
       </nav>
 
       {/* Divider */}
@@ -41,10 +48,10 @@ export function VoucherPageHeader({
       {/* Right-side chips */}
       <div className="flex items-center gap-2">
         {/* Entry Mode chip */}
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-info/10 text-info border border-info/25 select-none">
+        {/* <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-info/10 text-info border border-info/25 select-none">
           <Icon name="Grid2x2" size={10} />
           {entryMode}
-        </span>
+        </span> */}
 
         {/* Keyboard shortcut hint */}
         <button

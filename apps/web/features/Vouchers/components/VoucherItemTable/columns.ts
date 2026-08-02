@@ -19,9 +19,9 @@ export type VoucherRow = {
   isPhantom?: boolean;
 };
 
-const columnPaddingX2={
-  meta: { cellClassName: "px-2" }
-}
+const columnPaddingX2 = {
+  meta: { layout: { cellClassName: "px-2" } }
+};
 
 import { ReadOnlyNumericCell } from "../../../../components/TableCells/ReadOnlyNumericCell";
 import { SmartDiscountCell } from "../../../../components/TableCells/SmartDiscountCell";

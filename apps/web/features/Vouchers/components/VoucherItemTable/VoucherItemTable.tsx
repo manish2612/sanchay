@@ -31,14 +31,20 @@ export function VoucherItemTable() {
           className="h-full flex-1 rounded-none border-x-0 border-t-0"
           tableOptions={{
             meta: {
-              updateData,
-              onRowCommit,
-              rowErrors,
-              phantomRowConfig: {
-                isPhantom: (row) => row.original.isPhantom,
-                actionText: "Add New Row",
+              actions: {
+                updateData,
+                onRowCommit,
               },
-              isRowEmpty: (row: any) => row.original.item.trim() === "",
+              state: {
+                rowErrors,
+                isRowEmpty: (row: any) => row.original.item.trim() === "",
+              },
+              features: {
+                phantomRowConfig: {
+                  isPhantom: (row: any) => row.original.isPhantom,
+                  actionText: "Add New Row",
+                },
+              },
             },
           }}
         >
@@ -92,7 +98,7 @@ export function VoucherItemTable() {
                       flex: `${cell.column.getSize()} 0 auto`,
                     }}
                     className={`py-0 border-r border-border last:border-r-0 ${
-                      (cell.column.columnDef.meta as any)?.cellClassName || ""
+                      cell.column.columnDef.meta?.layout?.cellClassName || ""
                     }`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

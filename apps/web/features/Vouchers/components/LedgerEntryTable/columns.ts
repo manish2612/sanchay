@@ -15,7 +15,24 @@ const columnPaddingX2 = {
 };
 
 export const ledgerColumns: ColumnDef<LedgerEntryRow>[] = [
-  { accessorKey: "name", header: "Ledger Name", size: 300, cell: AutoSuggestCell },
-  { accessorKey: "amount", header: "Amount", size: 142, cell: NumericCell, meta: { cellClassName: "px-2", headerClassName: "text-right", allowNegative: true } },
-  // { accessorKey: "vatAmt", header: "VAT Amt", size: 118, cell: NumericCell,  meta: { cellClassName: "px-2" } },
+  { 
+    accessorKey: "name", 
+    header: "Ledger Name", 
+    size: 300, 
+    cell: AutoSuggestCell, 
+    meta: { 
+      inputConfig: { placeholder: "Search Ledger" } 
+    } 
+  },
+  { 
+    accessorKey: "amount", 
+    header: "Amount", 
+    size: 142, 
+    cell: NumericCell, 
+    meta: { 
+      layout: { cellClassName: "px-2", headerClassName: "text-right" }, 
+      inputConfig: { allowNegative: true } 
+    } 
+  },
+  // { accessorKey: "vatAmt", header: "VAT Amt", size: 118, cell: NumericCell,  meta: { layout: { cellClassName: "px-2" } } },
 ];

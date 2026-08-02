@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "@prime/ui";
 
 export const TextCell = ({ getValue, row, column, table }: any) => {
+  const { state, actions } = table.options.meta || {};
+  const error = state?.rowErrors?.[row.index];
+  const { updateData } = actions || {};
+
   const initialValue = getValue() as string;
   const [value, setValue] = useState(initialValue);
-  const error = table.options.meta?.rowErrors?.[row.index];
 
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
   const onBlur = () => {
-    if (table.options.meta?.updateData) {
-      table.options.meta.updateData(row.index, column.id, value);
-    }
+    updateData?.(row.index, column.id, value);
   };
 
   return (
@@ -21,9 +22,7 @@ export const TextCell = ({ getValue, row, column, table }: any) => {
       value={value}
       onChange={(e) => {
         setValue(e.target.value);
-        if (table.options.meta?.updateData) {
-          table.options.meta.updateData(row.index, column.id, e.target.value);
-        }
+        updateData?.(row.index, column.id, e.target.value);
       }}
       onBlur={onBlur}
       className={`h-8 w-full my-auto bg-surface transition-all px-2 ${

@@ -22,14 +22,20 @@ export function LedgerEntryTable() {
           className="h-full flex-1 rounded-none border-x-0 border-t-0 border-b-0"
           tableOptions={{
             meta: {
-              updateData,
-              onRowCommit,
-              rowErrors,
-              phantomRowConfig: {
-                isPhantom: (row) => row.original.isPhantom,
-                actionText: "Add New Entry",
+              actions: {
+                updateData,
+                onRowCommit,
               },
-              isRowEmpty: (row: any) => row.original.name.trim() === "",
+              state: {
+                rowErrors,
+                isRowEmpty: (row: any) => row.original.name.trim() === "",
+              },
+              features: {
+                phantomRowConfig: {
+                  isPhantom: (row: any) => row.original.isPhantom,
+                  actionText: "Add New Entry",
+                },
+              },
             },
           }}
         >
@@ -46,7 +52,7 @@ export function LedgerEntryTable() {
                           width: header.getSize(),
                           flex: `${header.getSize()} 0 auto`,
                         }}
-                        className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.headerClassName || ""}`}
+                        className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${header.column.columnDef.meta?.layout?.headerClassName || ""}`}
                       >
                         {flexRender(
                           header.column.columnDef.header,
@@ -83,7 +89,7 @@ export function LedgerEntryTable() {
                       flex: `${cell.column.getSize()} 0 auto`,
                     }}
                     className={`py-0 border-r border-border last:border-r-0 ${
-                      (cell.column.columnDef.meta as any)?.cellClassName || ""
+                      cell.column.columnDef.meta?.layout?.cellClassName || ""
                     }`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

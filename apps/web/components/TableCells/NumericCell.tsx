@@ -2,10 +2,15 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "@prime/ui";
 
 export const NumericCell = ({ getValue, row, column, table }: any) => {
-  const initialValue = getValue() as string;
+  const { inputConfig } = column.columnDef.meta || {};
+  const { allowNegative = false } = inputConfig || {};
 
-  const allowNegative = (column.columnDef.meta as any)?.allowNegative ?? false;
-  const regex = allowNegative ? /[^0-9.-]/g : /[^0-9.]/g;
+  const { state, actions } = table.options.meta || {};
+  const error = state?.rowErrors?.[row.index];
+  const { updateData } = actions || {};
+
+  const initialValue = getValue() as string;
+  const regex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;
 
   const formatValue = (val: string) => {
     if (!val || val.trim() === "") return "0.00";
@@ -18,8 +23,6 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
     return initialValue === "" ? "0.00" : initialValue;
   });
 
-  const error = table.options.meta?.rowErrors?.[row.index];
-
   useEffect(() => {
     setValue(initialValue === "" ? "0.00" : initialValue);
   }, [initialValue]);
@@ -27,9 +30,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const onBlur = () => {
     const formatted = formatValue(value);
     setValue(formatted);
-    if (table.options.meta?.updateData) {
-      table.options.meta.updateData(row.index, column.id, formatted);
-    }
+    updateData?.(row.index, column.id, formatted);
   };
 
   return (
@@ -46,9 +47,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
       onChange={(e) => {
         const val = e.target.value.replace(regex, "");
         setValue(val);
-        if (table.options.meta?.updateData) {
-          table.options.meta.updateData(row.index, column.id, val);
-        }
+        updateData?.(row.index, column.id, val);
       }}
       onBlur={onBlur}
       className={`h-8 w-full my-auto bg-surface transition-all px-2 ${

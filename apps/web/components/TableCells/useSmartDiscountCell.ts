@@ -7,7 +7,9 @@ export function useSmartDiscountCell<TData>(context: CellContext<TData, unknown>
   const { row, table } = context;
   const original = row.original as any;
   const rowIndex = row.index;
-  const updateData = (table.options.meta as any)?.updateData;
+  const { state, actions } = table.options.meta || {};
+  const { updateData } = actions || {};
+  const error = state?.rowErrors?.[rowIndex];
 
   const getExternalMode = useCallback((): DiscountMode => {
     return original.discAmt && !original.discPer ? "AMOUNT" : "PERCENT";
@@ -84,7 +86,25 @@ export function useSmartDiscountCell<TData>(context: CellContext<TData, unknown>
     commitValue(formatted, mode);
   }, [commitValue, localValue, mode]);
 
-  const error = (table.options.meta as any)?.rowErrors?.[rowIndex];
+
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Block all invalid printable characters to prevent selection loss
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && /[^0-9.]/.test(e.key)) {
+      e.preventDefault();
+    }
+  }, []);
+
+  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    const target = e.target;
+    // Select immediately for keyboard nav
+    target.select();
+    // Select on next animation frame and after 10ms for mouse clicks to override native cursor placement
+    requestAnimationFrame(() => {
+      target.select();
+      setTimeout(() => target.select(), 10);
+    });
+  }, []);
 
   return {
     mode,
@@ -95,5 +115,7 @@ export function useSmartDiscountCell<TData>(context: CellContext<TData, unknown>
     setAmountMode,
     handleChange,
     handleBlur,
+    handleKeyDown,
+    handleFocus,
   };
 }
