@@ -23,7 +23,7 @@ import { SegmentedControlDemo } from "./demos/SegmentedControlDemo";
 
 export function ComponentDemos() {
   return (
-      <div className="flex flex-col flex-1 relative overflow-hidden">
+      <div className="flex flex-col flex-1 min-h-0 relative overflow-y-auto bg-background">
         {/* App Menu Bar - Top Placement */}
 
         {/* Background Grid & Glow */}
