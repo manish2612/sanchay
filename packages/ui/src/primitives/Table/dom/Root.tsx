@@ -1,17 +1,11 @@
 "use client";
 
 import * as React from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  ColumnDef,
-  Row,
-} from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { cn } from "../../../utils";
 import { tableStyles } from "../styles";
 import { TableContext } from "./Context";
-import { useTableNavigation } from "./useTableNavigation";
+import { useTableRoot } from "./useTableRoot";
 
 interface TableRootProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   data: TData[];
@@ -31,67 +25,17 @@ export function TableRoot<TData>({
   rowHeight = 44,
   ...props
 }: TableRootProps<TData>) {
-  const [focusedRowIndex, setFocusedRowIndex] = React.useState(-1);
-  const [lastFocusedRowIndex, setLastFocusedRowIndex] = React.useState(-1);
-  const [editingRowIndex, setEditingRowIndex] = React.useState<number | null>(-1);
-  const [successRowIndex, setSuccessRowIndex] = React.useState<number | null>(null);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-  const rootRef = React.useRef<HTMLDivElement>(null);
-
-  // Keep track of the last focused row whenever it's valid
-  React.useEffect(() => {
-    if (focusedRowIndex >= 0) {
-      setLastFocusedRowIndex(focusedRowIndex);
-    }
-  }, [focusedRowIndex]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    ...tableOptions,
-    meta: {
-      ...tableOptions?.meta,
-      focusedRowIndex,
-      editingRowIndex,
-      successRowIndex,
-    },
-  });
-
-  const { rows } = table.getRowModel();
-
-  const virtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => scrollRef.current,
-    estimateSize: () => rowHeight, 
-    overscan: 20,
-  });
-
-  const totalWidth = table.getTotalSize();
-
-  /* 
-     Sync Virtualizer scroll with focused row.
-     This effect ensures consistent auto-scrolling when the focused row changes,
-     keeping the active row in view even during rapid keyboard navigation.
-  */
-  React.useEffect(() => {
-    if (focusedRowIndex >= 0) {
-      virtualizer.scrollToIndex(focusedRowIndex, { align: "auto" });
-    }
-  }, [focusedRowIndex, virtualizer]);
-
-  const { handleKeyDown, handleRowClick, focusNewRowInput } = useTableNavigation({
+  const {
     table,
-    rows,
-    focusedRowIndex,
-    lastFocusedRowIndex,
-    setFocusedRowIndex,
-    setEditingRowIndex,
-    setSuccessRowIndex,
+    virtualizer,
     scrollRef,
     rootRef,
-    onRowClick,
-  });
+    focusedRowIndex,
+    handleRowClick,
+    handleKeyDown,
+    handleRootFocus,
+    totalWidth,
+  } = useTableRoot({ data, columns, onRowClick, tableOptions, rowHeight });
 
   // Do not memoize contextValue! useVirtualizer returns a stable class instance, 
   // so if we memoize this, Table.Body will completely fail to re-render on scroll or layout measurements.
@@ -116,24 +60,7 @@ export function TableRoot<TData>({
         )}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        onFocus={(e) => {
-          // If the focus was placed directly on the root div (e.g. via Tab navigation from outside)
-          if (e.target === rootRef.current) {
-            // Prevent the ping-pong trap! If they Shift+Tabbed OUT of an inner input, 
-            // e.relatedTarget will be that inner input. We should politely let them leave.
-            if (e.relatedTarget && rootRef.current.contains(e.relatedTarget as Node)) {
-              return;
-            }
-
-            // Wake up the phantom row by explicitly setting the focused row state
-            const targetIndex = Math.max(0, focusedRowIndex);
-            setFocusedRowIndex(targetIndex);
-            setEditingRowIndex(targetIndex);
-            
-            // Drop focus seamlessly into the grid inputs for a fluid UX
-            focusNewRowInput(targetIndex, 0, 5);
-          }
-        }}
+        onFocus={handleRootFocus}
         role="grid"
         {...props}
       >
