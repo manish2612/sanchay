@@ -28,7 +28,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const mockUser = { name: "Admin User", email: "admin@example.com" };
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground selection:bg-primary/30">
+    <div className="h-screen w-screen overflow-hidden flex bg-background text-foreground selection:bg-primary/30">
       {/* Global Navigation Sidebar */}
       <Sidebar
         appName={APP_NAME}
@@ -41,7 +41,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
       {/* Main Content Area */}
       <main className="flex flex-col flex-1 relative overflow-hidden items-center bg-background">
-        <div className="w-full max-w-[1440px] flex-1 flex flex-col">
+        <div className="w-full max-w-[1440px] flex-1 flex flex-col min-h-0">
           {children}
         </div>
       </main>

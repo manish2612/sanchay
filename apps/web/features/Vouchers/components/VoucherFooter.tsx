@@ -44,8 +44,10 @@ export function VoucherFooter({
       </div>
 
       {/* Middle: Ledger Table */}
-      <div className="flex flex-col border border-border rounded-lg overflow-hidden bg-surface-variant shadow-sm min-w-0">
-        <LedgerEntryTable />
+      <div className="flex flex-col border border-border rounded-lg overflow-hidden bg-surface-variant shadow-sm min-w-0 relative min-h-[160px]">
+        <div className="absolute inset-0 flex flex-col">
+          <LedgerEntryTable />
+        </div>
       </div>
 
       {/* Right: Summary panel & Actions */}
