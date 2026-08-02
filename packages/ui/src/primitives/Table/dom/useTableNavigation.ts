@@ -123,12 +123,12 @@ export function useTableNavigation<TData>({
         ? isCombobox.getAttribute("data-expanded") === "true"
         : isCombobox?.getAttribute("aria-expanded") === "true";
 
-      // If it's a closed combobox and the user is pressing ArrowUp/ArrowDown, 
-      // bypass the escape hatch to allow the grid to move between rows!
+      // If it's a closed combobox and the user is pressing ArrowUp/ArrowDown/Enter, 
+      // bypass the escape hatch to allow the grid to process the grid navigation or commit!
       const isNavigatingClosedCombobox = 
         Boolean(isCombobox) && 
         !isComboboxExpanded && 
-        (e.key === "ArrowDown" || e.key === "ArrowUp");
+        (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter");
 
       if (!isNavigatingClosedCombobox) {
         if (
