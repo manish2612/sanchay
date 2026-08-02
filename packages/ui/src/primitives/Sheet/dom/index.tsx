@@ -41,11 +41,11 @@ const SheetContent = React.forwardRef<
       className={cn(sheetVariants({ side }), className)}
       {...props}
     >
-      {children}
       <DialogPrimitive.Close className={cn(closeVariants())}>
-        <Icon name="X" size={16} />
+        <Icon name="X" size={20} />
         <span className="sr-only">Close</span>
       </DialogPrimitive.Close>
+      {children}
     </DialogPrimitive.Content>
   </SheetPortal>
 ));
