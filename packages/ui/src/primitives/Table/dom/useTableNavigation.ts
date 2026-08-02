@@ -49,12 +49,14 @@ export function useTableNavigation<TData>({
             const rowBody = newRowEl.firstElementChild || newRowEl;
             const targetCell = rowBody.children[colIndex];
             if (targetCell) {
-              elementToFocus = targetCell.querySelector("input, select, button, [tabindex='0']");
+              elementToFocus = targetCell.querySelector("input:not([disabled])") || 
+                               targetCell.querySelector("select:not([disabled]), button:not([disabled]), [tabindex='0']");
             }
           }
 
           if (!elementToFocus) {
-            elementToFocus = newRowEl.querySelector("input, select, button, [tabindex='0']");
+            elementToFocus = newRowEl.querySelector("input:not([disabled])") || 
+                             newRowEl.querySelector("select:not([disabled]), button:not([disabled]), [tabindex='0']");
           }
 
           if (elementToFocus) {
@@ -70,6 +72,19 @@ export function useTableNavigation<TData>({
   );
 
   /**
+   * Helper to safely extract and fallback namespaced meta configuration.
+   */
+  const getTableMeta = React.useCallback(() => {
+    const meta = table.options.meta as any;
+    if (!meta) return {};
+    return {
+      phantomRowConfig: meta.features?.phantomRowConfig || meta.phantomRowConfig,
+      isRowEmptyFn: meta.state?.isRowEmpty || meta.isRowEmpty,
+      onRowCommitFn: meta.actions?.onRowCommit || meta.onRowCommit,
+    };
+  }, [table.options.meta]);
+
+  /**
    * handleKeyDown:
    * The master keyboard navigation engine for the grid.
    * Handles hotkeys, grid traversal (Arrows, Tab), and edit commits (Enter).
@@ -78,13 +93,14 @@ export function useTableNavigation<TData>({
     (e: React.KeyboardEvent) => {
       if (rows.length === 0) return;
 
+      const meta = getTableMeta();
+
       // Global Table Hotkey: CTRL+N to spawn/jump to Phantom Row
       if (e.ctrlKey && !e.metaKey && e.key.toLowerCase() === "n") {
         e.preventDefault();
 
         // Attempt to find a designated phantom row, fallback to absolute bottom if none exists
-        // Prefer the table meta config if provided, otherwise check original.isPhantom
-        const isPhantomFn = table.options.meta?.phantomRowConfig?.isPhantom;
+        const isPhantomFn = meta.phantomRowConfig?.isPhantom;
         const phantomIndex = rows.findIndex((r) =>
           isPhantomFn ? isPhantomFn(r) : (r.original as any).isPhantom
         );
@@ -147,35 +163,39 @@ export function useTableNavigation<TData>({
         return -1;
       };
 
-      if (e.key === "Tab" && target.tagName === "INPUT") {
+      if (e.key === "Tab") {
+        const isFocusable = target.tagName === "INPUT" || target.tagName === "BUTTON" || target.tagName === "SELECT" || target.hasAttribute("tabindex");
+        if (!isFocusable) return;
+
         const rowEl = target.closest('[role="row"]');
         if (rowEl) {
-          const inputs = Array.from(rowEl.querySelectorAll("input"));
-          const colIndexForTab = inputs.indexOf(target as HTMLInputElement);
+          const focusables = Array.from(
+            rowEl.querySelectorAll("input:not([disabled]), select:not([disabled]), button:not([disabled]), [tabindex='0']")
+          ) as HTMLElement[];
+          const focusableIndex = focusables.indexOf(target as HTMLElement);
 
-          // Forward Wraparound: If Tab is pressed on the very last input of a row,
-          // intercept it and smoothly wrap focus to the very first input of the next row.
-          if (!e.shiftKey && colIndexForTab === inputs.length - 1) {
+          // Forward Wraparound: If Tab is pressed on the very last focusable element of a row
+          if (!e.shiftKey && focusableIndex === focusables.length - 1) {
             const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
             const isLastRow = currentIndex === rows.length - 1;
             
-            const isPhantomFn = table.options.meta?.phantomRowConfig?.isPhantom;
+            const isPhantomFn = meta.phantomRowConfig?.isPhantom;
             const currentRow = rows[currentIndex];
             const isPhantom = currentRow ? (isPhantomFn ? isPhantomFn(currentRow) : (currentRow.original as any)?.isPhantom) : false;
 
-            const isRowEmptyFn = (table.options.meta as any)?.isRowEmpty;
-            const isRowEmpty = isRowEmptyFn && currentRow ? isRowEmptyFn(currentRow) : false;
+            const isRowEmpty = meta.isRowEmptyFn && currentRow ? meta.isRowEmptyFn(currentRow) : false;
 
             const shouldExitNatively = isLastRow && isPhantom && isRowEmpty;
 
             if (!shouldExitNatively) {
               e.preventDefault();
 
-              if (table.options.meta?.onRowCommit) {
-                const columnId = table.getVisibleLeafColumns()[colIndexForTab]?.id;
-                const cellValue = target.value;
+              if (meta.onRowCommitFn) {
+                const gridColIndex = getColIndex();
+                const columnId = gridColIndex !== -1 ? table.getVisibleLeafColumns()[gridColIndex]?.id : undefined;
+                const cellValue = target.tagName === "INPUT" ? (target as HTMLInputElement).value : undefined;
 
-                const action = table.options.meta.onRowCommit(
+                const action = meta.onRowCommitFn(
                   currentIndex,
                   columnId,
                   cellValue
@@ -208,8 +228,8 @@ export function useTableNavigation<TData>({
             }
           }
 
-          // Backward Wraparound: If Shift+Tab is pressed on the very first input of a row
-          if (e.shiftKey && colIndexForTab === 0) {
+          // Backward Wraparound: If Shift+Tab is pressed on the very first focusable of a row
+          if (e.shiftKey && focusableIndex === 0) {
             const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
             if (currentIndex > 0) {
               e.preventDefault();
@@ -249,7 +269,7 @@ export function useTableNavigation<TData>({
 
         // If we are actively editing an input, Enter signifies a "Commit" attempt
         if (target.tagName === "INPUT") {
-          if (table.options.meta?.onRowCommit) {
+          if (meta.onRowCommitFn) {
             // Identify which column was committed and extract its raw value
             let colIndex = -1;
             const cell =
@@ -266,7 +286,7 @@ export function useTableNavigation<TData>({
               target.tagName === "INPUT" ? (target as HTMLInputElement).value : undefined;
 
             // Delegate validation and routing to the consumer's business logic
-            const action = table.options.meta.onRowCommit(
+            const action = meta.onRowCommitFn(
               focusedRowIndex,
               columnId,
               cellValue
@@ -286,7 +306,7 @@ export function useTableNavigation<TData>({
                 // Determine if we are moving into a Phantom Row (Create Mode).
                 // If newIndex >= rows.length, it means we committed the previous phantom row
                 // and React hasn't appended the new one yet, so it's guaranteed to be a phantom row!
-                const isPhantomFn = table.options.meta?.phantomRowConfig?.isPhantom;
+                const isPhantomFn = meta.phantomRowConfig?.isPhantom;
                 const targetRow = rows[newIndex];
                 const isTargetPhantom = targetRow 
                   ? (isPhantomFn ? isPhantomFn(targetRow) : (targetRow.original as any)?.isPhantom)
