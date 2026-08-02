@@ -282,7 +282,19 @@ export function useTableNavigation<TData>({
                 const newIndex = focusedRowIndex + 1;
                 setFocusedRowIndex(newIndex);
                 setEditingRowIndex(newIndex);
-                focusNewRowInput(newIndex, colIndex);
+                
+                // Determine if we are moving into a Phantom Row (Create Mode).
+                // If newIndex >= rows.length, it means we committed the previous phantom row
+                // and React hasn't appended the new one yet, so it's guaranteed to be a phantom row!
+                const isPhantomFn = table.options.meta?.phantomRowConfig?.isPhantom;
+                const targetRow = rows[newIndex];
+                const isTargetPhantom = targetRow 
+                  ? (isPhantomFn ? isPhantomFn(targetRow) : (targetRow.original as any)?.isPhantom)
+                  : true;
+
+                // If moving into a phantom row (Create Mode), snap to the first column.
+                // Otherwise, preserve the current column index (Edit Mode).
+                focusNewRowInput(newIndex, isTargetPhantom ? 0 : colIndex);
               }, 0);
             } else if (action === "EXIT") {
               // Consumer validated successfully and requested to end the edit session
