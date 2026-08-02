@@ -77,7 +77,7 @@ const SegmentedControlRoot = React.forwardRef<
         ref={ref}
         className={cn(
           segmentedControlRootVariants({ variant, size, className }),
-          isBinary && "has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-focus-ring has-[:focus-visible]:ring-offset-2"
+          isBinary && "has-[:focus-visible]:outline-none has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-focus-ring"
         )}
         data-activation-mode={derivedActivationMode}
         onKeyDown={handleKeyDown}
