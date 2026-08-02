@@ -20,3 +20,4 @@ export * from './primitives/DatePicker';
 export * from './primitives/AutoSuggest';
 export * from './components/Form';
 export * from './primitives/Switch';
+export * from './components/SplitButton';
