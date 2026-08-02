@@ -47,4 +47,8 @@ export const colors = {
     dangerForeground: "#FFFFFF",
     info: "#3498DB", 
     infoForeground: "#FFFFFF",
+    
+    // Sidebar Custom
+    sidebarAvatarBg: "#DBE64C",
+    sidebarAvatarText: "#001F3F",
 };
