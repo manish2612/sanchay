@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React from "react";
 import { Icon } from "@prime/ui";
 import { type VoucherFooterState } from "../hooks/useVoucherFooter";
-import { useClickOutside } from "../../../hooks/useClickOutside";
+import { useVoucherSummaryPanel } from "./useVoucherSummaryPanel";
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -42,10 +42,7 @@ export interface VoucherSummaryPanelProps {
 }
 
 export function VoucherSummaryPanel({ summary }: VoucherSummaryPanelProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  useClickOutside(wrapperRef, () => setIsOpen(false));
+  const { isOpen, wrapperRef, toggleOpen } = useVoucherSummaryPanel();
 
   return (
     <aside
@@ -61,7 +58,7 @@ export function VoucherSummaryPanel({ summary }: VoucherSummaryPanelProps) {
           </span>
           {/* Breakdown Chip Trigger */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={toggleOpen}
             className={`text-[10px] font-medium transition-colors px-1.5 py-0.5 rounded flex justify-center items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
               isOpen
                 ? "bg-primary text-primary-foreground shadow-sm"

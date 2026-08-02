@@ -16,19 +16,10 @@ import { type VoucherDetailsFormState } from "../hooks/useVoucherDetailsForm";
 interface VoucherTypeSelectorProps {
   value: string;
   onChange: (v: string) => void;
+  options: string[];
 }
 
-function VoucherTypeSelector({ value, onChange }: VoucherTypeSelectorProps) {
-  const options = [
-    "Sales",
-    "Purchase",
-    "Receipt",
-    "Payment",
-    "Journal",
-    "Credit Note",
-    "Debit Note",
-  ];
-
+function VoucherTypeSelector({ value, onChange, options }: VoucherTypeSelectorProps) {
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground select-none leading-none">
@@ -85,6 +76,8 @@ export function VoucherDetailsForm({
   setPaymentMode,
   salesAc,
   setSalesAc,
+  voucherTypeOptions,
+  filteredPartyOptions,
 }: VoucherDetailsFormState) {
   return (
     <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
@@ -96,6 +89,7 @@ export function VoucherDetailsForm({
             <VoucherTypeSelector
               value={voucherType}
               onChange={setVoucherType}
+              options={voucherTypeOptions}
             />
           </div>
 
@@ -219,10 +213,7 @@ export function VoucherDetailsForm({
             <AutoSuggest
               inputValue={partyQuery}
               onInputChange={setPartyQuery}
-              options={[
-                { label: "Cash", value: "cash" },
-                { label: "Bank", value: "bank" },
-              ]}
+              options={filteredPartyOptions}
             >
               <AutoSuggest.Input
                 label="Party A/C"
@@ -232,10 +223,7 @@ export function VoucherDetailsForm({
               <AutoSuggest.Content>
                 <AutoSuggest.List>
                   <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
-                  {[
-                    { label: "Cash", value: "cash" },
-                    { label: "Bank", value: "bank" },
-                  ].map((opt) => (
+                  {filteredPartyOptions.map((opt) => (
                     <AutoSuggest.Item key={opt.value} value={opt.value}>
                       {opt.label}
                     </AutoSuggest.Item>

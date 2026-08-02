@@ -1,5 +1,22 @@
 import { useState } from "react";
 
+// ─── Constants & Extracted Logic ──────────────────────────────────────────
+
+const VOUCHER_TYPE_OPTIONS = [
+  "Sales",
+  "Purchase",
+  "Receipt",
+  "Payment",
+  "Journal",
+  "Credit Note",
+  "Debit Note",
+];
+
+const PARTY_ACCOUNT_OPTIONS = [
+  { label: "Cash", value: "cash" },
+  { label: "Bank", value: "bank" },
+];
+
 export function useVoucherDetailsForm() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [mitiDate, setMitiDate] = useState<Date | undefined>(new Date());
@@ -14,6 +31,10 @@ export function useVoucherDetailsForm() {
   const [paymentMode, setPaymentMode] = useState("Credit");
   const [salesAc, setSalesAc] = useState("13% Sales");
 
+  const filteredPartyOptions = PARTY_ACCOUNT_OPTIONS.filter((opt) =>
+    opt.label.toLowerCase().includes(partyQuery.toLowerCase())
+  );
+
   return {
     isDrawerOpen, setIsDrawerOpen,
     mitiDate, setMitiDate,
@@ -26,6 +47,8 @@ export function useVoucherDetailsForm() {
     mode, setMode,
     paymentMode, setPaymentMode,
     salesAc, setSalesAc,
+    voucherTypeOptions: VOUCHER_TYPE_OPTIONS,
+    filteredPartyOptions,
   };
 }
 

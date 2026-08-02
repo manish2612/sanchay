@@ -19,12 +19,6 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const onBlur = () => {
     updateData?.(row.index, column.id, value);
   };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      onRowCommit?.(row.index, column.id, value);
-    }
-  };
   const MOCK_ITEMS = [
     { label: "MacBook Pro 16", value: "MacBook Pro 16" },
     { label: "iPhone 15 Pro", value: "iPhone 15 Pro" },
@@ -58,7 +52,6 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
         }`}
         inputClassName="text-sm h-full px-1"
         onBlur={onBlur}
-        onKeyDown={handleKeyDown}
       />
       <AutoSuggest.Content>
         <AutoSuggest.List>
