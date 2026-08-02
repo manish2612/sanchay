@@ -1,39 +1,105 @@
 import React from "react";
-import { TextInput, DatePicker, Icon, AutoSuggest, DropdownMenu } from "@prime/ui";
+import {
+  TextInput,
+  DatePicker,
+  Icon,
+  AutoSuggest,
+  DropdownMenu,
+  Button,
+} from "@prime/ui";
 import { type VoucherDetailsFormState } from "../hooks/useVoucherDetailsForm";
 
+// ─── Voucher Type Primary Dropdown ─────────────────────────────────────────
+// Uses children-as-custom-trigger pattern to apply brand primary styling.
+// This is the master control field — visually dominant to signal hierarchy.
+
+interface VoucherTypeSelectorProps {
+  value: string;
+  onChange: (v: string) => void;
+}
+
+function VoucherTypeSelector({ value, onChange }: VoucherTypeSelectorProps) {
+  const options = [
+    "Sales",
+    "Purchase",
+    "Receipt",
+    "Payment",
+    "Journal",
+    "Credit Note",
+    "Debit Note",
+  ];
+
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground select-none leading-none">
+        Voucher Type
+      </span>
+      <DropdownMenu
+        items={options.map((opt) => ({
+          id: opt,
+          label: opt,
+          onSelect: () => onChange(opt),
+        }))}
+        align="start"
+      >
+        {/* Custom trigger: bold primary-colored button */}
+        <Button
+          variant="primary"
+          size="sm"
+          className="w-full justify-between font-semibold text-sm h-9"
+        >
+          <span className="truncate">{value}</span>
+          <Icon
+            name="ChevronDown"
+            size={14}
+            className="opacity-70 ml-2 shrink-0"
+          />
+        </Button>
+      </DropdownMenu>
+    </div>
+  );
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
 export function VoucherDetailsForm({
-  isDrawerOpen, setIsDrawerOpen,
-  mitiDate, setMitiDate,
-  adDate, setAdDate,
-  refMitiDate, setRefMitiDate,
-  refAdDate, setRefAdDate,
-  partyQuery, setPartyQuery,
-  voucherType, setVoucherType,
-  applyTax, setApplyTax,
-  mode, setMode,
-  paymentMode, setPaymentMode,
-  salesAc, setSalesAc,
+  isDrawerOpen,
+  setIsDrawerOpen,
+  mitiDate,
+  setMitiDate,
+  adDate,
+  setAdDate,
+  refMitiDate,
+  setRefMitiDate,
+  refAdDate,
+  setRefAdDate,
+  partyQuery,
+  setPartyQuery,
+  voucherType,
+  setVoucherType,
+  applyTax,
+  setApplyTax,
+  mode,
+  setMode,
+  paymentMode,
+  setPaymentMode,
+  salesAc,
+  setSalesAc,
 }: VoucherDetailsFormState) {
   return (
-    <div className="flex border-b border-border bg-surface relative overflow-hidden">
-      <section className="flex-1 px-4 py-3 flex flex-col gap-2">
-        {/* Form Grid */}
+    <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
+      <section className="flex-1 px-4 pt-3 pb-2 flex flex-col gap-2">
+        {/* ── Primary Row: Core document identifiers ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-2 items-end">
-          {/* Group 1: Primary Details */}
+          {/* Voucher Type — Primary accent control */}
           <div className="lg:col-span-1">
-            <DropdownMenu
-              label="Voucher Type"
-              labelVariant="in-field"
-              triggerLabel={voucherType}
-              items={[
-                { id: "Sales", label: "Sales", onSelect: () => setVoucherType("Sales") },
-                { id: "Purchase", label: "Purchase", onSelect: () => setVoucherType("Purchase") },
-                { id: "Receipt", label: "Receipt", onSelect: () => setVoucherType("Receipt") },
-              ]}
+            <VoucherTypeSelector
+              value={voucherType}
+              onChange={setVoucherType}
             />
           </div>
 
+          {/* Voucher No — Read-only, monospace */}
           <div className="lg:col-span-1">
             <TextInput
               label="Voucher No."
@@ -41,24 +107,44 @@ export function VoucherDetailsForm({
               disabled
               tabIndex={-1}
               className="pointer-events-none"
-              inputClassName="font-mono font-medium pointer-events-none"
+              inputClassName="font-mono font-medium pointer-events-none text-muted-foreground bg-muted"
               value="8384/003"
               readOnly
             />
           </div>
 
+          {/* Payment Mode */}
           <div className="lg:col-span-1">
             <DropdownMenu
               label="Payment Mode"
               labelVariant="in-field"
               triggerLabel={paymentMode}
               items={[
-                { id: "Credit", label: "Credit", onSelect: () => setPaymentMode("Credit") },
-                { id: "Cash", label: "Cash", onSelect: () => setPaymentMode("Cash") },
+                {
+                  id: "Credit",
+                  label: "Credit",
+                  onSelect: () => setPaymentMode("Credit"),
+                },
+                {
+                  id: "Cash",
+                  label: "Cash",
+                  onSelect: () => setPaymentMode("Cash"),
+                },
+                {
+                  id: "Bank Transfer",
+                  label: "Bank Transfer",
+                  onSelect: () => setPaymentMode("Bank Transfer"),
+                },
+                {
+                  id: "Cheque",
+                  label: "Cheque",
+                  onSelect: () => setPaymentMode("Cheque"),
+                },
               ]}
             />
           </div>
 
+          {/* Miti (BS) */}
           <div className="lg:col-span-1">
             <DatePicker
               label="Miti (bs)"
@@ -67,10 +153,10 @@ export function VoucherDetailsForm({
               onDateChange={setMitiDate}
               calendarType="nepali"
               placeholder="Select Miti"
-              className=""
             />
           </div>
 
+          {/* Date (AD) */}
           <div className="lg:col-span-1">
             <DatePicker
               label="Date (ad)"
@@ -79,35 +165,56 @@ export function VoucherDetailsForm({
               onDateChange={setAdDate}
               calendarType="gregorian"
               placeholder="Select Date"
-              className=""
             />
           </div>
 
-          <div className="lg:col-span-1">
+          {/* Apply Tax — Neutral, no yellow styling per design decision */}
+          {/* <div className="lg:col-span-1">
             <DropdownMenu
               label="Apply Tax"
               labelVariant="in-field"
               triggerLabel={applyTax}
               items={[
-                { id: "Item Level", label: "Item Level", onSelect: () => setApplyTax("Item Level") },
-                { id: "Invoice Level", label: "Invoice Level", onSelect: () => setApplyTax("Invoice Level") },
+                {
+                  id: "Item Level",
+                  label: "Item Level",
+                  onSelect: () => setApplyTax("Item Level"),
+                },
+                {
+                  id: "Invoice Level",
+                  label: "Invoice Level",
+                  onSelect: () => setApplyTax("Invoice Level"),
+                },
+                {
+                  id: "No Tax",
+                  label: "No Tax",
+                  onSelect: () => setApplyTax("No Tax"),
+                },
               ]}
             />
-          </div>
+          </div> */}
 
-          <div className="lg:col-span-1">
+          {/* Mode — Neutral, no green styling per design decision */}
+          {/* <div className="lg:col-span-1">
             <DropdownMenu
               label="Mode"
               labelVariant="in-field"
               triggerLabel={mode}
               items={[
-                { id: "Item Mode", label: "Item Mode", onSelect: () => setMode("Item Mode") },
-                { id: "Account Mode", label: "Account Mode", onSelect: () => setMode("Account Mode") },
+                {
+                  id: "Item Mode",
+                  label: "Item Mode",
+                  onSelect: () => setMode("Item Mode"),
+                },
+                {
+                  id: "Account Mode",
+                  label: "Account Mode",
+                  onSelect: () => setMode("Account Mode"),
+                },
               ]}
             />
-          </div>
+          </div> */}
 
-          {/* Group 2: Date & Account Details */}
           <div className="lg:col-span-1">
             <AutoSuggest
               inputValue={partyQuery}
@@ -138,74 +245,60 @@ export function VoucherDetailsForm({
             </AutoSuggest>
           </div>
 
+          {/* Sales A/C */}
           <div className="lg:col-span-1">
             <DropdownMenu
               label="Sales A/C"
               labelVariant="in-field"
               triggerLabel={salesAc}
               items={[
-                { id: "13% Sales", label: "13% Sales", onSelect: () => setSalesAc("13% Sales") },
-                { id: "Exempt Sales", label: "Exempt Sales", onSelect: () => setSalesAc("Exempt Sales") },
+                {
+                  id: "13% Sales",
+                  label: "13% Sales",
+                  onSelect: () => setSalesAc("13% Sales"),
+                },
+                {
+                  id: "0% Sales",
+                  label: "0% Sales",
+                  onSelect: () => setSalesAc("0% Sales"),
+                },
+                {
+                  id: "Exempt Sales",
+                  label: "Exempt Sales",
+                  onSelect: () => setSalesAc("Exempt Sales"),
+                },
               ]}
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <TextInput
+              label="Ref. No."
+              labelVariant="in-field"
+              placeholder="Reference number..."
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <DatePicker
+              label="Ref. Miti (bs)"
+              labelVariant="in-field"
+              date={refMitiDate}
+              onDateChange={setRefMitiDate}
+              calendarType="nepali"
+              placeholder="Select Miti"
+            />
+          </div>
+          <div className="lg:col-span-1">
+            <DatePicker
+              label="Ref. Date (ad)"
+              labelVariant="in-field"
+              date={refAdDate}
+              onDateChange={setRefAdDate}
+              calendarType="gregorian"
+              placeholder="Select Date"
             />
           </div>
         </div>
       </section>
-
-      {/* Vertical Ribbon (DOM order placed here for perfect Tab flow: Primary Fields -> Ribbon -> Secondary Fields) */}
-      <button
-        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-        className="w-8 relative z-20 bg-surface flex-shrink-0 border-l border-border flex items-center justify-center hover:bg-surface-variant transition-colors cursor-pointer group focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focus-ring"
-      >
-        <Icon
-          name="ChevronRight"
-          size={20}
-          className={`text-muted-foreground group-hover:text-foreground transition-all duration-300 ${isDrawerOpen ? "rotate-180" : ""}`}
-        />
-      </button>
-
-      {/* Overlay Drawer */}
-      <div
-        className={`absolute inset-y-0 left-0 right-8 bg-surface shadow-[-10px_0_5px_-5px_rgba(0,0,0,0.05)] transition-transform duration-300 ease-in-out z-10 flex flex-col overflow-y-auto ${
-          isDrawerOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="p-4 flex-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-2 gap-y-2 items-end">
-            <div>
-              <DatePicker
-                label="Ref. Miti (bs)"
-                labelVariant="in-field"
-                date={refMitiDate}
-                onDateChange={setRefMitiDate}
-                calendarType="nepali"
-                placeholder="Select Miti"
-                className="text-muted-foreground"
-              />
-            </div>
-
-            <div>
-              <DatePicker
-                label="Ref. Date (ad)"
-                labelVariant="in-field"
-                date={refAdDate}
-                onDateChange={setRefAdDate}
-                calendarType="gregorian"
-                placeholder="Select Date"
-                className="text-muted-foreground"
-              />
-            </div>
-
-            <div>
-              <TextInput
-                label="Ref. No."
-                labelVariant="in-field"
-                placeholder="Reference number..."
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

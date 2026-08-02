@@ -31,7 +31,7 @@ export function SidebarPanelItem({ item, level = 0 }: SidebarPanelItemProps) {
       {/* Icon (optional for L2/L3) */}
       {item.icon && (
         <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center mr-3">
-          <Icon name={item.icon} className="text-[18px]" />
+          <Icon name={item.icon as any} className="text-[18px]" />
         </div>
       )}
 

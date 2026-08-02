@@ -73,8 +73,8 @@ export function SidebarRailUser({
         onMouseLeave={onMouseLeave}
         className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold shadow-sm transition-all ${
           isOpen
-            ? "bg-white/30 text-white ring-2 ring-white/50"
-            : "bg-white/20 text-white hover:ring-2 hover:ring-white/50"
+            ? "bg-sidebar-avatar-bg text-sidebar-avatar-text ring-2 ring-focus-ring/60 ring-offset-1 ring-offset-primary scale-105"
+            : "bg-sidebar-avatar-bg text-sidebar-avatar-text hover:scale-105 hover:ring-2 hover:ring-focus-ring/60 hover:ring-offset-1 hover:ring-offset-primary"
         }`}
       >
         {user.avatarUrl ? (

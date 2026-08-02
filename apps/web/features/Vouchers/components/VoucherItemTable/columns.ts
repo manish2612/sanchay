@@ -23,6 +23,8 @@ const columnPaddingX2={
   meta: { cellClassName: "px-2" }
 }
 
+import { ReadOnlyNumericCell } from "../../../../components/TableCells/ReadOnlyNumericCell";
+
 export const editableColumns: ColumnDef<VoucherRow>[] = [
   { accessorKey: "item", header: "Name of Item", size: 300, cell: AutoSuggestCell },
   { accessorKey: "qty", header: "Qty", size: 80, cell: NumericCell, ...columnPaddingX2 },
@@ -33,6 +35,6 @@ export const editableColumns: ColumnDef<VoucherRow>[] = [
   { accessorKey: "per", header: "Per", size: 70, cell: TextCell , ...columnPaddingX2 },
   { accessorKey: "discPer", header: "Disc. %", size: 80, cell: NumericCell , ...columnPaddingX2 },
   { accessorKey: "discAmt", header: "Disc. Amt", size: 100, cell: NumericCell , ...columnPaddingX2 },
-  { accessorKey: "amount", header: "Amount", size: 120, cell: NumericCell, ...columnPaddingX2 },
-  { accessorKey: "vatAmt", header: "VAT Amt", size: 100, cell: NumericCell , ...columnPaddingX2 },
+  { accessorKey: "amount", header: "Amount", size: 120, cell: ReadOnlyNumericCell, ...columnPaddingX2 },
+  { accessorKey: "vatAmt", header: "VAT Amt", size: 100, cell: ReadOnlyNumericCell , ...columnPaddingX2 },
 ];

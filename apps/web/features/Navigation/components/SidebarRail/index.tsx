@@ -66,7 +66,7 @@ export function SidebarRail({
   return (
     <>
       <div className="flex flex-col items-center w-[72px] h-screen bg-primary border-r border-primary-dark shadow-sm z-20 py-4 flex-shrink-0">
-        {/* App Logo / Master Toggle (Only toggles when collapsed) */}
+        {/* App Logo / Master Toggle */}
         <div
           className="relative group flex items-center justify-center w-12 h-12 mb-6 cursor-pointer"
           onClick={() => {
@@ -87,17 +87,12 @@ export function SidebarRail({
           }
           onMouseLeave={handleMouseLeave}
         >
-          <div className="relative flex items-center justify-center w-full h-full rounded-xl bg-white/10 text-white shadow-sm transition-all duration-200 overflow-hidden">
+          {/* Solid white card logo — high contrast against green sidebar */}
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white shadow-md transition-all duration-200 group-hover:shadow-lg group-hover:scale-105">
             <Icon
               name="Layers"
-              className={`text-[24px] absolute transition-opacity duration-200 ${!isPanelActuallyOpen ? "group-hover:opacity-0" : "opacity-100"}`}
+              className="text-primary text-[22px]"
             />
-            {!isPanelActuallyOpen && (
-              <Icon
-                name="Menu"
-                className="text-[26px] absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              />
-            )}
           </div>
         </div>
 
