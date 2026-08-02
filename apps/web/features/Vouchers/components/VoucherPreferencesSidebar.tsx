@@ -24,7 +24,11 @@ export function VoucherPreferencesSidebar({
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side="right" className="sm:max-w-md overflow-y-auto">
+      <SheetContent
+        side="right"
+        className="sm:max-w-md overflow-y-auto"
+        overlayClassName="!bg-foreground/10 supports-[backdrop-filter]:!bg-foreground/10 supports-[backdrop-filter]:!backdrop-blur-none"
+      >
         <SheetHeader className="mb-6">
           <SheetTitle>Voucher Preferences</SheetTitle>
           <SheetDescription>
