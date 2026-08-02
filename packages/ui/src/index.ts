@@ -22,3 +22,4 @@ export * from './components/Form';
 export * from './primitives/Switch';
 export * from './components/SplitButton';
 export * from './primitives/SegmentedControl';
+export * from './primitives/Sheet';
