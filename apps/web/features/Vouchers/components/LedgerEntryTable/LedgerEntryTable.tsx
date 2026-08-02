@@ -67,11 +67,11 @@ export function LedgerEntryTable() {
                 key={row.id}
                 data-state={row.getIsSelected() ? "selected" : undefined}
                 data-focused={isFocused}
-                className={`transition-colors border-b border-border group ${
+                className={`transition-colors border-b border-border border-l-3 border-l-transparent group ${
                   row.original.isPhantom
                     ? "bg-primary/5"
                     : isFocused
-                      ? "bg-primary/[0.06] border-l-2 border-l-primary"
+                      ? "bg-primary/[0.06] border-l-primary"
                       : "hover:bg-surface-variant/40"
                 }`}
               >
