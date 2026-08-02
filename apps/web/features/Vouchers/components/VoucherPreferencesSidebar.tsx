@@ -32,7 +32,7 @@ export function VoucherPreferencesSidebar({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Apply Tax */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-foreground">
@@ -70,7 +70,7 @@ export function VoucherPreferencesSidebar({
             </SegmentedControl.Root>
           </div>
 
-          <div className="h-px bg-border mt-0 mb-5" />
+          <div className="h-px bg-border mt-0 mb-3 opacity-40" />
 
           {/* Boolean Toggles */}
           <div className="space-y-1">
