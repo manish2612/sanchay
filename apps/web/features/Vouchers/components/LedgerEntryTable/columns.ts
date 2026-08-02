@@ -19,8 +19,10 @@ export const ledgerColumns: ColumnDef<LedgerEntryRow>[] = [
     accessorKey: "name", 
     header: "Ledger Name", 
     size: 300, 
+    minSize: 150,
     cell: AutoSuggestCell, 
     meta: { 
+      layout: { fluid: true },
       inputConfig: { placeholder: "Search Ledger" } 
     } 
   },

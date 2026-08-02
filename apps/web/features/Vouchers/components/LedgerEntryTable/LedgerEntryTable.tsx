@@ -39,27 +39,32 @@ export function LedgerEntryTable() {
             },
           }}
         >
-          {/* Table Header — was missing! Added for visual structure */}
+          {/* Table Header */}
           <Table.Header className="bg-surface-variant sticky top-0 z-10 border-b border-border h-8">
             {({ table }) => (
               <>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <Table.HeaderRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <Table.Head
-                        key={header.id}
-                        style={{
-                          width: header.getSize(),
-                          flex: `${header.getSize()} 0 auto`,
-                        }}
-                        className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${header.column.columnDef.meta?.layout?.headerClassName || ""}`}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </Table.Head>
-                    ))}
+                    {headerGroup.headers.map((header) => {
+                      const isFluid = (header.column.columnDef.meta as any)?.layout?.fluid;
+                      return (
+                        <Table.Head
+                          key={header.id}
+                          style={{
+                            flex: isFluid ? "1 1 0%" : `0 0 ${header.getSize()}px`,
+                            width: isFluid ? "100%" : `${header.getSize()}px`,
+                            minWidth: isFluid ? `${header.column.columnDef.minSize || 0}px` : `${header.getSize()}px`,
+                            maxWidth: isFluid ? undefined : `${header.getSize()}px`,
+                          }}
+                          className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ""}`}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </Table.Head>
+                      );
+                    })}
                   </Table.HeaderRow>
                 ))}
               </>
@@ -81,20 +86,25 @@ export function LedgerEntryTable() {
                       : "hover:bg-surface-variant/40"
                 }`}
               >
-                {row.getVisibleCells().map((cell) => (
-                  <Table.Cell
-                    key={cell.id}
-                    style={{
-                      width: cell.column.getSize(),
-                      flex: `${cell.column.getSize()} 0 auto`,
-                    }}
-                    className={`py-0 border-r border-border last:border-r-0 ${
-                      cell.column.columnDef.meta?.layout?.cellClassName || ""
-                    }`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Table.Cell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const isFluid = (cell.column.columnDef.meta as any)?.layout?.fluid;
+                  return (
+                    <Table.Cell
+                      key={cell.id}
+                      style={{
+                        flex: isFluid ? "1 1 0%" : `0 0 ${cell.column.getSize()}px`,
+                        width: isFluid ? "100%" : `${cell.column.getSize()}px`,
+                        minWidth: isFluid ? `${cell.column.columnDef.minSize || 0}px` : `${cell.column.getSize()}px`,
+                        maxWidth: isFluid ? undefined : `${cell.column.getSize()}px`,
+                      }}
+                      className={`py-0 border-r border-border last:border-r-0 ${
+                        (cell.column.columnDef.meta as any)?.layout?.cellClassName || ""
+                      }`}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Table.Cell>
+                  );
+                })}
               </Table.Row>
             )}
           </Table.Body>
