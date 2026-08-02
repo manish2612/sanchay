@@ -48,60 +48,68 @@ export function VoucherSummaryPanel({ summary }: VoucherSummaryPanelProps) {
     <aside
       className="bg-surface-variant border border-border rounded-lg flex flex-col flex-shrink-0 shadow-sm relative z-20 w-full"
       aria-label="Financial summary"
-      ref={wrapperRef}
     >
-      {/* Panel header */}
+      {/* Panel header (Wrapper ref handles click-outside for the popover) */}
       <div className="flex items-center justify-between px-3.5 py-2 border-b border-border relative">
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold font-heading text-foreground tracking-wide uppercase">
             Summary
           </span>
           {/* Breakdown Chip Trigger */}
-          <button
-            onClick={toggleOpen}
-            className={`text-[10px] font-medium transition-colors px-1.5 py-0.5 rounded flex justify-center items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
-              isOpen
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-primary hover:text-primary-hover bg-primary/10 hover:bg-primary/20"
-            }`}
-            aria-expanded={isOpen}
-          >
-            <Icon name="Eye" size={16} />
-            View Breakdown
-          </button>
+          <div ref={wrapperRef}>
+            <button
+              onClick={toggleOpen}
+              className={`text-[10px] font-medium transition-colors px-1.5 py-0.5 rounded flex justify-center items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
+                isOpen
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-primary hover:text-primary-hover bg-primary/10 hover:bg-primary/20"
+              }`}
+              aria-expanded={isOpen}
+            >
+              <Icon name="Eye" size={16} />
+              View Breakdown
+            </button>
+            {/* Floating Popover Card (anchored to header) */}
+            {isOpen && (
+              <div className="absolute bottom-full mb-2 right-0 w-[280px] bg-surface border border-border rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-50 overflow-hidden transform origin-bottom animate-in fade-in zoom-in-95 duration-150">
+                <div className="py-1">
+                  <SummaryRow
+                    label={`Gross Total`}
+                    value={formatAmount(summary.subTotal)}
+                  />
+                  <SummaryRow
+                    label={`Discount`}
+                    value={formatAmount(summary.discount)}
+                  />
+                  <SummaryRow
+                    label="Taxable Amount"
+                    value={formatAmount(summary.taxableAmount)}
+                  />
+                  <SummaryRow
+                    label="Exempted Amount"
+                    value={formatAmount(summary.exemptedAmount)}
+                  />
+                  <SummaryRow
+                    label={`VAT Amount (${summary.vatPercent}%)`}
+                    value={formatAmount(summary.vatAmount)}
+                    valueClassName="text-info font-medium"
+                  />
+                  <SummaryRow
+                    label="Rounding Off"
+                    value={formatAmount(summary.roundingOff)}
+                  />
+                  <SummaryRow
+                    label={`Net Total`}
+                    value={formatAmount(summary.netTotal)}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <span className="text-xs text-muted-foreground font-mono">
           {summary.currency}
         </span>
-
-        {/* Floating Popover Card (anchored to header) */}
-        {isOpen && (
-          <div className="absolute bottom-full mb-2 right-0 w-[280px] bg-surface border border-border rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-50 overflow-hidden transform origin-bottom animate-in fade-in zoom-in-95 duration-150">
-            <div className="py-1">
-              <SummaryRow
-                label={`Discount`}
-                value={formatAmount(summary.discount)}
-              />
-              <SummaryRow
-                label="Taxable Amount"
-                value={formatAmount(summary.taxableAmount)}
-              />
-              <SummaryRow
-                label="Exempted Amount"
-                value={formatAmount(summary.exemptedAmount)}
-              />
-              <SummaryRow
-                label={`VAT Amount (${summary.vatPercent}%)`}
-                value={formatAmount(summary.vatAmount)}
-                valueClassName="text-info font-medium"
-              />
-              <SummaryRow
-                label="Rounding Off"
-                value={formatAmount(summary.roundingOff)}
-              />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Gross Total (Always visible) */}
@@ -111,7 +119,7 @@ export function VoucherSummaryPanel({ summary }: VoucherSummaryPanelProps) {
           value={formatAmount(summary.subTotal)}
         />
         <SummaryRow
-          label="VAT Amount"
+          label="VAT Amount (13%)"
           value={formatAmount(summary.vatAmount)}
         />
       </div>
