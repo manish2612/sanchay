@@ -1,50 +1,54 @@
 export const colorsDark = {
-    // Base - Midnight Mirage
-    background: "#001F3F",
+    // Base — correct elevation hierarchy: background is darkest, surfaces get lighter
+    background: "#0D1B2A", // True dark canvas (was #001F3F — too blue, now neutral dark navy)
     foreground: "#F6F7ED", // Praxeti White
 
-    // Surfaces 
-    surface: "#001429", // Darker than base
-    surfaceVariant: "#002952", // Lighter than base
+    // Surfaces — each level lighter than the one below (elevation hierarchy)
+    surface: "#152232",         // Card/panel level — lighter than background ✓
+    surfaceVariant: "#1C2E40",  // Section headers, table headers — lighter than surface ✓
     surfaceVariantForeground: "#F6F7ED",
-    popover: "#001A33",
+    popover: "#1C2E40",
     popoverForeground: "#F6F7ED",
-    surfaceHover: "#002952",
-    surfaceActive: "#003366",
-    surfaceBorder: "#004080",
+    surfaceHover: "#1F3347",    // Hover state — distinct from surfaceVariant ✓
+    surfaceActive: "#243C54",   // Pressed/active state — distinct from hover ✓
+    surfaceBorder: "#2A4560",   // Visible border, not noisy
 
-    // Primary - Picture Book Green (Adjusted slightly for dark mode pop if needed, but keeping it true to brand)
+    // Primary - Picture Book Green (unchanged — brand color must stay consistent)
     primary: "#00804C",
-    primaryHover: "#00995B", // Lighter for hover in dark mode
-    primaryActive: "#00B36B", 
+    primaryHover: "#00995B",  // Lighter for hover in dark mode
+    primaryActive: "#00B36B",
     primaryForeground: "#FFFFFF",
 
     // Secondary - Mantis
     secondary: "#74C365",
-    secondaryHover: "#89D17B", // Lighter
+    secondaryHover: "#89D17B",
     secondaryForeground: "#001F3F",
 
     // Neutral
-    muted: "#002952",
+    muted: "#1C2E40",
     mutedForeground: "#8A9BA8",
 
     // Borders / Focus
-    border: "#004080",
-    input: "#004080",
-    focusRing: "#DBE64C", // First Colors of Spring for high contrast glow
+    border: "#2A4560",      // Clear visible border (was #004080 — too saturated blue)
+    input: "#2A4560",
+    focusRing: "#DBE64C",   // First Colors of Spring — stays identical (high contrast glow)
 
     // States
-    disabled: "#002952",
+    disabled: "#1C2E40",
     disabledForeground: "#5C6E80",
-    outline: "#003366",
+    outline: "#243C54",
 
-    // Semantic
-    success: "#74C365", // Mantis
+    // Semantic (hue unchanged, lightness tuned for dark bg readability)
+    success: "#74C365",   // Mantis
     successForeground: "#001F3F",
-    warning: "#DBE64C", // First Colors of Spring
+    warning: "#DBE64C",   // First Colors of Spring
     warningForeground: "#001F3F",
     danger: "#E74C3C",
     dangerForeground: "#FFFFFF",
-    info: "#3498DB", 
+    info: "#3498DB",
     infoForeground: "#FFFFFF",
+    
+    // Sidebar Custom
+    sidebarAvatarBg: "#DBE64C",
+    sidebarAvatarText: "#001F3F",
 };

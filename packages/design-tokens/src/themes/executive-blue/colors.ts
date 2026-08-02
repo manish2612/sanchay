@@ -52,4 +52,8 @@ export const colors = {
     actionPrimary: "#00804C", 
     actionPrimaryHover: "#006B3F", 
     actionPrimaryForeground: "#FFFFFF",
+    
+    // Sidebar Custom
+    sidebarAvatarBg: "#0BD3AD",
+    sidebarAvatarText: "#001F3F",
 };

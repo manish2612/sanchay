@@ -52,4 +52,8 @@ export const colorsDark = {
     actionPrimary: "#00804C", 
     actionPrimaryHover: "#1A8D5E", // 10% White over Picture Book Green
     actionPrimaryForeground: "#FFFFFF",
+
+    // Sidebar Custom
+    sidebarAvatarBg: "#0BD3AD",
+    sidebarAvatarText: "#001F3F",
 };

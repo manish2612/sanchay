@@ -49,4 +49,8 @@ export const colorsDark = {
     dangerForeground: "hsl(0, 0%, 100%)",
     info: "hsl(199, 89%, 48%)",
     infoForeground: "hsl(0, 0%, 100%)",
+
+    // Sidebar Custom
+    sidebarAvatarBg: "#0EEFDB",
+    sidebarAvatarText: "hsl(222, 22%, 5%)",
 };
