@@ -86,7 +86,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
         onFocus={onFocus}
         onBlur={onBlur}
         className={cn(
-          "flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed text-sm min-w-[60px]",
+          "flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed text-sm min-w-0",
           labelVariant === "in-field" && "leading-tight text-foreground",
           inputClassName,
         )}

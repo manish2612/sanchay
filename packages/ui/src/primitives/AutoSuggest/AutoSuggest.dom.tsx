@@ -127,7 +127,7 @@ export const AutoSuggestInput = React.forwardRef<
               labelVariant !== "in-field" && "py-1 min-h-10",
               className
             )}
-            inputClassName="min-w-[60px]"
+            inputClassName="min-w-0"
             placeholder={
               multiple && Array.isArray(currentValue) && currentValue.length > 0
                 ? ""

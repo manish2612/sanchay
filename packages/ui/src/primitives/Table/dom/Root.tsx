@@ -34,7 +34,7 @@ export function TableRoot<TData>({
     handleRowClick,
     handleKeyDown,
     handleRootFocus,
-    totalWidth,
+    totalMinWidth,
   } = useTableRoot({ data, columns, onRowClick, tableOptions, rowHeight });
 
   // Do not memoize contextValue! useVirtualizer returns a stable class instance, 
@@ -64,7 +64,7 @@ export function TableRoot<TData>({
         role="grid"
         {...props}
       >
-        <div className="flex flex-col h-full" style={{ minWidth: totalWidth }}>
+        <div className="flex flex-col h-full" style={{ minWidth: totalMinWidth }}>
           {children}
         </div>
       </div>
