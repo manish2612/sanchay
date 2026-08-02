@@ -110,11 +110,12 @@ export const AutoSuggestInput = React.forwardRef<
 
     return (
       <Popover.Anchor asChild>
-        <CommandPrimitive.Input
-          asChild
-          value={currentInputValue}
-          onValueChange={handleInputChange}
-        >
+        <div className="w-full">
+          <CommandPrimitive.Input
+            asChild
+            value={currentInputValue}
+            onValueChange={handleInputChange}
+          >
           <TextInput
             ref={ref}
             variant={variant}
@@ -202,7 +203,8 @@ export const AutoSuggestInput = React.forwardRef<
             }
             {...props}
           />
-        </CommandPrimitive.Input>
+          </CommandPrimitive.Input>
+        </div>
       </Popover.Anchor>
     );
   }

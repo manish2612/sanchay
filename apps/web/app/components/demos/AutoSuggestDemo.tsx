@@ -43,6 +43,13 @@ const GROUPED_STATES = [
   },
 ];
 
+const CUSTOMERS = [
+  { value: "cust_1", label: "Acme Corp", meta: { id: "C-10492", contact: "john@acme.com", status: "Active", balance: "$14,200.00" } },
+  { value: "cust_2", label: "Globex Inc", meta: { id: "C-10493", contact: "sarah@globex.com", status: "Overdue", balance: "$45,000.00" } },
+  { value: "cust_3", label: "Initech", meta: { id: "C-10494", contact: "bill@initech.com", status: "Active", balance: "$0.00" } },
+  { value: "cust_4", label: "Umbrella Corp", meta: { id: "C-10495", contact: "alice@umbrella.com", status: "Suspended", balance: "$1,250,000.00" } },
+];
+
 export function AutoSuggestDemo() {
   const [value, setValue] = useState("");
   const [dynamicValue, setDynamicValue] = useState("");
@@ -275,6 +282,48 @@ export function AutoSuggestDemo() {
                       <span className="text-xs text-muted-foreground uppercase">
                         {option.value}
                       </span>
+                    </div>
+                  </AutoSuggest.Item>
+                ))}
+              </AutoSuggest.List>
+            </AutoSuggest.Content>
+          </AutoSuggest>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-foreground">
+            Rich Entity List (Fintech Standard)
+          </label>
+          <AutoSuggest options={CUSTOMERS}>
+            <AutoSuggest.Input placeholder="Search customers..." />
+            <AutoSuggest.Content>
+              <AutoSuggest.List>
+                <AutoSuggest.Empty>No customers found.</AutoSuggest.Empty>
+                {CUSTOMERS.map((customer) => (
+                  <AutoSuggest.Item key={customer.value} value={customer.value} className="py-2.5">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="font-semibold text-primary leading-none">
+                          {customer.label}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground leading-none">
+                          ID: {customer.meta.id} &bull; {customer.meta.contact}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-end gap-1.5">
+                        <span className="font-medium text-foreground leading-none">
+                          {customer.meta.balance}
+                        </span>
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded-sm uppercase tracking-wider font-bold leading-none ${
+                            customer.meta.status === "Active" ? "bg-success/20 text-success" :
+                            customer.meta.status === "Overdue" ? "bg-danger/20 text-danger" :
+                            "bg-warning/20 text-warning"
+                          }`}
+                        >
+                          {customer.meta.status}
+                        </span>
+                      </div>
                     </div>
                   </AutoSuggest.Item>
                 ))}
