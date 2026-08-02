@@ -73,7 +73,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
 
                 const isAtEdge = isAtTopEdge || isAtBottomEdge;
 
-                const successRowIndex = table.options.meta?.successRowIndex;
+                const successRowIndex = table.options.meta?.state?.successRowIndex || (table.options.meta as any)?.successRowIndex;
                 const isSuccess = successRowIndex === focusedVirtualRow.index;
 
                 return (
@@ -98,7 +98,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
               {virtualizer.getVirtualItems().map((virtualRow: any) => {
                 const row = rows[virtualRow.index];
                 const isFocused = virtualRow.index === focusedRowIndex;
-                const phantomConfig = table.options.meta?.phantomRowConfig;
+                const phantomConfig = table.options.meta?.features?.phantomRowConfig || (table.options.meta as any)?.phantomRowConfig;
                 const isPhantom = phantomConfig?.isPhantom?.(row);
 
                 let renderedRow;
