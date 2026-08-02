@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { Icon } from "@prime/ui";
+import { Icon, Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@prime/ui";
+
+import { VoucherPreferencesSidebar } from "./VoucherPreferencesSidebar";
 
 interface VoucherPageHeaderProps {
   voucherMode?: string;
@@ -47,11 +49,15 @@ export function VoucherPageHeader({
 
       {/* Right-side chips */}
       <div className="flex items-center gap-2">
-        {/* Entry Mode chip */}
-        {/* <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-info/10 text-info border border-info/25 select-none">
-          <Icon name="Grid2x2" size={10} />
-          {entryMode}
-        </span> */}
+        <VoucherPreferencesSidebar>
+          <button
+            aria-label="Preferences"
+            title="Preferences"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+          >
+            <Icon name="Settings2" size={16} />
+          </button>
+        </VoucherPreferencesSidebar>
 
         {/* Keyboard shortcut hint */}
         <button
