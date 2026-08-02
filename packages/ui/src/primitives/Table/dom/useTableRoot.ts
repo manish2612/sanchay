@@ -60,7 +60,10 @@ export function useTableRoot<TData>({
     overscan: 20,
   });
 
-  const totalWidth = table.getTotalSize();
+  const totalMinWidth = table.getVisibleLeafColumns().reduce((sum, col) => {
+    const isFluid = (col.columnDef.meta as any)?.layout?.fluid;
+    return sum + (isFluid ? (col.columnDef.minSize || 100) : col.getSize());
+  }, 0);
 
   /* 
      Sync Virtualizer scroll with focused row.
@@ -118,6 +121,6 @@ export function useTableRoot<TData>({
     handleRowClick,
     handleKeyDown,
     handleRootFocus,
-    totalWidth,
+    totalMinWidth,
   };
 }
