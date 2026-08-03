@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { AutoSuggest } from "@prime/ui";
+import { 
+  AutoSuggest,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalTitle,
+  ModalDescription,
+  ModalClose,
+  Button
+} from "@prime/ui";
 
 export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig } = column.columnDef.meta || {};
@@ -11,6 +21,7 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
 
   const initialValue = getValue() as string;
   const [value, setValue] = useState(initialValue);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setValue(initialValue);
@@ -32,17 +43,17 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   );
 
   return (
-    <AutoSuggest
-      inputValue={value}
+    <>
+      <AutoSuggest
+        inputValue={value}
       onInputChange={(val) => {
         setValue(val);
         updateData?.(row.index, column.id, val);
       }}
       options={filteredOptions}
       creatable
-      onCreate={(val) => {
-        setValue(val);
-        updateData?.(row.index, column.id, val);
+      onCreate={() => {
+        setIsModalOpen(true);
       }}
     >
       <AutoSuggest.Input
@@ -65,5 +76,25 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
         </AutoSuggest.List>
       </AutoSuggest.Content>
     </AutoSuggest>
+      <Modal open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <ModalContent>
+          <ModalHeader>
+            <ModalTitle>Create New Item</ModalTitle>
+            <ModalDescription>
+              Enter the details for the new item.
+            </ModalDescription>
+          </ModalHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground">Dummy form fields go here...</p>
+          </div>
+          <ModalFooter>
+            <ModalClose asChild>
+              <Button variant="ghost">Cancel</Button>
+            </ModalClose>
+            <Button onClick={() => setIsModalOpen(false)}>Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };
