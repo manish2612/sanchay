@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useFormWizardContext } from "../hooks/useFormWizard";
+import { Button } from "../../../primitives/Button";
+import { Icon } from "../../../primitives/Icon/Icon.dom";
 
 export interface FormFooterProps {
   onNext?: () => void;
@@ -24,7 +26,8 @@ export const FormFooter = ({
   submitLabel = "Submit",
   isSubmitting = false,
 }: FormFooterProps) => {
-  const { currentStep, totalSteps, nextStep, prevStep } = useFormWizardContext();
+  const { currentStep, totalSteps, nextStep, prevStep } =
+    useFormWizardContext();
 
   const isLastStep = currentStep === totalSteps;
   const isFirstStep = currentStep === 1;
@@ -42,56 +45,46 @@ export const FormFooter = ({
   return (
     <div className="flex-shrink-0 bg-surface/95 backdrop-blur-sm border-t border-surface-border px-7 py-3.5 flex items-center gap-2.5">
       {onCancel && (
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-fg bg-surface-variant hover:bg-surface-hover border border-border rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
+        <Button variant="outline" onClick={onCancel}>
           Cancel
-        </button>
+        </Button>
       )}
 
       {/* Spacer */}
       <div className="flex-1" />
 
       {onSkip && !isLastStep && (
-        <button
-          type="button"
-          onClick={onSkip}
-          className="px-4 py-2 text-sm font-medium text-muted-fg hover:text-fg hover:bg-surface-hover rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
+        <Button variant="ghost" onClick={onSkip} className="text-muted-fg">
           Skip
-        </button>
+        </Button>
       )}
 
       {totalSteps > 1 && !isFirstStep && (
-        <button
-          type="button"
-          onClick={handlePrev}
-          className="px-4 py-2 text-sm font-medium text-fg bg-surface-variant hover:bg-surface-hover border border-border rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        >
+        <Button variant="outline" onClick={handlePrev}>
+          <Icon name="ChevronLeft" size={20} />
           Previous
-        </button>
+        </Button>
       )}
 
       {onSave && (
-        <button
-          type="button"
+        <Button
+          variant="outline"
           onClick={onSave}
-          className="px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 border border-primary/30 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="text-primary hover:bg-primary/10 border-primary/30 hover:text-primary"
         >
           Save Draft
-        </button>
+        </Button>
       )}
 
-      <button
+      <Button
         type={isLastStep ? "submit" : "button"}
+        variant="primary"
         onClick={!isLastStep ? handleNext : undefined}
         disabled={isSubmitting}
-        className="px-5 py-2 text-sm font-bold text-primary-fg bg-primary hover:bg-primary-hover rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLastStep ? submitLabel : nextLabel}
-      </button>
+        <Icon name="ChevronRight" size={20} />
+      </Button>
     </div>
   );
 };
