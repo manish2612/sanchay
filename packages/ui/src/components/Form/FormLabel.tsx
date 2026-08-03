@@ -1,6 +1,9 @@
+"use client"
+
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { useFormField } from "./useFormField"
+import { cn } from "../../utils"
 
 export const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
@@ -11,7 +14,7 @@ export const FormLabel = React.forwardRef<
   return (
     <LabelPrimitive.Root
       ref={ref}
-      className={className}
+      className={cn(error && "text-danger", className)}
       htmlFor={formItemId}
       {...props}
     />

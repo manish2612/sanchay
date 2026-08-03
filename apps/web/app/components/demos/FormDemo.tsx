@@ -1,10 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useForm, useFieldArray } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-
+import { useFormDemo } from "./useFormDemo"
 import {
   Form,
   TextInput,
@@ -12,42 +9,14 @@ import {
   Text
 } from "@prime/ui"
 
-const formSchema = z.object({
-  departmentName: z.string().min(2, "Department name must be at least 2 characters."),
-  employees: z.array(
-    z.object({
-      firstName: z.string().min(1, "First name is required"),
-      role: z.string().min(1, "Role is required"),
-    })
-  ).min(1, "At least one employee is required"),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
 export function FormDemo() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      departmentName: "",
-      employees: [{ firstName: "", role: "" }],
-    },
-  })
-
-  const { fields, append, remove } = useFieldArray({
-    name: "employees",
-    control: form.control,
-  })
-
-  function onSubmit(data: FormValues) {
-    console.log("Form Submitted:", data)
-    alert(JSON.stringify(data, null, 2))
-  }
+  const { form, fields, append, remove, onSubmit } = useFormDemo()
 
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-8">
       <div>
-        <Text variant="heading">RHF Composition Demo</Text>
-        <Text variant="body" className="text-gray-500 mt-2">
+        <Text variant="heading4">RHF Composition Demo</Text>
+        <Text variant="body2" className="text-gray-500 mt-2">
           This form demonstrates the highly-performant composition pattern using React Hook Form, Zod validation, and UI primitives.
         </Text>
       </div>
@@ -56,27 +25,24 @@ export function FormDemo() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             
-            {/* Standard Field */}
-            <Form.Field
-              control={form.control}
-              name="departmentName"
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Label>Department Name</Form.Label>
-                  <Form.Control>
-                    <TextInput placeholder="e.g. Engineering" {...field} />
-                  </Form.Control>
-                  <Form.Message />
-                </Form.Item>
-              )}
-            />
+            <Form.Section title="Basic Information" description="General details about the department.">
+              {/* Standard Field */}
+              <Form.Field
+                control={form.control}
+                name="departmentName"
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Label>Department Name</Form.Label>
+                    <Form.Control>
+                      <TextInput placeholder="e.g. Engineering" {...field} />
+                    </Form.Control>
+                    <Form.Message />
+                  </Form.Item>
+                )}
+              />
+            </Form.Section>
 
-            <hr className="my-8" />
-
-            {/* Dynamic Array / Table-like Structure */}
-            <div>
-              <Text variant="heading" className="mb-4">Employees (Dynamic Rows)</Text>
-              
+            <Form.Section title="Employees (Dynamic Rows)" description="Add or remove employees for this department.">
               <div className="space-y-4">
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex gap-4 items-start p-4 border rounded-lg bg-gray-50">
@@ -124,7 +90,7 @@ export function FormDemo() {
               </div>
 
               {form.formState.errors.employees?.root && (
-                <p className="text-red-500 text-sm mt-2">
+                <p className="text-danger text-sm mt-2">
                   {form.formState.errors.employees.root.message}
                 </p>
               )}
@@ -137,7 +103,7 @@ export function FormDemo() {
               >
                 + Add Employee
               </Button>
-            </div>
+            </Form.Section>
 
             <div className="pt-6 border-t flex justify-end">
               <Button type="submit" variant="primary">
