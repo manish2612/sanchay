@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { GridBackground } from "@prime/ui";
 import { APP_NAME } from "@prime/config";
 
@@ -65,6 +66,22 @@ export function ComponentDemos() {
               <ModalDemo />
               <FormDemo />
               <DropdownDemo />
+            </div>
+
+            {/* Form Wizard Demos */}
+            <div className="bg-surface p-6 rounded-xl border border-border flex flex-col gap-4 mt-2">
+              <div className="flex flex-col gap-1">
+                <h3 className="font-head text-lg font-bold text-fg">Form Wizard Templates</h3>
+                <p className="text-sm text-muted-fg">Full page wizard layouts using Compound Components.</p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/demos/form-wizard-multi" className="px-4 py-2 bg-primary text-primary-fg font-medium rounded-lg hover:bg-primary-hover transition-colors shadow-sm">
+                  Multi-Step Wizard
+                </Link>
+                <Link href="/demos/form-wizard-single" className="px-4 py-2 bg-surface-variant text-fg font-medium rounded-lg hover:bg-surface-hover border border-border transition-colors">
+                  Single-Step Form
+                </Link>
+              </div>
             </div>
           </div>
         </div>

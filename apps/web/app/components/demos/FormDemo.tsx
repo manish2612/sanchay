@@ -15,8 +15,8 @@ export function FormDemo() {
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-8">
       <div>
-        <Text variant="heading4">RHF Composition Demo</Text>
-        <Text variant="body2" className="text-gray-500 mt-2">
+        <Text variant="heading">RHF Composition Demo</Text>
+        <Text variant="body" className="text-gray-500 mt-2">
           This form demonstrates the highly-performant composition pattern using React Hook Form, Zod validation, and UI primitives.
         </Text>
       </div>
