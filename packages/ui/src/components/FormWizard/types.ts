@@ -5,6 +5,8 @@ export interface FormWizardStep {
   title: string;
   description?: string;
   status?: "pending" | "in-progress" | "done";
+  isOptional?: boolean;
+  fields?: string[];
 }
 
 export interface FormWizardContextValue {

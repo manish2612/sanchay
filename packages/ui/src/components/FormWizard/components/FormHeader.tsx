@@ -1,12 +1,19 @@
 import React, { ReactNode } from "react";
+import { useFormWizardContext } from "../hooks/useFormWizard";
 
 export interface FormHeaderProps {
   graphic?: ReactNode;
-  title: string;
+  title?: string;
   subtitle?: ReactNode;
 }
 
 export const FormHeader = ({ graphic, title, subtitle }: FormHeaderProps) => {
+  const { steps, currentStep } = useFormWizardContext();
+  const currentStepInfo = steps[currentStep - 1];
+
+  const displayTitle = title || currentStepInfo?.title || "";
+  const displaySubtitle = subtitle || currentStepInfo?.description;
+
   return (
     <div className="flex-shrink-0 relative flex flex-col items-center text-center gap-2 px-8 py-9 border-b border-surface-border">
       {graphic && (
@@ -16,11 +23,11 @@ export const FormHeader = ({ graphic, title, subtitle }: FormHeaderProps) => {
       )}
       <div className="flex flex-col items-center gap-1.5 w-full min-w-0">
         <div className="font-head text-[26px] font-semibold text-fg tracking-tight">
-          {title}
+          {displayTitle}
         </div>
-        {subtitle && (
+        {displaySubtitle && (
           <div className="text-base text-muted-fg leading-relaxed max-w-[480px]">
-            {subtitle}
+            {displaySubtitle}
           </div>
         )}
       </div>

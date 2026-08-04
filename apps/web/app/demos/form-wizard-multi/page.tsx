@@ -6,30 +6,130 @@ import { FormWizard, Form } from "@prime/ui";
 import { Monitor } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  accountName: z.string().min(1, "Account Name is required"),
+  accountCode: z.string().min(1, "Account Code is required"),
+  internalNotes: z.string().optional(),
+});
+
 const STEPS = [
-  { id: 1, title: "Initial Setup", description: "Basic details" },
-  { id: 2, title: "General Details", description: "Name, code & classification" },
-  { id: 3, title: "Tax & Compliance", description: "VAT, PAN & rates" },
+  { 
+    id: 1, 
+    title: "Initial Setup", 
+    description: "Basic details", 
+    fields: ["accountName", "accountCode"] 
+  },
+  { 
+    id: 2, 
+    title: "General Details", 
+    description: "Name, code & classification", 
+    isOptional: true,
+    fields: ["internalNotes"] 
+  },
+  { 
+    id: 3, 
+    title: "Tax & Compliance", 
+    description: "VAT, PAN & rates" 
+  },
 ];
+
+import { useFormWizardContext } from "@prime/ui";
+
+const DemoWizardContent = ({ form }: { form: any }) => {
+  const { currentStep } = useFormWizardContext();
+
+  return (
+    <FormWizard.Content>
+      <div className="space-y-6">
+        {currentStep === 1 && (
+          <>
+            <Form.Field
+              control={form.control}
+              name="accountName"
+              render={({ field }: any) => (
+                <Form.Item>
+                  <Form.Label>Account Name *</Form.Label>
+                  <Form.Control>
+                    <input
+                      {...field}
+                      className="w-full h-10 px-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-transparent text-foreground"
+                      placeholder="e.g. Current Assets"
+                    />
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
+              )}
+            />
+            
+            <FormWizard.Separator />
+
+            <Form.Field
+              control={form.control}
+              name="accountCode"
+              render={({ field }: any) => (
+                <Form.Item>
+                  <Form.Label>Account Code *</Form.Label>
+                  <Form.Control>
+                    <input
+                      {...field}
+                      className="w-full h-10 px-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-transparent text-foreground"
+                      placeholder="e.g. 1000"
+                    />
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
+              )}
+            />
+          </>
+        )}
+
+        {currentStep === 2 && (
+          <>
+            <Form.Field
+              control={form.control}
+              name="internalNotes"
+              render={({ field }: any) => (
+                <Form.Item>
+                  <Form.Label>Internal Notes (Optional)</Form.Label>
+                  <Form.Control>
+                    <textarea
+                      {...field}
+                      rows={4}
+                      className="w-full p-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-transparent text-foreground resize-none"
+                      placeholder="Add any internal classification notes here..."
+                    />
+                  </Form.Control>
+                  <Form.Message />
+                </Form.Item>
+              )}
+            />
+          </>
+        )}
+
+        {currentStep === 3 && (
+          <div className="py-8 text-center text-muted-fg">
+            <p>Tax and compliance details go here.</p>
+            <p className="text-sm mt-2">Click Submit to finish the setup.</p>
+          </div>
+        )}
+      </div>
+    </FormWizard.Content>
+  );
+};
 
 export default function MultiStepFormWizardDemo() {
   const router = useRouter();
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       accountName: "",
       accountCode: "",
       internalNotes: "",
     },
   });
-
-  const handleNext = () => {
-    // In a real app, we might trigger form validation here
-    // For the demo, we'll just let the wizard handle moving to the next step
-    // by relying on the default behavior if onNext isn't prevented.
-    // Wait, the FormFooter uses the context nextStep.
-    // To do it properly we can just let it be handled by default by omitting onNext
-    // or by passing a custom handler that does form.trigger().
-  };
 
   const onSubmit = (data: any) => {
     console.log("Submitted data:", data);
@@ -59,56 +159,12 @@ export default function MultiStepFormWizardDemo() {
         <FormWizard.Container>
           <FormWizard.Header
             graphic={<Monitor className="w-12 h-12 stroke-[1.25]" />}
-            title="General Details"
-            subtitle="Set the ledger account name, code, and operational classification."
           />
 
-          <FormWizard.Content>
-            {/* We can use the RHF Form components from @prime/ui here if they are exported */}
-            <div className="space-y-6">
-              <Form.Field
-                control={form.control}
-                name="accountName"
-                render={({ field }: any) => (
-                  <Form.Item>
-                    <Form.Label>Account Name *</Form.Label>
-                    <Form.Control>
-                      <input
-                        {...field}
-                        className="w-full h-10 px-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="e.g. Current Assets"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
-                )}
-              />
-              
-              <FormWizard.Separator />
-
-              <Form.Field
-                control={form.control}
-                name="accountCode"
-                render={({ field }: any) => (
-                  <Form.Item>
-                    <Form.Label>Account Code</Form.Label>
-                    <Form.Control>
-                      <input
-                        {...field}
-                        className="w-full h-10 px-3 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="e.g. 1000"
-                      />
-                    </Form.Control>
-                    <Form.Message />
-                  </Form.Item>
-                )}
-              />
-            </div>
-          </FormWizard.Content>
+          <DemoWizardContent form={form} />
 
           <FormWizard.Footer
             onCancel={() => router.push("/")}
-            onSkip={() => console.log("Skipped")}
             onSave={() => console.log("Saved draft")}
           />
         </FormWizard.Container>
