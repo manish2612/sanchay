@@ -13,6 +13,8 @@ export interface FormWizardContextValue {
   currentStep: number;
   totalSteps: number;
   steps: FormWizardStep[];
+  rejectedStepIndex: number | null;
+  setRejectedStepIndex: (step: number | null) => void;
   nextStep: () => void;
   prevStep: () => void;
   goToStep: (step: number) => void;

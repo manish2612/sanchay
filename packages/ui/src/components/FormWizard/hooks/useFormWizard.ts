@@ -15,6 +15,7 @@ export const useFormWizardContext = () => {
 
 export const useFormWizard = (initialStep = 1, steps: FormWizardStep[] = []) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
+  const [rejectedStepIndex, setRejectedStepIndex] = useState<number | null>(null);
 
   const nextStep = useCallback(() => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length || 1));
@@ -34,6 +35,8 @@ export const useFormWizard = (initialStep = 1, steps: FormWizardStep[] = []) => 
     currentStep,
     totalSteps: steps.length || 1,
     steps,
+    rejectedStepIndex,
+    setRejectedStepIndex,
     nextStep,
     prevStep,
     goToStep,
