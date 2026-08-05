@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { GridBackground } from "@prime/ui";
 import { APP_NAME } from "@prime/config";
 
@@ -20,58 +21,76 @@ import { DropdownDemo } from "./demos/DropdownDemo";
 import { AutoSuggestDemo } from "./demos/AutoSuggestDemo";
 import { SwitchDemo } from "./demos/SwitchDemo";
 import { SegmentedControlDemo } from "./demos/SegmentedControlDemo";
+import { FormDemo } from "./demos/FormDemo";
 
 export function ComponentDemos() {
   return (
-      <div className="flex flex-col flex-1 min-h-0 relative overflow-y-auto bg-background">
-        {/* App Menu Bar - Top Placement */}
+    <div className="flex flex-col flex-1 min-h-0 relative overflow-y-auto bg-background">
+      {/* App Menu Bar - Top Placement */}
 
-        {/* Background Grid & Glow */}
-        <GridBackground className="opacity-60 fixed inset-0 z-0 pointer-events-none" />
+      {/* Background Grid & Glow */}
+      <GridBackground className="opacity-60 fixed inset-0 z-0 pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col items-center py-16 px-4">
-          {/* Header Content */}
-          <div className="text-center max-w-xl mb-12">
-            <h1 className="text-4xl font-extrabold mb-2 font-heading tracking-tight text-foreground">
-              Welcome to {APP_NAME}
-            </h1>
-            <p className="text-lg font-body text-gray-400 font-normal">
-              Theme & Density Demonstration
-            </p>
+      <div className="relative z-10 flex flex-col items-center py-16 px-4">
+        {/* Header Content */}
+        <div className="text-center max-w-xl mb-12">
+          <h1 className="text-4xl font-extrabold mb-2 font-heading tracking-tight text-foreground">
+            Welcome to {APP_NAME}
+          </h1>
+          <p className="text-lg font-body text-gray-400 font-normal">
+            Theme & Density Demonstration
+          </p>
+        </div>
+
+        {/* Main Demos Container - Full Width / Responsive */}
+        <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          {/* Column 1: Controls & Config */}
+          <div className="flex flex-col gap-6">
+            <ThemeControls />
+            <NavDemoWrapper />
+            <ShortcutDemo />
           </div>
 
-          {/* Main Demos Container - Full Width / Responsive */}
-          <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Column 1: Controls & Config */}
-            <div className="flex flex-col gap-6">
-              <ThemeControls />
-              <NavDemoWrapper />
-              <ShortcutDemo />
+          {/* Column 2: Component Showcase */}
+          <div className="flex flex-col gap-6">
+            <SwitchDemo />
+            <SegmentedControlDemo />
+            <FontDemo />
+
+            <div className="space-y-6">
+              <ButtonDemo />
+              <TextInputDemo />
+              <AutoSuggestDemo />
+              <DatePickerDemo />
+              <MenuBarDemo />
+              <ModalDemo />
+              <FormDemo />
+              <DropdownDemo />
             </div>
 
-            {/* Column 2: Component Showcase */}
-            <div className="flex flex-col gap-6">
-              <SwitchDemo />
-              <SegmentedControlDemo />
-              <FontDemo />
-
-              <div className="space-y-6">
-                <ButtonDemo />
-                <TextInputDemo />
-                <AutoSuggestDemo />
-                <DatePickerDemo />
-                <MenuBarDemo />
-                <ModalDemo />
-                <DropdownDemo />
+            {/* Form Wizard Demos */}
+            <div className="bg-surface p-6 rounded-xl border border-border flex flex-col gap-4 mt-2">
+              <div className="flex flex-col gap-1">
+                <h3 className="font-head text-lg font-bold text-fg">Form Wizard Templates</h3>
+                <p className="text-sm text-muted-fg">Full page wizard layouts using Compound Components.</p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/demos/form-wizard-multi" className="px-4 py-2 bg-primary text-primary-fg font-medium rounded-lg hover:bg-primary-hover transition-colors shadow-sm">
+                  Multi-Step Wizard
+                </Link>
+                <Link href="/demos/form-wizard-single" className="px-4 py-2 bg-surface-variant text-fg font-medium rounded-lg hover:bg-surface-hover border border-border transition-colors">
+                  Single-Step Form
+                </Link>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Full Width Demos */}
-          <div className="w-full max-w-7xl mt-8">
-            <TableDemo />
-          </div>
+        {/* Full Width Demos */}
+        <div className="w-full max-w-7xl mt-8">
+          <TableDemo />
         </div>
       </div>
+    </div>
   );
 }

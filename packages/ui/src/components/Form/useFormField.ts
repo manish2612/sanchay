@@ -1,15 +1,18 @@
+"use client"
+
 import * as React from "react"
 import { useFormContext } from "react-hook-form"
 import { FormFieldContext, FormItemContext } from "./context"
 
 export const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
-  const itemContext = React.useContext(FormItemContext)
-  const { getFieldState, formState } = useFormContext()
-
+  
   if (!fieldContext) {
     throw new Error("useFormField should be used within <FormField>")
   }
+
+  const itemContext = React.useContext(FormItemContext)
+  const { getFieldState, formState } = useFormContext()
 
   const fieldState = getFieldState(fieldContext.name, formState)
   const { id } = itemContext

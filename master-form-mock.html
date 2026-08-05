@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ledger Item — Create New · Sanchay ERP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ─────────────────────────────────────────────
+       DESIGN TOKENS  (Prosperity Green / Light)
+       All values sourced from existing token system.
+       No arbitrary colors introduced.
+    ───────────────────────────────────────────── */
+    :root {
+      --bg:               #F6F7ED;
+      --fg:               #001F3F;
+      --surface:          #FFFFFF;
+      --surface-variant:  #F0F2E6;
+      --surface-hover:    #E9ECE0;
+      --surface-active:   #E0E3D6;
+      --surface-border:   #DCE0D1;
+      --muted:            #F0F2E6;
+      --muted-fg:         #5C6E80;
+      --border:           #DCE0D1;
+      --input:            #DCE0D1;
+      --focus-ring:       #DBE64C;
+      --outline:          #C9CFBD;
+
+      --primary:          #00804C;
+      --primary-hover:    #006B3F;
+      --primary-active:   #005633;
+      --primary-fg:       #FFFFFF;
+
+      --secondary:        #74C365;
+      --secondary-hover:  #62B852;
+      --secondary-fg:     #001F3F;
+
+      --danger:           #E74C3C;
+
+      --font-body: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      --font-head: "Work Sans", sans-serif;
+
+      --text-xs:   11px;
+      --text-sm:   12px;
+      --text-md:   14px;
+      --text-base: 14px;
+      --text-lg:   16px;
+      --text-xl:   18px;
+      --text-2xl:  22px;
+
+      --radius-sm:  4px;
+      --radius-md:  6px;
+      --radius-lg:  10px;
+      --radius-xl:  16px;
+
+      /* ── Layout ── */
+      --sidebar-w:     52px;
+      --nav-visible-w: 340px;
+      --card-overlap:  44px;  /* how far card bleeds left over nav panel */
+      --nav-w:         calc(var(--nav-visible-w) + var(--card-overlap));
+      --header-h:      52px;
+      --card-v-gap:    32px;  /* breathing room top + bottom (like Benti) */
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: var(--text-base); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--outline); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    /* ════════════════════════════════════════
+       APP SHELL
+    ════════════════════════════════════════ */
+    .app-shell { display: flex; height: 100dvh; overflow: hidden; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--primary);
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 0; gap: 4px; flex-shrink: 0; z-index: 40;
+    }
+    .sidebar-logo {
+      width: 32px; height: 32px; background: var(--primary-fg);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px; flex-shrink: 0;
+    }
+    .sidebar-logo svg { color: var(--primary); }
+    .sidebar-nav { display: flex; flex-direction: column; align-items: center; gap: 2px; flex: 1; }
+    .sidebar-item {
+      width: 36px; height: 36px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: rgba(255,255,255,0.6);
+      transition: background 0.15s, color 0.15s; position: relative;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .sidebar-item.active { background: rgba(255,255,255,0.18); color: #fff; }
+    .sidebar-item.active::before {
+      content: ''; position: absolute; left: -8px;
+      width: 3px; height: 20px; background: var(--focus-ring);
+      border-radius: 0 2px 2px 0;
+    }
+    .sidebar-bottom { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .avatar-chip {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--focus-ring); color: var(--fg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-family: var(--font-head); font-weight: 700;
+    }
+
+    /* ── Main ── */
+    .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+
+    /* ── Page Header ── */
+    .page-header {
+      height: var(--header-h); background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px;
+      gap: 10px; flex-shrink: 0; z-index: 30;
+    }
+    .page-header-crumb { font-family: var(--font-head); font-size: var(--text-sm); color: var(--muted-fg); display: flex; align-items: center; gap: 5px; }
+    .page-header-crumb a { color: var(--muted-fg); text-decoration: none; transition: color 0.15s; }
+    .page-header-crumb a:hover { color: var(--primary); }
+    .page-header-crumb .sep { opacity: 0.4; }
+    .page-header-title { font-family: var(--font-head); font-size: var(--text-lg); font-weight: 600; color: var(--fg); }
+    .header-spacer { flex: 1; }
+    .header-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 9999px;
+      font-size: var(--text-xs); font-weight: 500;
+      background: #E8F5E9; color: var(--primary); border: 1px solid var(--secondary);
+    }
+
+    /* ════════════════════════════════════════
+       FORM CANVAS — the two-zone layout
+    ════════════════════════════════════════ */
+    .form-canvas {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── STEP NAV PANEL ──
+       Uses --surface-active (#E0E3D6) — a token-derived mid-tone.
+       Clearly lighter than sidebar primary, clearly darker than --bg.
+       This three-tone gradient (dark → mid → light) is what creates
+       the visual depth that allows the white card's shadow to read.
+       z-index: 1 — sits below the form body's stacking context.
+    ── */
+    .step-nav {
+      width: var(--nav-w);
+      padding-right: var(--card-overlap) ; /* Reserve space for form overlap */
+      flex-shrink: 0;
+      background: var(--surface-active); /* #E0E3D6 — token, not arbitrary */
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;       /* BELOW form body — card overlaps on top */
+    }
+
+    /* Scrollable inner of step nav */
+    .step-nav-inner {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Entity zone: watermark + form title ── */
+    .nav-top {
+      padding: 28px 22px 18px 22px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    /* Low-opacity watermark icon — contextual to the master type */
+    .nav-watermark {
+      position: absolute;
+      top: 20px; right: 18px;
+      width: 68px; height: 68px;
+      color: var(--primary);
+      opacity: 0.09;
+      pointer-events: none;
+    }
+    .nav-entity-kicker {
+      font-size: var(--text-xs); font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--primary); opacity: 0.6;
+      margin-bottom: 4px;
+    }
+    .nav-entity-name {
+      font-family: var(--font-head);
+      font-size: 17px; font-weight: 700;
+      color: var(--fg); line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .nav-divider {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,128,76,0.3) 0%, transparent 100%);
+    }
+
+    /* ── Step list ── */
+    .step-list {
+      padding: 16px 14px 16px 18px;
+      display: flex; flex-direction: column;
+      flex: 1;
+    }
+    .step-item {
+      display: flex; align-items: flex-start; gap: 11px;
+      padding: 10px 8px; cursor: pointer;
+      border-radius: var(--radius-lg);
+      transition: background 0.15s;
+      position: relative; outline: none;
+    }
+    .step-item:hover { background: rgba(0,128,76,0.07); }
+    .step-item:focus-visible { box-shadow: inset 0 0 0 2px var(--primary); }
+    /* Connecting line */
+    .step-item:not(:last-child)::after {
+      content: ''; position: absolute;
+      left: 22px; /* center of dot */
+      top: 46px;
+      width: 2px; height: calc(100% - 14px);
+      background: var(--outline); border-radius: 1px;
+    }
+    .step-item.done:not(:last-child)::after { background: var(--secondary); }
+
+    .step-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: var(--text-xs);
+      font-family: var(--font-head); font-weight: 700;
+      border: 2px solid var(--outline);
+      background: var(--surface-variant); color: var(--muted-fg);
+      transition: all 0.2s; position: relative; z-index: 1;
+    }
+    .step-item.done .step-dot {
+      background: var(--secondary); border-color: var(--secondary);
+      color: var(--secondary-fg);
+    }
+    .step-item.active .step-dot {
+      background: var(--primary); border-color: var(--primary);
+      color: #fff; box-shadow: 0 0 0 4px rgba(0,128,76,0.2);
+    }
+    .step-info { display: flex; flex-direction: column; gap: 1px; padding-top: 2px; }
+    .step-label {
+      font-family: var(--font-head); font-size: var(--text-md); font-weight: 500;
+      color: var(--fg); line-height: 1.25;
+    }
+    .step-item.active .step-label { color: var(--primary); font-weight: 700; }
+    .step-item.done .step-label { color: var(--muted-fg); }
+    .step-desc { font-size: var(--text-sm); color: var(--muted-fg); line-height: 1.3; margin-top: 1px; }
+    .step-chip {
+      display: inline-flex; align-items: center; gap: 3px;
+      margin-top: 5px; padding: 2px 8px; border-radius: 9999px; font-size: 10px; font-weight: 600;
+    }
+    .step-chip.done { background: rgba(116,195,101,0.2); color: var(--primary-hover); border: 1px solid rgba(116,195,101,0.4); }
+    .step-chip.active { background: rgba(0,128,76,0.12); color: var(--primary); border: 1px solid rgba(0,128,76,0.25); }
+    .step-chip.pending { background: var(--surface-variant); color: var(--muted-fg); border: 1px solid var(--border); }
+
+    /* Bottom stats */
+    .nav-stats {
+      padding: 14px 22px 20px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+    .nav-stats-label { font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted-fg); margin-bottom: 9px; }
+    .nav-stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 0; font-size: var(--text-sm); }
+    .nav-stat-k { color: var(--muted-fg); }
+    .nav-stat-v { font-weight: 600; color: var(--fg); }
+    .nav-stat-v.green { color: var(--primary); }
+
+    /* ════════════════════════════════════════
+       FORM BODY
+       position: relative + z-index: 2 is the key:
+       it creates a stacking context ABOVE the nav panel.
+       The card's negative margin-left bleeds into the nav panel's
+       space while rendering visually on top because this stacking
+       context has higher z-index. The shadow is cast onto the nav panel.
+    ════════════════════════════════════════ */
+    .form-body {
+      flex: 1;
+      min-width: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      /* overflow: hidden; REMOVED: this clipped the overlapping step card */
+      position: relative;
+      z-index: 2;       /* ABOVE step nav stacking context */
+      /* Padding: right + top/bottom. Left is zero — card itself has the overlap margin */
+      padding: var(--card-v-gap) 28px var(--card-v-gap) 0;
+    }
+
+    /* ── STEP CARD ──
+       This is the primary elevated surface.
+       margin-left: calc(-1 * var(--card-overlap))  pulls the card's left edge
+       into the nav panel's space. Because .form-body has z-index: 2 and the
+       nav panel has z-index: 1, the card paints on top. The box-shadow is
+       cast onto the nav panel background — this is the visible overlap effect.
+
+       The card occupies the full height of form-body (via flex stretch),
+       minus the vertical gap padding from form-body itself.
+       This gives the Benti-style "card with space around it" appearance.
+    ── */
+    .step-card {
+      background: var(--surface);
+      border-radius: 0;    /* 16px — less aggressive than 24px */
+      /* Rich directional shadow — visible against --surface-active nav panel */
+      box-shadow:
+        -8px 0 32px rgba(0,31,63,0.12),
+         0   8px 32px rgba(0,31,63,0.10),
+         0   2px  8px rgba(0,31,63,0.06);
+      overflow: hidden;
+      margin-left: calc(-1 * var(--card-overlap));  /* true CSS overlap */
+      max-width: 800px;
+
+      /* Card takes full height of form-body content area */
+      display: flex;
+      flex-direction: column;
+      /* Animate in on mount */
+      animation: cardIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Top gradient accent */
+    .card-accent {
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--focus-ring) 100%);
+      flex-shrink: 0;
+    }
+
+    /* Card header — stays fixed when content changes */
+    .card-header {
+      padding: 36px 32px 28px;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .card-icon {
+      width: 140px; height: 80px;
+      background: transparent; border: none;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+      position: relative;
+      margin-bottom: 4px;
+    }
+    .card-icon svg { width: 100%; height: 100%; }
+    
+    .card-head-text { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .card-title {
+      font-family: var(--font-head); font-size: 26px;
+      font-weight: 600; color: var(--fg); letter-spacing: -0.01em;
+    }
+    .card-sub { font-size: var(--text-md); color: var(--muted-fg); line-height: 1.5; max-width: 480px; }
+
+    /* ── Card scrollable content region ──
+       This is the ONLY part that changes on step switch.
+       The card header and footer stay completely still — no layout shift.
+    ── */
+    .card-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px 28px;
+    }
+
+    /* Content transition — opacity fade only, no translate (prevents layout shift) */
+    .card-content.transitioning {
+      opacity: 0;
+      transition: opacity 0.12s ease;
+    }
+    .card-content.visible {
+      opacity: 1;
+      transition: opacity 0.18s ease 0.08s;
+    }
+
+    /* ── Card sticky footer — inside the card, not outside ── */
+    .card-footer {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--surface-border);
+      padding: 14px 28px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .footer-spacer { flex: 1; }
+    .footer-hint { font-size: var(--text-sm); color: var(--muted-fg); display: flex; align-items: center; gap: 5px; }
+    .kbd {
+      display: inline-flex; align-items: center;
+      padding: 1px 6px; border: 1px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 10px;
+      font-family: ui-monospace, monospace; color: var(--muted-fg);
+      background: var(--surface-variant); box-shadow: 0 1px 0 var(--border);
+    }
+
+    /* ════════════════════════════════════════
+       FIELD COMPONENTS
+    ════════════════════════════════════════ */
+    .field-section { margin-bottom: 24px; }
+    .field-section:last-child { margin-bottom: 0; }
+    .field-section-title {
+      font-family: var(--font-head); font-size: var(--text-xs); font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--primary);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .field-section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(0,128,76,0.2) 0%, transparent 100%);
+    }
+    .field-sep { height: 1px; background: var(--surface-border); margin: 0 0 22px; }
+
+    .fields-grid { display: grid; gap: 18px; }
+    .fields-grid.col-2 { grid-template-columns: 1fr 1fr; }
+    .fields-grid.col-1 { grid-template-columns: 1fr; }
+    .field-span-2 { grid-column: span 2; }
+
+    /* Field group */
+    .f-group { display: flex; flex-direction: column; gap: 5px; }
+    .f-label {
+      font-size: var(--text-sm); font-weight: 600; color: var(--fg);
+      display: flex; align-items: center; gap: 5px; letter-spacing: 0.01em;
+    }
+    .f-label .req { color: var(--danger); font-size: 14px; line-height: 1; }
+    .f-label .opt {
+      font-size: 10px; font-weight: 400; color: var(--muted-fg);
+      background: var(--muted); padding: 1px 6px;
+      border-radius: 9999px; border: 1px solid var(--border);
+    }
+
+    /* LG input — 48px height for master forms */
+    .f-ctrl {
+      height: 48px;
+      border: 1.5px solid var(--input); border-radius: var(--radius-lg);
+      background: var(--surface); font-family: var(--font-body);
+      font-size: var(--text-md); color: var(--fg);
+      padding: 0 14px; width: 100%;
+      display: flex; align-items: center; gap: 9px;
+      cursor: text; position: relative;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .f-ctrl:hover { border-color: var(--primary); }
+    .f-ctrl:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,128,76,0.14); }
+    .f-ctrl input, .f-ctrl select, .f-ctrl textarea {
+      background: none; border: none; outline: none;
+      font-family: inherit; font-size: inherit; color: inherit;
+      width: 100%; height: 100%; cursor: inherit; appearance: none;
+    }
+    .f-ctrl.select-ctrl { cursor: pointer; }
+    .f-ctrl.readonly { background: var(--muted); border-color: var(--border); cursor: default; }
+    .f-ctrl.readonly input { color: var(--muted-fg); font-weight: 500; }
+    .f-ctrl.error { border-color: var(--danger); }
+    .f-ctrl.error:focus-within { box-shadow: 0 0 0 3px rgba(231,76,60,0.14); }
+
+    .f-icon-l { color: var(--muted-fg); flex-shrink: 0; }
+    .f-chevron { position: absolute; right: 14px; color: var(--muted-fg); pointer-events: none; }
+
+    .f-hint { font-size: var(--text-xs); color: var(--muted-fg); line-height: 1.4; }
+    .f-hint.err { color: var(--danger); }
+
+    .f-ctrl.textarea-ctrl { height: auto; min-height: 80px; padding: 12px 14px; align-items: flex-start; }
+    .f-ctrl.textarea-ctrl textarea { height: auto; min-height: 52px; resize: vertical; line-height: 1.6; }
+
+    /* Toggle row */
+    .f-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 15px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s; user-select: none;
+    }
+    .f-toggle:hover { border-color: var(--primary); background: rgba(0,128,76,0.02); }
+    .f-toggle-label { display: flex; flex-direction: column; gap: 1px; }
+    .f-toggle-name { font-size: var(--text-md); font-weight: 500; color: var(--fg); }
+    .f-toggle-desc { font-size: var(--text-sm); color: var(--muted-fg); }
+    .f-switch { width: 42px; height: 23px; background: var(--border); border-radius: 9999px; position: relative; flex-shrink: 0; transition: background 0.2s; }
+    .f-switch.on { background: var(--primary); }
+    .f-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .f-switch.on::after { transform: translateX(19px); }
+
+    /* Info callout (used in step 3) */
+    .f-callout {
+      padding: 12px 14px; border-radius: var(--radius-lg);
+      background: var(--surface-variant); border: 1px solid var(--border);
+      font-size: var(--text-sm); color: var(--muted-fg);
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .f-callout svg { color: var(--primary); flex-shrink: 0; margin-top: 1px; }
+
+    /* ════════════════════════════════════════
+       BUTTONS
+    ════════════════════════════════════════ */
+    .btn {
+      height: 38px; padding: 0 18px; border-radius: var(--radius-lg);
+      font-family: var(--font-body); font-size: var(--text-md); font-weight: 500;
+      cursor: pointer; border: 1.5px solid transparent;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+      white-space: nowrap; text-decoration: none; user-select: none;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-sm { height: 30px; padding: 0 12px; border-radius: var(--radius-md); font-size: var(--text-sm); }
+    .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); box-shadow: 0 4px 12px rgba(0,128,76,0.28); }
+    .btn-outline { background: transparent; color: var(--fg); border-color: var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,128,76,0.04); }
+    .btn-ghost { background: transparent; color: var(--muted-fg); border-color: transparent; }
+    .btn-ghost:hover { background: var(--surface-hover); color: var(--fg); }
+
+    /* Tooltip */
+    [data-tooltip] { position: relative; }
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip); position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--fg); color: #fff; font-size: var(--text-xs); padding: 3px 8px;
+      border-radius: var(--radius-sm); white-space: nowrap; pointer-events: none; z-index: 200; opacity: 0.92;
+    }
+
+    /* ════════════════════════════════════════
+       ANIMATIONS
+    ════════════════════════════════════════ */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes checkPop {
+      0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); }
+    }
+    .step-item.done .step-dot { animation: checkPop 0.25s ease-out both; }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+
+    .mobile-header { display: none; }
+
+    /* 960–1279: compress nav, reduce overlap */
+    @media (max-width: 1279px) {
+      :root { --nav-visible-w: 230px; --card-overlap: 30px; --card-v-gap: 18px; }
+      .card-content { padding: 20px 22px; }
+      .card-header { padding: 18px 22px 16px; }
+      .card-footer { padding: 12px 22px; }
+    }
+
+    /* ≤959: Horizontal Top Bar (Tablet & Mobile) */
+    @media (max-width: 959px) {
+      :root { --card-overlap: 0px; --card-v-gap: 0px; --nav-visible-w: 100%; }
+      .form-canvas { flex-direction: column; }
+      
+      .step-nav {
+        width: 100%; height: auto; padding: 0;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .step-nav-inner { overflow: visible; display: block; }
+      .nav-top, .nav-divider, .nav-stats, .step-list { display: none !important; }
+      
+      .mobile-header { 
+        display: flex; padding: 12px 16px; align-items: center; gap: 14px; width: 100%; 
+      }
+      .mh-dot {
+        width: 32px; height: 32px; border-radius: 50%;
+        background: var(--primary); color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: var(--text-md); font-weight: 700; font-family: var(--font-head);
+        box-shadow: 0 0 0 4px rgba(0,128,76,0.15);
+        flex-shrink: 0;
+      }
+      .mh-info {
+        flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px;
+      }
+      .mh-title { display: flex; align-items: center; gap: 8px; }
+      .mh-entity {
+        font-size: 16px; font-weight: 700; font-family: var(--font-head);
+        color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .mh-chip {
+        background: transparent; color: var(--muted-fg); border: 1px solid var(--border);
+        font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px;
+        text-transform: uppercase; letter-spacing: 0.05em;
+      }
+      .mh-step-text {
+        font-size: var(--text-sm); color: var(--muted-fg);
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .mh-progress {
+        background: rgba(116,195,101,0.15); color: var(--primary-hover); border: 1px solid rgba(116,195,101,0.3);
+        font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 9999px;
+        flex-shrink: 0;
+      }
+      
+      .form-body { padding: 0; min-height: 0; }
+      .step-card { margin-left: 0; border-radius: 0; box-shadow: none; border: none; min-height: 0; }
+      .card-header { display: none !important; }
+      .fields-grid.col-2 { grid-template-columns: 1fr; }
+      .field-span-2 { grid-column: span 1; }
+    }
+
+    @media (max-width: 400px) {
+      .f-ctrl { height: 44px; }
+      .card-content { padding: 16px 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar" aria-label="Main navigation">
+    <div class="sidebar-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <div class="sidebar-nav">
+      <div class="sidebar-item" data-tooltip="Dashboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Company">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8l-2 4h12l-2-4z"/></svg>
+      </div>
+      <div class="sidebar-item active" data-tooltip="Masters">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Transactions">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Reports">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="sidebar-item" data-tooltip="Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-item" data-tooltip="Help">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="avatar-chip">MK</div>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- FORM CANVAS -->
+    <div class="form-canvas">
+
+      <!-- ══════════════════════════════
+           STEP NAV PANEL (z-index: 1)
+           Background: --surface-active (#E0E3D6)
+           Three-tone depth: dark sidebar → mid nav → light canvas
+      ══════════════════════════════ -->
+      <aside class="step-nav" aria-label="Form steps">
+        <div class="step-nav-inner">
+
+          <div class="mobile-header">
+            <div class="mh-dot" id="mh-dot">2</div>
+            <div class="mh-info">
+              <div class="mh-title">
+                <span class="mh-entity">Ledger Item</span>
+                <span class="mh-chip">New</span>
+              </div>
+              <div class="mh-step-text" id="mh-step-text">General Details (Name, code &amp; contact)</div>
+            </div>
+            <div class="mh-progress" id="mh-progress">Step 2 of 5</div>
+          </div>
+
+          <div class="nav-top">
+            <!-- Contextual watermark icon — ledger/book, 9% opacity -->
+            <svg class="nav-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+              <line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="12" y2="15"/>
+            </svg>
+            <p class="nav-entity-kicker">Creating new</p>
+            <p class="nav-entity-name">Ledger Item</p>
+            <div class="nav-divider"></div>
+          </div>
+
+          <div class="step-list" role="tablist">
+
+            <div class="step-item done" role="tab" tabindex="0" onclick="switchStep(1)">
+              <div class="step-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div class="step-info">
+                <span class="step-label">Classification</span>
+                <span class="step-desc">Group &amp; account type</span>
+                <!-- <span class="step-chip done">✓ Complete</span> -->
+              </div>
+            </div>
+
+            <div class="step-item active" role="tab" tabindex="0" aria-selected="true" onclick="switchStep(2)">
+              <div class="step-dot">2</div>
+              <div class="step-info">
+                <span class="step-label">General Details</span>
+                <span class="step-desc">Name, code &amp; contact</span>
+                <!-- <span class="step-chip active">Step 2 of 5</span> -->
+              </div>
+            </div>
+
+            <div class="step-item" role="tab" tabindex="0" onclick="switchStep(3)">
+              <div class="step-dot">3</div>
+              <div class="step-info">
+                <span class="step-label">Tax &amp; Compliance</span>
+                <span class="step-desc">VAT, PAN &amp; rates</span>
+                <!-- <span class="step-chip pending">Pending</span> -->
+              </div>
+            </div>
+
+            <div class="step-item" role="tab" tabindex="0" onclick="switchStep(4)">
+              <div class="step-dot">4</div>
+              <div class="step-info">
+                <span class="step-label">Opening Balance</span>
+                <span class="step-desc">As of fiscal year start</span>
+                <!-- <span class="step-chip pending">Pending</span> -->
+              </div>
+            </div>
+
+            <div class="step-item" role="tab" tabindex="0" onclick="switchStep(5)">
+              <div class="step-dot">5</div>
+              <div class="step-info">
+                <span class="step-label">Advanced Settings</span>
+                <span class="step-desc">Limits, notes &amp; flags</span>
+                <!-- <span class="step-chip pending">Pending</span> -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- <div class="nav-stats">
+            <p class="nav-stats-label">Context</p>
+            <div class="nav-stat-row"><span class="nav-stat-k">Total Ledgers</span><span class="nav-stat-v">248</span></div>
+            <div class="nav-stat-row"><span class="nav-stat-k">In This Group</span><span class="nav-stat-v green">34</span></div>
+            <div class="nav-stat-row"><span class="nav-stat-k">Fiscal Year</span><span class="nav-stat-v">2081–82</span></div>
+          </div> -->
+
+        </div>
+      </aside>
+
+      <!-- ══════════════════════════════
+           FORM BODY (z-index: 2)
+           Sits ABOVE nav panel in stacking order.
+           Card bleeds left via negative margin-left,
+           its shadow is cast onto the nav panel behind it.
+           Padding top+bottom = breathing room like Benti.
+      ══════════════════════════════ -->
+      <div class="form-body">
+
+        <!-- ── STEP CARD ──
+             margin-left: -var(--card-overlap) creates the overlap.
+             z-index of parent (.form-body: 2) > nav panel (1),
+             so the card paints on top despite extending leftward.
+             Card is flex column: header (fixed) + content (scroll) + footer (fixed)
+        ── -->
+        <div class="step-card" id="step-card">
+
+          <div class="card-accent"></div>
+
+          <!-- Header stays fixed — no shift on step change -->
+          <div class="card-header">
+            <div class="card-icon" id="card-icon">
+              <!-- Benti style layered illustration: grey background + primary foreground -->
+              <svg viewBox="0 0 140 80" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <!-- BACKGROUND GREY ELEMENTS -->
+                <g stroke="currentColor" stroke-width="1.5" opacity="0.3" color="var(--fg)">
+                  <!-- Monitor / Canvas -->
+                  <rect x="35" y="16" width="70" height="44" rx="4" ry="4"/>
+                  <line x1="56" y1="60" x2="84" y2="60"/>
+                  <line x1="70" y1="60" x2="70" y2="64"/>
+                  <line x1="60" y1="64" x2="80" y2="64"/>
+
+                  <!-- Decorative floating elements -->
+                  <!-- Ruler on the right -->
+                  <rect x="110" y="24" width="12" height="32" rx="2" ry="2"/>
+                  <line x1="110" y1="30" x2="114" y2="30"/>
+                  <line x1="110" y1="36" x2="114" y2="36"/>
+                  <line x1="110" y1="42" x2="114" y2="42"/>
+                  <line x1="110" y1="48" x2="114" y2="48"/>
+
+                  <!-- Squiggle on the left -->
+                  <path d="M 18 36 Q 24 28 28 38 T 34 32" stroke-width="1.2"/>
+
+                  <!-- Abstract Shapes -->
+                  <circle cx="28" cy="18" r="3"/>
+                  <path d="M 116 14 L 120 18 M 120 14 L 116 18" stroke-width="1.2"/>
+                  <circle cx="106" cy="62" r="1.5" fill="currentColor"/>
+                  <circle cx="24" cy="56" r="1.5" fill="currentColor"/>
+                </g>
+
+                <!-- FOREGROUND COLORED ELEMENT -->
+                <!-- Floating document with a pencil overlay -->
+                <g stroke="var(--primary)" stroke-width="2" fill="var(--surface)">
+                  <!-- Document -->
+                  <rect x="54" y="8" width="32" height="42" rx="2" ry="2"/>
+                  <!-- Lines on document -->
+                  <line x1="62" y1="18" x2="78" y2="18"/>
+                  <line x1="62" y1="26" x2="72" y2="26"/>
+                  <!-- Pencil overlaid on right side -->
+                  <path d="M 76 28 L 92 12 A 2.828 2.828 0 1 1 96 16 L 80 32 Z" fill="var(--bg)"/>
+                  <path d="M 76 28 L 72 36 L 80 32" fill="var(--primary)"/>
+                  <line x1="90" y1="14" x2="94" y2="18"/>
+                </g>
+              </svg>
+            </div>
+            <div class="card-head-text">
+              <div class="card-title" id="card-title">General Details</div>
+              <div class="card-sub" id="card-sub">Set the ledger account name, code, and operational classification. Fields marked <span style="color:var(--danger)">*</span> are required.</div>
+            </div>
+          </div>
+
+          <!-- Scrollable content — ONLY this changes on step switch -->
+          <div class="card-content visible" id="card-content">
+            <!-- Step 2: General Details content -->
+            <div id="step-2-content">
+
+              <div class="field-section">
+                <div class="field-section-title">Account Identity</div>
+                <div class="fields-grid col-2">
+
+                  <div class="f-group field-span-2">
+                    <label class="f-label" for="ledger-name">Ledger Name <span class="req">*</span></label>
+                    <div class="f-ctrl">
+                      <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      <input id="ledger-name" type="text" placeholder="e.g. Cash in Hand, Shrestha Traders…" value="Shrestha Traders Pvt. Ltd." />
+                    </div>
+                    <p class="f-hint">Full legal name of the ledger account as registered.</p>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="ledger-code">Ledger Code <span class="opt">auto</span></label>
+                    <div class="f-ctrl readonly">
+                      <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+                      <input id="ledger-code" type="text" value="LCD-00341" readonly />
+                    </div>
+                    <p class="f-hint">System-generated. Override if required.</p>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="ledger-alias">Alias <span class="opt">optional</span></label>
+                    <div class="f-ctrl"><input id="ledger-alias" type="text" placeholder="e.g. Shrestha, STL…" /></div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="field-sep"></div>
+
+              <div class="field-section">
+                <div class="field-section-title">Classification</div>
+                <div class="fields-grid col-2">
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-group">Account Group <span class="req">*</span></label>
+                    <div class="f-ctrl select-ctrl" style="position:relative;">
+                      <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>
+                      <select id="acc-group" style="appearance:none;padding-right:28px;">
+                        <option selected>Sundry Debtors</option><option>Sundry Creditors</option>
+                        <option>Bank Accounts</option><option>Cash in Hand</option>
+                        <option>Direct Income</option><option>Direct Expenses</option>
+                      </select>
+                      <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                    <p class="f-hint">Determines placement in reports &amp; balance sheet.</p>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-nature">Nature <span class="req">*</span></label>
+                    <div class="f-ctrl select-ctrl" style="position:relative;">
+                      <select id="acc-nature" style="appearance:none;padding-right:28px;">
+                        <option selected>Debtor (Customer)</option><option>Creditor (Supplier)</option>
+                        <option>Bank</option><option>Cash</option><option>Asset</option>
+                        <option>Liability</option><option>Revenue</option><option>Expense</option>
+                      </select>
+                      <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-currency">Currency</label>
+                    <div class="f-ctrl select-ctrl" style="position:relative;">
+                      <select id="acc-currency" style="appearance:none;padding-right:28px;">
+                        <option selected>NPR — Nepali Rupee</option><option>USD — US Dollar</option>
+                        <option>INR — Indian Rupee</option><option>EUR — Euro</option>
+                      </select>
+                      <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-cc">Cost Centre</label>
+                    <div class="f-ctrl select-ctrl" style="position:relative;">
+                      <select id="acc-cc" style="appearance:none;padding-right:28px;">
+                        <option selected>— None —</option><option>Sales Division</option>
+                        <option>Operations</option><option>Admin &amp; HR</option>
+                      </select>
+                      <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="field-sep"></div>
+
+              <div class="field-section">
+                <div class="field-section-title">Contact &amp; Address</div>
+                <div class="fields-grid col-2">
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-phone">Phone</label>
+                    <div class="f-ctrl">
+                      <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.77 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.07 6.07l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                      <input id="acc-phone" type="tel" value="+977 9841234567" />
+                    </div>
+                  </div>
+
+                  <div class="f-group">
+                    <label class="f-label" for="acc-email">Email</label>
+                    <div class="f-ctrl">
+                      <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                      <input id="acc-email" type="email" placeholder="contact@company.com" />
+                    </div>
+                  </div>
+
+                  <div class="f-group field-span-2">
+                    <label class="f-label" for="acc-address">Address <span class="opt">optional</span></label>
+                    <div class="f-ctrl textarea-ctrl">
+                      <textarea id="acc-address" rows="2">Putalisadak, Kathmandu, Bagmati Province</textarea>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="field-sep"></div>
+
+              <div class="field-section">
+                <div class="field-section-title">Account Preferences</div>
+                <div class="fields-grid col-1" style="gap:10px;">
+
+                  <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+                    <div class="f-toggle-label">
+                      <span class="f-toggle-name">Enable Credit Limit</span>
+                      <span class="f-toggle-desc">Set maximum outstanding amount for this ledger account.</span>
+                    </div>
+                    <div class="f-switch on"></div>
+                  </div>
+
+                  <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+                    <div class="f-toggle-label">
+                      <span class="f-toggle-name">Allow Negative Balance</span>
+                      <span class="f-toggle-desc">Permits the account balance to go below zero.</span>
+                    </div>
+                    <div class="f-switch"></div>
+                  </div>
+
+                  <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+                    <div class="f-toggle-label">
+                      <span class="f-toggle-name">Maintain Bill-by-Bill</span>
+                      <span class="f-toggle-desc">Track each invoice separately for ageing &amp; reconciliation.</span>
+                    </div>
+                    <div class="f-switch on"></div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Footer stays fixed inside card — no external footer -->
+          <div class="card-footer">
+            <button class="btn btn-ghost" id="btn-prev">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              Previous
+            </button>
+            <!-- <div class="footer-hint">
+              <span class="kbd">Tab</span> fields
+              <span style="margin:0 5px;opacity:.3">·</span>
+              <span class="kbd">⌘S</span> draft
+            </div> -->
+            <div class="footer-spacer"></div>
+            <button class="btn btn-outline">Save as Draft</button>
+            <button class="btn btn-primary" id="btn-next">
+              Continue
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+
+        </div><!-- /step-card -->
+      </div><!-- /form-body -->
+
+    </div><!-- /form-canvas -->
+  </main>
+</div>
+
+<script>
+  /* ─── Step content templates ─── */
+  const STEPS = [
+    {
+      title: 'Classification',
+      sub: 'Define the group and account type to position this ledger correctly in your chart of accounts.',
+      tag: 'Step 1 / 5',
+      html: `
+        <div class="field-section">
+          <div class="field-section-title">Account Type</div>
+          <div class="fields-grid col-2">
+            <div class="f-group">
+              <label class="f-label" for="s1-group">Account Group <span class="req">*</span></label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>Sundry Debtors</option><option>Sundry Creditors</option>
+                  <option>Bank Accounts</option><option>Cash in Hand</option>
+                  <option>Fixed Assets</option><option>Current Liabilities</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+              <p class="f-hint">Determines placement in reports &amp; balance sheet.</p>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Account Nature <span class="req">*</span></label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>Debtor (Customer)</option><option>Creditor (Supplier)</option>
+                  <option>Bank</option><option>Cash</option><option>Asset</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Currency</label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>NPR — Nepali Rupee</option><option>USD</option><option>INR</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Cost Centre</label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>— None —</option><option>Sales</option><option>Operations</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>`
+    },
+    {
+      title: 'General Details',
+      sub: 'Set the ledger account name, code, and operational classification. Fields marked <span style="color:var(--danger)">*</span> are required.',
+      tag: 'Step 2 / 5',
+      html: document.getElementById('card-content').innerHTML
+    },
+    {
+      title: 'Tax &amp; Compliance',
+      sub: 'Configure VAT registration, PAN number, and applicable tax rates for this ledger account.',
+      tag: 'Step 3 / 5',
+      html: `
+        <div class="field-section">
+          <div class="field-section-title">VAT &amp; Registration</div>
+          <div class="fields-grid col-2">
+            <div class="f-group">
+              <label class="f-label">PAN Number</label>
+              <div class="f-ctrl"><input type="text" placeholder="9-digit PAN…" value="305491827" /></div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">VAT Registration No.</label>
+              <div class="f-ctrl"><input type="text" placeholder="VAT Reg. No." value="305491827" /></div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Default Tax Rate</label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>13% VAT (Standard)</option><option>0% (Zero-rated)</option><option>Exempt</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">TDS Category</label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>— Not Applicable —</option><option>5%</option><option>10%</option><option>15%</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-sep"></div>
+        <div class="field-section">
+          <div class="field-section-title">Tax Flags</div>
+          <div class="fields-grid col-1" style="gap:10px;">
+            <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+              <div class="f-toggle-label">
+                <span class="f-toggle-name">Subject to Reverse Charge</span>
+                <span class="f-toggle-desc">Apply reverse charge mechanism on transactions for this ledger.</span>
+              </div>
+              <div class="f-switch"></div>
+            </div>
+            <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+              <div class="f-toggle-label">
+                <span class="f-toggle-name">Include in VAT Report</span>
+                <span class="f-toggle-desc">Include this ledger's transactions in VAT return reports.</span>
+              </div>
+              <div class="f-switch on"></div>
+            </div>
+          </div>
+        </div>
+        <div class="field-sep"></div>
+        <div class="f-callout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Tax rates set here apply as defaults for transactions. They can be overridden at the transaction level. Ensure PAN and VAT numbers match your IRD registration.</span>
+        </div>`
+    },
+    {
+      title: 'Opening Balance',
+      sub: 'Enter the opening balance for this ledger account as of the start of fiscal year 2081–82.',
+      tag: 'Step 4 / 5',
+      html: `
+        <div class="field-section">
+          <div class="field-section-title">Balance as of 2081 Shrawan 1</div>
+          <div class="fields-grid col-2">
+            <div class="f-group">
+              <label class="f-label">Opening Amount <span class="req">*</span></label>
+              <div class="f-ctrl">
+                <svg class="f-icon-l" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <input type="number" placeholder="0.00" value="125000.00" style="font-variant-numeric:tabular-nums;" />
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Dr / Cr</label>
+              <div class="f-ctrl select-ctrl" style="position:relative;">
+                <select style="appearance:none;padding-right:28px;">
+                  <option selected>Dr (Debit)</option><option>Cr (Credit)</option>
+                </select>
+                <svg class="f-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-sep"></div>
+        <div class="f-callout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Ensure opening balances are verified against your previous year's audited financial statements before saving. Incorrect opening balances will affect all reports.</span>
+        </div>`
+    },
+    {
+      title: 'Advanced Settings',
+      sub: 'Configure credit limits, ageing, and additional operational flags for this ledger account.',
+      tag: 'Step 5 / 5',
+      html: `
+        <div class="field-section">
+          <div class="field-section-title">Credit Settings</div>
+          <div class="fields-grid col-2">
+            <div class="f-group">
+              <label class="f-label">Credit Limit (NPR)</label>
+              <div class="f-ctrl">
+                <input type="number" placeholder="0.00" value="500000" style="font-variant-numeric:tabular-nums;" />
+              </div>
+              <p class="f-hint">Set 0 for unlimited. Alerts will trigger above this amount.</p>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Credit Days</label>
+              <div class="f-ctrl">
+                <input type="number" placeholder="0" value="30" />
+              </div>
+              <p class="f-hint">Number of days allowed before payment is due.</p>
+            </div>
+          </div>
+        </div>
+        <div class="field-sep"></div>
+        <div class="field-section">
+          <div class="field-section-title">Operational Flags</div>
+          <div class="fields-grid col-1" style="gap:10px;">
+            <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+              <div class="f-toggle-label">
+                <span class="f-toggle-name">Include in Ageing Report</span>
+                <span class="f-toggle-desc">Show outstanding invoices in accounts receivable ageing analysis.</span>
+              </div>
+              <div class="f-switch on"></div>
+            </div>
+            <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+              <div class="f-toggle-label">
+                <span class="f-toggle-name">Send Payment Reminders</span>
+                <span class="f-toggle-desc">Automatically send email reminders for overdue payments.</span>
+              </div>
+              <div class="f-switch on"></div>
+            </div>
+            <div class="f-toggle" role="switch" tabindex="0" onclick="this.querySelector('.f-switch').classList.toggle('on')">
+              <div class="f-toggle-label">
+                <span class="f-toggle-name">Inactive / Discontinued</span>
+                <span class="f-toggle-desc">Mark this ledger as inactive. It will not appear in transaction dropdowns.</span>
+              </div>
+              <div class="f-switch"></div>
+            </div>
+          </div>
+        </div>
+        <div class="field-sep"></div>
+        <div class="f-group">
+          <label class="f-label">Internal Notes <span class="opt">optional</span></label>
+          <div class="f-ctrl textarea-ctrl">
+            <textarea rows="3" placeholder="Add any internal notes, remarks, or instructions for this ledger account…"></textarea>
+          </div>
+        </div>`
+    }
+  ];
+
+  // Cache step 2 HTML from DOM
+  STEPS[1].html = document.getElementById('card-content').innerHTML;
+
+  let currentStep = 2;
+
+  function switchStep(n) {
+    if (n === currentStep) return;
+    currentStep = n;
+
+    /* Update step nav items */
+    const items = document.querySelectorAll('.step-item');
+    items.forEach((el, i) => {
+      el.classList.remove('done', 'active');
+      el.removeAttribute('aria-selected');
+      const dot = el.querySelector('.step-dot');
+      const chip = el.querySelector('.step-chip');
+      if (i < n - 1) {
+        el.classList.add('done');
+        dot.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+        chip.className = 'step-chip done'; chip.textContent = '✓ Complete';
+      } else if (i === n - 1) {
+        el.classList.add('active'); el.setAttribute('aria-selected', 'true');
+        dot.textContent = n;
+        chip.className = 'step-chip active'; chip.textContent = `Step ${n} of 5`;
+        
+        /* Update Mobile Header */
+        const mhDot = document.getElementById('mh-dot');
+        const mhStepText = document.getElementById('mh-step-text');
+        const mhProgress = document.getElementById('mh-progress');
+        const stepLabel = el.querySelector('.step-label').textContent;
+        const stepDesc = el.querySelector('.step-desc').textContent;
+        
+        if (mhDot) mhDot.textContent = n;
+        if (mhStepText) mhStepText.textContent = `${stepLabel} (${stepDesc})`;
+        if (mhProgress) mhProgress.textContent = `Step ${n} of 5`;
+      } else {
+        dot.textContent = i + 1;
+        chip.className = 'step-chip pending'; chip.textContent = 'Pending';
+      }
+    });
+
+    /* Update card header (stays in position — no layout shift) */
+    document.getElementById('card-title').innerHTML = STEPS[n - 1].title;
+    document.getElementById('card-sub').innerHTML = STEPS[n - 1].sub;
+
+    /* Fade content out → swap → fade in */
+    const content = document.getElementById('card-content');
+    content.classList.remove('visible');
+    content.classList.add('transitioning');
+
+    setTimeout(() => {
+      content.innerHTML = STEPS[n - 1].html;
+      /* Re-attach focus listeners */
+      content.querySelectorAll('.f-ctrl input, .f-ctrl select, .f-ctrl textarea').forEach(attachFocus);
+      content.querySelectorAll('.f-toggle').forEach(el => {
+        el.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); el.querySelector('.f-switch').classList.toggle('on'); } });
+      });
+      content.classList.remove('transitioning');
+      content.classList.add('visible');
+      content.scrollTop = 0;
+    }, 130);
+  }
+
+  /* Next / Prev buttons */
+  document.getElementById('btn-next').addEventListener('click', () => { if (currentStep < 5) switchStep(currentStep + 1); });
+  document.getElementById('btn-prev').addEventListener('click', () => { if (currentStep > 1) switchStep(currentStep - 1); });
+
+  /* Focus glow */
+  function attachFocus(el) {
+    el.addEventListener('focus', () => el.closest('.f-ctrl').classList.add('focused'));
+    el.addEventListener('blur',  () => el.closest('.f-ctrl').classList.remove('focused'));
+  }
+  document.querySelectorAll('.f-ctrl input, .f-ctrl select, .f-ctrl textarea').forEach(attachFocus);
+
+  /* Toggle keyboard */
+  document.querySelectorAll('.f-toggle').forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); el.querySelector('.f-switch').classList.toggle('on'); } });
+  });
+
+  /* Step keyboard nav */
+  document.querySelectorAll('.step-item').forEach((el, i) => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); switchStep(i + 1); } });
+  });
+</script>
+</body>
+</html>

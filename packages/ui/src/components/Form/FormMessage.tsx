@@ -1,5 +1,8 @@
+"use client"
+
 import * as React from "react"
 import { useFormField } from "./useFormField"
+import { cn } from "../../utils"
 
 export const FormMessage = React.forwardRef<
   HTMLParagraphElement,
@@ -16,7 +19,7 @@ export const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={className}
+      className={cn("text-sm font-medium text-danger", className)}
       {...props}
     >
       {body}

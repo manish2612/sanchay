@@ -7,6 +7,7 @@ import { FormLabel } from "./FormLabel"
 import { FormControl } from "./FormControl"
 import { FormDescription } from "./FormDescription"
 import { FormMessage } from "./FormMessage"
+import { FormSection } from "./FormSection"
 import { useFormField } from "./useFormField"
 
 export const Form = Object.assign(FormRoot, {
@@ -16,6 +17,8 @@ export const Form = Object.assign(FormRoot, {
   Control: FormControl,
   Description: FormDescription,
   Message: FormMessage,
+  Section: FormSection,
 })
 
 export { useFormField }
+export * from "./types"
