@@ -12,6 +12,9 @@ import { COMPANY_FORM_FIELDS, COMPANY_WIZARD_STEPS } from "./constants";
 import { CompanyProfileStep } from "./components/CompanyProfileStep";
 import { ContactLocationStep } from "./components/ContactLocationStep";
 import { OperationsComplianceStep } from "./components/OperationsComplianceStep";
+import { CompanyProfileGraphic } from "./components/graphics/CompanyProfileGraphic";
+import { ContactLocationGraphic } from "./components/graphics/ContactLocationGraphic";
+import { OperationsComplianceGraphic } from "./components/graphics/OperationsComplianceGraphic";
 
 const WizardContent = ({ form }: { form: any }) => {
   const { currentStep } = useFormWizardContext();
@@ -27,7 +30,11 @@ const WizardContent = ({ form }: { form: any }) => {
   );
 };
 
-const FormWizardHeaderWithContext = ({ getHeaderIcon }: { getHeaderIcon: (step: number) => React.ReactNode }) => {
+const FormWizardHeaderWithContext = ({
+  getHeaderIcon,
+}: {
+  getHeaderIcon: (step: number) => React.ReactNode;
+}) => {
   const { currentStep } = useFormWizardContext();
   const stepConfig = COMPANY_WIZARD_STEPS.find((s) => s.id === currentStep);
 
@@ -72,11 +79,26 @@ const CreateCompanyPage = () => {
   const getHeaderIcon = (step: number) => {
     switch (step) {
       case 1:
-        return <Icon name="Building2" size={48} className="stroke-[1.25]" />;
+        return (
+          <CompanyProfileGraphic
+            className="w-54 h-auto"
+            primaryOffset={{ x: 10, y: -10 }}
+          />
+        );
       case 2:
-        return <Icon name="MapPin" size={48} className="stroke-[1.25]" />;
+        return (
+          <ContactLocationGraphic
+            className="w-54 h-auto"
+            primaryOffset={{ x: 0, y: 15 }}
+          />
+        );
       case 3:
-        return <Icon name="Briefcase" size={48} className="stroke-[1.25]" />;
+        return (
+          <OperationsComplianceGraphic
+            className="w-54 h-auto"
+            primaryOffset={{ x: 20, y: 15 }}
+          />
+        );
       default:
         return <Icon name="Building2" size={48} className="stroke-[1.25]" />;
     }
@@ -94,12 +116,10 @@ const CreateCompanyPage = () => {
 
         <FormWizard.Container>
           <FormWizardHeaderWithContext getHeaderIcon={getHeaderIcon} />
-          
+
           <WizardContent form={form} />
 
-          <FormWizard.Footer
-            onCancel={() => router.push("/")}
-          />
+          <FormWizard.Footer onCancel={() => router.push("/")} />
         </FormWizard.Container>
       </FormWizard>
     </div>
