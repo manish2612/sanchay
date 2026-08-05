@@ -17,7 +17,7 @@ export const FormHeader = ({ graphic, title, subtitle }: FormHeaderProps) => {
   return (
     <div className="flex-shrink-0 relative flex flex-col items-center text-center px-7 py-7 border-b border-surface-border">
       {graphic && (
-        <div className="relative flex-shrink-0 flex items-center justify-center w-[140px] h-[80px] bg-transparent border-none text-primary">
+        <div className="relative flex-shrink-0 flex items-center justify-center bg-transparent border-none text-primary mb-4">
           {graphic}
         </div>
       )}
