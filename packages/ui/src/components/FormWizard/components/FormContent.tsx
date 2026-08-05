@@ -32,7 +32,7 @@ export const FormContent = ({ children, className = "" }: FormContentProps) => {
   return (
     <div
       ref={containerRef}
-      className={`flex-1 overflow-y-auto overflow-x-hidden px-7 py-6 ${className}`}
+      className={`flex-1 overflow-y-auto overflow-x-hidden px-4 py-4 lg:px-7 lg:py-6 ${className}`}
     >
       {children}
     </div>

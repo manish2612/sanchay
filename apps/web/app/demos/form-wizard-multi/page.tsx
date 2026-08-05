@@ -123,6 +123,7 @@ const DemoWizardContent = ({ form }: { form: any }) => {
 export default function MultiStepFormWizardDemo() {
   const router = useRouter();
   const form = useForm({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       accountName: "",
@@ -137,7 +138,7 @@ export default function MultiStepFormWizardDemo() {
   };
 
   return (
-    <div className="h-screen w-screen bg-bg">
+    <div className="h-[100dvh] w-full bg-bg">
       <div className="absolute top-4 right-4 z-50">
         <button
           type="button"

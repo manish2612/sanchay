@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 export default function SingleStepFormWizardDemo() {
   const router = useRouter();
   const form = useForm({
+    mode: "onChange",
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -21,7 +22,7 @@ export default function SingleStepFormWizardDemo() {
   };
 
   return (
-    <div className="h-screen w-screen bg-bg p-8">
+    <div className="h-[100dvh] w-full bg-bg p-8">
       <div className="absolute top-4 right-4 z-50">
         <button
           type="button"

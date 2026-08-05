@@ -60,7 +60,7 @@ export const FormFooter = ({
   };
 
   return (
-    <div className="flex-shrink-0 bg-surface/95 backdrop-blur-sm border-t border-surface-border px-7 py-3.5 flex items-center gap-2.5">
+    <div className="flex-shrink-0 bg-surface/95 backdrop-blur-sm border-t border-surface-border px-4 lg:px-7 py-3 lg:py-3.5 flex items-center gap-2.5">
       {onCancel && (
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel

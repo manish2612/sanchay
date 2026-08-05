@@ -90,7 +90,7 @@ export const FormWizardRoot = ({
       <Form {...form}>
         <form
           onSubmit={onSubmit ? form.handleSubmit(onSubmit) : undefined}
-          className={`flex h-full w-full overflow-hidden ${className}`}
+          className={`flex flex-col lg:flex-row h-full w-full overflow-hidden ${className}`}
         >
           {children}
         </form>
