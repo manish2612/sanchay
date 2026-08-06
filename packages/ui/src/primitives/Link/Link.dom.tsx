@@ -22,7 +22,7 @@ export const UniversalLink = (props: LinkProps) => {
   const LinkImpl = useContext(LinkContext);
 
   if (!LinkImpl) {
-    if (__DEV__) {
+    if (process.env.NODE_ENV !== "production") {
       console.warn(
         "UniversalLink: No LinkProvider found. Navigation will not work. Please wrap your app root in <LinkProvider>."
       );
