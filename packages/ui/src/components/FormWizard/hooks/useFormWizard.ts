@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback } from "react";
-import { FormWizardContextValue, FormWizardStep } from "./types";
+import { FormWizardContextValue, FormWizardStep } from "../types";
 
 export const FormWizardContext = createContext<FormWizardContextValue | null>(null);
 
