@@ -16,4 +16,5 @@ export const FormWizard = Object.assign(FormWizardRoot, {
 });
 
 export * from "./types";
+export { StepNavProps } from "./components/StepNav";
 export { useFormWizardContext } from "./hooks/useFormWizard";
