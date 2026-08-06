@@ -190,7 +190,7 @@ export const AutoSuggestInput = React.forwardRef<
                   </div>
                 ) : !multiple &&
                   currentValue &&
-                  flatOptions.find((o) => o.value === currentValue)
+                  (flatOptions.find((o) => o.value === currentValue) as any)
                     ?.reserveLeadingSpace ? (
                   <div aria-hidden="true" className="w-4 h-4 shrink-0 ml-2" />
                 ) : null

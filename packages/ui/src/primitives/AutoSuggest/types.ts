@@ -6,6 +6,7 @@ export interface AutoSuggestOption {
   disabled?: boolean;
   icon?: string;
   leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
 }
 
 export type AutoSuggestOptions = (AutoSuggestOption | { group: string; items: AutoSuggestOption[] })[];
