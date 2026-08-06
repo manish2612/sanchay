@@ -1,5 +1,4 @@
 import { cva } from 'class-variance-authority';
-import { StyleSheet } from 'react-native';
 
 export const tableStyles = {
     root: cva("relative flex flex-col w-full h-full overflow-hidden rounded-md border border-border bg-surface focus-within:outline focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-primary"),

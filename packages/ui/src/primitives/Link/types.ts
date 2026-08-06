@@ -1,7 +1,5 @@
 "use client";
 import React, { createContext, ReactNode } from "react";
-import type { StyleProp, ViewStyle, TextStyle } from "react-native";
-
 /**
  * Platform-agnostic Link props
  */
@@ -15,7 +13,7 @@ export interface LinkProps {
   /**
    * Pass-through styles
    */
-  style?: StyleProp<ViewStyle | TextStyle>;
+  style?: any;
   /**
    * Open in new tab? (Web only)
    */

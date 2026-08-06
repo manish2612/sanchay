@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { ColumnDef, Row, TableOptions } from "@tanstack/react-table";
 import { cn } from "../../../utils";
 import { tableStyles } from "../styles";
 import { TableContext } from "./Context";
@@ -11,7 +11,7 @@ interface TableRootProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   data: TData[];
   columns: ColumnDef<TData>[];
   onRowClick?: (row: Row<TData>) => void;
-  tableOptions?: Partial<import("@tanstack/react-table").TableOptions<TData>>;
+  tableOptions?: Partial<TableOptions<TData>>;
   rowHeight?: number; // Configurable density
 }
 

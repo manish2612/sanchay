@@ -6,7 +6,7 @@ export * from './primitives/TextInput/types';
 export { GridBackground } from './components/GridBackground';
 export { Icon } from './primitives/Icon/Icon.native';
 export * from './primitives/Icon/types';
-export { useResponsiveValue, useResponsiveValues } from './hooks/useResponsive';
+export { useResponsiveValue, useResponsiveValues } from './hooks/useResponsive.native';
 export * from './primitives/Link/Link.native';
 export * from './primitives/Link/types';
 export * from './examples/NavDemo.native';
