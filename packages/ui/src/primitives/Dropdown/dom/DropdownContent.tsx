@@ -6,7 +6,9 @@ import { dropdownContentClassName } from "./styles.dom";
 
 const DropdownContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> & {
+    onOpenAutoFocus?: (e: Event) => void;
+  }
 >(({ className, sideOffset = 4, style, ...props }, ref) => {
   return (
     <DropdownMenuPrimitive.Portal>
