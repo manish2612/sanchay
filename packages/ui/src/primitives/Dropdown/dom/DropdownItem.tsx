@@ -13,12 +13,14 @@ interface DropdownItemProps extends React.ComponentPropsWithoutRef<
   typeof DropdownMenuPrimitive.Item
 > {
   shortcut?: string;
+  leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
 }
 
 const DropdownItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   DropdownItemProps
->(({ className, children, shortcut, style, ...props }, ref) => {
+>(({ className, children, shortcut, leadingVisual, reserveLeadingSpace, style, ...props }, ref) => {
   // Removed useTheme
   const context = useDropdownContext();
   const searchQuery = context?.searchQuery?.toLowerCase() || "";
@@ -72,7 +74,16 @@ const DropdownItem = React.forwardRef<
       {...props}
     >
       {/* Group content (Icon + Label) to properly align left */}
-      <span className={dropdownItemContentClassName}>{children}</span>
+      <span className={dropdownItemContentClassName}>
+        {leadingVisual ? (
+          <span aria-hidden="true" className="flex shrink-0 items-center justify-center">
+            {leadingVisual}
+          </span>
+        ) : reserveLeadingSpace ? (
+          <span aria-hidden="true" className="w-4 h-4 shrink-0" />
+        ) : null}
+        {children}
+      </span>
 
       {shortcut && (
         <span className="ml-auto text-xs opacity-60">{shortcut}</span>
