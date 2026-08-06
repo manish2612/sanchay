@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Icon } from "@prime/ui";
+import { useRouter } from "next/navigation";
+import { Icon, type IconName } from "@prime/ui";
 import { NavItemConfig } from "../../data/navigationTree";
 import { useSidebar } from "../Sidebar/useSidebar";
 import { SidebarRailSettings } from "./SidebarRailSettings";
@@ -25,6 +26,7 @@ export function SidebarRail({
 }: SidebarRailProps) {
   const { activeL1ItemId, setActiveL1ItemId, setPanelOpen, isPanelOpen } =
     useSidebar();
+  const router = useRouter();
 
   // Shared popover state to ensure only one is open at a time
   const [openPopover, setOpenPopover] = useState<"settings" | "user" | null>(
@@ -47,6 +49,10 @@ export function SidebarRail({
     setActiveL1ItemId(item.id);
     if (item.children && item.children.length > 0) {
       setPanelOpen(true);
+      if (item.href) router.push(item.href);
+    } else {
+      setPanelOpen(false);
+      if (item.href) router.push(item.href);
     }
   };
 
@@ -117,7 +123,7 @@ export function SidebarRail({
                     : "text-white/70 hover:bg-white/10 hover:text-white"
                 }`}
               >
-                <Icon name={item.icon || "Folder"} className="text-[24px]" />
+                <Icon name={(item.icon as IconName) || "Folder"} className="text-[24px]" />
               </button>
             );
           })}
