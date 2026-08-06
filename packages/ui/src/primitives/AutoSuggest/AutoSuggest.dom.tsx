@@ -176,6 +176,12 @@ export const AutoSuggestInput = React.forwardRef<
                     );
                   })}
                 </div>
+              ) : (!multiple && currentValue && flatOptions.find((o) => o.value === currentValue)?.leadingVisual) ? (
+                <div aria-hidden="true" className="flex items-center pl-2 pr-1">
+                  {flatOptions.find((o) => o.value === currentValue)?.leadingVisual}
+                </div>
+              ) : (!multiple && currentValue && flatOptions.find((o) => o.value === currentValue)?.reserveLeadingSpace) ? (
+                <div aria-hidden="true" className="w-4 h-4 shrink-0 ml-2" />
               ) : null
             }
             rightSlot={
@@ -329,7 +335,7 @@ AutoSuggestGroup.displayName = "AutoSuggestGroup";
 export const AutoSuggestItem = React.forwardRef<
   HTMLDivElement,
   AutoSuggestItemProps
->(({ className, value, disabled, onSelect, children }, ref) => {
+>(({ className, value, disabled, onSelect, leadingVisual, reserveLeadingSpace, children }, ref) => {
   const { currentValue, multiple, handleSelect } = useAutoSuggestContext();
 
   const isSelected = multiple
@@ -356,6 +362,13 @@ export const AutoSuggestItem = React.forwardRef<
         className
       )}
     >
+      {leadingVisual ? (
+        <span aria-hidden="true" className="flex shrink-0 items-center justify-center mr-2">
+          {leadingVisual}
+        </span>
+      ) : reserveLeadingSpace ? (
+        <span aria-hidden="true" className="w-4 h-4 shrink-0 mr-2" />
+      ) : null}
       {children}
     </CommandPrimitive.Item>
   );

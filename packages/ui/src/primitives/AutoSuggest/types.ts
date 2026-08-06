@@ -5,6 +5,7 @@ export interface AutoSuggestOption {
   value: string;
   disabled?: boolean;
   icon?: string;
+  leadingVisual?: React.ReactNode;
 }
 
 export type AutoSuggestOptions = (AutoSuggestOption | { group: string; items: AutoSuggestOption[] })[];
@@ -66,6 +67,8 @@ export interface AutoSuggestItemProps {
   onSelect?: (value: string) => void;
   children?: React.ReactNode;
   className?: string;
+  leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
 }
 
 export interface AutoSuggestGroupProps {
