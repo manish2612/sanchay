@@ -16,6 +16,17 @@ const US_STATES = [
   { value: "mi", label: "Michigan" },
 ];
 
+const COUNTRIES = [
+  { value: "us", label: "United States", leadingVisual: "🇺🇸" },
+  { value: "ca", label: "Canada", leadingVisual: "🇨🇦" },
+  { value: "uk", label: "United Kingdom", leadingVisual: "🇬🇧" },
+  { value: "fr", label: "France", leadingVisual: "🇫🇷" },
+  { value: "de", label: "Germany", leadingVisual: "🇩🇪" },
+  { value: "jp", label: "Japan", leadingVisual: "🇯🇵" },
+  { value: "au", label: "Australia", leadingVisual: "🇦🇺" },
+  { value: "unknown", label: "Unknown Territory", reserveLeadingSpace: true },
+];
+
 const GROUPED_STATES = [
   {
     group: "West Coast",
@@ -52,6 +63,7 @@ const CUSTOMERS = [
 
 export function AutoSuggestDemo() {
   const [value, setValue] = useState("");
+  const [countryValue, setCountryValue] = useState("");
   const [dynamicValue, setDynamicValue] = useState("");
   const [groupedValue, setGroupedValue] = useState("");
   const [multiValue, setMultiValue] = useState<string[]>([]);
@@ -138,6 +150,40 @@ export function AutoSuggestDemo() {
             <p className="text-xs text-muted-foreground">
               Selected: {multiValue.join(", ")}
             </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-foreground">
+            Country Selection (with Leading Visuals)
+          </label>
+          <AutoSuggest
+            options={COUNTRIES}
+            value={countryValue}
+            onChange={setCountryValue}
+          >
+            <AutoSuggest.Input
+              placeholder="Search countries..."
+              clearable
+            />
+            <AutoSuggest.Content>
+              <AutoSuggest.List>
+                <AutoSuggest.Empty>No countries found.</AutoSuggest.Empty>
+                {COUNTRIES.map((country) => (
+                  <AutoSuggest.Item 
+                    key={country.value} 
+                    value={country.value}
+                    leadingVisual={country.leadingVisual}
+                    reserveLeadingSpace={country.reserveLeadingSpace ?? true}
+                  >
+                    {country.label}
+                  </AutoSuggest.Item>
+                ))}
+              </AutoSuggest.List>
+            </AutoSuggest.Content>
+          </AutoSuggest>
+          {countryValue && (
+            <p className="text-xs text-muted-foreground">Selected: {countryValue}</p>
           )}
         </div>
 
