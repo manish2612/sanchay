@@ -22,7 +22,7 @@ export default function SingleStepFormWizardDemo() {
   };
 
   return (
-    <div className="h-[100dvh] w-full bg-bg p-8">
+    <div className="h-[100dvh] w-full bg-bg">
       <div className="absolute top-4 right-4 z-50">
         <button
           type="button"

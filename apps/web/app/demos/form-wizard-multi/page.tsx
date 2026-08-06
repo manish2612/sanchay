@@ -16,23 +16,23 @@ const formSchema = z.object({
 });
 
 const STEPS = [
-  { 
-    id: 1, 
-    title: "Initial Setup", 
-    description: "Basic details", 
-    fields: ["accountName", "accountCode"] 
+  {
+    id: 1,
+    title: "Initial Setup",
+    description: "Basic details",
+    fields: ["accountName", "accountCode"],
   },
-  { 
-    id: 2, 
-    title: "General Details", 
-    description: "Name, code & classification", 
+  {
+    id: 2,
+    title: "General Details",
+    description: "Name, code & classification",
     isOptional: true,
-    fields: ["internalNotes"] 
+    fields: ["internalNotes"],
   },
-  { 
-    id: 3, 
-    title: "Tax & Compliance", 
-    description: "VAT, PAN & rates" 
+  {
+    id: 3,
+    title: "Tax & Compliance",
+    description: "VAT, PAN & rates",
   },
 ];
 
@@ -63,7 +63,7 @@ const DemoWizardContent = ({ form }: { form: any }) => {
                 </Form.Item>
               )}
             />
-            
+
             <FormWizard.Separator />
 
             <Form.Field
@@ -139,7 +139,7 @@ export default function MultiStepFormWizardDemo() {
 
   return (
     <div className="h-[100dvh] w-full bg-bg">
-      <div className="absolute top-4 right-4 z-50">
+      <div className="absolute bottom-20 left-4 z-50">
         <button
           type="button"
           onClick={() => router.push("/")}
@@ -149,13 +149,8 @@ export default function MultiStepFormWizardDemo() {
         </button>
       </div>
 
-      <FormWizard
-        form={form}
-        initialStep={1}
-        steps={STEPS}
-        onSubmit={onSubmit}
-      >
-        <FormWizard.StepNav />
+      <FormWizard form={form} initialStep={1} steps={STEPS} onSubmit={onSubmit}>
+        <FormWizard.StepNav title="Create Account" />
 
         <FormWizard.Container>
           <FormWizard.Header
