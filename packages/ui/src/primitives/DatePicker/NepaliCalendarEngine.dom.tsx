@@ -258,7 +258,7 @@ export function NepaliCalendarEngine({
                     <button
                       type="button"
                       disabled={Boolean(isOutOfBounds)}
-                      ref={el => dayRefs.current[d] = el}
+                      ref={el => { dayRefs.current[d] = el; }}
                       tabIndex={d === tabTargetDate ? 0 : -1}
                       onKeyDown={(e) => handleGridKeyDown(e, d)}
                       onClick={() => handleSelectDate(d)}

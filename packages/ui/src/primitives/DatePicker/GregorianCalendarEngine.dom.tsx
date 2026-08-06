@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, type Matcher } from "react-day-picker";
 import { addMonths, subMonths, setMonth, setYear, startOfMonth } from "date-fns";
 import { Icon } from "../Icon/Icon.dom";
 import { DatePickerProps } from "./types";
@@ -144,8 +144,12 @@ export function GregorianCalendarEngine({
           onDateChange?.(d);
           setIsOpen(false);
         }}
-        fromDate={minDate}
-        toDate={maxDate}
+        startMonth={minDate}
+        endMonth={maxDate}
+        disabled={[
+          minDate ? { before: minDate } : undefined,
+          maxDate ? { after: maxDate } : undefined,
+        ].filter(Boolean) as Matcher[]}
         classNames={{
           ...dayPickerProps?.classNames,
           month_caption: "hidden", // Hide react-day-picker's internal header
@@ -157,7 +161,12 @@ export function GregorianCalendarEngine({
           Nav: () => null,
           ...dayPickerProps?.components,
         }}
-        {...dayPickerProps}
+        {...(() => {
+          if (!dayPickerProps) return {};
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { required, ...rest } = dayPickerProps as any;
+          return rest;
+        })()}
       />
     </div>
   );

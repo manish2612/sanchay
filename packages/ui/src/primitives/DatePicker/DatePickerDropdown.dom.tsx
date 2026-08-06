@@ -38,7 +38,7 @@ export function DatePickerDropdown({ value, onChange, options, className, align 
         ref={contentRef}
         align={align} 
         sideOffset={4}
-        onOpenAutoFocus={(e) => {
+        onOpenAutoFocus={(e: any) => {
           // Prevent Radix from auto-focusing the first item in the list
           e.preventDefault();
           // Focus the currently selected item instead, which automatically scrolls it into view
