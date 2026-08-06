@@ -13,6 +13,14 @@
         },
         "lint": {},
         "type-check": {},
+        "storybook": {
+            "cache": false,
+            "persistent": true
+        },
+        "build-storybook": {
+            "dependsOn": ["^build"],
+            "outputs": ["storybook-static/**"]
+        },
         "dev": {
             "cache": false,
             "persistent": true
