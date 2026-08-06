@@ -64,18 +64,31 @@ export const StepNav = ({ title = "Form Wizard", className = "" }: StepNavProps 
       `}</style>
 
       {/* Mobile Header (Visible < 1024px) */}
-      <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-surface-active border-b border-border">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 border-primary bg-primary text-primary-fg shadow-[0_0_0_4px_rgba(0,128,76,0.2)]">
-          {currentStep}
+      <div className="lg:hidden flex items-center justify-between gap-3 px-4 py-3 bg-surface-active border-b border-border min-h-[52px]">
+        {/* Left Side: Main Form Title */}
+        <div className="flex-1 min-w-0 pr-2">
+          {typeof title === "string" ? (
+            <h1 className="font-head text-sm font-bold text-fg truncate">
+              {title}
+            </h1>
+          ) : (
+            title
+          )}
         </div>
-        <div className="flex-1 min-w-0 flex flex-col">
-          <div className="flex items-center gap-2">
-            <span className="font-head text-sm font-bold uppercase tracking-wider text-primary truncate">
+
+        {/* Right Side: Step Progress & Circle */}
+        <div className="flex items-center gap-2.5 flex-shrink-0 text-right">
+          <div className="flex flex-col items-end min-w-0">
+            <span className="font-head text-[11px] font-semibold text-muted-fg uppercase tracking-wider leading-none">
               Step {currentStep} of {totalSteps}
             </span>
+            <span className="font-head text-xs font-medium text-fg truncate max-w-[120px] sm:max-w-[180px] leading-tight mt-0.5">
+              {steps[currentStep - 1]?.title}
+            </span>
           </div>
-          <div className="truncate text-base font-bold text-fg font-head leading-tight">
-            {steps[currentStep - 1]?.title}
+
+          <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-head font-bold bg-primary text-primary-fg border-2 border-primary ring-4 ring-primary/15">
+            {currentStep}
           </div>
         </div>
       </div>
