@@ -6,6 +6,8 @@ export interface DropdownMenuItem {
   label: string;
   onSelect: () => void;
   icon?: IconName;
+  leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
   shortcut?: string;
   disabled?: boolean;
 }

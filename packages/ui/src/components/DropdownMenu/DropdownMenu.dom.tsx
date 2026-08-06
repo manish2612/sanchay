@@ -107,6 +107,8 @@ const DropdownMenu = ({
             disabled={item.disabled}
             shortcut={item.shortcut}
             textValue={item.label} // REQUIRED for search to work
+            leadingVisual={item.leadingVisual}
+            reserveLeadingSpace={item.reserveLeadingSpace}
           >
             {item.icon && <Icon name={item.icon} size={16} />}
             {item.label}
