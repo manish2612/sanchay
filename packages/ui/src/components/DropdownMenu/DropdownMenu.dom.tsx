@@ -34,7 +34,7 @@ const DropdownMenu = ({
           className={cn(
             "w-full justify-between font-normal text-sm",
             labelVariant === "in-field" &&
-              "h-auto border-none px-0 py-0 shadow-none ring-0 outline-none hover:bg-transparent hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
+              "h-auto border-none px-0 py-0 shadow-none ring-0 outline-none bg-transparent hover:bg-transparent hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
           )}
         >
           <span className="truncate">{triggerLabel || "Select..."}</span>
