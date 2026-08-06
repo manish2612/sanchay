@@ -4,11 +4,12 @@ import React from "react";
 import { Button } from "../primitives/Button/Button.dom";
 import { DropdownMenu } from "./DropdownMenu";
 import { Icon } from "../primitives/Icon/Icon.dom";
+import type { IconName } from "../primitives/Icon/types";
 
 export interface SplitButtonItem {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconName;
   onSelect: () => void;
   disabled?: boolean;
 }
