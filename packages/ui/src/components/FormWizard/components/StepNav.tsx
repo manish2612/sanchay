@@ -4,7 +4,14 @@ import React from "react";
 import { useFormWizardContext } from "../hooks/useFormWizard";
 import { Check } from "lucide-react";
 
-export const StepNav = () => {
+export interface StepNavProps {
+  /** Custom title string or ReactNode to display in the StepNav sidebar header */
+  title?: React.ReactNode;
+  /** Custom CSS classes for the sidebar container */
+  className?: string;
+}
+
+export const StepNav = ({ title = "Form Wizard", className = "" }: StepNavProps = {}) => {
   const {
     currentStep,
     steps,
@@ -74,13 +81,17 @@ export const StepNav = () => {
       </div>
 
       {/* Desktop Sidebar (Visible >= 1024px) */}
-      <aside className="hidden lg:flex flex-col w-[344px] pr-11 flex-shrink-0 bg-surface-variant relative z-10 overflow-hidden">
+      <aside className={`hidden lg:flex flex-col w-[344px] pr-11 flex-shrink-0 bg-surface-variant relative z-10 overflow-hidden ${className}`}>
         <div className="flex flex-col flex-1 overflow-y-auto">
           {/* Entity Zone */}
           <div className="px-6 pt-7 pb-4 relative flex-shrink-0">
-            <h2 className="font-head text-[17px] font-bold text-fg leading-tight">
-              Form Wizard
-            </h2>
+            {typeof title === "string" ? (
+              <h2 className="font-head text-[17px] font-bold text-fg leading-tight">
+                {title}
+              </h2>
+            ) : (
+              title
+            )}
           </div>
           <div className="h-[1px] bg-gradient-to-r from-primary/30 to-transparent" />
 
