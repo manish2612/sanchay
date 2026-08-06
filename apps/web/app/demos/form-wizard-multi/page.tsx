@@ -155,7 +155,7 @@ export default function MultiStepFormWizardDemo() {
         steps={STEPS}
         onSubmit={onSubmit}
       >
-        <FormWizard.StepNav />
+        <FormWizard.StepNav title="Create New Account" />
 
         <FormWizard.Container>
           <FormWizard.Header

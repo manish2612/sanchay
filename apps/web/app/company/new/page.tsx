@@ -112,7 +112,7 @@ const CreateCompanyPage = () => {
         steps={COMPANY_WIZARD_STEPS}
         onSubmit={onSubmit}
       >
-        <FormWizard.StepNav />
+        <FormWizard.StepNav title="Create New Company" />
 
         <FormWizard.Container>
           <FormWizardHeaderWithContext getHeaderIcon={getHeaderIcon} />
