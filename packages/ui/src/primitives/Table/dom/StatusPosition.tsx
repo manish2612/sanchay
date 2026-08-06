@@ -107,8 +107,8 @@ export const TableStatusPosition = React.forwardRef<
         <span className="font-mono">{count}</span>
         <Icon
           name={
-            position === "top" ? "keyboard_arrow_up" : "keyboard_arrow_down"
-          } // Using Material Icons names
+            position === "top" ? "ChevronUp" : "ChevronDown"
+          }
           size={16}
           className="text-muted-foreground"
         />

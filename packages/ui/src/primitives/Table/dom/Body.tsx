@@ -10,9 +10,10 @@ import { Icon } from "../../Icon/Icon.dom";
 
 interface TableBodyProps extends Omit<
   React.HTMLAttributes<HTMLDivElement>,
-  "children"
+  "children" | "dir"
 > {
   children: (row: Row<any>, isFocused: boolean) => React.ReactNode;
+  dir?: "ltr" | "rtl";
 }
 
 export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
@@ -40,6 +41,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
         className={cn("flex-1 w-full min-h-0", className)}
         type="always"
         {...props}
+        dir={props.dir}
       >
         <ScrollAreaPrimitive.Viewport ref={scrollRef} className="w-full h-full">
           <div ref={ref} className={tableStyles.body()} role="rowgroup">
