@@ -14,9 +14,9 @@ export const FormSection = React.forwardRef<HTMLDivElement, FormSectionProps>(
     return (
       <div ref={ref} className={cn("space-y-6", className)} {...props}>
         <div>
-          <Text variant="heading4" className="mb-1">{title}</Text>
+          <Text variant="heading" size="lg" className="mb-1">{title}</Text>
           {description && (
-            <Text variant="body2" className="text-gray-500">
+            <Text variant="body" size="sm" className="text-gray-500">
               {description}
             </Text>
           )}
