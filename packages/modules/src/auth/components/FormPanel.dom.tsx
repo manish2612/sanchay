@@ -38,27 +38,21 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
 
         {/* Username/Email */}
         <div className="mb-5">
-          <TextInput.Root>
-            {/* @ts-ignore Web/Native type resolution conflict */}
-            <TextInput.Input
-              placeholder="Username"
-              value={email}
-              onChange={(e: any) => setEmail(e.target.value)}
-            />
-          </TextInput.Root>
+          <TextInput
+            placeholder="Username"
+            value={email}
+            onChange={(e: any) => setEmail(e.target.value)}
+          />
         </div>
 
         {/* Password */}
         <div className="mb-8">
-          <TextInput.Root>
-            {/* @ts-ignore Web/Native type resolution conflict */}
-            <TextInput.Input
-              placeholder="Password"
-              type={isVisible ? "text" : "password"}
-              value={password}
-              onChange={(e: any) => setPassword(e.target.value)}
-            />
-            <TextInput.Slot side="right">
+          <TextInput
+            placeholder="Password"
+            type={isVisible ? "text" : "password"}
+            value={password}
+            onChange={(e: any) => setPassword(e.target.value)}
+            rightSlot={
               <button
                 type="button"
                 onClick={() => setIsVisible(!isVisible)}
@@ -70,8 +64,8 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
                   className="text-muted-foreground"
                 />
               </button>
-            </TextInput.Slot>
-          </TextInput.Root>
+            }
+          />
         </div>
 
         {/* Actions */}
