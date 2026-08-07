@@ -60,9 +60,9 @@ const CUSTOMERS = [
   { value: "cust_4", label: "Umbrella Corp", meta: { id: "C-10495", contact: "alice@umbrella.com", status: "Suspended", balance: "$1,250,000.00" } },
 ];
 
-const meta: Meta<typeof AutoSuggest> = {
+const meta: Meta<AutoSuggestStoryArgs> = {
   title: 'Primitives/AutoSuggest',
-  component: AutoSuggest,
+  component: AutoSuggest as any,
   tags: ['autodocs'],
   argTypes: {
     multiple: { control: 'boolean' },
@@ -92,14 +92,15 @@ const meta: Meta<typeof AutoSuggest> = {
 };
 
 export default meta;
-type Story = StoryObj<any>;
+type AutoSuggestStoryArgs = React.ComponentProps<typeof AutoSuggest> & React.ComponentProps<typeof AutoSuggest.Input>;
+type Story = StoryObj<AutoSuggestStoryArgs>;
 
 export const DefaultStaticOptions: Story = {
   render: (args) => {
     const [value, setValue] = useState("");
     return (
       <div className="max-w-sm">
-        <AutoSuggest {...args} options={US_STATES} value={value} onChange={setValue}>
+        <AutoSuggest {...args} options={US_STATES} value={value} onChange={(v) => setValue(v as string)}>
           <AutoSuggest.Input
             label={args.label}
             labelVariant={args.labelVariant}
@@ -139,7 +140,7 @@ export const MultiSelect: Story = {
           {...args}
           options={US_STATES}
           value={multiValue}
-          onChange={setMultiValue}
+          onChange={(v) => setMultiValue(v as string[])}
         >
           <AutoSuggest.Input
             label={args.label}
@@ -178,7 +179,7 @@ export const CountrySelectionWithLeadingVisuals: Story = {
           {...args}
           options={COUNTRIES}
           value={countryValue}
-          onChange={setCountryValue}
+          onChange={(v) => setCountryValue(v as string)}
         >
           <AutoSuggest.Input
             label={args.label}
@@ -222,7 +223,7 @@ export const GroupedOptions: Story = {
           {...args}
           options={GROUPED_STATES}
           value={groupedValue}
-          onChange={setGroupedValue}
+          onChange={(v) => setGroupedValue(v as string)}
         >
           <AutoSuggest.Input
             label={args.label}
@@ -285,7 +286,7 @@ export const DynamicAPISearch: Story = {
           {...args}
           options={options}
           value={dynamicValue}
-          onChange={setDynamicValue}
+          onChange={(v) => setDynamicValue(v as string)}
           inputValue={inputValue}
           onInputChange={handleDynamicSearch}
         >
