@@ -49,8 +49,8 @@ export function DatePicker({
         className={cn(
           'flex w-full items-center justify-between font-normal text-sm focus:outline-none',
           labelVariant === 'in-field'
-            ? 'h-auto border-none px-0 py-0 shadow-none ring-0 hover:bg-transparent hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 disabled:bg-transparent'
-            : 'h-10 rounded-md border border-input bg-transparent px-3 py-2 shadow-sm ring-offset-background focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-surface-variant disabled:opacity-50',
+            ? 'h-auto border-none px-0 py-0 shadow-none ring-0 hover:bg-surface hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0 disabled:bg-surface'
+            : 'h-10 rounded-md border border-input bg-surface px-3 py-2 shadow-sm ring-offset-background focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-surface-variant disabled:opacity-50',
           !date && 'text-muted-foreground',
           className,
         )}
@@ -66,7 +66,7 @@ export function DatePicker({
       return (
         <div
           className={cn(
-            'flex min-h-[48px] w-full items-center rounded-md border border-input bg-transparent px-3 py-1.5 shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2',
+            'flex min-h-[48px] w-full items-center rounded-md border border-input bg-surface px-3 py-1.5 shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2',
             disabled && 'cursor-not-allowed opacity-50 bg-surface-variant',
           )}
         >
