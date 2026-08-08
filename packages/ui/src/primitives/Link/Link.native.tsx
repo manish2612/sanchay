@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
-import { Text, Pressable } from "react-native";
-import { LinkContext, LinkProps } from "./types";
+import React, { useContext } from 'react';
+import { Text, Pressable } from 'react-native';
+import { LinkContext, LinkProps } from './types';
 
 /**
  * Provider to inject the platform-specific Link implementation.
@@ -24,7 +24,7 @@ export const UniversalLink = (props: LinkProps) => {
   if (!LinkImpl) {
     if (__DEV__) {
       console.warn(
-        "UniversalLink: No LinkProvider found. Navigation will not work. Please wrap your app root in <LinkProvider>."
+        'UniversalLink: No LinkProvider found. Navigation will not work. Please wrap your app root in <LinkProvider>.',
       );
     }
     // Native Fallback

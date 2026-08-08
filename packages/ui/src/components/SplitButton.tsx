@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Button } from "../primitives/Button/Button.dom";
-import { DropdownMenu } from "./DropdownMenu";
-import { Icon } from "../primitives/Icon/Icon.dom";
+import React from 'react';
+import { Button } from '../primitives/Button/Button.dom';
+import { DropdownMenu } from './DropdownMenu';
+import { Icon } from '../primitives/Icon/Icon.dom';
+import type { IconName } from '../primitives/Icon/types';
 
 export interface SplitButtonItem {
   id: string;
   label: string;
-  icon?: string;
+  icon?: IconName;
   onSelect: () => void;
   disabled?: boolean;
 }
@@ -18,8 +19,8 @@ export interface SplitButtonProps {
   primaryLabel: string;
   primaryIcon?: string;
   items: SplitButtonItem[];
-  variant?: "primary" | "outline" | "ghost" | "destructive";
-  size?: "sm" | "default" | "lg";
+  variant?: 'primary' | 'outline' | 'ghost' | 'destructive';
+  size?: 'sm' | 'default' | 'lg';
   className?: string;
 }
 
@@ -28,12 +29,12 @@ export function SplitButton({
   primaryLabel,
   primaryIcon,
   items,
-  variant = "outline",
-  size = "sm",
+  variant = 'outline',
+  size = 'sm',
   className,
 }: SplitButtonProps) {
   return (
-    <div className={`inline-flex items-center -space-x-px ${className || ""}`}>
+    <div className={`inline-flex items-center -space-x-px ${className || ''}`}>
       <Button
         variant={variant}
         size={size}

@@ -1,18 +1,17 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { FormItemContext } from "./context"
+import * as React from 'react';
+import { FormItemContext } from './context';
 
-export const FormItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const id = React.useId()
+export const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => {
+    const id = React.useId();
 
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={className} {...props} />
-    </FormItemContext.Provider>
-  )
-})
-FormItem.displayName = "FormItem"
+    return (
+      <FormItemContext.Provider value={{ id }}>
+        <div ref={ref} className={className} {...props} />
+      </FormItemContext.Provider>
+    );
+  },
+);
+FormItem.displayName = 'FormItem';

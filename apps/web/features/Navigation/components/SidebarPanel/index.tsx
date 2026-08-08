@@ -1,9 +1,9 @@
-"use client";
-import React, { useState } from "react";
-import { Icon } from "@prime/ui";
-import { NavItemConfig } from "../../data/navigationTree";
-import { useSidebar } from "../Sidebar/useSidebar";
-import { SidebarPanelItem } from "../SidebarPanelItem";
+'use client';
+import React, { useState } from 'react';
+import { Icon } from '@prime/ui';
+import { NavItemConfig } from '../../data/navigationTree';
+import { useSidebar } from '../Sidebar/useSidebar';
+import { SidebarPanelItem } from '../SidebarPanelItem';
 
 interface SidebarPanelProps {
   activeL1Config?: NavItemConfig;
@@ -21,11 +21,10 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
   } | null>(null);
 
   // If no children, we don't render the panel contents
-  const hasChildren =
-    activeL1Config?.children && activeL1Config.children.length > 0;
+  const hasChildren = activeL1Config?.children && activeL1Config.children.length > 0;
 
   // Calculate width: if closed or no children, width is 0 (hidden). Otherwise 240px.
-  const panelWidth = isOpen && hasChildren ? "w-[240px]" : "w-0";
+  const panelWidth = isOpen && hasChildren ? 'w-[240px]' : 'w-0';
 
   const handleMouseEnter = (e: React.MouseEvent, text: string) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -56,7 +55,7 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
               <div className="flex-shrink-0">
                 <button
                   onClick={() => setPanelOpen(false)}
-                  onMouseEnter={(e) => handleMouseEnter(e, "Collapse Menu")}
+                  onMouseEnter={(e) => handleMouseEnter(e, 'Collapse Menu')}
                   onMouseLeave={handleMouseLeave}
                   className="w-8 h-8 flex items-center justify-center rounded-md text-mutedForeground hover:text-foreground hover:bg-surfaceHover transition-all cursor-pointer"
                 >
@@ -68,26 +67,18 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
             {/* Sub Navigation (L2 / L3 Flattened) */}
             <nav className="flex-1 overflow-y-auto py-5 px-3 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
               {activeL1Config.children?.map((l2Item) => {
-                const isSectionHeader =
-                  l2Item.children && l2Item.children.length > 0;
+                const isSectionHeader = l2Item.children && l2Item.children.length > 0;
 
                 if (isSectionHeader) {
                   // Render as a group with a non-clickable header
                   return (
-                    <div
-                      key={l2Item.id}
-                      className="flex flex-col mb-6 last:mb-0"
-                    >
+                    <div key={l2Item.id} className="flex flex-col mb-6 last:mb-0">
                       <h3 className="px-3 mb-2 text-[11px] font-bold uppercase tracking-wider text-mutedForeground select-none">
                         {l2Item.label}
                       </h3>
                       <div className="flex flex-col space-y-0.5">
                         {l2Item.children!.map((l3Item) => (
-                          <SidebarPanelItem
-                            key={l3Item.id}
-                            item={l3Item}
-                            level={0}
-                          />
+                          <SidebarPanelItem key={l3Item.id} item={l3Item} level={0} />
                         ))}
                       </div>
                     </div>
@@ -113,7 +104,7 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
           style={{
             top: tooltip.top,
             left: tooltip.left,
-            transform: "translateY(-50%)", // Vertically center relative to the top coordinate
+            transform: 'translateY(-50%)', // Vertically center relative to the top coordinate
           }}
         >
           {tooltip.text}

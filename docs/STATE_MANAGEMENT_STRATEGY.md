@@ -10,6 +10,7 @@ across the ERP frontend.
 ## What State Is Used For
 
 State is used to manage:
+
 - Authentication
 - User context
 - Application settings
@@ -23,6 +24,7 @@ This list is **illustrative, not exhaustive**.
 ## What State Is Not Used For
 
 State must not:
+
 - Encode business rules
 - Orchestrate API workflows
 - Replace domain logic
@@ -40,6 +42,7 @@ State must not:
 ## Persistence
 
 Persistence is:
+
 - Optional
 - Explicit
 - Infrastructure-driven
@@ -58,6 +61,7 @@ but state must remain functional without offline enabled.
 ## Replaceability
 
 The state solution must remain:
+
 - Replaceable
 - Testable
 - Isolated behind clear APIs

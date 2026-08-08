@@ -18,6 +18,7 @@ are handled consistently across web and mobile.
 ## Environment Types
 
 Typical environments include:
+
 - Development
 - Staging
 - Production

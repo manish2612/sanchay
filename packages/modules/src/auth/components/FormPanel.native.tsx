@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from "react";
-import { View, Pressable, StyleProp, ViewStyle } from "react-native";
-import { Text, TextInput, Button, Icon } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
-import { LoginData } from "../types";
-import { getFormPanelStyles } from "./styles";
+import React, { useState, useMemo } from 'react';
+import { View, Pressable, StyleProp, ViewStyle } from 'react-native';
+import { Text, TextInput, Button, Icon } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
+import { LoginData } from '../types';
+import { getFormPanelStyles } from './styles';
 
 interface FormPanelProps {
   onLogin?: (data: LoginData) => void;
@@ -11,11 +11,7 @@ interface FormPanelProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export function FormPanel({
-  onLogin,
-  onForgotPassword,
-  style,
-}: FormPanelProps) {
+export function FormPanel({ onLogin, onForgotPassword, style }: FormPanelProps) {
   const { theme } = useTheme();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const t = theme as any;
@@ -23,8 +19,8 @@ export function FormPanel({
   const styles = useMemo(() => getFormPanelStyles(t), [t]);
 
   const [isVisible, setIsVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     // <View style={[styles.container, style]}>
@@ -46,11 +42,7 @@ export function FormPanel({
       {/* Username/Email */}
       <View style={styles.inputGroup}>
         <TextInput.Root>
-          <TextInput.Input
-            placeholder="Username"
-            value={email}
-            onChangeText={setEmail}
-          />
+          <TextInput.Input placeholder="Username" value={email} onChangeText={setEmail} />
         </TextInput.Root>
       </View>
 
@@ -64,12 +56,9 @@ export function FormPanel({
             onChangeText={setPassword}
           />
           <TextInput.Slot side="right">
-            <Pressable
-              onPress={() => setIsVisible(!isVisible)}
-              style={styles.passwordToggle}
-            >
+            <Pressable onPress={() => setIsVisible(!isVisible)} style={styles.passwordToggle}>
               <Icon
-                name={isVisible ? "Eye" : "EyeOff"}
+                name={isVisible ? 'Eye' : 'EyeOff'}
                 size={20}
                 color={t.colors.mutedForeground}
               />
@@ -81,11 +70,7 @@ export function FormPanel({
       {/* Actions */}
       <View style={styles.actionGroup}>
         {/* @ts-expect-error Web/Native type resolution conflict */}
-        <Button
-          variant="secondary"
-          style={styles.actionButton}
-          onPress={() => {}}
-        >
+        <Button variant="secondary" style={styles.actionButton} onPress={() => {}}>
           Cancel
         </Button>
         {/* @ts-expect-error Web/Native type resolution conflict */}

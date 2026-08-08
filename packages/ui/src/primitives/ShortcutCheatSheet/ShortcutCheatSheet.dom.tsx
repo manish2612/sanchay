@@ -1,24 +1,14 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalTitle,
-  ModalDescription,
-} from "../Modal";
-import { TextInput } from "../TextInput";
-import { Icon } from "../Icon/Icon.dom"; // Correct import path
-import { ShortcutCheatSheetProps } from "./types";
-import { cn } from "../../utils";
+import * as React from 'react';
+import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription } from '../Modal';
+import { TextInput } from '../TextInput';
+import { Icon } from '../Icon/Icon.dom'; // Correct import path
+import { ShortcutCheatSheetProps } from './types';
+import { cn } from '../../utils';
 
-export const ShortcutCheatSheet = ({
-  open,
-  onOpenChange,
-  categories,
-}: ShortcutCheatSheetProps) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
+export const ShortcutCheatSheet = ({ open, onOpenChange, categories }: ShortcutCheatSheetProps) => {
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredCategories = React.useMemo(() => {
     if (!searchQuery) return categories;
@@ -30,9 +20,7 @@ export const ShortcutCheatSheet = ({
         // If category title matches, match ALL items in that category
         // (Requirement: "filter list by group title or shortcut label")
         // Interpretation: Checks if category title contains query.
-        const categoryTitleMatches = category.title
-          .toLowerCase()
-          .includes(lowerQuery);
+        const categoryTitleMatches = category.title.toLowerCase().includes(lowerQuery);
 
         if (categoryTitleMatches) {
           return category;
@@ -40,7 +28,7 @@ export const ShortcutCheatSheet = ({
 
         // otherwise filter items
         const filteredItems = category.items.filter((item) =>
-          item.label.toLowerCase().includes(lowerQuery)
+          item.label.toLowerCase().includes(lowerQuery),
         );
 
         return {
@@ -56,9 +44,7 @@ export const ShortcutCheatSheet = ({
       <ModalContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
         <ModalHeader>
           <ModalTitle>Keyboard Shortcuts</ModalTitle>
-          <ModalDescription>
-            List of available keyboard shortcuts.
-          </ModalDescription>
+          <ModalDescription>List of available keyboard shortcuts.</ModalDescription>
         </ModalHeader>
 
         <div className="px-1 mt-4">
@@ -87,9 +73,7 @@ export const ShortcutCheatSheet = ({
                       key={item.id}
                       className="flex flex-row items-center justify-between py-2 border-b border-border last:border-0"
                     >
-                      <span className="text-sm text-foreground">
-                        {item.label}
-                      </span>
+                      <span className="text-sm text-foreground">{item.label}</span>
                       <div className="flex flex-row gap-1">
                         {item.keys.map((key, index) => (
                           <kbd
@@ -112,4 +96,4 @@ export const ShortcutCheatSheet = ({
   );
 };
 
-ShortcutCheatSheet.displayName = "ShortcutCheatSheet";
+ShortcutCheatSheet.displayName = 'ShortcutCheatSheet';

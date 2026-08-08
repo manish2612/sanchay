@@ -10,6 +10,7 @@ which acts as the infrastructure backbone of the ERP frontend.
 ## Responsibilities
 
 The services layer is responsible for:
+
 - API communication
 - Authentication handling
 - Request interception
@@ -30,6 +31,7 @@ Direct network access is forbidden.
 ## Platform Differences
 
 Platform-specific behavior is handled via:
+
 - Adapters
 - Interceptors
 - Configuration
@@ -41,6 +43,7 @@ Modules remain unaware of platform differences.
 ## Offline Integration
 
 Offline behavior is injected at the API layer:
+
 - Requests may be queued
 - Responses may be served from cache
 - Sync is handled outside modules
@@ -52,6 +55,7 @@ Offline can be enabled or disabled without code changes.
 ## Error Handling
 
 Errors are:
+
 - Normalized centrally
 - Typed
 - Consistent across platforms

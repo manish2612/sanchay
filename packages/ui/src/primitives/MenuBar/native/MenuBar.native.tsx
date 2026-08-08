@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import { View, ViewStyle } from "react-native";
-import { useTheme } from "@prime/theme-provider";
-import { MenuBarContext } from "./contexts.native";
-import { getMenuBarStyles } from "./styles";
+import React, { useState } from 'react';
+import { View, ViewStyle } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
+import { MenuBarContext } from './contexts.native';
+import { getMenuBarStyles } from './styles';
 
-export function MenuBar({
-  children,
-  style,
-}: {
-  children: React.ReactNode;
-  style?: ViewStyle;
-}) {
+export function MenuBar({ children, style }: { children: React.ReactNode; style?: ViewStyle }) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const { theme } = useTheme();
   const styles = getMenuBarStyles(theme);

@@ -16,10 +16,16 @@ export interface DatePickerDropdownProps {
   align?: 'start' | 'center' | 'end';
 }
 
-export function DatePickerDropdown({ value, onChange, options, className, align = 'center' }: DatePickerDropdownProps) {
+export function DatePickerDropdown({
+  value,
+  onChange,
+  options,
+  className,
+  align = 'center',
+}: DatePickerDropdownProps) {
   const [open, setOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   const selectedOption = options.find((o) => o.value === value);
 
   return (
@@ -33,19 +39,21 @@ export function DatePickerDropdown({ value, onChange, options, className, align 
           <Icon name="ChevronDown" size={16} className="text-muted-foreground" />
         </button>
       </DropdownTrigger>
-      
-      <DropdownContent 
+
+      <DropdownContent
         ref={contentRef}
-        align={align} 
+        align={align}
         sideOffset={4}
-        onOpenAutoFocus={(e) => {
+        onOpenAutoFocus={(e: any) => {
           // Prevent Radix from auto-focusing the first item in the list
           e.preventDefault();
           // Focus the currently selected item instead, which automatically scrolls it into view
           // and ensures Arrow key navigation starts from that item!
           setTimeout(() => {
             if (contentRef.current) {
-              const selectedEl = contentRef.current.querySelector('[data-selected="true"]') as HTMLElement;
+              const selectedEl = contentRef.current.querySelector(
+                '[data-selected="true"]',
+              ) as HTMLElement;
               if (selectedEl) {
                 selectedEl.focus();
               } else {

@@ -1,12 +1,9 @@
-"use client";
+'use client';
 
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import React from "react";
-import { Icon } from "../../Icon/Icon.dom";
-import {
-  dropdownSubContentClassName,
-  dropdownSubTriggerClassName,
-} from "./styles.dom";
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import React from 'react';
+import { Icon } from '../../Icon/Icon.dom';
+import { dropdownSubContentClassName, dropdownSubTriggerClassName } from './styles.dom';
 
 const DropdownSub = DropdownMenuPrimitive.Sub;
 
@@ -19,7 +16,7 @@ const DropdownSubTrigger = React.forwardRef<
   return (
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
-      className={`${dropdownSubTriggerClassName} ${className || ""}`}
+      className={`${dropdownSubTriggerClassName} ${className || ''}`}
       style={style}
       {...props}
     >
@@ -37,7 +34,7 @@ const DropdownSubContent = React.forwardRef<
   return (
     <DropdownMenuPrimitive.SubContent
       ref={ref}
-      className={`${dropdownSubContentClassName} ${className || ""}`}
+      className={`${dropdownSubContentClassName} ${className || ''}`}
       style={style}
       {...props}
     />

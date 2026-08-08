@@ -1,28 +1,26 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormWizardContext } from "../hooks/useFormWizard";
-import { Check } from "lucide-react";
+import React from 'react';
+import { useFormWizardContext } from '../hooks/useFormWizard';
+import { Check } from 'lucide-react';
 
-export const StepNav = () => {
-  const {
-    currentStep,
-    steps,
-    totalSteps,
-    goToStep,
-    rejectedStepIndex,
-    setRejectedStepIndex,
-  } = useFormWizardContext();
-  const [modifier, setModifier] = React.useState("Alt+");
+export interface StepNavProps {
+  /** Custom title string or ReactNode to display in the StepNav sidebar header */
+  title?: React.ReactNode;
+  /** Custom CSS classes for the sidebar container */
+  className?: string;
+}
+
+export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps = {}) => {
+  const { currentStep, steps, totalSteps, goToStep, rejectedStepIndex, setRejectedStepIndex } =
+    useFormWizardContext();
+  const [modifier, setModifier] = React.useState('Alt+');
 
   // Detect if the user is on macOS to display the native "⌥" symbol for the Option key.
   // Falls back to "Alt+" for Windows/Linux users.
   React.useEffect(() => {
-    if (
-      typeof navigator !== "undefined" &&
-      /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)
-    ) {
-      setModifier("⌥");
+    if (typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.userAgent)) {
+      setModifier('⌥');
     }
   }, []);
 
@@ -57,30 +55,45 @@ export const StepNav = () => {
       `}</style>
 
       {/* Mobile Header (Visible < 1024px) */}
-      <div className="lg:hidden flex items-center gap-3 px-4 py-3 bg-surface-active border-b border-border">
-        <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 border-primary bg-primary text-primary-fg shadow-[0_0_0_4px_rgba(0,128,76,0.2)]">
-          {currentStep}
+      <div className="lg:hidden flex items-center justify-between gap-3 px-4 py-3 bg-surface-active border-b border-border min-h-[52px]">
+        {/* Left Side: Main Form Title */}
+        <div className="flex-1 min-w-0 pr-2">
+          {typeof title === 'string' ? (
+            <h1 className="font-head text-sm font-bold text-fg truncate">{title}</h1>
+          ) : (
+            title
+          )}
         </div>
-        <div className="flex-1 min-w-0 flex flex-col">
-          <div className="flex items-center gap-2">
-            <span className="font-head text-sm font-bold uppercase tracking-wider text-primary truncate">
+
+        {/* Right Side: Step Progress & Circle */}
+        <div className="flex items-center gap-2.5 flex-shrink-0 text-right">
+          <div className="flex flex-col items-end min-w-0">
+            <span className="font-head text-[11px] font-semibold text-muted-fg uppercase tracking-wider leading-none">
               Step {currentStep} of {totalSteps}
             </span>
+            <span className="font-head text-xs font-medium text-fg truncate max-w-[120px] sm:max-w-[180px] leading-tight mt-0.5">
+              {steps[currentStep - 1]?.title}
+            </span>
           </div>
-          <div className="truncate text-base font-bold text-fg font-head leading-tight">
-            {steps[currentStep - 1]?.title}
+
+          <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-head font-bold bg-primary text-primary-fg border-2 border-primary ring-4 ring-primary/15">
+            {currentStep}
           </div>
         </div>
       </div>
 
       {/* Desktop Sidebar (Visible >= 1024px) */}
-      <aside className="hidden lg:flex flex-col w-[344px] pr-11 flex-shrink-0 bg-surface-variant relative z-10 overflow-hidden">
+      <aside
+        className={`hidden lg:flex flex-col w-[344px] pr-11 flex-shrink-0 bg-surface-variant relative z-10 overflow-hidden ${className}`}
+      >
         <div className="flex flex-col flex-1 overflow-y-auto">
           {/* Entity Zone */}
           <div className="px-6 pt-7 pb-4 relative flex-shrink-0">
-            <h2 className="font-head text-[17px] font-bold text-fg leading-tight">
-              Form Wizard
-            </h2>
+            {typeof title === 'string' ? (
+              <h2 className="font-head text-[17px] font-bold text-fg leading-tight">{title}</h2>
+            ) : (
+              title
+            )}
           </div>
           <div className="h-[1px] bg-gradient-to-r from-primary/30 to-transparent" />
 
@@ -105,44 +118,44 @@ export const StepNav = () => {
                   title={`${step.title} (${modifier}${stepNumber})`}
                   onClick={() => goToStep(stepNumber)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
+                    if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       goToStep(stepNumber);
                     }
                   }}
                   className={`group relative flex items-start p-2.5 rounded-lg cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isRejected
-                      ? "bg-danger/10 text-danger shadow-md ring-1 ring-danger/30"
+                      ? 'bg-danger/10 text-danger shadow-md ring-1 ring-danger/30'
                       : isActive
-                        ? "bg-primary text-primary-foreground shadow-md ring-1 ring-primary-hover"
+                        ? 'bg-primary text-primary-foreground shadow-md ring-1 ring-primary-hover'
                         : isDone
-                          ? ""
-                          : "hover:bg-primary/5"
+                          ? ''
+                          : 'hover:bg-primary/5'
                   }`}
                 >
                   {/* Connecting Line (Absolute to parent, DOES NOT SHAKE) */}
                   {index !== steps.length - 1 && (
                     <div
                       className={`absolute left-[23px] top-[24px] -bottom-[40px] w-[2px] rounded-[1px] z-[1] ${
-                        isDone ? "bg-primary" : "bg-outline"
+                        isDone ? 'bg-primary' : 'bg-outline'
                       }`}
                     />
                   )}
 
                   {/* Shaking Container (Dot + Info + Shortcut) */}
                   <div
-                    className={`relative z-[2] flex items-start gap-3 w-full ${isRejected ? "animate-headshake" : ""}`}
+                    className={`relative z-[2] flex items-start gap-3 w-full ${isRejected ? 'animate-headshake' : ''}`}
                   >
                     {/* Dot */}
                     <div
                       className={`relative w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-head font-bold border-2 transition-all ${
                         isRejected
-                          ? "bg-danger border-danger text-danger-foreground ring-4 ring-danger/20"
+                          ? 'bg-danger border-danger text-danger-foreground ring-4 ring-danger/20'
                           : isActive
-                            ? "bg-primary-foreground text-primary border-transparent"
+                            ? 'bg-primary-foreground text-primary border-transparent'
                             : isDone
-                              ? "bg-primary border-primary text-primary-foreground ring-4 ring-primary/30"
-                              : "bg-surface border-outline text-muted-fg"
+                              ? 'bg-primary border-primary text-primary-foreground ring-4 ring-primary/30'
+                              : 'bg-surface border-outline text-muted-fg'
                       }`}
                     >
                       {isDone && !isRejected ? (
@@ -157,10 +170,10 @@ export const StepNav = () => {
                       <span
                         className={`font-head text-sm leading-tight truncate ${
                           isRejected
-                            ? "text-danger font-bold"
+                            ? 'text-danger font-bold'
                             : isActive
-                              ? "text-primary-foreground font-bold"
-                              : "text-muted-fg font-medium"
+                              ? 'text-primary-foreground font-bold'
+                              : 'text-muted-fg font-medium'
                         }`}
                       >
                         {step.title}
@@ -169,10 +182,10 @@ export const StepNav = () => {
                         <span
                           className={`text-xs leading-snug mt-[1px] truncate ${
                             isRejected
-                              ? "text-danger/80"
+                              ? 'text-danger/80'
                               : isActive
-                                ? "text-primary-foreground/80"
-                                : "text-muted-fg"
+                                ? 'text-primary-foreground/80'
+                                : 'text-muted-fg'
                           }`}
                         >
                           {step.description}
@@ -182,13 +195,13 @@ export const StepNav = () => {
 
                     {/* Shortcut Badge */}
                     <div
-                      className={`hidden lg:flex items-center justify-center transition-opacity mt-1 flex-shrink-0 ${isDone && !isActive ? "opacity-0 group-hover:opacity-100" : "opacity-100"}`}
+                      className={`hidden lg:flex items-center justify-center transition-opacity mt-1 flex-shrink-0 ${isDone && !isActive ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}
                     >
                       <kbd
                         className={`text-[10px] font-sans border rounded px-1.5 py-0.5 shadow-sm font-medium ${
                           isActive
-                            ? "border-primary-foreground/30 text-primary-foreground bg-primary/20"
-                            : "border-border text-muted-fg bg-surface group-hover:border-outline/80"
+                            ? 'border-primary-foreground/30 text-primary-foreground bg-primary/20'
+                            : 'border-border text-muted-fg bg-surface group-hover:border-outline/80'
                         }`}
                       >
                         {modifier}

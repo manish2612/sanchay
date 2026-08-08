@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import {
   Text,
   Modal,
@@ -13,14 +13,14 @@ import {
   Button,
   TextInput,
   useResponsiveValues,
-} from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
+} from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
 
 export function ModalDemo() {
   const { theme } = useTheme();
   const t = theme as any;
   const { width } = useResponsiveValues({
-    width: { base: "100%", xl: "48%" } as const,
+    width: { base: '100%', xl: '48%' } as const,
   });
 
   return (
@@ -29,7 +29,7 @@ export function ModalDemo() {
         padding: 20,
         backgroundColor: t.colors.background,
         borderRadius: 8,
-        borderColor: "#222222",
+        borderColor: '#222222',
         borderWidth: 1,
       }}
     >
@@ -46,8 +46,7 @@ export function ModalDemo() {
               <ModalHeader>
                 <ModalTitle>Edit Profile</ModalTitle>
                 <ModalDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
+                  Make changes to your profile here. Click save when you're done.
                 </ModalDescription>
               </ModalHeader>
               <View style={{ gap: 16, marginVertical: 16 }}>

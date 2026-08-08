@@ -11,6 +11,7 @@ platform-specific theme representations** that can be consumed by:
 - Mobile UI (React Native components)
 
 This guide is intended for:
+
 - Team member onboarding
 - Architectural enforcement
 - AI coding agents generating adapters correctly and safely
@@ -40,11 +41,13 @@ UI components must never consume design tokens directly.
 > **Adapters translate tokens. They do not design UI.**
 
 Theme adapters must:
+
 - Consume `design-tokens`
 - Output platform-compatible theme formats
 - Maintain parity between web and mobile
 
 Theme adapters must NOT:
+
 - Contain UI components
 - Implement business or domain logic
 - Define visual variants or component behavior
@@ -60,6 +63,7 @@ This system defines **two primary theme adapters**:
 2. React Native Theme Adapter
 
 Both adapters:
+
 - Consume the same token schema
 - Support the same theme variants
 - Expose platform-appropriate APIs
@@ -74,6 +78,7 @@ The web theme adapter converts design tokens into **CSS variables** that are
 consumed by **Radix UI primitives** and other web components.
 
 Radix primitives remain:
+
 - Unstyled
 - Token-driven
 - Decoupled from design decisions
@@ -83,6 +88,7 @@ Radix primitives remain:
 ### Responsibilities
 
 The web adapter must:
+
 - Generate CSS variables from design tokens
 - Support light and dark themes
 - Be extensible for future brand themes
@@ -94,6 +100,7 @@ The web adapter must:
 ### Explicit Non-Responsibilities
 
 The web adapter must NOT:
+
 - Import or wrap Radix components
 - Use Radix Themes
 - Define Tailwind or utility classes
@@ -105,10 +112,12 @@ The web adapter must NOT:
 ### Output Contract (Conceptual)
 
 The adapter outputs:
+
 - A set of CSS variables per theme
 - A mechanism to apply the active theme at the document or root level
 
 Conceptual example (not code):
+
 ```
 [data-theme="light"] → light theme CSS variables
 [data-theme="dark"]  → dark theme CSS variables
@@ -126,6 +135,7 @@ The React Native theme adapter converts design tokens into a **plain JavaScript
 theme object** consumable by React Native components.
 
 Because React Native does not support CSS variables:
+
 - Tokens are exposed as JS values
 - A Theme Provider is required
 
@@ -134,6 +144,7 @@ Because React Native does not support CSS variables:
 ### Responsibilities
 
 The React Native adapter must:
+
 - Export theme objects (light, dark, future brands)
 - Provide a Theme Provider
 - Ensure all styling values originate from tokens
@@ -144,6 +155,7 @@ The React Native adapter must:
 ### Explicit Non-Responsibilities
 
 The React Native adapter must NOT:
+
 - Allow components to import design tokens directly
 - Contain UI component logic
 - Include platform logic unrelated to theming
@@ -154,6 +166,7 @@ The React Native adapter must NOT:
 ### Output Contract (Conceptual)
 
 The adapter outputs:
+
 - Light theme object
 - Dark theme object
 - A provider to expose the active theme to components
@@ -171,6 +184,7 @@ Components consume theme values only, never raw tokens.
 - Only token values may differ
 
 Theme switching:
+
 - Is handled outside the adapters
 - Is driven by application-level state
 - Must not mutate design tokens
@@ -180,6 +194,7 @@ Theme switching:
 ## Future: Multi-Brand and Multi-Tenant Support
 
 Theme adapters must be designed to scale for:
+
 - Multiple brands
 - White-label deployments
 - Client-specific themes
@@ -188,11 +203,13 @@ Theme adapters must be designed to scale for:
 ### Required Constraint
 
 All brands must:
+
 - Share the same token schema
 - Use the same adapter logic
 - Differ only by token values
 
 Conceptual structure:
+
 ```
 design-tokens
   ├─ base
@@ -213,12 +230,14 @@ Adapters must not contain brand-specific conditionals.
 ### Allowed
 
 UI components may import from:
+
 - Web theme adapter
 - React Native theme adapter
 
 ### Forbidden
 
 UI components must never import:
+
 - `design-tokens`
 - Individual token files
 - Hardcoded design values
@@ -232,11 +251,13 @@ Violating this rule breaks cross-platform consistency.
 Before building any UI components:
 
 Web:
+
 1. Apply web theme adapter
 2. Toggle light/dark theme
 3. Verify CSS variables update correctly
 
 React Native:
+
 1. Apply native theme adapter
 2. Toggle theme
 3. Verify theme object updates correctly
@@ -248,6 +269,7 @@ Only after these checks pass should UI components be implemented.
 ## Explicitly Out of Scope
 
 Theme adapters do not handle:
+
 - Component variants
 - Interaction states
 - Animations
@@ -268,6 +290,7 @@ Theme adapters are the **critical translation layer** that ensure:
 - The system scales safely for ERP-level growth
 
 If adapters are correct:
+
 - Components stay simple
 - Themes evolve safely
 - Technical debt is minimized

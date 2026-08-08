@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, Pressable, FlatList, ScrollView } from "react-native";
-import { CommandListProps, CommandItemProps } from "../types";
-import { useCommandContext } from "./CommandPalette";
-import { styles } from "../styles";
-import { useTheme } from "@prime/theme-provider";
+import React from 'react';
+import { View, Text, Pressable, FlatList, ScrollView } from 'react-native';
+import { CommandListProps, CommandItemProps } from '../types';
+import { useCommandContext } from './CommandPalette';
+import { styles } from '../styles';
+import { useTheme } from '@prime/theme-provider';
 
 export const CommandList = ({ children, ...props }: CommandListProps) => {
   // In native, children are typically passed directly.
@@ -22,7 +22,7 @@ export const CommandEmpty = ({ children }: { children: React.ReactNode }) => {
   // Actually, to make "filtering" work in Native with composition, we'd need to clone children or use a Context-based registry.
 
   return (
-    <View style={{ padding: 20, alignItems: "center" }}>
+    <View style={{ padding: 20, alignItems: 'center' }}>
       <Text>{children}</Text>
     </View>
   );
@@ -35,7 +35,7 @@ export const CommandGroup = ({
   children: React.ReactNode;
   heading?: string;
 }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <View>
       {heading && (
@@ -44,7 +44,7 @@ export const CommandGroup = ({
             paddingHorizontal: 16,
             paddingVertical: 8,
             fontSize: 12,
-            fontWeight: "600",
+            fontWeight: '600',
             color: theme.colors.mutedForeground,
           }}
         >
@@ -56,14 +56,9 @@ export const CommandGroup = ({
   );
 };
 
-export const CommandItem = ({
-  children,
-  onSelect,
-  value,
-  disabled,
-}: CommandItemProps) => {
+export const CommandItem = ({ children, onSelect, value, disabled }: CommandItemProps) => {
   const { search, shouldFilter, filter } = useCommandContext();
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   // Filter logic
   if (shouldFilter && value && search) {
@@ -73,31 +68,25 @@ export const CommandItem = ({
 
   return (
     <Pressable
-      onPress={() => !disabled && onSelect?.(value || "")}
+      onPress={() => !disabled && onSelect?.(value || '')}
       style={({ pressed }) => [
         styles.item,
-        { backgroundColor: pressed ? theme.colors.surfaceHover : "transparent" },
+        { backgroundColor: pressed ? theme.colors.surfaceHover : 'transparent' },
         disabled && { opacity: 0.5 },
       ]}
       disabled={disabled}
     >
-      <Text style={[styles.itemText, { color: theme.colors.foreground }]}>
-        {children}
-      </Text>
+      <Text style={[styles.itemText, { color: theme.colors.foreground }]}>{children}</Text>
     </Pressable>
   );
 };
 
-export const CommandShortcut = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const theme = useTheme();
+export const CommandShortcut = ({ children }: { children: React.ReactNode }) => {
+  const { theme } = useTheme();
   return (
     <Text
       style={{
-        marginLeft: "auto",
+        marginLeft: 'auto',
         fontSize: 12,
         color: theme.colors.mutedForeground,
       }}
@@ -108,12 +97,12 @@ export const CommandShortcut = ({
 };
 
 export const CommandSeparator = () => {
-  const { colors } = useTheme();
+  const { theme } = useTheme();
   return (
     <View
       style={{
         height: 1,
-        backgroundColor: colors.border,
+        backgroundColor: theme.colors.border,
         marginVertical: 4,
       }}
     />

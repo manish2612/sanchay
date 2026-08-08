@@ -11,14 +11,14 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
-  }
+  },
 });
 
 export const getSizeStyles = (theme: any, size: 'sm' | 'default' | 'lg') => {
   const t = theme.space;
   // Get the base unit dynamically from the theme
   let baseUnit: number;
-  
+
   switch (size) {
     case 'sm':
       baseUnit = parseFloat(t['4']); // scales natively with density

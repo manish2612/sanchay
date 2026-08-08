@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import { SidebarProvider, useSidebar } from "./useSidebar";
-import { SidebarRail } from "../SidebarRail";
-import { SidebarPanel } from "../SidebarPanel";
-import { NAVIGATION_TREE } from "../../data/navigationTree";
+'use client';
+import React from 'react';
+import { SidebarProvider, useSidebar } from './useSidebar';
+import { SidebarRail } from '../SidebarRail';
+import { SidebarPanel } from '../SidebarPanel';
+import { NAVIGATION_TREE } from '../../data/navigationTree';
 
 interface SidebarContentProps {
   appName: string;
@@ -21,7 +21,7 @@ function SidebarContent({ appName, user, onLogout }: SidebarContentProps) {
   const activeL1Config = NAVIGATION_TREE.find((item) => item.id === activeL1ItemId);
 
   return (
-    // z-[100] ensures tooltips sit above sticky headers. 
+    // z-[100] ensures tooltips sit above sticky headers.
     // sticky top-0 h-screen ensures the sidebar doesn't scroll with the main body content.
     <div className="relative flex h-screen sticky top-0 bg-background z-[100] flex-shrink-0">
       {/* Level 1 Icon Rail (Primary Color Scheme) */}

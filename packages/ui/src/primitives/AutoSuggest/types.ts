@@ -1,32 +1,36 @@
-import * as React from "react";
+import * as React from 'react';
 
 export interface AutoSuggestOption {
   label: string;
   value: string;
   disabled?: boolean;
   icon?: string;
+  leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
 }
 
-export type AutoSuggestOptions = (AutoSuggestOption | { group: string; items: AutoSuggestOption[] })[];
+export type AutoSuggestOptions = (
+  AutoSuggestOption | { group: string; items: AutoSuggestOption[] }
+)[];
 
 export interface AutoSuggestRootProps<T extends boolean = false> {
   // Value Management
   value?: T extends true ? string[] : string;
   onChange?: (value: T extends true ? string[] : string) => void;
-  
+
   // Input Management
   inputValue?: string;
   onInputChange?: (value: string) => void;
-  
+
   // Data Logic
   options?: AutoSuggestOptions;
-  
+
   // Features
   multiple?: T;
   virtualized?: boolean;
   creatable?: boolean;
   onCreate?: (value: string) => void;
-  
+
   children?: React.ReactNode;
   className?: string;
 }
@@ -66,6 +70,8 @@ export interface AutoSuggestItemProps {
   onSelect?: (value: string) => void;
   children?: React.ReactNode;
   className?: string;
+  leadingVisual?: React.ReactNode;
+  reserveLeadingSpace?: boolean;
 }
 
 export interface AutoSuggestGroupProps {

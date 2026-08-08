@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import React from "react";
-import { cva } from "class-variance-authority";
-import { cn } from "../../utils";
-import { WebTextInputProps } from "./types";
-import { useTextInput } from "./useTextInput";
+import React from 'react';
+import { cva } from 'class-variance-authority';
+import { cn } from '../../utils';
+import { WebTextInputProps } from './types';
+import { useTextInput } from './useTextInput';
 
 const rootVariants = cva(
-  "flex items-center rounded-md border bg-transparent shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2",
+  'flex items-center rounded-md border bg-transparent shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2',
   {
     variants: {
       variant: {
-        default: "border-input",
-        error: "border-danger focus-within:ring-danger",
-        success: "border-success focus-within:ring-success",
+        default: 'border-input',
+        error: 'border-danger focus-within:ring-danger',
+        success: 'border-success focus-within:ring-success',
       },
       disabled: {
-        true: "opacity-50 cursor-not-allowed bg-surface-variant",
+        true: 'opacity-50 cursor-not-allowed bg-surface-variant',
       },
       labelVariant: {
-        default: "h-10 w-full px-3 py-2",
-        "in-field": "min-h-[48px] w-full px-3 py-1.5",
-        inline: "h-10 w-full px-3 py-2",
-        hidden: "h-10 w-full px-3 py-2",
+        default: 'h-10 w-full px-3 py-2',
+        'in-field': 'min-h-[48px] w-full px-3 py-1.5',
+        inline: 'h-10 w-full px-3 py-2',
+        hidden: 'h-10 w-full px-3 py-2',
       },
     },
     defaultVariants: {
-      variant: "default",
-      labelVariant: "default",
+      variant: 'default',
+      labelVariant: 'default',
     },
   },
 );
@@ -40,7 +40,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       variant,
       disabled,
       label,
-      labelVariant = "default",
+      labelVariant = 'default',
       labelClassName,
       leftSlot,
       rightSlot,
@@ -52,18 +52,10 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
     },
     ref,
   ) => {
-    const { id, isFocused, onFocus, onBlur } = useTextInput(
-      idProp,
-      onFocusProp,
-      onBlurProp,
-    );
+    const { id, isFocused, onFocus, onBlur } = useTextInput(idProp, onFocusProp, onBlurProp);
 
     const renderInputWrapper = (children: React.ReactNode) => (
-      <div
-        className={cn(
-          rootVariants({ variant, disabled, labelVariant, className }),
-        )}
-      >
+      <div className={cn(rootVariants({ variant, disabled, labelVariant, className }))}>
         {leftSlot && (
           <div className="text-muted-foreground mr-2 flex items-center justify-center">
             {leftSlot}
@@ -86,8 +78,8 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
         onFocus={onFocus}
         onBlur={onBlur}
         className={cn(
-          "flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed text-sm min-w-0",
-          labelVariant === "in-field" && "leading-tight text-foreground",
+          'flex-1 bg-transparent border-none outline-none placeholder:text-muted-foreground/50 placeholder:font-light disabled:cursor-not-allowed text-sm min-w-0',
+          labelVariant === 'in-field' && 'leading-tight text-foreground',
           inputClassName,
         )}
         {...props}
@@ -103,13 +95,9 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       innerInput
     );
 
-    if (labelVariant === "in-field") {
+    if (labelVariant === 'in-field') {
       return (
-        <div
-          className={cn(
-            rootVariants({ variant, disabled, labelVariant, className }),
-          )}
-        >
+        <div className={cn(rootVariants({ variant, disabled, labelVariant, className }))}>
           {leftSlot && (
             <div className="text-muted-foreground mr-2 flex items-center justify-center shrink-0">
               {leftSlot}
@@ -119,7 +107,10 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
             {label && (
               <label
                 htmlFor={id}
-                className={cn("text-[10px] uppercase text-muted-foreground font-semibold leading-none tracking-wider cursor-text w-full mb-0.5", labelClassName)}
+                className={cn(
+                  'text-[10px] uppercase text-muted-foreground font-semibold leading-none tracking-wider cursor-text w-full mb-0.5',
+                  labelClassName,
+                )}
               >
                 {label}
               </label>
@@ -135,17 +126,17 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       );
     }
 
-    if (labelVariant === "inline") {
+    if (labelVariant === 'inline') {
       return (
         <div className="flex items-center w-full gap-3">
           {label && (
-              <label
+            <label
               htmlFor={id}
               className={cn(
-                "text-sm font-medium leading-none shrink-0",
-                !labelClassName?.includes("w-") && "w-[120px]", // Default width if none specified
-                disabled && "cursor-not-allowed opacity-70",
-                labelClassName
+                'text-sm font-medium leading-none shrink-0',
+                !labelClassName?.includes('w-') && 'w-[120px]', // Default width if none specified
+                disabled && 'cursor-not-allowed opacity-70',
+                labelClassName,
               )}
             >
               {label}
@@ -156,7 +147,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
       );
     }
 
-    if (labelVariant === "hidden") {
+    if (labelVariant === 'hidden') {
       return (
         <div className="w-full">
           {label && (
@@ -176,9 +167,9 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
           <label
             htmlFor={id}
             className={cn(
-              "text-sm font-medium leading-none",
-              disabled && "cursor-not-allowed opacity-70",
-              labelClassName
+              'text-sm font-medium leading-none',
+              disabled && 'cursor-not-allowed opacity-70',
+              labelClassName,
             )}
           >
             {label}
@@ -190,4 +181,4 @@ export const TextInput = React.forwardRef<HTMLInputElement, WebTextInputProps>(
   },
 );
 
-TextInput.displayName = "TextInput";
+TextInput.displayName = 'TextInput';

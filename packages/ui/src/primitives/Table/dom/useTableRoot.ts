@@ -1,13 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   ColumnDef,
   Row,
   TableOptions,
-} from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { useTableNavigation } from "./useTableNavigation";
+} from '@tanstack/react-table';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { useTableNavigation } from './useTableNavigation';
 
 export interface UseTableRootOptions<TData> {
   data: TData[];
@@ -62,7 +62,7 @@ export function useTableRoot<TData>({
 
   const totalMinWidth = table.getVisibleLeafColumns().reduce((sum, col) => {
     const isFluid = (col.columnDef.meta as any)?.layout?.fluid;
-    return sum + (isFluid ? (col.columnDef.minSize || 100) : col.getSize());
+    return sum + (isFluid ? col.columnDef.minSize || 100 : col.getSize());
   }, 0);
 
   /* 
@@ -72,7 +72,7 @@ export function useTableRoot<TData>({
   */
   React.useEffect(() => {
     if (focusedRowIndex >= 0) {
-      virtualizer.scrollToIndex(focusedRowIndex, { align: "auto" });
+      virtualizer.scrollToIndex(focusedRowIndex, { align: 'auto' });
     }
   }, [focusedRowIndex, virtualizer]);
 
@@ -93,7 +93,7 @@ export function useTableRoot<TData>({
     (e: React.FocusEvent<HTMLDivElement>) => {
       // If the focus was placed directly on the root div (e.g. via Tab navigation from outside)
       if (e.target === rootRef.current) {
-        // Prevent the ping-pong trap! If they Shift+Tabbed OUT of an inner input, 
+        // Prevent the ping-pong trap! If they Shift+Tabbed OUT of an inner input,
         // e.relatedTarget will be that inner input. We should politely let them leave.
         if (e.relatedTarget && rootRef.current.contains(e.relatedTarget as Node)) {
           return;
@@ -108,7 +108,7 @@ export function useTableRoot<TData>({
         focusNewRowInput(targetIndex, 0, 5);
       }
     },
-    [focusedRowIndex, focusNewRowInput]
+    [focusedRowIndex, focusNewRowInput],
   );
 
   return {

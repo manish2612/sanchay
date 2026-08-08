@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { View, ViewStyle } from "react-native";
-import { useTheme } from "@prime/theme-provider";
-import { MenuBarContext, MenuContext } from "./contexts.native";
-import { getMenuBarStyles } from "./styles";
+import React, { useContext } from 'react';
+import { View, ViewStyle } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
+import { MenuBarContext, MenuContext } from './contexts.native';
+import { getMenuBarStyles } from './styles';
 
 export function MenuBarContent({
   children,

@@ -1,4 +1,4 @@
-export * from "./types";
+export * from './types';
 import {
   AutoSuggestRoot,
   AutoSuggestInput,
@@ -9,7 +9,7 @@ import {
   AutoSuggestItem,
   AutoSuggestCreateItem,
   AutoSuggestVirtualizedList,
-} from "./AutoSuggest.dom";
+} from './AutoSuggest.dom';
 
 export const AutoSuggest = Object.assign(AutoSuggestRoot, {
   Input: AutoSuggestInput,

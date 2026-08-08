@@ -1,12 +1,14 @@
 # Layout and Scrolling Strategy
 
 ## The Global App Shell Layout
-This ERP application is designed with a strict, bounding "App Shell" architecture. 
+
+This ERP application is designed with a strict, bounding "App Shell" architecture.
 
 In `apps/web/app/components/AppLayout.tsx`, the root container is strictly constrained to the viewport height using `h-screen w-screen overflow-hidden`.
 
 ### Why do we do this?
-In heavily data-dense applications (like ERPs, IDEs, and Dashboards), you almost never want the *entire browser window* to scroll natively. 
+
+In heavily data-dense applications (like ERPs, IDEs, and Dashboards), you almost never want the _entire browser window_ to scroll natively.
 
 If the global app was allowed to expand (`min-h-screen`), any large data tables or grids (like the Ledger Entry or Voucher tables) would infinitely expand their height as rows were added. This would push the footer off the screen, cause the entire page to scroll, and break the pinned layout of sidebars, headers, and footers.
 
@@ -18,14 +20,16 @@ By strictly bounding the app to `h-screen overflow-hidden`, we force all interna
 
 While `h-screen` is perfect for dense data-entry screens, you will eventually build modules that **should** feel like traditional scrolling web pages (for example: a long `Settings` form, a long `Marketing Dashboard`, or a `Report` view).
 
-Because the global `AppLayout` has `overflow-hidden`, these long pages will be cut off by default. 
+Because the global `AppLayout` has `overflow-hidden`, these long pages will be cut off by default.
 
 ### The Solution: Localized Overflow
-You do not need to (and should not) change the global `AppLayout`. 
+
+You do not need to (and should not) change the global `AppLayout`.
 
 Instead, simply re-enable vertical scrolling on the root container of that specific module's page (`page.tsx`).
 
 **Example of a scrolling page module:**
+
 ```tsx
 // apps/web/app/settings/page.tsx
 export default function SettingsPage() {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  Pressable, 
-  Text, 
-  ViewStyle, 
-  TextStyle, 
-  ActivityIndicator, 
-  PressableProps
+import {
+  Pressable,
+  Text,
+  ViewStyle,
+  TextStyle,
+  ActivityIndicator,
+  PressableProps,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@prime/theme-provider';
@@ -22,7 +22,7 @@ export interface ButtonProps extends PressableProps {
   textStyle?: TextStyle;
 }
 
-export function Button({ 
+export function Button({
   variant = 'primary',
   size = 'default',
   loading = false,
@@ -32,7 +32,7 @@ export function Button({
   style,
   textStyle,
   disabled,
-  ...props 
+  ...props
 }: ButtonProps) {
   const { theme } = useTheme();
   const t = theme as any;
@@ -44,36 +44,32 @@ export function Button({
   const content = (
     <>
       {loading ? (
-        <ActivityIndicator 
-          size="small" 
-          color={textColor} 
+        <ActivityIndicator
+          size="small"
+          color={textColor}
           style={{ marginRight: children ? 8 : 0 }}
         />
       ) : iconLeft ? (
-        <MaterialIcons 
-            name={iconLeft} 
-            size={iconSize} 
-            color={textColor} 
-            style={{ marginRight: children ? 8 : 0 }}
+        <MaterialIcons
+          name={iconLeft}
+          size={iconSize}
+          color={textColor}
+          style={{ marginRight: children ? 8 : 0 }}
         />
       ) : null}
 
       {children && (
-        <Text style={[
-          styles.text, 
-          { color: textColor, fontSize, fontWeight: '500' },
-          textStyle
-        ]}>
+        <Text style={[styles.text, { color: textColor, fontSize, fontWeight: '500' }, textStyle]}>
           {children}
         </Text>
       )}
 
       {!loading && iconRight && (
-        <MaterialIcons 
-            name={iconRight} 
-            size={iconSize} 
-            color={textColor} 
-            style={{ marginLeft: children ? 8 : 0 }}
+        <MaterialIcons
+          name={iconRight}
+          size={iconSize}
+          color={textColor}
+          style={{ marginLeft: children ? 8 : 0 }}
         />
       )}
     </>
@@ -91,10 +87,10 @@ export function Button({
           height,
           paddingHorizontal,
           borderRadius: t.radii.md,
-          opacity: (pressed || disabled) ? 0.7 : 1, // Standard pressed/disabled opacity
+          opacity: pressed || disabled ? 0.7 : 1, // Standard pressed/disabled opacity
         },
         width ? { width } : {}, // For icon button
-        style
+        style,
       ]}
       {...props}
     >
@@ -102,4 +98,3 @@ export function Button({
     </Pressable>
   );
 }
-

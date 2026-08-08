@@ -34,6 +34,7 @@ for the ERP frontend architecture.
 ## Tooling
 
 Testing tools must:
+
 - Be fast
 - Be deterministic
 - Not affect production builds

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
@@ -7,31 +7,35 @@ import { cn } from '../../utils';
 import { useSegmentedControl } from './SegmentedControlRoot.dom';
 
 const segmentedControlItemVariants = cva(
-  "inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-foreground",
+  'inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-foreground',
   {
     variants: {
       size: {
-        default: "px-3 py-1.5 text-sm",
-        xs: "px-2 py-0.5 text-xs",
-        sm: "px-2.5 py-1 text-sm",
-        lg: "px-4 py-2 text-base",
+        default: 'px-3 py-1.5 text-sm',
+        xs: 'px-2 py-0.5 text-xs',
+        sm: 'px-2.5 py-1 text-sm',
+        lg: 'px-4 py-2 text-base',
       },
       // Variant applies to the selected state of the item
       variant: {
-        default: "data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-sm",
-        outline: "data-[state=checked]:bg-transparent data-[state=checked]:border data-[state=checked]:border-primary data-[state=checked]:text-primary",
-        secondary: "data-[state=checked]:bg-secondary data-[state=checked]:text-secondary-foreground data-[state=checked]:shadow-sm",
-      }
+        default:
+          'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:shadow-sm',
+        outline:
+          'data-[state=checked]:bg-transparent data-[state=checked]:border data-[state=checked]:border-primary data-[state=checked]:text-primary',
+        secondary:
+          'data-[state=checked]:bg-secondary data-[state=checked]:text-secondary-foreground data-[state=checked]:shadow-sm',
+      },
     },
     defaultVariants: {
-      size: "default",
-      variant: "default",
+      size: 'default',
+      variant: 'default',
     },
-  }
+  },
 );
 
 export interface SegmentedControlItemProps
-  extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
+  extends
+    React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>,
     VariantProps<typeof segmentedControlItemVariants> {
   label?: React.ReactNode;
 }
@@ -41,10 +45,10 @@ const SegmentedControlItem = React.forwardRef<
   SegmentedControlItemProps
 >(({ className, size, variant, label, children, ...props }, ref) => {
   const context = useSegmentedControl();
-  
+
   // Size defaults to root context, then default variant
   const appliedSize = size || context.size || 'default';
-  
+
   // Individual items can override the default variant styling for checked state
   const appliedVariant = variant || 'default';
 
@@ -53,7 +57,7 @@ const SegmentedControlItem = React.forwardRef<
       ref={ref}
       className={cn(
         segmentedControlItemVariants({ size: appliedSize, variant: appliedVariant, className }),
-        context.isBinary && "focus-visible:ring-0 focus-visible:ring-offset-0"
+        context.isBinary && 'focus-visible:ring-0 focus-visible:ring-offset-0',
       )}
       {...props}
     >
@@ -61,6 +65,6 @@ const SegmentedControlItem = React.forwardRef<
     </RadioGroupPrimitive.Item>
   );
 });
-SegmentedControlItem.displayName = "SegmentedControlItem";
+SegmentedControlItem.displayName = 'SegmentedControlItem';
 
 export { SegmentedControlItem, segmentedControlItemVariants };

@@ -1,6 +1,6 @@
-import * as React from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { AutoSuggestRootProps, AutoSuggestOption } from "./types";
+import * as React from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { AutoSuggestRootProps, AutoSuggestOption } from './types';
 
 export function useAutoSuggest<T extends boolean = false>({
   value,
@@ -14,24 +14,20 @@ export function useAutoSuggest<T extends boolean = false>({
   onCreate,
 }: Pick<
   AutoSuggestRootProps<T>,
-  | "value"
-  | "onChange"
-  | "inputValue"
-  | "onInputChange"
-  | "options"
-  | "multiple"
-  | "virtualized"
-  | "creatable"
-  | "onCreate"
+  | 'value'
+  | 'onChange'
+  | 'inputValue'
+  | 'onInputChange'
+  | 'options'
+  | 'multiple'
+  | 'virtualized'
+  | 'creatable'
+  | 'onCreate'
 >) {
   const [open, setOpen] = React.useState(false);
 
-  const [internalValue, setInternalValue] = React.useState<string | string[]>(
-    multiple ? [] : ""
-  );
-  const [internalInputValue, setInternalInputValue] = React.useState(
-    inputValue || ""
-  );
+  const [internalValue, setInternalValue] = React.useState<string | string[]>(multiple ? [] : '');
+  const [internalInputValue, setInternalInputValue] = React.useState(inputValue || '');
 
   const isControlledValue = value !== undefined;
   const isControlledInput = inputValue !== undefined;
@@ -42,7 +38,7 @@ export function useAutoSuggest<T extends boolean = false>({
   // Helper to flatten grouped options
   const flatOptions = React.useMemo(() => {
     return (options || []).reduce<AutoSuggestOption[]>((acc, curr) => {
-      if ("group" in curr) {
+      if ('group' in curr) {
         return [...acc, ...curr.items];
       }
       return [...acc, curr];
@@ -62,13 +58,11 @@ export function useAutoSuggest<T extends boolean = false>({
     if (!virtualized) return flatOptions;
     if (!currentInputValue || exactMatchSelected) return flatOptions;
     return flatOptions.filter((opt) =>
-      opt.label.toLowerCase().includes(currentInputValue.toLowerCase())
+      opt.label.toLowerCase().includes(currentInputValue.toLowerCase()),
     );
   }, [flatOptions, currentInputValue, virtualized, exactMatchSelected]);
 
-  const [listElement, setListElement] = React.useState<HTMLDivElement | null>(
-    null
-  );
+  const [listElement, setListElement] = React.useState<HTMLDivElement | null>(null);
   const virtualizer = useVirtualizer({
     count: filteredFlatOptions.length,
     getScrollElement: () => listElement,
@@ -91,22 +85,20 @@ export function useAutoSuggest<T extends boolean = false>({
       if (onChange) onChange(newArray as any);
 
       // Don't update input value or close on multi-select
-      if (!isControlledInput) setInternalInputValue("");
-      if (onInputChange) onInputChange("");
+      if (!isControlledInput) setInternalInputValue('');
+      if (onInputChange) onInputChange('');
     } else {
       if (!isControlledValue) setInternalValue(selectedValue);
       if (onChange) onChange(selectedValue as any);
 
-      const selectedOption = flatOptions.find(
-        (opt) => opt.value === selectedValue
-      );
+      const selectedOption = flatOptions.find((opt) => opt.value === selectedValue);
       if (selectedOption) {
         if (!isControlledInput) setInternalInputValue(selectedOption.label);
         if (onInputChange) onInputChange(selectedOption.label);
       } else {
-         // Fallback if option wasn't in options array (e.g. creatable without static options)
-         if (!isControlledInput) setInternalInputValue(selectedValue);
-         if (onInputChange) onInputChange(selectedValue);
+        // Fallback if option wasn't in options array (e.g. creatable without static options)
+        if (!isControlledInput) setInternalInputValue(selectedValue);
+        if (onInputChange) onInputChange(selectedValue);
       }
 
       setOpen(false);
@@ -125,8 +117,8 @@ export function useAutoSuggest<T extends boolean = false>({
     if (onCreate && currentInputValue.trim()) {
       onCreate(currentInputValue.trim());
       if (multiple) {
-        if (!isControlledInput) setInternalInputValue("");
-        if (onInputChange) onInputChange("");
+        if (!isControlledInput) setInternalInputValue('');
+        if (onInputChange) onInputChange('');
       } else {
         setOpen(false);
       }
@@ -147,14 +139,14 @@ export function useAutoSuggest<T extends boolean = false>({
       e.stopPropagation();
       e.preventDefault();
     }
-    if (!isControlledValue) setInternalValue(multiple ? [] : "");
-    if (onChange) onChange((multiple ? [] : "") as any);
-    if (!isControlledInput) setInternalInputValue("");
-    if (onInputChange) onInputChange("");
+    if (!isControlledValue) setInternalValue(multiple ? [] : '');
+    if (onChange) onChange((multiple ? [] : '') as any);
+    if (!isControlledInput) setInternalInputValue('');
+    if (onInputChange) onInputChange('');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Backspace" && currentInputValue === "" && multiple) {
+    if (e.key === 'Backspace' && currentInputValue === '' && multiple) {
       // Allow cmdk to process backspace if we aren't removing tags
       const currentArray = (currentValue as string[]) || [];
       if (currentArray.length > 0) {
@@ -167,10 +159,7 @@ export function useAutoSuggest<T extends boolean = false>({
   const showCreate =
     creatable &&
     currentInputValue.trim().length > 0 &&
-    !flatOptions.some(
-      (opt) =>
-        opt.label.toLowerCase() === currentInputValue.trim().toLowerCase()
-    );
+    !flatOptions.some((opt) => opt.label.toLowerCase() === currentInputValue.trim().toLowerCase());
 
   const hasValue = multiple
     ? Array.isArray(currentValue) && currentValue.length > 0
@@ -196,9 +185,8 @@ export function useAutoSuggest<T extends boolean = false>({
     hasValue,
     isControlledInput,
     multiple,
-    virtualized
+    virtualized,
   };
 }
 
 export type AutoSuggestContextValue = ReturnType<typeof useAutoSuggest>;
-

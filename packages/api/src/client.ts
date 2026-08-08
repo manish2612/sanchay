@@ -18,7 +18,10 @@ export class HttpClient implements IHttpClient {
     this.client.interceptors.request.use(onFulfilled, onRejected);
   }
 
-  public registerResponseInterceptor(onFulfilled: (response: any) => any, onRejected?: ErrorInterceptorFn) {
+  public registerResponseInterceptor(
+    onFulfilled: (response: any) => any,
+    onRejected?: ErrorInterceptorFn,
+  ) {
     this.client.interceptors.response.use(onFulfilled, onRejected);
   }
 
@@ -27,17 +30,29 @@ export class HttpClient implements IHttpClient {
     return response.data;
   }
 
-  public async post<TResponse, TBody = unknown>(url: string, body?: TBody, config?: RequestConfig): Promise<TResponse> {
+  public async post<TResponse, TBody = unknown>(
+    url: string,
+    body?: TBody,
+    config?: RequestConfig,
+  ): Promise<TResponse> {
     const response = await this.client.post<TResponse>(url, body, config);
     return response.data;
   }
 
-  public async put<TResponse, TBody = unknown>(url: string, body?: TBody, config?: RequestConfig): Promise<TResponse> {
+  public async put<TResponse, TBody = unknown>(
+    url: string,
+    body?: TBody,
+    config?: RequestConfig,
+  ): Promise<TResponse> {
     const response = await this.client.put<TResponse>(url, body, config);
     return response.data;
   }
 
-  public async patch<TResponse, TBody = unknown>(url: string, body?: TBody, config?: RequestConfig): Promise<TResponse> {
+  public async patch<TResponse, TBody = unknown>(
+    url: string,
+    body?: TBody,
+    config?: RequestConfig,
+  ): Promise<TResponse> {
     const response = await this.client.patch<TResponse>(url, body, config);
     return response.data;
   }

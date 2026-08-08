@@ -1,4 +1,4 @@
-import { IconName } from "@prime/ui";
+import { IconName } from '@prime/ui';
 
 export type NavItemConfig = {
   id: string;
@@ -10,10 +10,10 @@ export type NavItemConfig = {
 
 export const NAVIGATION_TREE: NavItemConfig[] = [
   {
-    id: "dashboard",
-    label: "Dashboard",
-    icon: "LayoutDashboard",
-    href: "/dashboard",
+    id: 'dashboard',
+    label: 'Dashboard',
+    icon: 'LayoutDashboard',
+    href: '/dashboard',
   },
   {
     id: "company",

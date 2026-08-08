@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 // Icon type - can be a string name (for Icon component) or a React component
 export type MenuIcon = string | React.ComponentType<{ className?: string }>;
@@ -12,22 +12,22 @@ export interface BaseMenuItem {
 
 // 1. Simple Action Item (Clickable or Link)
 export interface MenuActionItem extends BaseMenuItem {
-  kind: "item";
+  kind: 'item';
   label: string;
   shortcut?: string;
-  
+
   // -- Action Strategy --
   // Option A: Callback (Backend ID mapped to client function)
-  onSelect?: () => void; 
-  actionId?: string; 
+  onSelect?: () => void;
+  actionId?: string;
 
   // Option B: Navigation (Routing Strategy)
-  href?: string; 
+  href?: string;
 }
 
 // 2. Checkbox Item (Toggle)
 export interface MenuCheckboxItem extends BaseMenuItem {
-  kind: "checkbox";
+  kind: 'checkbox';
   label: string;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
@@ -36,7 +36,7 @@ export interface MenuCheckboxItem extends BaseMenuItem {
 
 // 3. Radio Group (One of many)
 export interface MenuRadioGroup extends BaseMenuItem {
-  kind: "radio-group";
+  kind: 'radio-group';
   value: string;
   onValueChange: (value: string) => void;
   items: {
@@ -47,28 +47,23 @@ export interface MenuRadioGroup extends BaseMenuItem {
 
 // 4. Submenu (Nested items)
 export interface MenuSub extends BaseMenuItem {
-  kind: "sub";
+  kind: 'sub';
   label: string;
   content: MenuItem[]; // Recursive
 }
 
 // 5. Structural Items
 export interface MenuSeparator {
-  kind: "separator";
+  kind: 'separator';
 }
 export interface MenuLabel {
-  kind: "label";
+  kind: 'label';
   label: string;
 }
 
 // Union Type
 export type MenuItem =
-  | MenuActionItem
-  | MenuCheckboxItem
-  | MenuRadioGroup
-  | MenuSub
-  | MenuSeparator
-  | MenuLabel;
+  MenuActionItem | MenuCheckboxItem | MenuRadioGroup | MenuSub | MenuSeparator | MenuLabel;
 
 // Top Level Column (e.g., "File", "Edit")
 export interface MenuColumn {

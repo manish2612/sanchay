@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,19 +7,16 @@ import {
   Pressable,
   SafeAreaView,
   ActivityIndicator,
-} from "react-native";
-import { apiClient } from "@prime/services";
-import { Stack } from "expo-router";
+} from 'react-native';
+import { apiClient } from '@prime/services';
+import { Stack } from 'expo-router';
 
 export default function TestApiScreen() {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
 
-  const handleRequest = async (
-    method: string,
-    operation: () => Promise<any>
-  ) => {
+  const handleRequest = async (method: string, operation: () => Promise<any>) => {
     setLoading(true);
     setError(null);
     setResult(null);
@@ -27,46 +24,43 @@ export default function TestApiScreen() {
       const data = await operation();
       setResult(data);
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || 'An error occurred');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const getList = () =>
-    handleRequest("GET List", () => apiClient.get("/posts"));
-  const getDetail = () =>
-    handleRequest("GET Detail", () => apiClient.get("/posts/1"));
+  const getList = () => handleRequest('GET List', () => apiClient.get('/posts'));
+  const getDetail = () => handleRequest('GET Detail', () => apiClient.get('/posts/1'));
 
   const postCreate = () =>
-    handleRequest("POST Create", () =>
-      apiClient.post("/posts", {
-        title: "foo",
-        body: "bar",
+    handleRequest('POST Create', () =>
+      apiClient.post('/posts', {
+        title: 'foo',
+        body: 'bar',
         userId: 1,
-      })
+      }),
     );
 
   const putUpdate = () =>
-    handleRequest("PUT Update", () =>
-      apiClient.put("/posts/1", {
+    handleRequest('PUT Update', () =>
+      apiClient.put('/posts/1', {
         id: 1,
-        title: "foo updated",
-        body: "bar updated",
+        title: 'foo updated',
+        body: 'bar updated',
         userId: 1,
-      })
+      }),
     );
 
   const patchUpdate = () =>
-    handleRequest("PATCH Update", () =>
-      apiClient.patch("/posts/1", {
-        title: "foo patched",
-      })
+    handleRequest('PATCH Update', () =>
+      apiClient.patch('/posts/1', {
+        title: 'foo patched',
+      }),
     );
 
-  const deleteItem = () =>
-    handleRequest("DELETE", () => apiClient.delete("/posts/1"));
+  const deleteItem = () => handleRequest('DELETE', () => apiClient.delete('/posts/1'));
 
   const postMultipart = async () => {
     setLoading(true);
@@ -75,19 +69,19 @@ export default function TestApiScreen() {
     try {
       const formData = new FormData();
       // In React Native, file objects are slightly different, but FormData polyfill handles { uri, type, name }
-      formData.append("test-file", {
-        uri: "file:///path/to/test.txt",
-        type: "text/plain",
-        name: "test.txt",
+      formData.append('test-file', {
+        uri: 'file:///path/to/test.txt',
+        type: 'text/plain',
+        name: 'test.txt',
       } as any);
 
-      const res = await apiClient.post("https://httpbin.org/post", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await apiClient.post('https://httpbin.org/post', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(res);
     } catch (err: any) {
       console.log(err);
-      setError(err.message || "An error occurred");
+      setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -95,47 +89,17 @@ export default function TestApiScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen options={{ title: "API Test" }} />
+      <Stack.Screen options={{ title: 'API Test' }} />
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Text style={styles.header}>API Utility Test</Text>
 
         <View style={styles.buttonContainer}>
-          <Button
-            label="GET List"
-            onPress={getList}
-            color="#3b82f6"
-            disabled={loading}
-          />
-          <Button
-            label="GET Detail"
-            onPress={getDetail}
-            color="#3b82f6"
-            disabled={loading}
-          />
-          <Button
-            label="POST Create"
-            onPress={postCreate}
-            color="#22c55e"
-            disabled={loading}
-          />
-          <Button
-            label="PUT Update"
-            onPress={putUpdate}
-            color="#eab308"
-            disabled={loading}
-          />
-          <Button
-            label="PATCH Update"
-            onPress={patchUpdate}
-            color="#eab308"
-            disabled={loading}
-          />
-          <Button
-            label="DELETE"
-            onPress={deleteItem}
-            color="#ef4444"
-            disabled={loading}
-          />
+          <Button label="GET List" onPress={getList} color="#3b82f6" disabled={loading} />
+          <Button label="GET Detail" onPress={getDetail} color="#3b82f6" disabled={loading} />
+          <Button label="POST Create" onPress={postCreate} color="#22c55e" disabled={loading} />
+          <Button label="PUT Update" onPress={putUpdate} color="#eab308" disabled={loading} />
+          <Button label="PATCH Update" onPress={patchUpdate} color="#eab308" disabled={loading} />
+          <Button label="DELETE" onPress={deleteItem} color="#ef4444" disabled={loading} />
           <Button
             label="POST Multipart"
             onPress={postMultipart}
@@ -149,15 +113,11 @@ export default function TestApiScreen() {
           {error && <Text style={styles.errorText}>Error: {error}</Text>}
           {result && (
             <ScrollView style={styles.jsonContainer} nestedScrollEnabled>
-              <Text style={styles.jsonText}>
-                {JSON.stringify(result, null, 2)}
-              </Text>
+              <Text style={styles.jsonText}>{JSON.stringify(result, null, 2)}</Text>
             </ScrollView>
           )}
           {!loading && !error && !result && (
-            <Text style={styles.placeholderText}>
-              Select an operation to see results
-            </Text>
+            <Text style={styles.placeholderText}>Select an operation to see results</Text>
           )}
         </View>
       </ScrollView>
@@ -196,20 +156,20 @@ function Button({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   scrollContent: {
     padding: 20,
   },
   header: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 20,
-    color: "#1f2937",
+    color: '#1f2937',
   },
   buttonContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 10,
     marginBottom: 20,
   },
@@ -217,33 +177,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    minWidth: "45%",
-    alignItems: "center",
+    minWidth: '45%',
+    alignItems: 'center',
     marginBottom: 10,
   },
   buttonText: {
-    color: "white",
-    fontWeight: "600",
+    color: 'white',
+    fontWeight: '600',
   },
   resultContainer: {
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: '#e5e7eb',
     borderRadius: 8,
     padding: 16,
-    backgroundColor: "#f9fafb",
+    backgroundColor: '#f9fafb',
     minHeight: 200,
   },
   jsonContainer: {
     maxHeight: 400,
   },
   jsonText: {
-    fontFamily: "monospace",
+    fontFamily: 'monospace',
     fontSize: 12,
   },
   errorText: {
-    color: "#ef4444",
+    color: '#ef4444',
   },
   placeholderText: {
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
 });

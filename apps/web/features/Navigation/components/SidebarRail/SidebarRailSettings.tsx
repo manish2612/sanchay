@@ -1,20 +1,20 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { Icon } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider/web";
-import { Brand, Density, Mode } from "@prime/design-tokens";
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { Icon } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider/web';
+import { Brand, Density, Mode } from '@prime/design-tokens';
 
 const AVAILABLE_THEMES: { id: Brand; label: string; color: string }[] = [
-  { id: "classic", label: "Classic", color: "#0070f3" },
-  { id: "executive-blue", label: "Executive Blue", color: "#1E488F" },
-  { id: "prosperity-green", label: "Prosperity Green", color: "#2E5C46" },
-  { id: "vibrant-orange", label: "Vibrant Orange", color: "#E85D04" },
+  { id: 'classic', label: 'Classic', color: '#0070f3' },
+  { id: 'executive-blue', label: 'Executive Blue', color: '#1E488F' },
+  { id: 'prosperity-green', label: 'Prosperity Green', color: '#2E5C46' },
+  { id: 'vibrant-orange', label: 'Vibrant Orange', color: '#E85D04' },
 ];
 
 const AVAILABLE_DENSITIES: { id: Density; label: string }[] = [
-  { id: "compact", label: "Compact" },
-  { id: "comfortable", label: "Comfort" },
-  { id: "spacious", label: "Spacious" },
+  { id: 'compact', label: 'Compact' },
+  { id: 'comfortable', label: 'Comfort' },
+  { id: 'spacious', label: 'Spacious' },
 ];
 
 interface SidebarRailSettingsProps {
@@ -51,9 +51,9 @@ export function SidebarRailSettings({
       }
     }
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onPopoverToggle]);
 
   const handleToggle = () => {
@@ -69,12 +69,10 @@ export function SidebarRailSettings({
     <div className="relative flex justify-center w-full" ref={menuRef}>
       <button
         onClick={handleToggle}
-        onMouseEnter={(e) => !isOpen && onMouseEnter(e, "Settings & Theme")}
+        onMouseEnter={(e) => !isOpen && onMouseEnter(e, 'Settings & Theme')}
         onMouseLeave={onMouseLeave}
         className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-          isOpen
-            ? "bg-white/20 text-white"
-            : "text-white/70 hover:text-white hover:bg-white/10"
+          isOpen ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
         }`}
       >
         <Icon name="Settings" className="text-[22px]" />
@@ -83,9 +81,7 @@ export function SidebarRailSettings({
       {/* Settings Popover */}
       {isOpen && (
         <div className="absolute left-full ml-4 bottom-0 w-[280px] bg-surface border border-border shadow-2xl rounded-xl p-4 z-[100] flex flex-col cursor-default">
-          <div className="font-heading font-bold text-base text-foreground mb-4">
-            Appearance
-          </div>
+          <div className="font-heading font-bold text-base text-foreground mb-4">Appearance</div>
 
           {/* Theme Mode Selection */}
           <div className="mb-5">
@@ -93,7 +89,7 @@ export function SidebarRailSettings({
               Mode
             </div>
             <div className="flex bg-black/5 dark:bg-white/5 rounded-lg p-1">
-              {(["light", "dark", "system"] as const).map((m) => {
+              {(['light', 'dark', 'system'] as const).map((m) => {
                 const isActive = mode === m;
                 return (
                   <button
@@ -101,8 +97,8 @@ export function SidebarRailSettings({
                     onClick={() => setMode(m)}
                     className={`flex-1 flex items-center justify-center py-1.5 text-xs font-medium rounded-md capitalize transition-all ${
                       isActive
-                        ? "bg-primary text-primary-foreground shadow-md font-bold"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? 'bg-primary text-primary-foreground shadow-md font-bold'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     {m}
@@ -126,8 +122,8 @@ export function SidebarRailSettings({
                     onClick={() => setDensity(d.id)}
                     className={`flex-1 flex flex-col items-center justify-center py-1.5 px-1 text-[11px] font-medium rounded-md capitalize transition-all ${
                       isActive
-                        ? "bg-primary text-primary-foreground shadow-md font-bold"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? 'bg-primary text-primary-foreground shadow-md font-bold'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     {d.label}
@@ -151,8 +147,8 @@ export function SidebarRailSettings({
                     onClick={() => setBrand(theme.id)}
                     className={`flex items-center w-full px-2 py-2 rounded-md transition-colors ${
                       isActive
-                        ? "bg-primary/10 text-primary font-semibold"
-                        : "text-foreground hover:bg-surfaceHover"
+                        ? 'bg-primary/10 text-primary font-semibold'
+                        : 'text-foreground hover:bg-surfaceHover'
                     }`}
                   >
                     <div

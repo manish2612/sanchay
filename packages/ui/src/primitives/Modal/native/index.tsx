@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 import {
   Modal as RNModal,
   View,
@@ -9,10 +9,10 @@ import {
   ViewStyle,
   TextStyle,
   Pressable,
-} from "react-native";
-import { styles } from "./styles";
-import { Icon } from "../../Icon/Icon.native";
-import { useTheme } from "@prime/theme-provider";
+} from 'react-native';
+import { styles } from './styles';
+import { Icon } from '../../Icon/Icon.native';
+import { useTheme } from '@prime/theme-provider';
 
 interface ModalContextType {
   open: boolean;
@@ -24,7 +24,7 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 const useModalContext = () => {
   const context = useContext(ModalContext);
   if (!context) {
-    throw new Error("Modal compound components must be used within a Modal");
+    throw new Error('Modal compound components must be used within a Modal');
   }
   return context;
 };
@@ -47,11 +47,7 @@ const Modal = ({
   const open = controlledOpen ?? uncontrolledOpen;
   const onOpenChange = controlledOnOpenChange ?? setUncontrolledOpen;
 
-  return (
-    <ModalContext.Provider value={{ open, onOpenChange }}>
-      {children}
-    </ModalContext.Provider>
-  );
+  return <ModalContext.Provider value={{ open, onOpenChange }}>{children}</ModalContext.Provider>;
 };
 
 const ModalTrigger = ({
@@ -119,10 +115,7 @@ const ModalContent = ({
                 style,
               ]}
             >
-              <Pressable
-                style={styles.closeButton}
-                onPress={() => onOpenChange(false)}
-              >
+              <Pressable style={styles.closeButton} onPress={() => onOpenChange(false)}>
                 {/* Explicitly using a known icon for close */}
                 <Icon name="X" size={20} color={theme.colors.foreground} />
               </Pressable>
@@ -175,10 +168,7 @@ const ModalTitle = ({
 }) => {
   const { theme } = useTheme();
   return (
-    <Text
-      style={[styles.title, { color: theme.colors.foreground }, style]}
-      {...props}
-    >
+    <Text style={[styles.title, { color: theme.colors.foreground }, style]} {...props}>
       {children}
     </Text>
   );
@@ -194,14 +184,7 @@ const ModalDescription = ({
 }) => {
   const { theme } = useTheme();
   return (
-    <Text
-      style={[
-        styles.description,
-        { color: theme.colors.mutedForeground },
-        style,
-      ]}
-      {...props}
-    >
+    <Text style={[styles.description, { color: theme.colors.mutedForeground }, style]} {...props}>
       {children}
     </Text>
   );

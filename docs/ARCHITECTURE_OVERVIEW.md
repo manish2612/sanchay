@@ -6,6 +6,7 @@ This document defines the **core frontend architecture** for a production-grade 
 supporting **Web (Next.js)** and **Mobile (React Native)** from a **single monorepo**.
 
 The architecture is designed to:
+
 - Scale to ERP-level complexity (Odoo / Tally class)
 - Maximize code sharing
 - Maintain strict ownership boundaries
@@ -48,18 +49,18 @@ This document is the **entry point** for all architectural decisions.
 
 ## High-Level System View
 
-   User
-   ↓
-   App Shell (Web / Mobile)
-   ↓
-   Prime ERP Modules
-   ↓
-   Shared Services (API, State, Storage)
-   ↓
-   Backend (Go services)
-
+User
+↓
+App Shell (Web / Mobile)
+↓
+Prime ERP Modules
+↓
+Shared Services (API, State, Storage)
+↓
+Backend (Go services)
 
 Key point:
+
 > **Apps orchestrate. Packages implement.**
 
 ---
@@ -67,12 +68,15 @@ Key point:
 ## Layer Responsibilities
 
 ### 1. Apps Layer (`apps/`)
+
 **What it does**
+
 - Routing / Navigation
 - Platform lifecycle
 - Bootstrapping providers
 
 **What it never does**
+
 - Business logic
 - API logic
 - ERP rules
@@ -83,9 +87,11 @@ Apps are **replaceable**.
 ---
 
 ### 2. Packages Layer (`packages/`)
+
 This is where Prime ERP actually lives.
 
 Includes:
+
 - UI system
 - Prime ERP modules (Sales, Accounting, Inventory, etc.)
 - API & service abstractions
@@ -101,8 +107,8 @@ Packages are **platform-agnostic by default**.
 
 ## Code Sharing Strategy
 
-| Area            | Strategy                                  |
-|-----------------|--------------------------------------------|
+| Area            | Strategy                                   |
+| --------------- | ------------------------------------------ |
 | UI              | Platform files (`.web.tsx`, `.native.tsx`) |
 | Business logic  | 100% shared                                |
 | API layer       | Shared core + platform adapters            |
@@ -134,12 +140,14 @@ Go backend (service layer integration)
 Offline-first is treated as **infrastructure**, not a feature.
 
 Rules:
+
 - Prime ERP modules never branch on offline logic
 - API client decides online vs offline
 - Storage and network are adapter-based
 - Offline can be enabled or disabled per app
 
 If offline is disabled:
+
 - No storage
 - No queues
 - No sync
@@ -150,12 +158,14 @@ If offline is disabled:
 ## Debugging & Observability
 
 Debugging must:
+
 - Be fast
 - Be correct
 - Not affect production
 - Not increase build size
 
 Strategy:
+
 - Dev-only debug layer
 - Structured logs
 - API tracing
@@ -178,12 +188,14 @@ All debug code is **tree-shaken from production**.
 ## Why This Is Not Over-Engineering
 
 This architecture avoids:
+
 - Platform forks
 - Rewrite cycles
 - Hidden coupling
 - ERP-scale technical debt
 
 Complexity is:
+
 - Isolated
 - Explicit
 - Optional
@@ -195,11 +207,11 @@ This is **right-sized engineering for Prime ERP**, not premature abstraction.
 
 ## Architectural Invariants (Must Always Hold)
 
-1. Apps never own business logic  
-2. Modules never know platform details  
-3. Offline is optional and invisible  
-4. Debug code never ships to production  
-5. Types define contracts  
-6. Boundaries are enforced  
+1. Apps never own business logic
+2. Modules never know platform details
+3. Offline is optional and invisible
+4. Debug code never ships to production
+5. Types define contracts
+6. Boundaries are enforced
 
 Violation of these rules is considered an architectural bug.

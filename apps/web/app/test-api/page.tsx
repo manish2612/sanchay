@@ -1,17 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { apiClient } from "@prime/services";
+import { useState } from 'react';
+import { apiClient } from '@prime/services';
 
 export default function TestApiPage() {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
 
-  const handleRequest = async (
-    method: string,
-    operation: () => Promise<any>
-  ) => {
+  const handleRequest = async (method: string, operation: () => Promise<any>) => {
     setLoading(true);
     setError(null);
     setResult(null);
@@ -19,46 +16,43 @@ export default function TestApiPage() {
       const data = await operation();
       setResult(data);
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || 'An error occurred');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const getList = () =>
-    handleRequest("GET List", () => apiClient.get("/posts"));
-  const getDetail = () =>
-    handleRequest("GET Detail", () => apiClient.get("/posts/1"));
+  const getList = () => handleRequest('GET List', () => apiClient.get('/posts'));
+  const getDetail = () => handleRequest('GET Detail', () => apiClient.get('/posts/1'));
 
   const postCreate = () =>
-    handleRequest("POST Create", () =>
-      apiClient.post("/posts", {
-        title: "foo",
-        body: "bar",
+    handleRequest('POST Create', () =>
+      apiClient.post('/posts', {
+        title: 'foo',
+        body: 'bar',
         userId: 1,
-      })
+      }),
     );
 
   const putUpdate = () =>
-    handleRequest("PUT Update", () =>
-      apiClient.put("/posts/1", {
+    handleRequest('PUT Update', () =>
+      apiClient.put('/posts/1', {
         id: 1,
-        title: "foo updated",
-        body: "bar updated",
+        title: 'foo updated',
+        body: 'bar updated',
         userId: 1,
-      })
+      }),
     );
 
   const patchUpdate = () =>
-    handleRequest("PATCH Update", () =>
-      apiClient.patch("/posts/1", {
-        title: "foo patched",
-      })
+    handleRequest('PATCH Update', () =>
+      apiClient.patch('/posts/1', {
+        title: 'foo patched',
+      }),
     );
 
-  const deleteItem = () =>
-    handleRequest("DELETE", () => apiClient.delete("/posts/1"));
+  const deleteItem = () => handleRequest('DELETE', () => apiClient.delete('/posts/1'));
 
   // Note: JSONPlaceholder doesn't support multipart, so we use httpbin for this test
   // This might fail if CORS is an issue with httpbin from localhost, but illustrates the code.
@@ -73,18 +67,14 @@ export default function TestApiPage() {
       // But axios instance baseURL is fixed. Let's use full URL.
 
       const formData = new FormData();
-      formData.append(
-        "test-file",
-        new Blob(["test content"], { type: "text/plain" }),
-        "test.txt"
-      );
+      formData.append('test-file', new Blob(['test content'], { type: 'text/plain' }), 'test.txt');
 
-      const res = await apiClient.post("https://httpbin.org/post", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await apiClient.post('https://httpbin.org/post', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(res);
     } catch (err: any) {
-      setError(err.message || "An error occurred");
+      setError(err.message || 'An error occurred');
     } finally {
       setLoading(false);
     }

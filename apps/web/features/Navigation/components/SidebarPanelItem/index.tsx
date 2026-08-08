@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import Link from "next/link";
-import { Icon } from "@prime/ui";
-import { NavItemConfig } from "../../data/navigationTree";
-import { usePathname } from "next/navigation";
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { Icon } from '@prime/ui';
+import { NavItemConfig } from '../../data/navigationTree';
+import { usePathname } from 'next/navigation';
 
 interface SidebarPanelItemProps {
   item: NavItemConfig;
@@ -12,17 +12,17 @@ interface SidebarPanelItemProps {
 
 export function SidebarPanelItem({ item, level = 0 }: SidebarPanelItemProps) {
   const pathname = usePathname();
-  
+
   // Since this is now a flat list (L3 or standalone L2), we just check exact/starts-with path matching
   const isActive = item.href ? pathname?.startsWith(item.href) : false;
 
   // Active state styling
   // Fixed Dark Mode Hover Bug: Using `hover:bg-foreground/10 hover:text-foreground`
-  // guarantees perfect contrast in ALL themes because `foreground` dynamically maps to 
+  // guarantees perfect contrast in ALL themes because `foreground` dynamically maps to
   // pure white in dark mode and pure black in light mode.
   const activeClasses = isActive
-    ? "bg-primary/10 text-primary border-l-[3px] border-primary font-semibold"
-    : "text-mutedForeground hover:bg-foreground/10 hover:text-foreground border-l-[3px] border-transparent";
+    ? 'bg-primary/10 text-primary border-l-[3px] border-primary font-semibold'
+    : 'text-mutedForeground hover:bg-foreground/10 hover:text-foreground border-l-[3px] border-transparent';
 
   const content = (
     <div

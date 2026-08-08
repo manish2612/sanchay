@@ -11,6 +11,7 @@ design decisions across:
 - Mobile (React Native components)
 
 This guide is used for:
+
 - Team member onboarding
 - Enforcing architectural consistency
 - AI agent instructions for safe code generation
@@ -91,6 +92,7 @@ This package must remain **pure, deterministic, and platform-agnostic**.
 The design-tokens package **will contain separate files per token category**.
 
 Examples (non-exhaustive):
+
 - colors
 - spacing
 - typography
@@ -113,6 +115,7 @@ This guide only defines **rules and structure**, not implementation.
 Tokens must describe **intent**, not usage.
 
 ✔ Allowed:
+
 - `primary`
 - `background`
 - `muted`
@@ -120,17 +123,19 @@ Tokens must describe **intent**, not usage.
 - `border`
 
 ✘ Not allowed:
+
 - `buttonBlue`
 - `headerBg`
 - `cardShadow`
 
-Components decide *how* tokens are used.
+Components decide _how_ tokens are used.
 
 ---
 
 ### 2. No Component Coupling
 
 Tokens must never reference:
+
 - Button
 - Input
 - Modal
@@ -194,6 +199,7 @@ brand-b
 ```
 
 Rules:
+
 - Token keys are shared across all brands
 - Only values may differ
 - No brand may introduce new token categories arbitrarily
@@ -205,6 +211,7 @@ Rules:
 The design-tokens package exports **theme objects only**.
 
 It does NOT:
+
 - Convert tokens to CSS variables
 - Apply tokens to components
 - Handle media queries
@@ -246,6 +253,7 @@ Those responsibilities belong to **theme adapters**, not tokens.
 The `design-tokens` package is the **foundation of the UI system**.
 
 If this layer is correct:
+
 - Web and Mobile stay visually aligned
 - Themes scale cleanly
 - Components remain simple

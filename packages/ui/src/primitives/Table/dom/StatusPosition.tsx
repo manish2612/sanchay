@@ -1,14 +1,16 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Icon } from "../../Icon/Icon.dom";
-import { cn } from "../../../utils";
-import { tableStyles } from "../styles";
-import { useTableContext } from "./Context";
+import * as React from 'react';
+import { Icon } from '../../Icon/Icon.dom';
+import { cn } from '../../../utils';
+import { tableStyles } from '../styles';
+import { useTableContext } from './Context';
+import { Row } from '@tanstack/react-table';
+import { VirtualItem } from '@tanstack/react-virtual';
 
 export const TableStatusPosition = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { position: "top" | "bottom" }
+  React.HTMLAttributes<HTMLDivElement> & { position: 'top' | 'bottom' }
 >(({ className, position, ...props }, ref) => {
   const { virtualizer, data, scrollRef } = useTableContext();
   const virtualRows = virtualizer.getVirtualItems();
@@ -26,12 +28,10 @@ export const TableStatusPosition = React.forwardRef<
 
   let count = 0;
 
-  if (position === "top") {
+  if (position === 'top') {
     // First row whose TOP is visible (start >= scrollTop)
     // This counts partially hidden top rows as "above"
-    const firstFullyVisible = virtualRows.find(
-      (row) => row.start >= scrollOffset
-    );
+    const firstFullyVisible = virtualRows.find((row: VirtualItem) => row.start >= scrollOffset);
     if (firstFullyVisible) {
       count = firstFullyVisible.index;
     } else {
@@ -39,10 +39,7 @@ export const TableStatusPosition = React.forwardRef<
       // we essentially check the last virtual row.
       // If the last virtual row is partially above, then everything up to it is above.
       // This acts as a fallback.
-      count =
-        virtualRows.length > 0
-          ? virtualRows[virtualRows.length - 1].index + 1
-          : 0;
+      count = virtualRows.length > 0 ? virtualRows[virtualRows.length - 1].index + 1 : 0;
       // Optimization: usually finding the first IS sufficient.
       // If find() fails, it means ALL virtual rows are starting before the offset (cut off at top).
       // So effectively they are all "partially above".
@@ -57,9 +54,7 @@ export const TableStatusPosition = React.forwardRef<
     // Last row whose BOTTOM is visible (end <= scrollBottom)
     // This counts partially hidden bottom rows as "below"
     // We search backwards from the end of the list
-    const lastFullyVisible = [...virtualRows]
-      .reverse()
-      .find((row) => row.end <= scrollBottom);
+    const lastFullyVisible = [...virtualRows].reverse().find((row: VirtualItem) => row.end <= scrollBottom);
 
     if (lastFullyVisible) {
       count = data.length - 1 - lastFullyVisible.index;
@@ -85,30 +80,21 @@ export const TableStatusPosition = React.forwardRef<
       // So count = data.length - virtualRows[0].index;
       // Wait, if virtualRows[0].index is 0. Count = Total.
       // Correct.
-      count =
-        virtualRows.length > 0
-          ? data.length - virtualRows[0].index
-          : data.length;
+      count = virtualRows.length > 0 ? data.length - virtualRows[0].index : data.length;
     }
   }
 
   return (
     <div
       ref={ref}
-      className={cn(
-        tableStyles.statusBar(),
-        "shrink-0 bg-primary/8 flex-row-reverse",
-        className
-      )}
+      className={cn(tableStyles.statusBar(), 'shrink-0 bg-primary/8 flex-row-reverse', className)}
       {...props}
     >
       <div className="flex items-center gap-1">
-        <span>{position === "top" ? "Rows Above" : "Rows Below"}</span>
+        <span>{position === 'top' ? 'Rows Above' : 'Rows Below'}</span>
         <span className="font-mono">{count}</span>
         <Icon
-          name={
-            position === "top" ? "keyboard_arrow_up" : "keyboard_arrow_down"
-          } // Using Material Icons names
+          name={position === 'top' ? 'ChevronUp' : 'ChevronDown'}
           size={16}
           className="text-muted-foreground"
         />
@@ -116,4 +102,4 @@ export const TableStatusPosition = React.forwardRef<
     </div>
   );
 });
-TableStatusPosition.displayName = "Table.StatusPosition";
+TableStatusPosition.displayName = 'Table.StatusPosition';

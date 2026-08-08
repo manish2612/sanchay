@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { View, Platform } from "react-native";
-import { useResponsiveValue } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
-import { getLoginLayoutStyles } from "./styles";
+import React, { useMemo } from 'react';
+import { View, Platform } from 'react-native';
+import { useResponsiveValue } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
+import { getLoginLayoutStyles } from './styles';
 
 interface LoginLayoutProps {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export function LoginLayout({ children }: LoginLayoutProps) {
         styles.container,
         isSplit && styles.splitLayout,
         // Critical for Web: Root view needs explicit height to fill window
-        Platform.OS === "web" && ({ height: "100vh" } as any),
+        Platform.OS === 'web' && ({ height: '100vh' } as any),
       ]}
     >
       {children}
