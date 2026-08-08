@@ -10,6 +10,7 @@ and document the shared UI system for the ERP frontend.
 ## Scope
 
 Storybook is used for:
+
 - UI component development in isolation
 - Visual documentation
 - Regression prevention
@@ -21,6 +22,7 @@ Storybook is tooling-only and never ships to production.
 ## Platforms
 
 Storybook is maintained separately for:
+
 - Web (Next.js)
 - Mobile (React Native)
 

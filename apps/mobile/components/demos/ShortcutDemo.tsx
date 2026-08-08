@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Alert } from "react-native";
+import React, { useState } from 'react';
+import { View, Alert } from 'react-native';
 import {
   Button,
   Text,
@@ -12,8 +12,8 @@ import {
   CommandSeparator,
   ShortcutCheatSheet,
   useResponsiveValues,
-} from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
+} from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
 
 export const ShortcutDemo = () => {
   const [triggered, setTriggered] = useState<string | null>(null);
@@ -22,13 +22,13 @@ export const ShortcutDemo = () => {
   const { theme } = useTheme();
   const t = theme as any;
   const { width } = useResponsiveValues({
-    width: { base: "100%", xl: "48%" } as const,
+    width: { base: '100%', xl: '48%' } as const,
   });
 
   // Native doesn't support keyboard hooks the same way, so we just use buttons to demo
   const handleGlobalShortcut = () => {
-    setTriggered("Global Shortcut (Shift+G)");
-    Alert.alert("Global Shortcut Triggered!");
+    setTriggered('Global Shortcut (Shift+G)');
+    Alert.alert('Global Shortcut Triggered!');
   };
 
   return (
@@ -45,23 +45,19 @@ export const ShortcutDemo = () => {
       <Text weight="bold" size="lg" style={{ marginBottom: 8 }}>
         Shortcut System Demo
       </Text>
-      <Text style={{ marginBottom: 16 }}>
-        On mobile, use the buttons below to trigger actions:
-      </Text>
+      <Text style={{ marginBottom: 16 }}>On mobile, use the buttons below to trigger actions:</Text>
 
       {triggered && (
         <View
           style={{
-            backgroundColor: t.colors.primary + "20",
+            backgroundColor: t.colors.primary + '20',
             padding: 8,
             borderRadius: 4,
             marginTop: 8,
             marginBottom: 16,
           }}
         >
-          <Text style={{ color: t.colors.primary }}>
-            Last triggered: {triggered}
-          </Text>
+          <Text style={{ color: t.colors.primary }}>Last triggered: {triggered}</Text>
         </View>
       )}
 
@@ -86,7 +82,7 @@ export const ShortcutDemo = () => {
           <CommandGroup heading="Suggestions">
             <CommandItem
               onSelect={() => {
-                setTriggered("Selected: Calendar");
+                setTriggered('Selected: Calendar');
                 setOpen(false);
               }}
             >
@@ -94,7 +90,7 @@ export const ShortcutDemo = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                setTriggered("Selected: Search Emoji");
+                setTriggered('Selected: Search Emoji');
                 setOpen(false);
               }}
             >
@@ -102,7 +98,7 @@ export const ShortcutDemo = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                setTriggered("Selected: Calculator");
+                setTriggered('Selected: Calculator');
                 setOpen(false);
               }}
             >
@@ -114,7 +110,7 @@ export const ShortcutDemo = () => {
             <CommandItem
               value="settings"
               onSelect={() => {
-                setTriggered("Selected: Settings");
+                setTriggered('Selected: Settings');
                 setOpen(false);
               }}
             >
@@ -124,7 +120,7 @@ export const ShortcutDemo = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                setTriggered("Selected: Profile");
+                setTriggered('Selected: Profile');
                 setOpen(false);
               }}
             >
@@ -132,7 +128,7 @@ export const ShortcutDemo = () => {
             </CommandItem>
             <CommandItem
               onSelect={() => {
-                setTriggered("Selected: Billing");
+                setTriggered('Selected: Billing');
                 setOpen(false);
               }}
             >
@@ -147,18 +143,18 @@ export const ShortcutDemo = () => {
         onOpenChange={setCheatSheetOpen}
         categories={[
           {
-            title: "Navigation",
+            title: 'Navigation',
             items: [
-              { id: "nav-home", label: "Go to Home", keys: ["G", "H"] },
-              { id: "nav-settings", label: "Go to Settings", keys: ["G", "S"] },
+              { id: 'nav-home', label: 'Go to Home', keys: ['G', 'H'] },
+              { id: 'nav-settings', label: 'Go to Settings', keys: ['G', 'S'] },
             ],
           },
           {
-            title: "Actions",
+            title: 'Actions',
             items: [
-              { id: "act-save", label: "Save", keys: ["⌘", "S"] },
-              { id: "act-copy", label: "Copy", keys: ["⌘", "C"] },
-              { id: "act-paste", label: "Paste", keys: ["⌘", "V"] },
+              { id: 'act-save', label: 'Save', keys: ['⌘', 'S'] },
+              { id: 'act-copy', label: 'Copy', keys: ['⌘', 'C'] },
+              { id: 'act-paste', label: 'Paste', keys: ['⌘', 'V'] },
             ],
           },
         ]}

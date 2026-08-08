@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import React from "react";
-import { dropdownContentClassName } from "./styles.dom";
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import React from 'react';
+import { dropdownContentClassName } from './styles.dom';
 
 const DropdownContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
@@ -15,8 +15,8 @@ const DropdownContent = React.forwardRef<
       <DropdownMenuPrimitive.Content
         ref={ref}
         sideOffset={sideOffset}
-        className={`${dropdownContentClassName} ${className || ""}`}
-        style={{ minWidth: "var(--radix-dropdown-menu-trigger-width)", ...style }}
+        className={`${dropdownContentClassName} ${className || ''}`}
+        style={{ minWidth: 'var(--radix-dropdown-menu-trigger-width)', ...style }}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>

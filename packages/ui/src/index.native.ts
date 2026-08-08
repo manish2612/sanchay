@@ -1,4 +1,3 @@
-
 export { Button } from './primitives/Button/Button.native';
 export { TextInput } from './primitives/TextInput/index.native'; // TextInput has a barrel file for native
 export { Text } from './primitives/Text/Text.native';

@@ -1,12 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../../index';
-import {
-  CommandDialog,
-  CommandInput,
-  CommandList,
-  CommandItem,
-} from '../dom/index';
+import { CommandDialog, CommandInput, CommandList, CommandItem } from '../dom/index';
 
 const meta = {
   title: 'Primitives/CommandPalette',

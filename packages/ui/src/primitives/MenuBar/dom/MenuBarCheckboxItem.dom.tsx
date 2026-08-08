@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { Icon } from "../../Icon/Icon.dom";
-import { cn } from "../../../utils";
-import { menuBarStyles } from "./styles.dom";
+import * as React from 'react';
+import * as MenubarPrimitive from '@radix-ui/react-menubar';
+import { Icon } from '../../Icon/Icon.dom';
+import { cn } from '../../../utils';
+import { menuBarStyles } from './styles.dom';
 
 const MenuBarCheckboxItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.CheckboxItem>,

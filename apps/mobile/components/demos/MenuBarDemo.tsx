@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React from 'react';
+import { View } from 'react-native';
 import {
   Text,
   MenuBar,
@@ -10,11 +10,11 @@ import {
   MenuBarSeparator,
   MenuBarCheckboxItem,
   useResponsiveValues,
-} from "@prime/ui";
+} from '@prime/ui';
 
 export function MenuBarDemo() {
   const { width } = useResponsiveValues({
-    width: { base: "100%", xl: "48%" } as const,
+    width: { base: '100%', xl: '48%' } as const,
   });
 
   return (
@@ -23,7 +23,7 @@ export function MenuBarDemo() {
         MenuBar (Simulated)
       </Text>
       <View style={{ gap: 12 }}>
-        <MenuBar style={{ width: "100%" }}>
+        <MenuBar style={{ width: '100%' }}>
           <MenuBarMenu>
             <MenuBarTrigger>File</MenuBarTrigger>
             <MenuBarContent>

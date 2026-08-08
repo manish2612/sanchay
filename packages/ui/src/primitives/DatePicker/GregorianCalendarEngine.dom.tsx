@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { DayPicker, type Matcher } from "react-day-picker";
-import { addMonths, subMonths, setMonth, setYear, startOfMonth } from "date-fns";
-import { Icon } from "../Icon/Icon.dom";
-import { DatePickerProps } from "./types";
-import { DatePickerDropdown } from "./DatePickerDropdown.dom";
+import React, { useState, useEffect } from 'react';
+import { DayPicker, type Matcher } from 'react-day-picker';
+import { addMonths, subMonths, setMonth, setYear, startOfMonth } from 'date-fns';
+import { Icon } from '../Icon/Icon.dom';
+import { DatePickerProps } from './types';
+import { DatePickerDropdown } from './DatePickerDropdown.dom';
 
 const GREGORIAN_MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June', 
-  'July', 'August', 'September', 'October', 'November', 'December'
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export function GregorianCalendarEngine({
@@ -38,40 +48,54 @@ export function GregorianCalendarEngine({
   const maxYear = maxDate ? maxDate.getFullYear() : 2100;
   const years = Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i);
 
-  const isPrevDisabled = Boolean(minDate && (currentDate.getFullYear() < minDate.getFullYear() || (currentDate.getFullYear() === minDate.getFullYear() && currentDate.getMonth() <= minDate.getMonth())));
-  const isNextDisabled = Boolean(maxDate && (currentDate.getFullYear() > maxDate.getFullYear() || (currentDate.getFullYear() === maxDate.getFullYear() && currentDate.getMonth() >= maxDate.getMonth())));
+  const isPrevDisabled = Boolean(
+    minDate &&
+    (currentDate.getFullYear() < minDate.getFullYear() ||
+      (currentDate.getFullYear() === minDate.getFullYear() &&
+        currentDate.getMonth() <= minDate.getMonth())),
+  );
+  const isNextDisabled = Boolean(
+    maxDate &&
+    (currentDate.getFullYear() > maxDate.getFullYear() ||
+      (currentDate.getFullYear() === maxDate.getFullYear() &&
+        currentDate.getMonth() >= maxDate.getMonth())),
+  );
 
   const monthOptions = GREGORIAN_MONTHS.map((m, idx) => {
     let disabled = false;
     if (minDate) {
       if (currentDate.getFullYear() < minDate.getFullYear()) disabled = true;
-      if (currentDate.getFullYear() === minDate.getFullYear() && idx < minDate.getMonth()) disabled = true;
+      if (currentDate.getFullYear() === minDate.getFullYear() && idx < minDate.getMonth())
+        disabled = true;
     }
     if (maxDate) {
       if (currentDate.getFullYear() > maxDate.getFullYear()) disabled = true;
-      if (currentDate.getFullYear() === maxDate.getFullYear() && idx > maxDate.getMonth()) disabled = true;
+      if (currentDate.getFullYear() === maxDate.getFullYear() && idx > maxDate.getMonth())
+        disabled = true;
     }
     return { label: m, value: idx, disabled };
   });
 
-  const yearOptions = years.map(y => ({
-    label: String(y),
-    value: y,
-    disabled: (minDate && y < minDate.getFullYear()) || (maxDate && y > maxDate.getFullYear())
-  })).filter(o => !o.disabled);
+  const yearOptions = years
+    .map((y) => ({
+      label: String(y),
+      value: y,
+      disabled: (minDate && y < minDate.getFullYear()) || (maxDate && y > maxDate.getFullYear()),
+    }))
+    .filter((o) => !o.disabled);
 
   return (
-    <div 
+    <div
       className="p-3 prime-date-picker"
       onKeyDownCapture={(e) => {
         if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
-        
+
         const activeEl = document.activeElement;
         if (!activeEl || !activeEl.classList.contains('rdp-day')) return;
 
         const dayText = activeEl.textContent;
         if (!dayText) return;
-        
+
         let dayNum = parseInt(dayText, 10);
         if (isNaN(dayNum)) return;
 
@@ -94,9 +118,17 @@ export function GregorianCalendarEngine({
         else if (e.key === 'ArrowDown') targetDate.setDate(targetDate.getDate() + 7);
         else if (e.key === 'ArrowUp') targetDate.setDate(targetDate.getDate() - 7);
 
-        const checkMin = minDate ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()) : null;
-        const checkMax = maxDate ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate()) : null;
-        const targetVal = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+        const checkMin = minDate
+          ? new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())
+          : null;
+        const checkMax = maxDate
+          ? new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate())
+          : null;
+        const targetVal = new Date(
+          targetDate.getFullYear(),
+          targetDate.getMonth(),
+          targetDate.getDate(),
+        );
 
         if (checkMin && targetVal.getTime() < checkMin.getTime()) {
           e.preventDefault();
@@ -125,10 +157,20 @@ export function GregorianCalendarEngine({
 
         {/* Prev / Next Arrows */}
         <div className="flex gap-1">
-          <button type="button" disabled={isPrevDisabled} onClick={handlePrevMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
+          <button
+            type="button"
+            disabled={isPrevDisabled}
+            onClick={handlePrevMonth}
+            className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none"
+          >
             <Icon name="ChevronLeft" size={18} />
           </button>
-          <button type="button" disabled={isNextDisabled} onClick={handleNextMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
+          <button
+            type="button"
+            disabled={isNextDisabled}
+            onClick={handleNextMonth}
+            className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none"
+          >
             <Icon name="ChevronRight" size={18} />
           </button>
         </div>
@@ -146,14 +188,16 @@ export function GregorianCalendarEngine({
         }}
         startMonth={minDate}
         endMonth={maxDate}
-        disabled={[
-          minDate ? { before: minDate } : undefined,
-          maxDate ? { after: maxDate } : undefined,
-        ].filter(Boolean) as Matcher[]}
+        disabled={
+          [
+            minDate ? { before: minDate } : undefined,
+            maxDate ? { after: maxDate } : undefined,
+          ].filter(Boolean) as Matcher[]
+        }
         classNames={{
           ...dayPickerProps?.classNames,
-          month_caption: "hidden", // Hide react-day-picker's internal header
-          nav: "hidden",
+          month_caption: 'hidden', // Hide react-day-picker's internal header
+          nav: 'hidden',
         }}
         components={{
           // Ensure internal headers are completely stripped out

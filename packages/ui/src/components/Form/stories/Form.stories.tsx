@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
-import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useForm, useFieldArray } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { Form, TextInput, Button, Text } from '../../../index';
 
 const meta = {
@@ -17,13 +17,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const formSchema = z.object({
-  departmentName: z.string().min(2, "Department name must be at least 2 characters."),
-  employees: z.array(
-    z.object({
-      firstName: z.string().min(1, "First name is required"),
-      role: z.string().min(1, "Role is required"),
-    })
-  ).min(1, "At least one employee is required"),
+  departmentName: z.string().min(2, 'Department name must be at least 2 characters.'),
+  employees: z
+    .array(
+      z.object({
+        firstName: z.string().min(1, 'First name is required'),
+        role: z.string().min(1, 'Role is required'),
+      }),
+    )
+    .min(1, 'At least one employee is required'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -32,18 +34,18 @@ const RHFCompositionDemo = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      departmentName: "",
-      employees: [{ firstName: "", role: "" }],
+      departmentName: '',
+      employees: [{ firstName: '', role: '' }],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
-    name: "employees",
+    name: 'employees',
     control: form.control,
   });
 
   function onSubmit(data: FormValues) {
-    console.log("Form Submitted:", data);
+    console.log('Form Submitted:', data);
     alert(JSON.stringify(data, null, 2));
   }
 
@@ -52,8 +54,8 @@ const RHFCompositionDemo = () => {
       <div>
         <Text variant="heading">RHF Composition Demo</Text>
         <Text variant="body" className="text-gray-500 mt-2">
-          This form demonstrates the highly-performant composition pattern using
-          React Hook Form, Zod validation, and UI primitives.
+          This form demonstrates the highly-performant composition pattern using React Hook Form,
+          Zod validation, and UI primitives.
         </Text>
       </div>
 
@@ -124,11 +126,7 @@ const RHFCompositionDemo = () => {
                       />
                     </div>
                     <div className="pt-8">
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => remove(index)}
-                      >
+                      <Button type="button" variant="ghost" onClick={() => remove(index)}>
                         Remove
                       </Button>
                     </div>
@@ -146,7 +144,7 @@ const RHFCompositionDemo = () => {
                 type="button"
                 variant="secondary"
                 className="mt-4"
-                onClick={() => append({ firstName: "", role: "" })}
+                onClick={() => append({ firstName: '', role: '' })}
               >
                 + Add Employee
               </Button>

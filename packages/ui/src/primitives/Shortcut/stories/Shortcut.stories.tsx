@@ -30,8 +30,12 @@ const ShortcutDemo = () => {
 
   return (
     <div className="p-8 border border-border rounded-lg bg-surface shadow-sm">
-      <Text variant="heading" size="lg" className="mb-4">Shortcut Hook Demo</Text>
-      <Text variant="body" size="md">{lastAction}</Text>
+      <Text variant="heading" size="lg" className="mb-4">
+        Shortcut Hook Demo
+      </Text>
+      <Text variant="body" size="md">
+        {lastAction}
+      </Text>
     </div>
   );
 };

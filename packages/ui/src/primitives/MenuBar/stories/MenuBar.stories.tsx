@@ -77,12 +77,8 @@ export const Default: Story = {
         <MenuBarMenu>
           <MenuBarTrigger>View</MenuBarTrigger>
           <MenuBarContent>
-            <MenuBarCheckboxItem checked>
-              Always Show Bookmarks Bar
-            </MenuBarCheckboxItem>
-            <MenuBarCheckboxItem checked={false}>
-              Always Show Full URLs
-            </MenuBarCheckboxItem>
+            <MenuBarCheckboxItem checked>Always Show Bookmarks Bar</MenuBarCheckboxItem>
+            <MenuBarCheckboxItem checked={false}>Always Show Full URLs</MenuBarCheckboxItem>
             <MenuBarSeparator />
             <MenuBarItem inset>Toggle Fullscreen</MenuBarItem>
             <MenuBarSeparator />

@@ -17,12 +17,13 @@ React Native requires a specific version of the JDK (currently JDK 17 is recomme
     brew install --cask zulu@17
     ```
 
-3.  Verify installation:
+4.  Verify installation:
 
     ```bash
     java -version
     ```
-    *Output should mention "Zulu17" or similar.*
+
+    _Output should mention "Zulu17" or similar._
 
 ### Option B: Direct Download
 
@@ -33,12 +34,12 @@ Download the **.dmg** for **macOS ARM 64-bit** from the [Azul Downloads Page](ht
 ## 2. Install Android Studio
 
 1.  Download **Android Studio** from the [official website](https://developer.android.com/studio).
-    *   **Note**: Ensure you download the version specifically for "Mac with Apple chip".
+    - **Note**: Ensure you download the version specifically for "Mac with Apple chip".
 2.  Open the downloaded `.dmg` file and drag Android Studio to your **Applications** folder.
 3.  Launch Android Studio.
 4.  Follow the **Setup Wizard**:
-    *   Select "Standard" installation.
-    *   This will download the latest Android SDK, Platform-Tools, and Build-Tools.
+    - Select "Standard" installation.
+    - This will download the latest Android SDK, Platform-Tools, and Build-Tools.
 
 ---
 
@@ -49,15 +50,15 @@ Download the **.dmg** for **macOS ARM 64-bit** from the [Azul Downloads Page](ht
 1.  Open Android Studio.
 2.  Click on **More Actions** (three dots) > **SDK Manager** (or `Command + ,` to open Preferences > Languages & Frameworks > Android SDK).
 3.  **SDK Platforms** Tab:
-    *   Check **Android 14.0 ("UpsideDownCake")** (or the version specified in the project).
-    *   Ensure **Android SDK Platform** is checked.
-    *   Click "Apply" to download.
+    - Check **Android 14.0 ("UpsideDownCake")** (or the version specified in the project).
+    - Ensure **Android SDK Platform** is checked.
+    - Click "Apply" to download.
 4.  **SDK Tools** Tab:
-    *   Check **Android SDK Build-Tools**.
-    *   Check **Android SDK Command-line Tools (latest)**.
-    *   Check **Android SDK Platform-Tools**.
-    *   Check **Android Emulator**.
-    *   Click "Apply".
+    - Check **Android SDK Build-Tools**.
+    - Check **Android SDK Command-line Tools (latest)**.
+    - Check **Android SDK Platform-Tools**.
+    - Check **Android Emulator**.
+    - Click "Apply".
 
 ---
 
@@ -85,7 +86,8 @@ You need to tell your shell where the Android SDK is located.
     ```bash
     adb --version
     ```
-    *Should output `Android Debug Bridge version ...`*
+
+    _Should output `Android Debug Bridge version ...`_
 
 ---
 
@@ -96,12 +98,12 @@ You need to tell your shell where the Android SDK is located.
 3.  Click **Create Device**.
 4.  **Hardware**: Select a device definition (e.g., **Pixel 8**). Click "Next".
 5.  **System Image**:
-    *   **IMPORTANT**: Select the **ARM64-v8a** image. It might be under the **Recommended** tab or **Other Images**.
-    *   Look for API Level 34 (Android 14) or similar.
-    *   Click the "Download" button next to the image name if needed.
+    - **IMPORTANT**: Select the **ARM64-v8a** image. It might be under the **Recommended** tab or **Other Images**.
+    - Look for API Level 34 (Android 14) or similar.
+    - Click the "Download" button next to the image name if needed.
 6.  **Verify Configuration**:
-    *   Give your AVD a name (e.g., "Pixel_8_API_34").
-    *   Click "Finish".
+    - Give your AVD a name (e.g., "Pixel_8_API_34").
+    - Click "Finish".
 
 ---
 

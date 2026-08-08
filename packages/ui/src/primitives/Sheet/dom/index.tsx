@@ -1,10 +1,10 @@
-import * as React from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { type VariantProps } from "class-variance-authority";
+import * as React from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { type VariantProps } from 'class-variance-authority';
 
-import { cn } from "../../../utils";
-import { sheetVariants, overlayVariants, closeVariants } from "./styles";
-import { Icon } from "../../Icon/Icon.dom";
+import { cn } from '../../../utils';
+import { sheetVariants, overlayVariants, closeVariants } from './styles';
+import { Icon } from '../../Icon/Icon.dom';
 
 const Sheet = DialogPrimitive.Root;
 
@@ -18,16 +18,13 @@ const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    ref={ref}
-    className={cn(overlayVariants(), className)}
-    {...props}
-  />
+  <DialogPrimitive.Overlay ref={ref} className={cn(overlayVariants(), className)} {...props} />
 ));
 SheetOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 interface SheetContentProps
-  extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
+  extends
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>,
     VariantProps<typeof sheetVariants> {
   overlay?: boolean;
   overlayClassName?: string;
@@ -36,7 +33,7 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, overlay = true, overlayClassName, children, ...props }, ref) => (
+>(({ side = 'right', className, overlay = true, overlayClassName, children, ...props }, ref) => (
   <SheetPortal>
     {overlay && <SheetOverlay className={overlayClassName} />}
     <DialogPrimitive.Content
@@ -54,33 +51,18 @@ const SheetContent = React.forwardRef<
 ));
 SheetContent.displayName = DialogPrimitive.Content.displayName;
 
-const SheetHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-2 text-center sm:text-left",
-      className
-    )}
-    {...props}
-  />
+const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
 );
-SheetHeader.displayName = "SheetHeader";
+SheetHeader.displayName = 'SheetHeader';
 
-const SheetFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
     {...props}
   />
 );
-SheetFooter.displayName = "SheetFooter";
+SheetFooter.displayName = 'SheetFooter';
 
 const SheetTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -88,10 +70,7 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-lg font-semibold text-foreground",
-      className
-    )}
+    className={cn('text-lg font-semibold text-foreground', className)}
     {...props}
   />
 ));
@@ -103,7 +82,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn('text-sm text-muted-foreground', className)}
     {...props}
   />
 ));

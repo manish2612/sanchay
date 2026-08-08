@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
-import { View, StyleProp, ViewStyle } from "react-native";
-import { Text, useResponsiveValue } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
-import { getBrandPanelStyles } from "./styles";
+import React, { useMemo } from 'react';
+import { View, StyleProp, ViewStyle } from 'react-native';
+import { Text, useResponsiveValue } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
+import { getBrandPanelStyles } from './styles';
 
 interface BrandPanelProps {
   style?: StyleProp<ViewStyle>;
@@ -22,13 +22,13 @@ export function BrandPanel({ style }: BrandPanelProps) {
 
   // Responsive overrides
   const responsiveContainerStyle: ViewStyle = isLargeScreen
-    ? { flex: 1, minHeight: "100%" }
+    ? { flex: 1, minHeight: '100%' }
     : {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        height: "38%",
+        height: '38%',
       };
 
   return (
@@ -36,18 +36,18 @@ export function BrandPanel({ style }: BrandPanelProps) {
       <View>
         <Text
           style={styles.title}
-          align={"center"}
-          weight={"bold"}
-          variant={"heading"}
-          size={"2xl"}
+          align={'center'}
+          weight={'bold'}
+          variant={'heading'}
+          size={'2xl'}
         >
           Prime
         </Text>
         <Text
           style={styles.welcome}
-          align={"center"}
-          variant={"heading"}
-          size={"4xl"}
+          align={'center'}
+          variant={'heading'}
+          size={'4xl'}
           weight="bold"
         >
           Welcome Back!

@@ -1,19 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import {
-  Modal as Dialog,
-  ModalContent as DialogContent,
-} from "../../../primitives/Modal/dom";
-import { CommandPalette } from "./CommandPalette";
-import { CommandDialogProps } from "../types";
+import * as React from 'react';
+import { Modal as Dialog, ModalContent as DialogContent } from '../../../primitives/Modal/dom';
+import { CommandPalette } from './CommandPalette';
+import { CommandDialogProps } from '../types';
 
-const CommandDialog = ({
-  children,
-  open,
-  onOpenChange,
-  ...props
-}: CommandDialogProps) => {
+const CommandDialog = ({ children, open, onOpenChange, ...props }: CommandDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange} {...props}>
       <DialogContent className="overflow-hidden p-0 shadow-lg">

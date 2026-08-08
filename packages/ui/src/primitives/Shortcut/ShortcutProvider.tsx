@@ -1,13 +1,7 @@
-"use client";
+'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  useCallback,
-} from "react";
-import { HotkeysProvider } from "react-hotkeys-hook";
+import React, { createContext, useContext, useMemo, useState, useCallback } from 'react';
+import { HotkeysProvider } from 'react-hotkeys-hook';
 
 // Internal context for registry/debugging - separated from the library's provider
 interface InternalShortcutContextType {
@@ -16,15 +10,10 @@ interface InternalShortcutContextType {
   popScope: (scope: string) => void;
 }
 
-const InternalShortcutContext =
-  createContext<InternalShortcutContextType | null>(null);
+const InternalShortcutContext = createContext<InternalShortcutContextType | null>(null);
 
-export const ShortcutProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
-  const [activeScopes, setActiveScopes] = useState<string[]>(["*"]); // '*' is usually global in many libraries, or we just rely on the library's mechanism.
+export const ShortcutProvider = ({ children }: { children: React.ReactNode }) => {
+  const [activeScopes, setActiveScopes] = useState<string[]>(['*']); // '*' is usually global in many libraries, or we just rely on the library's mechanism.
   // react-hotkeys-hook v4 manages scopes via useHotkeys arguments.
   // However, often we want a "Scope Provider" to declaratively set the current scope (e.g. inside a Modal).
 
@@ -45,14 +34,12 @@ export const ShortcutProvider = ({
       pushScope,
       popScope,
     }),
-    [activeScopes, pushScope, popScope]
+    [activeScopes, pushScope, popScope],
   );
 
   return (
-    <HotkeysProvider initiallyActiveScopes={["*"]}>
-      <InternalShortcutContext.Provider value={value}>
-        {children}
-      </InternalShortcutContext.Provider>
+    <HotkeysProvider initiallyActiveScopes={['*']}>
+      <InternalShortcutContext.Provider value={value}>{children}</InternalShortcutContext.Provider>
     </HotkeysProvider>
   );
 };
@@ -60,9 +47,7 @@ export const ShortcutProvider = ({
 export const useShortcutContext = () => {
   const context = useContext(InternalShortcutContext);
   if (!context) {
-    throw new Error(
-      "useShortcutContext must be used within a ShortcutProvider"
-    );
+    throw new Error('useShortcutContext must be used within a ShortcutProvider');
   }
   return context;
 };

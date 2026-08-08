@@ -1,21 +1,21 @@
-import React from "react";
-import { View, ScrollView } from "react-native";
-import { Text, useResponsiveValues, GridBackground } from "@prime/ui";
-import { APP_NAME } from "@prime/config";
-import { useTheme } from "@prime/theme-provider";
-import { useRouter } from "expo-router";
-import { Button } from "@prime/ui";
+import React from 'react';
+import { View, ScrollView } from 'react-native';
+import { Text, useResponsiveValues, GridBackground } from '@prime/ui';
+import { APP_NAME } from '@prime/config';
+import { useTheme } from '@prime/theme-provider';
+import { useRouter } from 'expo-router';
+import { Button } from '@prime/ui';
 
-import { ThemeControls } from "./demos/ThemeControls";
-import { StatsDemo } from "./demos/StatsDemo";
-import { FontDemo } from "./demos/FontDemo";
-import { ButtonDemo } from "./demos/ButtonDemo";
-import { TextInputDemo } from "./demos/TextInputDemo";
-import { MenuBarDemo } from "./demos/MenuBarDemo";
-import { ModalDemo } from "./demos/ModalDemo";
-import { NavDemoWrapper } from "./demos/NavDemoWrapper";
-import { ShortcutDemo } from "./demos/ShortcutDemo";
-import { DropdownDemo } from "./demos/DropdownDemo";
+import { ThemeControls } from './demos/ThemeControls';
+import { StatsDemo } from './demos/StatsDemo';
+import { FontDemo } from './demos/FontDemo';
+import { ButtonDemo } from './demos/ButtonDemo';
+import { TextInputDemo } from './demos/TextInputDemo';
+import { MenuBarDemo } from './demos/MenuBarDemo';
+import { ModalDemo } from './demos/ModalDemo';
+import { NavDemoWrapper } from './demos/NavDemoWrapper';
+import { ShortcutDemo } from './demos/ShortcutDemo';
+import { DropdownDemo } from './demos/DropdownDemo';
 
 export function ComponentDemos() {
   const { theme } = useTheme();
@@ -30,12 +30,12 @@ export function ComponentDemos() {
     componentsSubWidth,
     rootPadding,
   } = useResponsiveValues({
-    contentDirection: { base: "column", lg: "row" } as const,
-    contentAlign: { base: "stretch", lg: "flex-start" } as const,
-    panelWidth: { base: "100%", lg: "48%" } as const,
+    contentDirection: { base: 'column', lg: 'row' } as const,
+    contentAlign: { base: 'stretch', lg: 'flex-start' } as const,
+    panelWidth: { base: '100%', lg: '48%' } as const,
     // Components: XL=SideBySide, LG=Stacked
-    componentsSubDirection: { base: "column", xl: "row" } as const,
-    componentsSubWidth: { base: "100%", xl: "48%" } as const,
+    componentsSubDirection: { base: 'column', xl: 'row' } as const,
+    componentsSubWidth: { base: '100%', xl: '48%' } as const,
     rootPadding: { base: t.space[16], md: t.space[2] } as const,
   });
 
@@ -43,14 +43,14 @@ export function ComponentDemos() {
     <ScrollView
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: t.colors.background,
         padding: t.space[6] || 24,
         paddingVertical: rootPadding,
       }}
     >
-      <View style={{ width: "100%", maxWidth: 1200, alignSelf: "center" }}>
+      <View style={{ width: '100%', maxWidth: 1200, alignSelf: 'center' }}>
         <Text
           variant="heading"
           size="2xl"
@@ -67,7 +67,7 @@ export function ComponentDemos() {
 
         <View style={{ marginBottom: 20 }}>
           {/* Using prime/ui Button */}
-          <Button variant="primary" onPress={() => router.push("/test-api")}>
+          <Button variant="primary" onPress={() => router.push('/test-api')}>
             Open API Test
           </Button>
         </View>
@@ -80,7 +80,7 @@ export function ComponentDemos() {
             flexDirection: contentDirection,
             gap: 24,
             alignItems: contentAlign,
-            width: "100%",
+            width: '100%',
             marginTop: 24,
           }}
         >
@@ -100,20 +100,15 @@ export function ComponentDemos() {
 
           <View style={{ width: panelWidth }}>
             {/* Components Showcase */}
-            <View style={{ marginTop: 0, width: "100%" }}>
-              <Text
-                variant="heading"
-                size="lg"
-                weight="bold"
-                style={{ marginBottom: 10 }}
-              >
+            <View style={{ marginTop: 0, width: '100%' }}>
+              <Text variant="heading" size="lg" weight="bold" style={{ marginBottom: 10 }}>
                 Components
               </Text>
               <View
                 style={{
                   flexDirection: componentsSubDirection,
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-between',
                   gap: 16,
                 }}
               >
@@ -125,9 +120,7 @@ export function ComponentDemos() {
               </View>
 
               {/* MenuBar Section */}
-              <View
-                style={{ width: componentsSubWidth, margin: 0, marginTop: 16 }}
-              >
+              <View style={{ width: componentsSubWidth, margin: 0, marginTop: 16 }}>
                 <MenuBarDemo />
               </View>
 

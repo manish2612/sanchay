@@ -1,5 +1,5 @@
-"use client";
-import React, { createContext, ReactNode } from "react";
+'use client';
+import React, { createContext, ReactNode } from 'react';
 /**
  * Platform-agnostic Link props
  */
@@ -17,7 +17,7 @@ export interface LinkProps {
   /**
    * Open in new tab? (Web only)
    */
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  target?: '_blank' | '_self' | '_parent' | '_top';
   /**
    * Additional props passed to the underlying platform link
    */

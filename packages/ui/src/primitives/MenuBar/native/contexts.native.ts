@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 // Context to manage open menu state
 export interface MenuBarContextType {

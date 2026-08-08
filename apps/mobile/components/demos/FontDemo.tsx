@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
 
 export function FontDemo() {
   const { theme } = useTheme();
@@ -26,19 +26,19 @@ export function FontDemo() {
       <Text weight="light" style={{ marginBottom: 2 }}>
         Light 300
       </Text>
-      <Text weight="light" style={{ marginBottom: 2, fontStyle: "italic" }}>
+      <Text weight="light" style={{ marginBottom: 2, fontStyle: 'italic' }}>
         Light Italic 300
       </Text>
       <Text weight="regular" style={{ marginBottom: 2 }}>
         Regular 400
       </Text>
-      <Text weight="regular" style={{ marginBottom: 2, fontStyle: "italic" }}>
+      <Text weight="regular" style={{ marginBottom: 2, fontStyle: 'italic' }}>
         Regular Italic 400
       </Text>
       <Text weight="medium" style={{ marginBottom: 2 }}>
         Medium 500
       </Text>
-      <Text weight="medium" style={{ marginBottom: 15, fontStyle: "italic" }}>
+      <Text weight="medium" style={{ marginBottom: 15, fontStyle: 'italic' }}>
         Medium Italic 500
       </Text>
 

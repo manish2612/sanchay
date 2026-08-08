@@ -30,5 +30,5 @@ export interface IconProps {
    * For Web: React.CSSProperties
    * For Native: StyleProp<TextStyle>
    */
-  style?: any; 
+  style?: any;
 }

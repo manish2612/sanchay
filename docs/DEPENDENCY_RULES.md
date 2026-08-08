@@ -10,7 +10,7 @@ to preserve architectural boundaries.
 ## Allowed Dependency Flow
 
 apps → packages  
-modules → ui, hooks, services, state, types, config  
+modules → ui, hooks, services, state, types, config
 
 ---
 
@@ -18,7 +18,7 @@ modules → ui, hooks, services, state, types, config
 
 packages → apps  
 modules → platform APIs  
-ui → business logic  
+ui → business logic
 
 ---
 

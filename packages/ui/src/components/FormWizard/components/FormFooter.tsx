@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormWizardContext } from "../hooks/useFormWizard";
-import { Button } from "../../../primitives/Button";
-import { Icon } from "../../../primitives/Icon/Icon.dom";
+import React from 'react';
+import { useFormWizardContext } from '../hooks/useFormWizard';
+import { Button } from '../../../primitives/Button';
+import { Icon } from '../../../primitives/Icon/Icon.dom';
 
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
 export interface FormFooterProps {
   onNext?: () => void;
@@ -24,13 +24,16 @@ export const FormFooter = ({
   onSave,
   onSkip,
   onCancel,
-  nextLabel = "Continue",
-  submitLabel = "Submit",
+  nextLabel = 'Continue',
+  submitLabel = 'Submit',
   isSubmitting = false,
 }: FormFooterProps) => {
-  const { currentStep, totalSteps, nextStep, prevStep, steps } =
-    useFormWizardContext();
-  const { trigger, resetField, formState: { isDirty } } = useFormContext();
+  const { currentStep, totalSteps, nextStep, prevStep, steps } = useFormWizardContext();
+  const {
+    trigger,
+    resetField,
+    formState: { isDirty },
+  } = useFormContext();
 
   const currentStepInfo = steps[currentStep - 1];
   const isLastStep = currentStep === totalSteps;
@@ -96,7 +99,7 @@ export const FormFooter = ({
       )}
 
       <Button
-        type={isLastStep ? "submit" : "button"}
+        type={isLastStep ? 'submit' : 'button'}
         variant="primary"
         onClick={!isLastStep ? (e) => handleNext(e) : undefined}
         disabled={isSubmitting}

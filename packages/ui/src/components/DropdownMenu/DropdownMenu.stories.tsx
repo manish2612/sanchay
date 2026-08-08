@@ -45,23 +45,23 @@ type Story = StoryObj<typeof DropdownMenu>;
 
 const sampleItems = [
   {
-    id: "1",
-    label: "Profile",
-    onSelect: () => alert("Profile clicked"),
-    icon: "User" as const,
+    id: '1',
+    label: 'Profile',
+    onSelect: () => alert('Profile clicked'),
+    icon: 'User' as const,
   },
   {
-    id: "2",
-    label: "Settings",
-    onSelect: () => alert("Settings clicked"),
-    icon: "Settings" as const,
-    shortcut: "⌘S",
+    id: '2',
+    label: 'Settings',
+    onSelect: () => alert('Settings clicked'),
+    icon: 'Settings' as const,
+    shortcut: '⌘S',
   },
   {
-    id: "3",
-    label: "Logout",
-    onSelect: () => alert("Logout clicked"),
-    icon: "LogOut" as const,
+    id: '3',
+    label: 'Logout',
+    onSelect: () => alert('Logout clicked'),
+    icon: 'LogOut' as const,
   },
 ];
 

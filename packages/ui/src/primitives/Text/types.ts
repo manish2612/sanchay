@@ -13,30 +13,30 @@ export interface TextProps {
    * @default 'body'
    */
   variant?: TextVariant;
-  
+
   /**
    * Font size from the theme.
    * @default 'md'
    */
   size?: TextSize;
-  
+
   /**
    * Font weight from the theme.
    * @default 'regular'
    */
   weight?: TextWeight;
-  
+
   /**
    * Text alignment.
    */
   align?: TextAlign;
-  
+
   /**
    * Color key from the theme or a raw color string.
    * @default 'foreground'
    */
   color?: TextColor | string;
-  
+
   /**
    * If true, truncates text to a single line using ellipsis.
    * Shortcut for numberOfLines={1} ellipsizeMode="tail"

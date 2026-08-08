@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   overlay: {
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     borderBottomWidth: 1,
-  }
+  },
 });
 
 export const getDropdownThemeStyles = (theme: any) => ({
@@ -82,4 +82,3 @@ export const getDropdownThemeStyles = (theme: any) => ({
     color: theme.colors.foreground,
   },
 });
-

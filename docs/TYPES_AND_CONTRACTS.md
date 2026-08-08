@@ -10,6 +10,7 @@ across the ERP frontend and backend.
 ## Role of Types
 
 Types define:
+
 - API payloads
 - Domain models
 - Shared enums
@@ -33,6 +34,7 @@ All errors exchanged across layers must conform to shared types.
 - UnknownError
 
 Each error type must define:
+
 - Stable error code
 - Human-readable message
 - Optional metadata
@@ -59,6 +61,7 @@ Navigation intent must be type-safe.
 - **RouteParams** (Type): Defines the required parameters for each route.
 
 Example:
+
 ```typescript
 export type RouteName = 'invoiceDetails' | 'userProfile';
 export interface RouteParams {

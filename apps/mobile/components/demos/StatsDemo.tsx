@@ -1,7 +1,7 @@
-import React from "react";
-import { View } from "react-native";
-import { Text } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
+import React from 'react';
+import { View } from 'react-native';
+import { Text } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
 
 export function StatsDemo() {
   const { theme } = useTheme();

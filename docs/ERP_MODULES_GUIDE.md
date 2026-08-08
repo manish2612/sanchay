@@ -12,6 +12,7 @@ Prime ERP ERP modules are the **core value units** of the system.
 ## What Is a Prime ERP Module?
 
 An Prime ERP module represents a **business domain**, for example:
+
 - Auth
 - Sales
 - Accounting
@@ -19,6 +20,7 @@ An Prime ERP module represents a **business domain**, for example:
 - Reports
 
 Each module is:
+
 - Self-contained
 - Independently scalable
 - Platform-agnostic
@@ -28,6 +30,7 @@ Each module is:
 ## Module Responsibilities (Illustrative)
 
 A Prime ERP module may include:
+
 - Domain-specific API usage
 - Domain state
 - Domain components
@@ -41,6 +44,7 @@ This list is **not exhaustive**.
 ## What Modules Must Not Do
 
 Modules must never:
+
 - Access platform APIs
 - Implement navigation directly
 - Read environment variables
@@ -54,6 +58,7 @@ Modules must never:
 Typical structure:
 
 modules/<module-name>/
+
 - api.ts
 - state.ts
 - hooks.ts
@@ -66,6 +71,7 @@ modules/<module-name>/
 ## Dependency Rules
 
 Allowed dependencies:
+
 - ui
 - hooks
 - services
@@ -73,6 +79,7 @@ Allowed dependencies:
 - types
 
 Disallowed dependencies:
+
 - apps/*
 - platform-specific APIs
 
@@ -81,6 +88,7 @@ Disallowed dependencies:
 ## Cross-Module Communication
 
 Modules communicate only via:
+
 - Shared services
 - Shared state
 - Explicit public APIs

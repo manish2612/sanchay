@@ -68,5 +68,5 @@ export const Default: Story = {
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
+  ),
 };

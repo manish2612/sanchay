@@ -2,12 +2,12 @@ import React from 'react';
 import type { Preview } from '@storybook/react-vite';
 import { ThemeProvider, useTheme } from '@prime/theme-provider';
 import '../src/index.css';
-import type { Brand, Mode, Density } from "@prime/design-tokens";
+import type { Brand, Mode, Density } from '@prime/design-tokens';
 
 // Syncs the Storybook Toolbar globals with our ThemeProvider
-const ThemeSync = ({ mode, brand, density }: { mode: Mode, brand: Brand, density: Density }) => {
+const ThemeSync = ({ mode, brand, density }: { mode: Mode; brand: Brand; density: Density }) => {
   const { setMode, setBrand, setDensity } = useTheme();
-  
+
   React.useEffect(() => {
     setMode(mode);
   }, [mode, setMode]);
@@ -21,7 +21,12 @@ const ThemeSync = ({ mode, brand, density }: { mode: Mode, brand: Brand, density
   }, [density, setDensity]);
 
   React.useEffect(() => {
-    document.body.classList.add('bg-background', 'text-foreground', 'transition-colors', 'duration-200');
+    document.body.classList.add(
+      'bg-background',
+      'text-foreground',
+      'transition-colors',
+      'duration-200',
+    );
     if (mode === 'dark') {
       document.documentElement.classList.add('dark');
       document.body.classList.add('dark');
@@ -82,15 +87,19 @@ const preview: Preview = {
   parameters: {
     controls: {
       matchers: {
-       color: /(background|color)$/i,
-       date: /Date$/i,
+        color: /(background|color)$/i,
+        date: /Date$/i,
       },
     },
     backgrounds: { disable: true },
   },
   decorators: [
     (Story, context) => {
-      const { brand, mode, density } = context.globals as { brand: Brand; mode: Mode; density: Density };
+      const { brand, mode, density } = context.globals as {
+        brand: Brand;
+        mode: Mode;
+        density: Density;
+      };
 
       return (
         <ThemeProvider initialBrand={brand} initialMode={mode} initialDensity={density}>

@@ -86,9 +86,7 @@ const SingleStepDemo = () => {
             </div>
           </FormWizard.Content>
 
-          <FormWizard.Footer
-            onCancel={() => console.log('Cancelled')}
-          />
+          <FormWizard.Footer onCancel={() => console.log('Cancelled')} />
         </FormWizard.Container>
       </FormWizard>
     </div>

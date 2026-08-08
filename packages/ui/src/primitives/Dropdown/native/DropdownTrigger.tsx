@@ -1,6 +1,6 @@
-import React from "react";
-import { TouchableOpacity, Pressable, View } from "react-native"; // Using TouchableOpacity for feedback or Pressable
-import { useDropdownContext } from "./DropdownRoot";
+import React from 'react';
+import { TouchableOpacity, Pressable, View } from 'react-native'; // Using TouchableOpacity for feedback or Pressable
+import { useDropdownContext } from './DropdownRoot';
 
 const DropdownTrigger = ({ children, asChild, ...props }: any) => {
   const { setOpen } = useDropdownContext();

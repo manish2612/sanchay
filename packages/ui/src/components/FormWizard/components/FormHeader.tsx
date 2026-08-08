@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { useFormWizardContext } from "../hooks/useFormWizard";
+import React, { ReactNode } from 'react';
+import { useFormWizardContext } from '../hooks/useFormWizard';
 
 export interface FormHeaderProps {
   graphic?: ReactNode;
@@ -8,11 +8,11 @@ export interface FormHeaderProps {
   className?: string;
 }
 
-export const FormHeader = ({ graphic, title, subtitle, className = "" }: FormHeaderProps) => {
+export const FormHeader = ({ graphic, title, subtitle, className = '' }: FormHeaderProps) => {
   const { steps, currentStep } = useFormWizardContext();
   const currentStepInfo = steps[currentStep - 1];
 
-  const displayTitle = title || currentStepInfo?.title || "";
+  const displayTitle = title || currentStepInfo?.title || '';
   const displaySubtitle = subtitle || currentStepInfo?.description;
 
   return (

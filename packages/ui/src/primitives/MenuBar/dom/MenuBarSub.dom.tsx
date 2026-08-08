@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { Icon } from "../../Icon/Icon.dom";
-import { cn } from "../../../utils";
-import { menuBarStyles } from "./styles.dom";
+import * as React from 'react';
+import * as MenubarPrimitive from '@radix-ui/react-menubar';
+import { Icon } from '../../Icon/Icon.dom';
+import { cn } from '../../../utils';
+import { menuBarStyles } from './styles.dom';
 
 const MenuBarSub = MenubarPrimitive.Sub;
 
@@ -16,7 +16,7 @@ const MenuBarSubTrigger = React.forwardRef<
 >(({ className, inset, children, ...props }, ref) => (
   <MenubarPrimitive.SubTrigger
     ref={ref}
-    className={cn(menuBarStyles.subTrigger, inset && "pl-8", className)}
+    className={cn(menuBarStyles.subTrigger, inset && 'pl-8', className)}
     {...props}
   >
     {children}

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 import { DatePicker } from './index';
-import { addDays } from "date-fns";
+import { addDays } from 'date-fns';
 
 const meta: Meta<typeof DatePicker> = {
   title: 'Primitives/DatePicker',
@@ -34,7 +34,7 @@ const meta: Meta<typeof DatePicker> = {
     placeholder: {
       control: 'text',
       description: 'Placeholder text for the input field.',
-    }
+    },
   },
   args: {
     label: 'Date Picker',
@@ -43,7 +43,7 @@ const meta: Meta<typeof DatePicker> = {
     labelVariant: 'default',
     calendarType: 'gregorian',
     nepaliLanguage: 'english',
-  }
+  },
 };
 
 export default meta;
@@ -64,7 +64,7 @@ export const Default: Story = {
         />
       </div>
     );
-  }
+  },
 };
 
 export const InFieldLabel: Story = {
@@ -76,14 +76,10 @@ export const InFieldLabel: Story = {
     const [date, setDate] = useState<Date | undefined>(args.date);
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };
 
 export const PreSelectedDate: Story = {
@@ -95,14 +91,10 @@ export const PreSelectedDate: Story = {
     const [date, setDate] = useState<Date | undefined>(addDays(new Date(), 5));
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };
 
 export const Disabled: Story = {
@@ -116,7 +108,7 @@ export const Disabled: Story = {
     <div className="max-w-sm">
       <DatePicker {...args} />
     </div>
-  )
+  ),
 };
 
 export const MinMaxDatesGregorian: Story = {
@@ -131,14 +123,10 @@ export const MinMaxDatesGregorian: Story = {
     const [date, setDate] = useState<Date | undefined>(args.date);
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };
 
 export const NepaliCalendarEnglishScript: Story = {
@@ -152,14 +140,10 @@ export const NepaliCalendarEnglishScript: Story = {
     const [date, setDate] = useState<Date | undefined>(args.date);
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };
 
 export const MinMaxDatesNepali: Story = {
@@ -167,22 +151,18 @@ export const MinMaxDatesNepali: Story = {
     label: 'Min/Max Dates (Nepali)',
     labelVariant: 'in-field',
     calendarType: 'nepali',
-    minDate: new Date("2024-04-13"),
-    maxDate: new Date("2025-04-13"),
+    minDate: new Date('2024-04-13'),
+    maxDate: new Date('2025-04-13'),
     placeholder: 'Only BS 2081 allowed',
   },
   render: (args) => {
     const [date, setDate] = useState<Date | undefined>(args.date);
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };
 
 export const NepaliCalendarNepaliScript: Story = {
@@ -197,12 +177,8 @@ export const NepaliCalendarNepaliScript: Story = {
     const [date, setDate] = useState<Date | undefined>(args.date);
     return (
       <div className="max-w-sm">
-        <DatePicker
-          {...args}
-          date={date}
-          onDateChange={setDate}
-        />
+        <DatePicker {...args} date={date} onDateChange={setDate} />
       </div>
     );
-  }
+  },
 };

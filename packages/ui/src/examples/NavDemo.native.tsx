@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { UniversalLink } from "../primitives/Link";
-import { Button } from "../primitives/Button/Button.native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { UniversalLink } from '../primitives/Link';
+import { Button } from '../primitives/Button/Button.native';
 
 interface NavDemoProps {
   onLoginPress: () => void;
@@ -40,41 +40,41 @@ export const NavDemo = ({ onLoginPress }: NavDemoProps) => {
 const styles = StyleSheet.create({
   container: {
     padding: 24,
-    backgroundColor: "rgba(0,0,0,0.02)",
+    backgroundColor: 'rgba(0,0,0,0.02)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    borderColor: 'rgba(0,0,0,0.1)',
     maxWidth: 400,
     gap: 16,
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 8,
-    color: "#000",
+    color: '#000',
   },
   section: {
     gap: 8,
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#000",
+    fontWeight: '600',
+    color: '#000',
   },
   description: {
     fontSize: 14,
     opacity: 0.7,
     marginBottom: 8,
-    color: "#000",
+    color: '#000',
   },
   link: {
-    color: "#007AFF",
+    color: '#007AFF',
     fontSize: 16,
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
   divider: {
     height: 1,
-    backgroundColor: "rgba(0,0,0,0.1)",
+    backgroundColor: 'rgba(0,0,0,0.1)',
     marginVertical: 8,
   },
 });

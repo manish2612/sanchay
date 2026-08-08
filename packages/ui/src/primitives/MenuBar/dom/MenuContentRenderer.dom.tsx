@@ -1,35 +1,29 @@
-"use client";
+'use client';
 
-import React from "react";
-import { MenuItem } from "../schema";
-import { MenuBarItem } from "./MenuBarItem.dom";
-import { MenuBarCheckboxItem } from "./MenuBarCheckboxItem.dom";
-import { MenuBarRadioGroup } from "./MenuBarRadioGroup.dom";
-import { MenuBarRadioItem } from "./MenuBarRadioItem.dom";
-import { MenuBarSeparator } from "./MenuBarSeparator.dom";
-import { MenuBarLabel } from "./MenuBarLabel.dom";
-import {
-  MenuBarSub,
-  MenuBarSubTrigger,
-  MenuBarSubContent,
-} from "./MenuBarSub.dom";
-import { MenuBarShortcut } from "./MenuBarShortcut.dom";
-import { UniversalLink } from "../../Link"; // Updated import to point to primitives/Link/index
-import { Icon } from "../../Icon/Icon.dom"; // Assuming Icon usage needs standardizing, checking imports
+import React from 'react';
+import { MenuItem } from '../schema';
+import { MenuBarItem } from './MenuBarItem.dom';
+import { MenuBarCheckboxItem } from './MenuBarCheckboxItem.dom';
+import { MenuBarRadioGroup } from './MenuBarRadioGroup.dom';
+import { MenuBarRadioItem } from './MenuBarRadioItem.dom';
+import { MenuBarSeparator } from './MenuBarSeparator.dom';
+import { MenuBarLabel } from './MenuBarLabel.dom';
+import { MenuBarSub, MenuBarSubTrigger, MenuBarSubContent } from './MenuBarSub.dom';
+import { MenuBarShortcut } from './MenuBarShortcut.dom';
+import { UniversalLink } from '../../Link'; // Updated import to point to primitives/Link/index
+import { Icon } from '../../Icon/Icon.dom'; // Assuming Icon usage needs standardizing, checking imports
 
 export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
   return (
     <>
       {items.map((item, index) => {
         switch (item.kind) {
-          case "item": {
+          case 'item': {
             // Logic for Link vs Action
             const content = (
               <>
                 {item.label}
-                {item.shortcut && (
-                  <MenuBarShortcut>{item.shortcut}</MenuBarShortcut>
-                )}
+                {item.shortcut && <MenuBarShortcut>{item.shortcut}</MenuBarShortcut>}
               </>
             );
 
@@ -41,11 +35,7 @@ export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
               // The 'asChild' pattern is best here if supported by UniversalLink, otherwise we wrap.
               // Assuming UniversalLink renders an <a> or similar.
               return (
-                <UniversalLink
-                  key={index}
-                  href={item.href}
-                  className="contents"
-                >
+                <UniversalLink key={index} href={item.href} className="contents">
                   <MenuBarItem inset={item.inset} disabled={item.disabled}>
                     {content}
                   </MenuBarItem>
@@ -65,7 +55,7 @@ export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
             );
           }
 
-          case "checkbox":
+          case 'checkbox':
             return (
               <MenuBarCheckboxItem
                 key={index}
@@ -74,19 +64,13 @@ export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
                 disabled={item.disabled}
               >
                 {item.label}
-                {item.shortcut && (
-                  <MenuBarShortcut>{item.shortcut}</MenuBarShortcut>
-                )}
+                {item.shortcut && <MenuBarShortcut>{item.shortcut}</MenuBarShortcut>}
               </MenuBarCheckboxItem>
             );
 
-          case "radio-group":
+          case 'radio-group':
             return (
-              <MenuBarRadioGroup
-                key={index}
-                value={item.value}
-                onValueChange={item.onValueChange}
-              >
+              <MenuBarRadioGroup key={index} value={item.value} onValueChange={item.onValueChange}>
                 {item.items.map((radio, rIndex) => (
                   <MenuBarRadioItem key={rIndex} value={radio.value}>
                     {radio.label}
@@ -95,7 +79,7 @@ export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
               </MenuBarRadioGroup>
             );
 
-          case "sub":
+          case 'sub':
             return (
               <MenuBarSub key={index}>
                 <MenuBarSubTrigger inset={item.inset} disabled={item.disabled}>
@@ -107,10 +91,10 @@ export const MenuContentRenderer = ({ items }: { items: MenuItem[] }) => {
               </MenuBarSub>
             );
 
-          case "separator":
+          case 'separator':
             return <MenuBarSeparator key={index} />;
 
-          case "label":
+          case 'label':
             return (
               <MenuBarLabel key={index} inset>
                 {item.label}

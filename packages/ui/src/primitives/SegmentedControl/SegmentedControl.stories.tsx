@@ -85,22 +85,9 @@ export const CustomBorderRadius: Story = {
         disabled
       />
       <div className="w-[60px]">
-        <SegmentedControl.Root
-          {...args}
-          defaultValue="%"
-          size="xs"
-          className="rounded-md p-0.5"
-        >
-          <SegmentedControl.Item
-            value="%"
-            label="%"
-            className="w-4 rounded-sm font-bold"
-          />
-          <SegmentedControl.Item
-            value="#"
-            label="#"
-            className="w-4 rounded-sm font-bold"
-          />
+        <SegmentedControl.Root {...args} defaultValue="%" size="xs" className="rounded-md p-0.5">
+          <SegmentedControl.Item value="%" label="%" className="w-4 rounded-sm font-bold" />
+          <SegmentedControl.Item value="#" label="#" className="w-4 rounded-sm font-bold" />
         </SegmentedControl.Root>
       </div>
     </div>

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { ReactNode, useEffect, useRef } from "react";
-import { useFormWizardContext } from "../hooks/useFormWizard";
+import React, { ReactNode, useEffect, useRef } from 'react';
+import { useFormWizardContext } from '../hooks/useFormWizard';
 
 export interface FormContentProps {
   children: ReactNode;
   className?: string;
 }
 
-export const FormContent = ({ children, className = "" }: FormContentProps) => {
+export const FormContent = ({ children, className = '' }: FormContentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { currentStep } = useFormWizardContext();
 
@@ -16,7 +16,8 @@ export const FormContent = ({ children, className = "" }: FormContentProps) => {
   // On mobile screens (< 1024px), auto-focus is skipped to prevent native virtual keyboards from popping up.
   useEffect(() => {
     // Only auto-focus on desktop viewports
-    const isDesktop = typeof window !== "undefined" && window.matchMedia("(min-width: 1024px)").matches;
+    const isDesktop =
+      typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
     if (!isDesktop) return;
 
     if (containerRef.current) {

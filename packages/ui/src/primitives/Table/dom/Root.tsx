@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { ColumnDef, Row, TableOptions } from "@tanstack/react-table";
-import { cn } from "../../../utils";
-import { tableStyles } from "../styles";
-import { TableContext } from "./Context";
-import { useTableRoot } from "./useTableRoot";
+import * as React from 'react';
+import { ColumnDef, Row, TableOptions } from '@tanstack/react-table';
+import { cn } from '../../../utils';
+import { tableStyles } from '../styles';
+import { TableContext } from './Context';
+import { useTableRoot } from './useTableRoot';
 
 interface TableRootProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   data: TData[];
@@ -37,7 +37,7 @@ export function TableRoot<TData>({
     totalMinWidth,
   } = useTableRoot({ data, columns, onRowClick, tableOptions, rowHeight });
 
-  // Do not memoize contextValue! useVirtualizer returns a stable class instance, 
+  // Do not memoize contextValue! useVirtualizer returns a stable class instance,
   // so if we memoize this, Table.Body will completely fail to re-render on scroll or layout measurements.
   const contextValue = {
     table,
@@ -53,11 +53,7 @@ export function TableRoot<TData>({
     <TableContext.Provider value={contextValue}>
       <div
         ref={rootRef}
-        className={cn(
-          tableStyles.root(),
-          "overflow-x-auto overflow-y-hidden",
-          className
-        )}
+        className={cn(tableStyles.root(), 'overflow-x-auto overflow-y-hidden', className)}
         tabIndex={0}
         onKeyDown={handleKeyDown}
         onFocus={handleRootFocus}

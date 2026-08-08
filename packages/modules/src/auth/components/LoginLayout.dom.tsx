@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface LoginLayoutProps {
   children: React.ReactNode;
@@ -9,9 +9,7 @@ interface LoginLayoutProps {
 export function LoginLayout({ children }: LoginLayoutProps) {
   return (
     <div className="flex justify-center items-center min-h-screen bg-surface p-6">
-      <div className="flex w-full max-w-[1200px] relative shadow-2xl">
-        {children}
-      </div>
+      <div className="flex w-full max-w-[1200px] relative shadow-2xl">{children}</div>
     </div>
   );
 }

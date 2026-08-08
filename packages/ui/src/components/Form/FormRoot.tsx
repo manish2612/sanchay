@@ -1,3 +1,3 @@
-import { FormProvider } from "react-hook-form"
+import { FormProvider } from 'react-hook-form';
 
-export const FormRoot = FormProvider
+export const FormRoot = FormProvider;

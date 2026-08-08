@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { usePathname } from "next/navigation";
-import { Sidebar } from "../../features/Navigation/components/Sidebar";
-import { APP_NAME } from "@prime/config";
+import React from 'react';
+import { usePathname } from 'next/navigation';
+import { Sidebar } from '../../features/Navigation/components/Sidebar';
+import { APP_NAME } from '@prime/config';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   // const { isAuthenticated, user } = useAuth();
   // if (!isAuthenticated && pathname !== "/login") return <Redirect to="/login" />
 
-  const isLoginPage = pathname === "/login";
+  const isLoginPage = pathname === '/login';
 
   // If we are on the login page, render the page content without the Sidebar wrapper
   if (isLoginPage) {
@@ -25,7 +25,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   }
 
   // Temporary mock user until auth is integrated
-  const mockUser = { name: "Admin User", email: "admin@example.com" };
+  const mockUser = { name: 'Admin User', email: 'admin@example.com' };
 
   return (
     <div className="min-h-screen flex bg-background text-foreground selection:bg-primary/30">
@@ -35,15 +35,13 @@ export function AppLayout({ children }: AppLayoutProps) {
         user={mockUser}
         onLogout={() => {
           // TODO: [AUTHENTICATION] Implement real logout logic here
-          console.log("Logout clicked");
+          console.log('Logout clicked');
         }}
       />
 
       {/* Main Content Area */}
       <main className="flex flex-col flex-1 relative overflow-hidden items-center bg-background">
-        <div className="w-full max-w-[1440px] flex-1 flex flex-col">
-          {children}
-        </div>
+        <div className="w-full max-w-[1440px] flex-1 flex flex-col">{children}</div>
       </main>
     </div>
   );

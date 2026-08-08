@@ -1,15 +1,9 @@
-import React from "react";
-import { Pressable, Text } from "react-native";
-import { useTheme } from "@prime/theme-provider";
-import { getMenuBarStyles } from "./styles";
+import React from 'react';
+import { Pressable, Text } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
+import { getMenuBarStyles } from './styles';
 
-export function MenuBarItem({
-  children,
-  style,
-  inset,
-  disabled,
-  ...props
-}: any) {
+export function MenuBarItem({ children, style, inset, disabled, ...props }: any) {
   const { theme } = useTheme();
   const styles = getMenuBarStyles(theme);
 

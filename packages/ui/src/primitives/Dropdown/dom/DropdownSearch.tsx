@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef } from "react";
-import { useDropdownContext } from "./DropdownRoot";
-import { TextInput } from "../../TextInput/TextInput.dom";
-import { Icon } from "../../Icon/Icon.dom";
-import {
-  dropdownSearchClassName,
-  dropdownSearchContainerClassName,
-} from "./styles.dom";
+import React, { useEffect, useRef } from 'react';
+import { useDropdownContext } from './DropdownRoot';
+import { TextInput } from '../../TextInput/TextInput.dom';
+import { Icon } from '../../Icon/Icon.dom';
+import { dropdownSearchClassName, dropdownSearchContainerClassName } from './styles.dom';
 
 interface DropdownSearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -33,12 +30,12 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
           onChange={handleChange}
           autoFocus
           onKeyDown={(e) => {
-            if (e.key === "ArrowDown") {
+            if (e.key === 'ArrowDown') {
               e.preventDefault();
               const content = e.currentTarget.closest('[role="menu"]');
               if (content) {
                 const items = content.querySelectorAll(
-                  '[role="menuitem"]:not([aria-disabled="true"])'
+                  '[role="menuitem"]:not([aria-disabled="true"])',
                 );
                 if (items.length > 0) {
                   (items[0] as HTMLElement).focus();
@@ -47,12 +44,12 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
               return;
             }
 
-            if (e.key === "ArrowUp") {
+            if (e.key === 'ArrowUp') {
               e.preventDefault();
               return;
             }
 
-            if (e.key === "Enter" || e.key === "Escape") {
+            if (e.key === 'Enter' || e.key === 'Escape') {
               return;
             }
 
@@ -62,9 +59,9 @@ const DropdownSearch = React.forwardRef<HTMLInputElement, DropdownSearchProps>(
         />
       </div>
     );
-  }
+  },
 );
 
-DropdownSearch.displayName = "DropdownSearch";
+DropdownSearch.displayName = 'DropdownSearch';
 
 export { DropdownSearch };

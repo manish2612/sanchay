@@ -148,9 +148,7 @@ const MultiStepDemo = () => {
         <FormWizard.StepNav title="Create Account" />
 
         <FormWizard.Container>
-          <FormWizard.Header
-            graphic={<Monitor className="w-12 h-12 stroke-[1.25]" />}
-          />
+          <FormWizard.Header graphic={<Monitor className="w-12 h-12 stroke-[1.25]" />} />
 
           <DemoWizardContent form={form} />
 

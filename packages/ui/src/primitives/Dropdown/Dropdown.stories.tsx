@@ -49,7 +49,7 @@ export const Basic: Story = {
         </DropdownPrimitive.DropdownItem>
       </DropdownPrimitive.DropdownContent>
     </DropdownPrimitive.DropdownRoot>
-  )
+  ),
 };
 
 interface CountryOption {
@@ -60,11 +60,11 @@ interface CountryOption {
 }
 
 const COUNTRIES: CountryOption[] = [
-  { value: "us", label: "United States", flag: "🇺🇸" },
-  { value: "ca", label: "Canada", flag: "🇨🇦" },
-  { value: "gb", label: "United Kingdom", flag: "🇬🇧" },
-  { value: "fr", label: "France", flag: "🇫🇷" },
-  { value: "unknown", label: "Unknown Territory", reserveLeadingSpace: true },
+  { value: 'us', label: 'United States', flag: '🇺🇸' },
+  { value: 'ca', label: 'Canada', flag: '🇨🇦' },
+  { value: 'gb', label: 'United Kingdom', flag: '🇬🇧' },
+  { value: 'fr', label: 'France', flag: '🇫🇷' },
+  { value: 'unknown', label: 'Unknown Territory', reserveLeadingSpace: true },
 ];
 
 export const Searchable: Story = {
@@ -86,7 +86,11 @@ export const Searchable: Story = {
                 ) : null}
                 {selected.label}
               </span>
-              <Icon name="ChevronDown" size={16} className="text-muted-foreground ml-2 opacity-50 shrink-0" />
+              <Icon
+                name="ChevronDown"
+                size={16}
+                className="text-muted-foreground ml-2 opacity-50 shrink-0"
+              />
             </Button>
           </DropdownPrimitive.DropdownTrigger>
           <DropdownPrimitive.DropdownContent align="start" className="w-full min-w-[200px]">
@@ -107,5 +111,5 @@ export const Searchable: Story = {
         </DropdownPrimitive.DropdownRoot>
       </div>
     );
-  }
+  },
 };

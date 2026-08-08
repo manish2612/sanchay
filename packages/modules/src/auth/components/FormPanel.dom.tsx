@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { TextInput, Button, Icon } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
-import { LoginData } from "../types";
+import React, { useState } from 'react';
+import { TextInput, Button, Icon } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
+import { LoginData } from '../types';
 
 interface FormPanelProps {
   onLogin?: (data: LoginData) => void;
@@ -16,8 +16,8 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
   const t = theme as any;
 
   const [isVisible, setIsVisible] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <div className="absolute top-0 right-0 h-full w-full md:w-1/2 flex justify-center items-center p-6 z-20">
@@ -27,9 +27,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
           <Icon name="Briefcase" size={24} className="text-foreground" />
           <div>
             <p className="text-[13px] text-muted-foreground m-0">Company</p>
-            <p className="font-semibold text-foreground m-0">
-              Egrow Tech Private limited
-            </p>
+            <p className="font-semibold text-foreground m-0">Egrow Tech Private limited</p>
           </div>
         </div>
         <h3 className="text-2xl mb-8 text-center text-foreground font-bold font-heading">
@@ -49,7 +47,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
         <div className="mb-8">
           <TextInput
             placeholder="Password"
-            type={isVisible ? "text" : "password"}
+            type={isVisible ? 'text' : 'password'}
             value={password}
             onChange={(e: any) => setPassword(e.target.value)}
             rightSlot={
@@ -59,7 +57,7 @@ export function FormPanel({ onLogin, onForgotPassword }: FormPanelProps) {
                 className="bg-transparent border-none cursor-pointer p-0 flex items-center"
               >
                 <Icon
-                  name={isVisible ? "Eye" : "EyeOff"}
+                  name={isVisible ? 'Eye' : 'EyeOff'}
                   size={20}
                   className="text-muted-foreground"
                 />

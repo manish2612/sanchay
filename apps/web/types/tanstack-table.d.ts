@@ -1,15 +1,15 @@
-import "@tanstack/react-table";
-import { RowData } from "@tanstack/react-table";
+import '@tanstack/react-table';
+import { RowData } from '@tanstack/react-table';
 
-declare module "@tanstack/react-table" {
+declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     actions?: {
       updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
       onRowCommit?: (
         rowIndex: number,
         columnId?: string,
-        cellValue?: string
-      ) => "STAY" | "ADVANCE" | "EXIT";
+        cellValue?: string,
+      ) => 'STAY' | 'ADVANCE' | 'EXIT';
     };
     state?: {
       rowErrors?: Record<number, boolean>;

@@ -35,7 +35,10 @@ export const Full5Items: Story = {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <Table.HeaderRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => (
-                      <Table.Head key={header.id} style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}>
+                      <Table.Head
+                        key={header.id}
+                        style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}
+                      >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </Table.Head>
                     ))}
@@ -47,9 +50,19 @@ export const Full5Items: Story = {
           <Table.StatusPosition position="top" />
           <Table.Body>
             {(row, isFocused) => (
-              <Table.Row key={row.id} data-state={row.getIsSelected() ? "selected" : undefined} data-focused={isFocused}>
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <Table.Cell key={cell.id} style={{ width: cell.column.getSize(), flex: `${cell.column.getSize()} 0 auto` }}>
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
                 ))}
@@ -63,7 +76,7 @@ export const Full5Items: Story = {
         </Table.Root>
       </div>
     );
-  }
+  },
 };
 
 export const NoChrome6Items: Story = {
@@ -76,9 +89,19 @@ export const NoChrome6Items: Story = {
           <Table.StatusPosition position="top" />
           <Table.Body>
             {(row, isFocused) => (
-              <Table.Row key={row.id} data-state={row.getIsSelected() ? "selected" : undefined} data-focused={isFocused}>
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <Table.Cell key={cell.id} style={{ width: cell.column.getSize(), flex: `${cell.column.getSize()} 0 auto` }}>
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
                 ))}
@@ -89,7 +112,7 @@ export const NoChrome6Items: Story = {
         </Table.Root>
       </div>
     );
-  }
+  },
 };
 
 export const Bare60Items: Story = {
@@ -101,9 +124,19 @@ export const Bare60Items: Story = {
         <Table.Root {...args} data={data} columns={columns} className="h-full">
           <Table.Body>
             {(row, isFocused) => (
-              <Table.Row key={row.id} data-state={row.getIsSelected() ? "selected" : undefined} data-focused={isFocused}>
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <Table.Cell key={cell.id} style={{ width: cell.column.getSize(), flex: `${cell.column.getSize()} 0 auto` }}>
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
                 ))}
@@ -113,7 +146,7 @@ export const Bare60Items: Story = {
         </Table.Root>
       </div>
     );
-  }
+  },
 };
 
 export const NoData: Story = {
@@ -125,9 +158,19 @@ export const NoData: Story = {
         <Table.Root {...args} data={data} columns={columns} className="h-full">
           <Table.Body>
             {(row, isFocused) => (
-              <Table.Row key={row.id} data-state={row.getIsSelected() ? "selected" : undefined} data-focused={isFocused}>
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <Table.Cell key={cell.id} style={{ width: cell.column.getSize(), flex: `${cell.column.getSize()} 0 auto` }}>
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Table.Cell>
                 ))}
@@ -137,5 +180,5 @@ export const NoData: Story = {
         </Table.Root>
       </div>
     );
-  }
+  },
 };

@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
-import { View } from "react-native";
-import { CommandPaletteProps } from "../types";
-import { styles } from "../styles";
+import React, { createContext, useContext, useState, useMemo } from 'react';
+import { View } from 'react-native';
+import { CommandPaletteProps } from '../types';
+import { styles } from '../styles';
 
 interface CommandContextType {
   search: string;
@@ -15,7 +15,7 @@ const CommandContext = createContext<CommandContextType | null>(null);
 export const useCommandContext = () => {
   const context = useContext(CommandContext);
   if (!context) {
-    throw new Error("useCommandContext must be used within a CommandPalette");
+    throw new Error('useCommandContext must be used within a CommandPalette');
   }
   return context;
 };
@@ -32,7 +32,7 @@ export const CommandPalette = ({
   filter = defaultFilter,
   ...props
 }: CommandPaletteProps) => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const value = useMemo(
     () => ({
@@ -41,7 +41,7 @@ export const CommandPalette = ({
       shouldFilter,
       filter,
     }),
-    [search, shouldFilter, filter]
+    [search, shouldFilter, filter],
   );
 
   return (

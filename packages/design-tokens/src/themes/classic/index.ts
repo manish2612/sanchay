@@ -10,39 +10,39 @@ import { motion } from '../../tokens/motion';
 import { zIndex } from '../../tokens/z-index';
 
 const shared = {
-    space: spacing,
-    sizes,
-    fonts: fontFamily,
-    fontSizes: fontSize,
-    fontWeights: fontWeight,
-    lineHeights: lineHeight,
-    radii,
-    shadows,
-    transitions: motion,
-    zIndices: zIndex,
+  space: spacing,
+  sizes,
+  fonts: fontFamily,
+  fontSizes: fontSize,
+  fontWeights: fontWeight,
+  lineHeights: lineHeight,
+  radii,
+  shadows,
+  transitions: motion,
+  zIndices: zIndex,
 };
 
 const light = {
-    meta: {
-        name: 'Classic',
-        version: '1.0.0',
-        mode: 'light' as const,
-    },
-    colors,
-    ...shared,
+  meta: {
+    name: 'Classic',
+    version: '1.0.0',
+    mode: 'light' as const,
+  },
+  colors,
+  ...shared,
 };
 
 const dark = {
-    meta: {
-        name: 'Classic',
-        version: '1.0.0',
-        mode: 'dark' as const,
-    },
-    colors: colorsDark,
-    ...shared,
+  meta: {
+    name: 'Classic',
+    version: '1.0.0',
+    mode: 'dark' as const,
+  },
+  colors: colorsDark,
+  ...shared,
 };
 
 export const brand = {
-    light,
-    dark,
+  light,
+  dark,
 };
