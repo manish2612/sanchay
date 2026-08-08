@@ -43,7 +43,7 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
   return (
     <>
       <div
-        className={`relative h-screen bg-surface border-r border-border shadow-sm flex flex-col transition-[width] duration-300 ease-in-out overflow-hidden z-10 flex-shrink-0 ${panelWidth}`}
+        className={`relative h-dvh bg-surface border-r border-border shadow-sm flex flex-col transition-[width] duration-300 ease-in-out overflow-hidden z-10 flex-shrink-0 ${panelWidth}`}
       >
         {activeL1Config && (
           <div className="w-[240px] h-full flex flex-col">

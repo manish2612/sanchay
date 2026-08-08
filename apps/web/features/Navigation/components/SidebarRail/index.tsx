@@ -62,7 +62,7 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
 
   return (
     <>
-      <div className="flex flex-col items-center w-[72px] h-screen bg-primary border-r border-primary-dark shadow-sm z-20 py-4 flex-shrink-0">
+      <div className="flex flex-col items-center w-[72px] h-dvh bg-primary border-r border-primary-dark shadow-sm z-20 py-4 flex-shrink-0">
         {/* App Logo / Master Toggle */}
         <div
           className="relative group flex items-center justify-center w-12 h-12 mb-6 cursor-pointer"
