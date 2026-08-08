@@ -1,23 +1,34 @@
 import React from 'react';
 import { LoginGraphic } from './components/LoginGraphic';
+import { LoginForm } from './components/LoginForm';
+import { LoginHeaderGraphic } from './components/LoginHeaderGraphic';
 
 export default function Login() {
   return (
-    <main className="min-h-screen flex w-full">
-      {/* Left Panel - Login Form (Placeholder) */}
-      <section className="w-full lg:w-3/5 flex items-center justify-center p-8 bg-background">
-        <div className="w-full max-w-md">
-          {/* Placeholder for actual login form components */}
-          <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-          <p className="text-gray-500 mb-8">Please enter your details to sign in.</p>
+    <main className="min-h-dvh flex w-full">
+      {/* Left Panel - Login Form */}
+      <section className="relative w-full lg:w-3/5 flex items-center justify-center p-8 bg-background overflow-hidden">
+        {/* Ambient Glow Effects */}
+        {/* Top Glow: Top-Right on mobile, Top-Left on desktop */}
+        <div className="absolute -top-32 -right-32 lg:right-auto lg:-left-32 w-96 h-96 bg-primary/15 rounded-full blur-[120px] transform-gpu pointer-events-none" />
 
-          <div className="space-y-4">
-            <div className="h-12 bg-gray-100 rounded-md w-full animate-pulse border border-gray-200"></div>
-            <div className="h-12 bg-gray-100 rounded-md w-full animate-pulse border border-gray-200"></div>
-            <div className="h-12 bg-primary rounded-md w-full flex items-center justify-center mt-6">
-              <span className="text-primary-foreground font-medium text-lg">Login Placeholder</span>
-            </div>
+        {/* Bottom Glow: Bottom-Left */}
+        <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-primary/15 rounded-full blur-[100px] transform-gpu pointer-events-none" />
+
+        <div className="relative z-10 w-full max-w-md">
+          {/* Mobile-only Graphic Header */}
+          <div className="flex justify-center lg:hidden mb-6">
+            <LoginHeaderGraphic className="w-64 h-auto" primaryOffset={{ x: 0, y: -16 }} />
           </div>
+
+          <h1 className="text-3xl font-bold mb-2 text-foreground text-center lg:text-left">
+            Welcome Back!
+          </h1>
+          <p className="text-muted-foreground mb-16 text-center lg:text-left">
+            Please enter your details to sign in.
+          </p>
+
+          <LoginForm />
         </div>
       </section>
 

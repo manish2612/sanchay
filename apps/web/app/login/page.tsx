@@ -29,7 +29,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <LoginLayout />
       {responseMsg && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 p-4 text-center text-sm font-medium text-green-600 bg-white/90 shadow rounded">
