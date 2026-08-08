@@ -11,6 +11,8 @@ import { TableFooter } from './Footer';
 import { TableStatusPosition } from './StatusPosition';
 import { useTableContext } from './Context';
 
+
+
 export const Table = {
   Root: TableRoot,
   Header: TableHeader,

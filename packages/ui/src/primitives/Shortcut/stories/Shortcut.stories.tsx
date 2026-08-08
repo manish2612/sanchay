@@ -46,4 +46,5 @@ export const Default: Story = {
       <ShortcutDemo />
     </ShortcutProvider>
   ),
+  args: {} as React.ComponentProps<typeof ShortcutProvider>,
 };

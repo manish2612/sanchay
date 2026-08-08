@@ -95,4 +95,5 @@ const SingleStepDemo = () => {
 
 export const Default: Story = {
   render: () => <SingleStepDemo />,
+  args: {} as React.ComponentProps<typeof FormWizard>,
 };

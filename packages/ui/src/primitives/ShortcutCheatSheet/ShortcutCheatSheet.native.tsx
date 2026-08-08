@@ -49,9 +49,9 @@ export const ShortcutCheatSheet = ({ open, onOpenChange, categories }: ShortcutC
 
         <ScrollView style={styles.container}>
           <TextInput
-            style={{ marginBottom: theme.space[4] }}
+            style={{ marginBottom: theme.space[4] as any }}
             placeholder="Search shortcuts..."
-            placeholderTextColor={(theme.colors as any).mutedForeground || '#999'}
+            placeholderTextColor={theme.colors.mutedForeground || '#999'}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -63,7 +63,7 @@ export const ShortcutCheatSheet = ({ open, onOpenChange, categories }: ShortcutC
                 {
                   textAlign: 'center',
                   marginVertical: 20,
-                  color: (theme.colors as any).mutedForeground || '#999',
+                  color: theme.colors.mutedForeground || '#999',
                 },
               ]}
             >

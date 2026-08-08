@@ -164,4 +164,5 @@ const RHFCompositionDemo = () => {
 
 export const Composition: Story = {
   render: () => <RHFCompositionDemo />,
+  args: {} as React.ComponentProps<typeof Form>,
 };

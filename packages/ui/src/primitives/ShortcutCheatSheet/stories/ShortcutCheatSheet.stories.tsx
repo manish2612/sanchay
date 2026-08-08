@@ -45,4 +45,5 @@ export const Default: Story = {
       </>
     );
   },
+  args: {} as React.ComponentProps<typeof ShortcutCheatSheet>,
 };

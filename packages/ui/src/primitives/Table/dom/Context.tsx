@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Table as TanStackTable, RowData, Row } from '@tanstack/react-table';
+import { Table as TanStackTable, RowData, Row, TableState } from '@tanstack/react-table';
+import { Virtualizer } from '@tanstack/react-virtual';
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
@@ -9,6 +10,8 @@ declare module '@tanstack/react-table' {
     editingRowIndex?: number | null;
     successRowIndex?: number | null;
     updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
+    state?: TableState;
+    features?: unknown[];
     onRowCommit?: (
       rowIndex: number,
       columnId?: string,
@@ -29,7 +32,7 @@ declare module '@tanstack/react-table' {
 export interface TableContextValue<TData> {
   table: TanStackTable<TData>;
   data: TData[];
-  virtualizer: any;
+  virtualizer: Virtualizer<HTMLDivElement, Element>;
   scrollRef: React.RefObject<HTMLDivElement | null>;
   focusedRowIndex: number;
   handleRowClick: (index: number, e?: React.MouseEvent) => void;

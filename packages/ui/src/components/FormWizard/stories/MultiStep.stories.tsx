@@ -164,4 +164,5 @@ const MultiStepDemo = () => {
 
 export const Default: Story = {
   render: () => <MultiStepDemo />,
+  args: {} as React.ComponentProps<typeof FormWizard>,
 };

@@ -5,6 +5,8 @@ import { Icon } from '../../Icon/Icon.dom';
 import { cn } from '../../../utils';
 import { tableStyles } from '../styles';
 import { useTableContext } from './Context';
+import { Row } from '@tanstack/react-table';
+import { VirtualItem } from '@tanstack/react-virtual';
 
 export const TableStatusPosition = React.forwardRef<
   HTMLDivElement,
@@ -29,7 +31,7 @@ export const TableStatusPosition = React.forwardRef<
   if (position === 'top') {
     // First row whose TOP is visible (start >= scrollTop)
     // This counts partially hidden top rows as "above"
-    const firstFullyVisible = virtualRows.find((row) => row.start >= scrollOffset);
+    const firstFullyVisible = virtualRows.find((row: VirtualItem) => row.start >= scrollOffset);
     if (firstFullyVisible) {
       count = firstFullyVisible.index;
     } else {
@@ -52,7 +54,7 @@ export const TableStatusPosition = React.forwardRef<
     // Last row whose BOTTOM is visible (end <= scrollBottom)
     // This counts partially hidden bottom rows as "below"
     // We search backwards from the end of the list
-    const lastFullyVisible = [...virtualRows].reverse().find((row) => row.end <= scrollBottom);
+    const lastFullyVisible = [...virtualRows].reverse().find((row: VirtualItem) => row.end <= scrollBottom);
 
     if (lastFullyVisible) {
       count = data.length - 1 - lastFullyVisible.index;

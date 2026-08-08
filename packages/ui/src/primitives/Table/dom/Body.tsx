@@ -8,8 +8,8 @@ import { tableStyles } from '../styles';
 import { useTableContext } from './Context';
 import { Icon } from '../../Icon/Icon.dom';
 
-interface TableBodyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'dir'> {
-  children: (row: Row<any>, isFocused: boolean) => React.ReactNode;
+export interface TableBodyProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'dir'> {
+  children: (row: Row<unknown>, isFocused: boolean) => React.ReactNode;
   dir?: 'ltr' | 'rtl';
 }
 
@@ -52,7 +52,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
               {(() => {
                 const virtualRows = virtualizer.getVirtualItems();
                 const focusedVirtualRow = virtualRows.find(
-                  (row: any) => row.index === focusedRowIndex,
+                  (row) => row.index === focusedRowIndex,
                 );
 
                 if (!focusedVirtualRow) return null;
@@ -71,9 +71,7 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
 
                 const isAtEdge = isAtTopEdge || isAtBottomEdge;
 
-                const successRowIndex =
-                  table.options.meta?.state?.successRowIndex ||
-                  (table.options.meta as any)?.successRowIndex;
+                const successRowIndex = table.options.meta?.successRowIndex;
                 const isSuccess = successRowIndex === focusedVirtualRow.index;
 
                 return (
@@ -94,12 +92,10 @@ export const TableBody = React.forwardRef<HTMLDivElement, TableBodyProps>(
                 );
               })()}
 
-              {virtualizer.getVirtualItems().map((virtualRow: any) => {
+              {virtualizer.getVirtualItems().map((virtualRow) => {
                 const row = rows[virtualRow.index];
                 const isFocused = virtualRow.index === focusedRowIndex;
-                const phantomConfig =
-                  table.options.meta?.features?.phantomRowConfig ||
-                  (table.options.meta as any)?.phantomRowConfig;
+                const phantomConfig = table.options.meta?.phantomRowConfig;
                 const isPhantom = phantomConfig?.isPhantom?.(row);
 
                 let renderedRow;

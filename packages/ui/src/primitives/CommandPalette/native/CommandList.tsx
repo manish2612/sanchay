@@ -35,7 +35,7 @@ export const CommandGroup = ({
   children: React.ReactNode;
   heading?: string;
 }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <View>
       {heading && (
@@ -58,7 +58,7 @@ export const CommandGroup = ({
 
 export const CommandItem = ({ children, onSelect, value, disabled }: CommandItemProps) => {
   const { search, shouldFilter, filter } = useCommandContext();
-  const theme = useTheme();
+  const { theme } = useTheme();
 
   // Filter logic
   if (shouldFilter && value && search) {
@@ -82,7 +82,7 @@ export const CommandItem = ({ children, onSelect, value, disabled }: CommandItem
 };
 
 export const CommandShortcut = ({ children }: { children: React.ReactNode }) => {
-  const theme = useTheme();
+  const { theme } = useTheme();
   return (
     <Text
       style={{
@@ -97,12 +97,12 @@ export const CommandShortcut = ({ children }: { children: React.ReactNode }) => 
 };
 
 export const CommandSeparator = () => {
-  const { colors } = useTheme();
+  const { theme } = useTheme();
   return (
     <View
       style={{
         height: 1,
-        backgroundColor: colors.border,
+        backgroundColor: theme.colors.border,
         marginVertical: 4,
       }}
     />

@@ -247,7 +247,7 @@ export function NepaliCalendarEngine({
     .map((y) => ({
       label: nepaliLanguage === 'nepali' ? toNepaliNumber(y) : String(y),
       value: y,
-      disabled: (minNd && y < minNd.getYear()) || (maxNd && y > maxNd.getYear()),
+      disabled: Boolean((minNd && y < minNd.getYear()) || (maxNd && y > maxNd.getYear())),
     }))
     .filter((o) => !o.disabled);
 

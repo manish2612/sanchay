@@ -18,8 +18,10 @@ export interface WebTextInputProps
   inputClassName?: string;
 }
 
+import type { TextInputProps as RNTextInputProps } from 'react-native';
+
 // Native Input Props
-export interface NativeTextInputProps extends TextInputBaseProps {
+export interface NativeTextInputProps extends TextInputBaseProps, RNTextInputProps {
   className?: string; // Sometimes passed by cross-platform wrappers
   inputStyle?: any;
 }
