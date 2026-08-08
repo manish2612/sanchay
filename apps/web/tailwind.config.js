@@ -25,6 +25,12 @@ module.exports = {
             borderRadius: webTheme.radii,
             boxShadow: webTheme.shadows,
             spacing: webTheme.space,
+            height: {
+                screen: ['100vh', '100dvh'],
+            },
+            minHeight: {
+                screen: ['100vh', '100dvh'],
+            },
             keyframes: {
                 shake: {
                     '0%, 100%': { transform: 'translateX(0)' },

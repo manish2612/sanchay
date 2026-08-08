@@ -22,8 +22,8 @@ function SidebarContent({ appName, user, onLogout }: SidebarContentProps) {
 
   return (
     // z-[100] ensures tooltips sit above sticky headers.
-    // sticky top-0 h-screen ensures the sidebar doesn't scroll with the main body content.
-    <div className="relative flex h-screen sticky top-0 bg-background z-[100] flex-shrink-0">
+    // sticky top-0 h-dvh ensures the sidebar doesn't scroll with the main body content.
+    <div className="relative flex h-dvh sticky top-0 bg-background z-[100] flex-shrink-0">
       {/* Level 1 Icon Rail (Primary Color Scheme) */}
       <SidebarRail appName={appName} user={user} items={NAVIGATION_TREE} onLogout={onLogout} />
 

@@ -423,7 +423,7 @@
   .h-px {
     height: 1px;
   }
-  .h-screen {
+  .h-dvh {
     height: 100vh;
   }
   .max-h-\[85vh\] {
@@ -441,7 +441,7 @@
   .min-h-\[200px\] {
     min-height: 200px;
   }
-  .min-h-screen {
+  .min-h-dvh {
     min-height: 100vh;
   }
   .w-3\.5 {
