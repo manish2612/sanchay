@@ -4,22 +4,23 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, TextInput, Button, Icon, UniversalLink, Switch } from '@prime/ui';
-import { loginSchema, type LoginValues } from '../schema';
+import { signupSchema, type SignupValues } from '../schema';
 
-export function LoginForm() {
+export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
 
-  const form = useForm<LoginValues>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<SignupValues>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: '',
+      phone: '',
       password: '',
-      rememberMe: false,
+      terms: false,
     },
   });
 
-  const onSubmit = async (data: LoginValues) => {
+  const onSubmit = async (data: SignupValues) => {
     // API logic will go here later
     setGlobalError(null);
 
@@ -27,7 +28,7 @@ export function LoginForm() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Example of how a global error would be set on failure:
-    // setGlobalError('Invalid email or password.');
+    // setGlobalError('This email is already in use.');
   };
 
   return (
@@ -64,6 +65,30 @@ export function LoginForm() {
           )}
         />
 
+        {/* Phone Field */}
+        <Form.Field
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <Form.Item>
+              <Form.Control>
+                <TextInput
+                  {...field}
+                  label="Phone number"
+                  labelVariant="default"
+                  placeholder="+1 (555) 000-0000"
+                  type="tel"
+                  autoComplete="tel"
+                  className="h-12 px-4"
+                  inputClassName="text-base ml-1"
+                  leftSlot={<Icon name="Phone" size={20} className="text-muted-foreground/70" />}
+                />
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
+          )}
+        />
+
         {/* Password Field */}
         <Form.Field
           control={form.control}
@@ -75,9 +100,9 @@ export function LoginForm() {
                   {...field}
                   label="Password"
                   labelVariant="default"
-                  placeholder="Enter password here"
+                  placeholder="Create a password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   className="h-12 px-4"
                   inputClassName="text-base ml-1"
                   leftSlot={<Icon name="Lock" size={20} className="text-muted-foreground/70" />}
@@ -98,32 +123,31 @@ export function LoginForm() {
           )}
         />
 
-        {/* Remember Me & Forgot Password Row */}
-        <div className="flex items-center justify-between pt-1">
+        {/* Terms of Service Switch */}
+        <div className="pt-1">
           <Form.Field
             control={form.control}
-            name="rememberMe"
+            name="terms"
             render={({ field }) => (
               <Form.Item className="flex flex-row items-center space-x-2 space-y-0">
                 <Form.Control>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} id="remember-me" />
+                  <Switch checked={field.value} onCheckedChange={field.onChange} id="terms-of-service" />
                 </Form.Control>
                 <label
-                  htmlFor="remember-me"
+                  htmlFor="terms-of-service"
                   className="text-sm font-medium leading-none cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Remember me
+                  I agree to the Terms of Service and Privacy Policy
                 </label>
               </Form.Item>
             )}
           />
-
-          <UniversalLink
-            href="/forgot-password"
-            className="text-sm font-medium text-primary hover:underline hover:text-primary-hover transition-colors"
-          >
-            Forgot password?
-          </UniversalLink>
+          {/* Ensure error message for terms is displayed if validation fails */}
+          {form.formState.errors.terms && (
+            <p className="text-sm font-medium text-destructive mt-2">
+              {form.formState.errors.terms.message}
+            </p>
+          )}
         </div>
 
         {/* Submit Button */}
@@ -133,17 +157,17 @@ export function LoginForm() {
           className="w-full mt-4 h-12 text-base font-semibold"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+          {form.formState.isSubmitting ? 'Signing up...' : 'Sign up'}
         </Button>
 
         {/* Footer Link */}
         <div className="text-center mt-4 text-sm text-muted-foreground">
-          Don't have an account?{' '}
+          Already have an account?{' '}
           <UniversalLink
-            href="/signup"
+            href="/login"
             className="font-semibold text-primary hover:underline hover:text-primary-hover transition-colors"
           >
-            Sign up
+            Log In
           </UniversalLink>
         </div>
       </form>
