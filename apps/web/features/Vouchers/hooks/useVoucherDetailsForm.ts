@@ -20,8 +20,10 @@ const PARTY_ACCOUNT_OPTIONS = [
 export function useVoucherDetailsForm() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [mitiDate, setMitiDate] = useState<Date | undefined>(new Date());
+  const [mitiString, setMitiString] = useState<string>("");
   const [adDate, setAdDate] = useState<Date | undefined>(new Date());
   const [refMitiDate, setRefMitiDate] = useState<Date | undefined>();
+  const [refMitiString, setRefMitiString] = useState<string>("");
   const [refAdDate, setRefAdDate] = useState<Date | undefined>();
   const [partyQuery, setPartyQuery] = useState("");
 
@@ -38,8 +40,10 @@ export function useVoucherDetailsForm() {
   return {
     isDrawerOpen, setIsDrawerOpen,
     mitiDate, setMitiDate,
+    mitiString, setMitiString,
     adDate, setAdDate,
     refMitiDate, setRefMitiDate,
+    refMitiString, setRefMitiString,
     refAdDate, setRefAdDate,
     partyQuery, setPartyQuery,
     voucherType, setVoucherType,
