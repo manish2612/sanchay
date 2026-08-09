@@ -42,6 +42,9 @@ export interface AutoSuggestInputProps extends React.InputHTMLAttributes<HTMLInp
   success?: boolean;
   label?: string;
   labelVariant?: 'default' | 'in-field' | 'inline' | 'hidden';
+  leftSlot?: React.ReactNode;
+  rightSlot?: React.ReactNode;
+
   labelClassName?: string;
   isLoading?: boolean;
   className?: string;
