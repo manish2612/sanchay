@@ -84,6 +84,7 @@ export function NepaliCalendarEngine({
   const [currentYear, setCurrentYear] = useState(initialNd.getYear());
   const [currentMonth, setCurrentMonth] = useState(initialNd.getMonth());
   const [focusedDate, setFocusedDate] = useState<number | null>(null);
+  const [hoveredDate, setHoveredDate] = useState<number | null>(null);
 
   const dayRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -362,6 +363,9 @@ export function NepaliCalendarEngine({
                       tabIndex={d === tabTargetDate ? 0 : -1}
                       onKeyDown={(e) => handleGridKeyDown(e, d)}
                       onClick={() => handleSelectDate(d)}
+                      onMouseEnter={() => setHoveredDate(d)}
+                      onMouseLeave={() => setHoveredDate(null)}
+                      onFocus={() => setFocusedDate(d)}
                       className={`relative w-10 h-10 flex items-center justify-center leading-none rounded-full transition-colors mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
                     >
                       <span className="text-sm font-medium">
@@ -384,7 +388,21 @@ export function NepaliCalendarEngine({
       {/* English Date Footer */}
       <div className="mt-4 pt-3 border-t border-border flex items-center justify-center h-8">
         <span className="text-sm text-muted-foreground font-medium">
-          {selectedNd ? format(selectedNd.getDateObject(), 'dd MMMM yyyy') : <>&nbsp;</>}
+          {(() => {
+            try {
+              const activeDate = hoveredDate ?? focusedDate;
+              if (activeDate !== null) {
+                const activeNd = new NepaliDate(currentYear, currentMonth, activeDate);
+                return format(activeNd.getDateObject(), 'dd MMMM yyyy');
+              }
+              if (selectedNd) {
+                return format(selectedNd.getDateObject(), 'dd MMMM yyyy');
+              }
+            } catch (e) {
+              // Ignore invalid dates out of library bounds
+            }
+            return <>&nbsp;</>;
+          })()}
         </span>
       </div>
     </div>
