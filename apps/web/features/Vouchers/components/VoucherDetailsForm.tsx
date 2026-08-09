@@ -144,7 +144,11 @@ export function VoucherDetailsForm({
               label="Miti (bs)"
               labelVariant="in-field"
               date={mitiDate}
-              onDateChange={setMitiDate}
+              onDateChange={(date, meta) => {
+                setMitiDate(date);
+                setAdDate(date);
+                if (meta?.nepaliDateString) setMitiString(meta.nepaliDateString);
+              }}
               calendarType="nepali"
               placeholder="Select Miti"
             />
@@ -156,7 +160,10 @@ export function VoucherDetailsForm({
               label="Date (ad)"
               labelVariant="in-field"
               date={adDate}
-              onDateChange={setAdDate}
+              onDateChange={(date) => {
+                setAdDate(date);
+                setMitiDate(date);
+              }}
               calendarType="gregorian"
               placeholder="Select Date"
             />
@@ -270,7 +277,11 @@ export function VoucherDetailsForm({
               label="Ref. Miti (bs)"
               labelVariant="in-field"
               date={refMitiDate}
-              onDateChange={setRefMitiDate}
+              onDateChange={(date, meta) => {
+                setRefMitiDate(date);
+                setRefAdDate(date);
+                if (meta?.nepaliDateString) setRefMitiString(meta.nepaliDateString);
+              }}
               calendarType="nepali"
               placeholder="Select Miti"
             />
@@ -280,7 +291,10 @@ export function VoucherDetailsForm({
               label="Ref. Date (ad)"
               labelVariant="in-field"
               date={refAdDate}
-              onDateChange={setRefAdDate}
+              onDateChange={(date) => {
+                setRefAdDate(date);
+                setRefMitiDate(date);
+              }}
               calendarType="gregorian"
               placeholder="Select Date"
             />

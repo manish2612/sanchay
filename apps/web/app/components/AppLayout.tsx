@@ -28,7 +28,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const mockUser = { name: 'Admin User', email: 'admin@example.com' };
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex bg-background text-foreground selection:bg-primary/30">
+    <div className="h-dvh w-full overflow-hidden flex bg-background text-foreground selection:bg-primary/30">
       {/* Global Navigation Sidebar */}
       <Sidebar
         appName={APP_NAME}

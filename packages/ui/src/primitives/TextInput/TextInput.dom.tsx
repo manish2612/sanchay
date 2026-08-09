@@ -7,7 +7,7 @@ import { WebTextInputProps } from './types';
 import { useTextInput } from './useTextInput';
 
 const rootVariants = cva(
-  'flex items-center rounded-md border bg-transparent shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2',
+  'flex items-center rounded-md border bg-surface shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-focus-ring focus-within:ring-offset-2',
   {
     variants: {
       variant: {
