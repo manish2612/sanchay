@@ -191,7 +191,7 @@ export function NepaliCalendarEngine({
 
   const handleSelectDate = (d: number) => {
     const nd = new NepaliDate(currentYear, currentMonth, d);
-    onDateChange?.(nd.getDateObject()); // Fire native JS Date to consumer
+    onDateChange?.(nd.getDateObject(), { nepaliDateString: nd.format('YYYY-MM-DD') });
     setIsOpen(false);
   };
 

@@ -4,7 +4,7 @@ export interface DatePickerProps {
   /** The currently selected date */
   date?: Date;
   /** Callback fired when a date is selected */
-  onDateChange?: (date?: Date) => void;
+  onDateChange?: (date?: Date, meta?: { nepaliDateString?: string }) => void;
   /** Placeholder text when no date is selected */
   placeholder?: string;
   className?: string;
