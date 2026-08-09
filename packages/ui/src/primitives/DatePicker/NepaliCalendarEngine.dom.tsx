@@ -366,13 +366,13 @@ export function NepaliCalendarEngine({
                       onMouseEnter={() => setHoveredDate(d)}
                       onMouseLeave={() => setHoveredDate(null)}
                       onFocus={() => setFocusedDate(d)}
-                      className={`relative w-10 h-10 flex items-center justify-center leading-none rounded-full transition-colors mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
+                      className={`relative w-10 h-10 flex items-center justify-center leading-none rounded-md transition-colors mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
                     >
                       <span className="text-sm font-medium">
                         {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
                       </span>
                       <span
-                        className={`absolute bottom-0 right-1 text-[10px] font-medium ${secondaryTextClass}`}
+                        className={`absolute bottom-[2px] right-1 text-[10px] font-medium ${secondaryTextClass}`}
                       >
                         {engDate.getDate()}
                       </span>
