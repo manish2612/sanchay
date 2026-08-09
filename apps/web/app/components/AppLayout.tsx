@@ -17,10 +17,10 @@ export function AppLayout({ children }: AppLayoutProps) {
   // const { isAuthenticated, user } = useAuth();
   // if (!isAuthenticated && pathname !== "/login") return <Redirect to="/login" />
 
-  const isLoginPage = pathname === '/login';
+  // If we are on an auth page, render the page content without the Sidebar wrapper
+  const isAuthPage = pathname === '/login' || pathname === '/signup';
 
-  // If we are on the login page, render the page content without the Sidebar wrapper
-  if (isLoginPage) {
+  if (isAuthPage) {
     return <>{children}</>;
   }
 
