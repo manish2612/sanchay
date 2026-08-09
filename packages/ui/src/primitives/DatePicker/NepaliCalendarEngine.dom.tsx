@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NepaliDate from 'nepali-datetime';
+import { format } from 'date-fns';
 import { Icon } from '../Icon/Icon.dom';
 import { DatePickerProps } from './types';
 import { DatePickerDropdown } from './DatePickerDropdown.dom';
@@ -297,7 +298,7 @@ export function NepaliCalendarEngine({
             {displayDays.map((d) => (
               <th
                 key={d}
-                className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]"
+                className="text-muted-foreground rounded-md w-10 font-normal text-[0.8rem]"
               >
                 {d}
               </th>
@@ -328,7 +329,7 @@ export function NepaliCalendarEngine({
                 const isInvalid = d < 1 || d > daysInMonth;
 
                 if (isInvalid) {
-                  return <td key={col} className="p-0 text-center w-9 h-9" />;
+                  return <td key={col} className="p-0 text-center w-10 h-10" />;
                 }
 
                 const isTodayDate = isToday(d);
@@ -343,6 +344,13 @@ export function NepaliCalendarEngine({
                     'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-focus-ring';
                 }
 
+                let secondaryTextClass = 'text-muted-foreground';
+                if (isSelectedDate || isTodayDate) {
+                  secondaryTextClass = 'opacity-80'; // Inherit high-contrast parent text color
+                }
+
+                const engDate = new NepaliDate(currentYear, currentMonth, d).getDateObject();
+
                 return (
                   <td key={col} className={`p-0 text-center`}>
                     <button
@@ -354,9 +362,16 @@ export function NepaliCalendarEngine({
                       tabIndex={d === tabTargetDate ? 0 : -1}
                       onKeyDown={(e) => handleGridKeyDown(e, d)}
                       onClick={() => handleSelectDate(d)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors mx-auto text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
+                      className={`relative w-10 h-10 flex items-center justify-center leading-none rounded-full transition-colors mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
                     >
-                      {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
+                      <span className="text-sm font-medium">
+                        {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
+                      </span>
+                      <span
+                        className={`absolute bottom-0 right-1 text-[10px] font-medium ${secondaryTextClass}`}
+                      >
+                        {engDate.getDate()}
+                      </span>
                     </button>
                   </td>
                 );
@@ -365,6 +380,13 @@ export function NepaliCalendarEngine({
           ))}
         </tbody>
       </table>
+
+      {/* English Date Footer */}
+      <div className="mt-4 pt-3 border-t border-border flex items-center justify-center h-8">
+        <span className="text-sm text-muted-foreground font-medium">
+          {selectedNd ? format(selectedNd.getDateObject(), 'dd MMMM yyyy') : <>&nbsp;</>}
+        </span>
+      </div>
     </div>
   );
 }
