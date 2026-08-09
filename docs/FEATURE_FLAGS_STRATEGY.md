@@ -18,6 +18,7 @@ rollouts, and behavior in the ERP frontend without redeploying applications.
 ## Responsibilities of Feature Flags
 
 Feature flags may be used to:
+
 - Enable or disable features
 - Control gradual rollouts
 - Toggle experimental functionality
@@ -30,6 +31,7 @@ This list is illustrative, not exhaustive.
 ## What Feature Flags Must Not Do
 
 Feature flags must never:
+
 - Replace business rules
 - Encode workflow logic
 - Act as permanent configuration
@@ -44,6 +46,7 @@ Feature flags must never:
 - Modules consume flags via a stable interface
 
 Examples of providers:
+
 - Environment-based
 - Remote configuration
 - Server-driven flags

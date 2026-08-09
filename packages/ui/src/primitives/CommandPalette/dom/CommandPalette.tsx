@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { Command as CommandPrimitive } from "cmdk";
-import { CommandPaletteProps } from "../types";
-import { cn } from "../../../utils";
-import { Dialog, DialogContent } from "@radix-ui/react-dialog";
+import * as React from 'react';
+import { Command as CommandPrimitive } from 'cmdk';
+import { CommandPaletteProps } from '../types';
+import { cn } from '../../../utils';
+import { Dialog, DialogContent } from '@radix-ui/react-dialog';
 
 const CommandPalette = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -14,8 +14,8 @@ const CommandPalette = React.forwardRef<
     <CommandPrimitive
       ref={ref}
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground",
-        className
+        'flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground',
+        className,
       )}
       {...props}
     >
@@ -23,6 +23,6 @@ const CommandPalette = React.forwardRef<
     </CommandPrimitive>
   );
 });
-CommandPalette.displayName = "CommandPalette";
+CommandPalette.displayName = 'CommandPalette';
 
 export { CommandPalette };

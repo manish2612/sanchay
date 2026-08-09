@@ -1,4 +1,3 @@
-
 export interface ShortcutItem {
   id: string;
   label: string;

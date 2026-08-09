@@ -1,15 +1,15 @@
-import { FieldPath, FieldValues } from "react-hook-form"
-import { useFormField } from "./useFormField"
+import { FieldPath, FieldValues } from 'react-hook-form';
+import { useFormField } from './useFormField';
 
 export type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = {
-  name: TName
-}
+  name: TName;
+};
 
 export type FormItemContextValue = {
-  id: string
-}
+  id: string;
+};
 
-export type UseFormFieldReturn = ReturnType<typeof useFormField>
+export type UseFormFieldReturn = ReturnType<typeof useFormField>;

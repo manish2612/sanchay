@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Row, Table } from "@tanstack/react-table";
+import * as React from 'react';
+import { Row, Table } from '@tanstack/react-table';
 
 interface UseTableNavigationProps<TData> {
   table: Table<TData>;
@@ -49,14 +49,20 @@ export function useTableNavigation<TData>({
             const rowBody = newRowEl.firstElementChild || newRowEl;
             const targetCell = rowBody.children[colIndex];
             if (targetCell) {
-              elementToFocus = targetCell.querySelector("input:not([disabled])") || 
-                               targetCell.querySelector("select:not([disabled]), button:not([disabled]), [tabindex='0']");
+              elementToFocus =
+                targetCell.querySelector('input:not([disabled])') ||
+                targetCell.querySelector(
+                  "select:not([disabled]), button:not([disabled]), [tabindex='0']",
+                );
             }
           }
 
           if (!elementToFocus) {
-            elementToFocus = newRowEl.querySelector("input:not([disabled])") || 
-                             newRowEl.querySelector("select:not([disabled]), button:not([disabled]), [tabindex='0']");
+            elementToFocus =
+              newRowEl.querySelector('input:not([disabled])') ||
+              newRowEl.querySelector(
+                "select:not([disabled]), button:not([disabled]), [tabindex='0']",
+              );
           }
 
           if (elementToFocus) {
@@ -68,7 +74,7 @@ export function useTableNavigation<TData>({
         }
       }, 50);
     },
-    [scrollRef]
+    [scrollRef],
   );
 
   /**
@@ -96,13 +102,13 @@ export function useTableNavigation<TData>({
       const meta = getTableMeta();
 
       // Global Table Hotkey: CTRL+N to spawn/jump to Phantom Row
-      if (e.ctrlKey && !e.metaKey && e.key.toLowerCase() === "n") {
+      if (e.ctrlKey && !e.metaKey && e.key.toLowerCase() === 'n') {
         e.preventDefault();
 
         // Attempt to find a designated phantom row, fallback to absolute bottom if none exists
         const isPhantomFn = meta.phantomRowConfig?.isPhantom;
         const phantomIndex = rows.findIndex((r) =>
-          isPhantomFn ? isPhantomFn(r) : (r.original as any).isPhantom
+          isPhantomFn ? isPhantomFn(r) : (r.original as any).isPhantom,
         );
         const targetIndex = phantomIndex !== -1 ? phantomIndex : rows.length - 1;
 
@@ -117,22 +123,22 @@ export function useTableNavigation<TData>({
       // Escape Hatch: Do not intercept keys if the user is interacting with an internal component
       // that needs its own keyboard events (like a DropdownMenu, DatePicker, or Combobox).
       const target = e.target as HTMLElement;
-      
-      const isCombobox = target.closest('[role="combobox"]');
-      const isComboboxExpanded = isCombobox?.hasAttribute("data-expanded") 
-        ? isCombobox.getAttribute("data-expanded") === "true"
-        : isCombobox?.getAttribute("aria-expanded") === "true";
 
-      // If it's a closed combobox and the user is pressing ArrowUp/ArrowDown/Enter, 
+      const isCombobox = target.closest('[role="combobox"]');
+      const isComboboxExpanded = isCombobox?.hasAttribute('data-expanded')
+        ? isCombobox.getAttribute('data-expanded') === 'true'
+        : isCombobox?.getAttribute('aria-expanded') === 'true';
+
+      // If it's a closed combobox and the user is pressing ArrowUp/ArrowDown/Enter,
       // bypass the escape hatch to allow the grid to process the grid navigation or commit!
-      const isNavigatingClosedCombobox = 
-        Boolean(isCombobox) && 
-        !isComboboxExpanded && 
-        (e.key === "ArrowDown" || e.key === "ArrowUp" || e.key === "Enter");
+      const isNavigatingClosedCombobox =
+        Boolean(isCombobox) &&
+        !isComboboxExpanded &&
+        (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter');
 
       if (!isNavigatingClosedCombobox) {
         if (
-          target.tagName === "SELECT" ||
+          target.tagName === 'SELECT' ||
           target.isContentEditable ||
           isCombobox ||
           target.closest('[role="listbox"]') ||
@@ -144,7 +150,7 @@ export function useTableNavigation<TData>({
       }
 
       // Escape Hatch: Allow standard buttons to handle Enter/Space natively (e.g., triggering a popover)
-      if (target.closest("button") && (e.key === "Enter" || e.key === " ")) {
+      if (target.closest('button') && (e.key === 'Enter' || e.key === ' ')) {
         return;
       }
 
@@ -154,8 +160,7 @@ export function useTableNavigation<TData>({
        */
       const getColIndex = () => {
         const cell =
-          target.closest('td, [role="cell"], .table-cell') ||
-          target.closest('div[style*="width"]');
+          target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
         if (cell && cell.parentElement) {
           const cells = Array.from(cell.parentElement.children);
           return cells.indexOf(cell as HTMLElement);
@@ -163,14 +168,20 @@ export function useTableNavigation<TData>({
         return -1;
       };
 
-      if (e.key === "Tab") {
-        const isFocusable = target.tagName === "INPUT" || target.tagName === "BUTTON" || target.tagName === "SELECT" || target.hasAttribute("tabindex");
+      if (e.key === 'Tab') {
+        const isFocusable =
+          target.tagName === 'INPUT' ||
+          target.tagName === 'BUTTON' ||
+          target.tagName === 'SELECT' ||
+          target.hasAttribute('tabindex');
         if (!isFocusable) return;
 
         const rowEl = target.closest('[role="row"]');
         if (rowEl) {
           const focusables = Array.from(
-            rowEl.querySelectorAll("input:not([disabled]), select:not([disabled]), button:not([disabled]), [tabindex='0']")
+            rowEl.querySelectorAll(
+              "input:not([disabled]), select:not([disabled]), button:not([disabled]), [tabindex='0']",
+            ),
           ) as HTMLElement[];
           const focusableIndex = focusables.indexOf(target as HTMLElement);
 
@@ -178,12 +189,17 @@ export function useTableNavigation<TData>({
           if (!e.shiftKey && focusableIndex === focusables.length - 1) {
             const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
             const isLastRow = currentIndex === rows.length - 1;
-            
+
             const isPhantomFn = meta.phantomRowConfig?.isPhantom;
             const currentRow = rows[currentIndex];
-            const isPhantom = currentRow ? (isPhantomFn ? isPhantomFn(currentRow) : (currentRow.original as any)?.isPhantom) : false;
+            const isPhantom = currentRow
+              ? isPhantomFn
+                ? isPhantomFn(currentRow)
+                : (currentRow.original as any)?.isPhantom
+              : false;
 
-            const isRowEmpty = meta.isRowEmptyFn && currentRow ? meta.isRowEmptyFn(currentRow) : false;
+            const isRowEmpty =
+              meta.isRowEmptyFn && currentRow ? meta.isRowEmptyFn(currentRow) : false;
 
             const shouldExitNatively = isLastRow && isPhantom && isRowEmpty;
 
@@ -192,16 +208,14 @@ export function useTableNavigation<TData>({
 
               if (meta.onRowCommitFn) {
                 const gridColIndex = getColIndex();
-                const columnId = gridColIndex !== -1 ? table.getVisibleLeafColumns()[gridColIndex]?.id : undefined;
-                const cellValue = target.tagName === "INPUT" ? (target as HTMLInputElement).value : undefined;
+                const columnId =
+                  gridColIndex !== -1 ? table.getVisibleLeafColumns()[gridColIndex]?.id : undefined;
+                const cellValue =
+                  target.tagName === 'INPUT' ? (target as HTMLInputElement).value : undefined;
 
-                const action = meta.onRowCommitFn(
-                  currentIndex,
-                  columnId,
-                  cellValue
-                );
+                const action = meta.onRowCommitFn(currentIndex, columnId, cellValue);
 
-                if (action === "ADVANCE") {
+                if (action === 'ADVANCE') {
                   setSuccessRowIndex(currentIndex);
                   setTimeout(() => setSuccessRowIndex(null), 400);
 
@@ -211,7 +225,7 @@ export function useTableNavigation<TData>({
                     setEditingRowIndex(newIndex);
                     focusNewRowInput(newIndex, 0);
                   }, 0);
-                } else if (action === "EXIT") {
+                } else if (action === 'EXIT') {
                   setEditingRowIndex(-1);
                   setSuccessRowIndex(currentIndex);
                   setTimeout(() => setSuccessRowIndex(null), 400);
@@ -236,7 +250,7 @@ export function useTableNavigation<TData>({
               const newIndex = currentIndex - 1;
               setFocusedRowIndex(newIndex);
               setEditingRowIndex(newIndex);
-              
+
               // Try to focus the last column of the previous row
               const lastColIndex = table.getVisibleLeafColumns().length - 1;
               focusNewRowInput(newIndex, lastColIndex);
@@ -244,7 +258,7 @@ export function useTableNavigation<TData>({
             // If currentIndex === 0, DO NOT preventDefault! Let the browser natively Shift+Tab out.
           }
         }
-      } else if (e.key === "ArrowDown") {
+      } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         // Navigate to the next row while maintaining the exact column index
         const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
@@ -254,7 +268,7 @@ export function useTableNavigation<TData>({
           setEditingRowIndex(newIndex);
           focusNewRowInput(newIndex, getColIndex());
         }
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         // Navigate to the previous row while maintaining the exact column index
         const currentIndex = focusedRowIndex >= 0 ? focusedRowIndex : lastFocusedRowIndex;
@@ -264,11 +278,11 @@ export function useTableNavigation<TData>({
           setEditingRowIndex(newIndex);
           focusNewRowInput(newIndex, getColIndex());
         }
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         e.preventDefault();
 
         // If we are actively editing an input, Enter signifies a "Commit" attempt
-        if (target.tagName === "INPUT") {
+        if (target.tagName === 'INPUT') {
           if (meta.onRowCommitFn) {
             // Identify which column was committed and extract its raw value
             let colIndex = -1;
@@ -283,16 +297,12 @@ export function useTableNavigation<TData>({
             const columnId =
               colIndex !== -1 ? table.getVisibleLeafColumns()[colIndex]?.id : undefined;
             const cellValue =
-              target.tagName === "INPUT" ? (target as HTMLInputElement).value : undefined;
+              target.tagName === 'INPUT' ? (target as HTMLInputElement).value : undefined;
 
             // Delegate validation and routing to the consumer's business logic
-            const action = meta.onRowCommitFn(
-              focusedRowIndex,
-              columnId,
-              cellValue
-            );
+            const action = meta.onRowCommitFn(focusedRowIndex, columnId, cellValue);
 
-            if (action === "ADVANCE") {
+            if (action === 'ADVANCE') {
               // Consumer validated successfully and requested to advance to the next row
               setSuccessRowIndex(focusedRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400); // Trigger success flash animation
@@ -302,27 +312,29 @@ export function useTableNavigation<TData>({
                 const newIndex = focusedRowIndex + 1;
                 setFocusedRowIndex(newIndex);
                 setEditingRowIndex(newIndex);
-                
+
                 // Determine if we are moving into a Phantom Row (Create Mode).
                 // If newIndex >= rows.length, it means we committed the previous phantom row
                 // and React hasn't appended the new one yet, so it's guaranteed to be a phantom row!
                 const isPhantomFn = meta.phantomRowConfig?.isPhantom;
                 const targetRow = rows[newIndex];
-                const isTargetPhantom = targetRow 
-                  ? (isPhantomFn ? isPhantomFn(targetRow) : (targetRow.original as any)?.isPhantom)
+                const isTargetPhantom = targetRow
+                  ? isPhantomFn
+                    ? isPhantomFn(targetRow)
+                    : (targetRow.original as any)?.isPhantom
                   : true;
 
                 // If moving into a phantom row (Create Mode), snap to the first column.
                 // Otherwise, preserve the current column index (Edit Mode).
                 focusNewRowInput(newIndex, isTargetPhantom ? 0 : colIndex);
               }, 0);
-            } else if (action === "EXIT") {
+            } else if (action === 'EXIT') {
               // Consumer validated successfully and requested to end the edit session
               setEditingRowIndex(-1);
               setSuccessRowIndex(focusedRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400);
               rootRef.current?.focus(); // Return global focus to the table grid for arrow navigation
-            } else if (action === "STAY") {
+            } else if (action === 'STAY') {
               // Consumer rejected the commit (e.g., validation failed).
               // Stay in edit mode and do nothing here; consumer handles showing the error state.
             }
@@ -351,7 +363,7 @@ export function useTableNavigation<TData>({
       setSuccessRowIndex,
       rootRef,
       onRowClick,
-    ]
+    ],
   );
 
   /**
@@ -369,18 +381,13 @@ export function useTableNavigation<TData>({
 
       if (e) {
         const target = e.target as HTMLElement;
-        if (
-          target.tagName === "INPUT" ||
-          target.tagName === "SELECT" ||
-          target.closest("button")
-        ) {
+        if (target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.closest('button')) {
           return; // Don't steal focus from natively interactive elements
         }
 
         // If they clicked a non-interactive part of the row, try to focus the corresponding input
         const cell =
-          target.closest('td, [role="cell"], .table-cell') ||
-          target.closest('div[style*="width"]');
+          target.closest('td, [role="cell"], .table-cell') || target.closest('div[style*="width"]');
         if (cell) {
           const rowEl = cell.parentElement;
           if (rowEl) {
@@ -390,22 +397,18 @@ export function useTableNavigation<TData>({
             if (colIndex !== -1) {
               shouldFocusGrid = false;
               setTimeout(() => {
-                const newRowEl = scrollRef.current?.querySelector(
-                  `[data-index="${index}"]`
-                );
+                const newRowEl = scrollRef.current?.querySelector(`[data-index="${index}"]`);
                 if (newRowEl) {
                   const rowBody = newRowEl.firstElementChild || newRowEl;
                   const targetCell = rowBody.children[colIndex];
                   let focusable = targetCell?.querySelector(
-                    "input, select, button, [tabindex='0']"
+                    "input, select, button, [tabindex='0']",
                   );
 
                   // Fallback to first focusable element in the entire row if the clicked cell doesn't have one
                   // (e.g. clicking a read-only colSpan action row)
                   if (!focusable) {
-                    focusable = newRowEl.querySelector(
-                      "input, select, button, [tabindex='0']"
-                    );
+                    focusable = newRowEl.querySelector("input, select, button, [tabindex='0']");
                   }
 
                   if (focusable) {
@@ -424,7 +427,7 @@ export function useTableNavigation<TData>({
         rootRef.current?.focus();
       }
     },
-    [rows, setFocusedRowIndex, setEditingRowIndex, onRowClick, scrollRef, rootRef]
+    [rows, setFocusedRowIndex, setEditingRowIndex, onRowClick, scrollRef, rootRef],
   );
 
   return { handleKeyDown, handleRowClick, focusNewRowInput };

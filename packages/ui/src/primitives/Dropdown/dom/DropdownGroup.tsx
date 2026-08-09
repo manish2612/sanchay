@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
-import React from "react";
-import {
-  dropdownLabelClassName,
-  dropdownSeparatorClassName,
-} from "./styles.dom";
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import React from 'react';
+import { dropdownLabelClassName, dropdownSeparatorClassName } from './styles.dom';
 
 const DropdownGroup = DropdownMenuPrimitive.Group;
 
@@ -16,7 +13,7 @@ const DropdownLabel = React.forwardRef<
   return (
     <DropdownMenuPrimitive.Label
       ref={ref}
-      className={`${dropdownLabelClassName} ${className || ""}`}
+      className={`${dropdownLabelClassName} ${className || ''}`}
       style={style}
       {...props}
     />
@@ -31,7 +28,7 @@ const DropdownSeparator = React.forwardRef<
   return (
     <DropdownMenuPrimitive.Separator
       ref={ref}
-      className={`${dropdownSeparatorClassName} ${className || ""}`}
+      className={`${dropdownSeparatorClassName} ${className || ''}`}
       style={style}
       {...props}
     />

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Modal,
   View,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   SafeAreaView,
   Pressable,
-} from "react-native";
-import { useDropdownContext } from "./DropdownRoot";
-import { styles, getDropdownThemeStyles } from "./styles";
+} from 'react-native';
+import { useDropdownContext } from './DropdownRoot';
+import { styles, getDropdownThemeStyles } from './styles';
 
-import { useTheme } from "@prime/theme-provider";
-import { Icon } from "../../Icon/Icon.native";
+import { useTheme } from '@prime/theme-provider';
+import { Icon } from '../../Icon/Icon.native';
 
 const DropdownContent = ({ children, style }: any) => {
   const { open, setOpen } = useDropdownContext();
@@ -20,23 +20,11 @@ const DropdownContent = ({ children, style }: any) => {
   if (!open) return null;
 
   return (
-    <Modal
-      transparent
-      visible={open}
-      animationType="fade"
-      onRequestClose={() => setOpen(false)}
-    >
+    <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
       <TouchableWithoutFeedback onPress={() => setOpen(false)}>
         <SafeAreaView style={styles.overlay}>
           <TouchableWithoutFeedback>
-            <View
-              style={[
-                styles.content,
-                getDropdownThemeStyles(theme).content,
-
-                style,
-              ]}
-            >
+            <View style={[styles.content, getDropdownThemeStyles(theme).content, style]}>
               {/* Close Button Header (Optional but good for Mobile UX) */}
               {/* <View style={{ alignItems: "flex-end", marginBottom: 4 }}>
                 <Pressable

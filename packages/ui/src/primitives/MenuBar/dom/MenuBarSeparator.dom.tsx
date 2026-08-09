@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { cn } from "../../../utils";
-import { menuBarStyles } from "./styles.dom";
+import * as React from 'react';
+import * as MenubarPrimitive from '@radix-ui/react-menubar';
+import { cn } from '../../../utils';
+import { menuBarStyles } from './styles.dom';
 
 const MenuBarSeparator = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Separator>,

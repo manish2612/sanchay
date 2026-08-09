@@ -1,7 +1,5 @@
-"use client";
-import React, { createContext, ReactNode } from "react";
-import type { StyleProp, ViewStyle, TextStyle } from "react-native";
-
+'use client';
+import React, { createContext, ReactNode } from 'react';
 /**
  * Platform-agnostic Link props
  */
@@ -15,11 +13,11 @@ export interface LinkProps {
   /**
    * Pass-through styles
    */
-  style?: StyleProp<ViewStyle | TextStyle>;
+  style?: any;
   /**
    * Open in new tab? (Web only)
    */
-  target?: "_blank" | "_self" | "_parent" | "_top";
+  target?: '_blank' | '_self' | '_parent' | '_top';
   /**
    * Additional props passed to the underlying platform link
    */

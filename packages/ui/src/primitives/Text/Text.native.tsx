@@ -1,14 +1,14 @@
-import React from "react";
-import { Text as RNText, TextStyle, StyleSheet } from "react-native";
-import { useTheme } from "@prime/theme-provider";
-import { TextProps, TextColor } from "./types";
+import React from 'react';
+import { Text as RNText, TextStyle, StyleSheet } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
+import { TextProps, TextColor } from './types';
 
 export const Text = ({
-  variant = "body",
-  size = "md",
-  weight = "regular",
+  variant = 'body',
+  size = 'md',
+  weight = 'regular',
   align,
-  color = "foreground",
+  color = 'foreground',
   truncate,
   style,
   children,
@@ -32,7 +32,7 @@ export const Text = ({
   const baseStyle: TextStyle = {
     fontFamily,
     fontSize,
-    fontWeight: fontWeightValue as TextStyle["fontWeight"], // safe cast as we expect valid weight strings or numbers
+    fontWeight: fontWeightValue as TextStyle['fontWeight'], // safe cast as we expect valid weight strings or numbers
     color: textColor,
     textAlign: align,
   };
@@ -41,7 +41,7 @@ export const Text = ({
   const truncateProps = truncate
     ? {
         numberOfLines: 1,
-        ellipsizeMode: "tail" as const,
+        ellipsizeMode: 'tail' as const,
       }
     : {};
 

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { Form } from "../Form";
-import { FormWizardContext, useFormWizard } from "./hooks/useFormWizard";
-import { FormWizardProps } from "./types";
+import React, { useEffect } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+import { Form } from '../Form';
+import { FormWizardContext, useFormWizard } from './hooks/useFormWizard';
+import { FormWizardProps } from './types';
 
 export interface FormWizardRootProps extends FormWizardProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +19,7 @@ export const FormWizardRoot = ({
   initialStep,
   steps,
   children,
-  className = "",
+  className = '',
 }: FormWizardRootProps) => {
   const wizard = useFormWizard(initialStep, steps);
 
@@ -71,14 +71,21 @@ export const FormWizardRoot = ({
       if (isNaN(num) || num < 1 || num > (wizard.steps?.length || 0)) return;
 
       e.preventDefault();
-      
+
       // Execute the unified jump handler
       await validatedGoToStep(num);
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [wizard.currentStep, wizard.steps, wizard.goToStep, wizard.setRejectedStepIndex, form, validatedGoToStep]);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [
+    wizard.currentStep,
+    wizard.steps,
+    wizard.goToStep,
+    wizard.setRejectedStepIndex,
+    form,
+    validatedGoToStep,
+  ]);
 
   const contextValue = {
     ...wizard,

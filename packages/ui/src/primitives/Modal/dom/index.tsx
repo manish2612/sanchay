@@ -1,9 +1,9 @@
-import * as React from "react";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import * as React from 'react';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-import { cn } from "../../../utils";
-import { contentVariants, overlayVariants, closeVariants } from "./styles";
-import { Icon } from "../../Icon/Icon.dom"; // Use our Icon primitive
+import { cn } from '../../../utils';
+import { contentVariants, overlayVariants, closeVariants } from './styles';
+import { Icon } from '../../Icon/Icon.dom'; // Use our Icon primitive
 
 const Modal = DialogPrimitive.Root;
 
@@ -17,11 +17,7 @@ const ModalOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
-    ref={ref}
-    className={cn(overlayVariants(), className)}
-    {...props}
-  />
+  <DialogPrimitive.Overlay ref={ref} className={cn(overlayVariants(), className)} {...props} />
 ));
 ModalOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
@@ -31,11 +27,7 @@ const ModalContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <ModalPortal>
     <ModalOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(contentVariants(), className)}
-      {...props}
-    >
+    <DialogPrimitive.Content ref={ref} className={cn(contentVariants(), className)} {...props}>
       {children}
       <DialogPrimitive.Close className={cn(closeVariants())}>
         <Icon name="X" size={16} />
@@ -46,33 +38,18 @@ const ModalContent = React.forwardRef<
 ));
 ModalContent.displayName = DialogPrimitive.Content.displayName;
 
-const ModalHeader = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
-      className
-    )}
-    {...props}
-  />
+const ModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />
 );
-ModalHeader.displayName = "ModalHeader";
+ModalHeader.displayName = 'ModalHeader';
 
-const ModalFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const ModalFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
+    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
     {...props}
   />
 );
-ModalFooter.displayName = "ModalFooter";
+ModalFooter.displayName = 'ModalFooter';
 
 const ModalTitle = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Title>,
@@ -80,10 +57,7 @@ const ModalTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn(
-      "text-lg font-semibold leading-none tracking-tight",
-      className
-    )}
+    className={cn('text-lg font-semibold leading-none tracking-tight', className)}
     {...props}
   />
 ));
@@ -95,7 +69,7 @@ const ModalDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn('text-sm text-muted-foreground', className)}
     {...props}
   />
 ));

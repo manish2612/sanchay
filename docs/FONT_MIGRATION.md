@@ -14,11 +14,11 @@ The UI system uses a **Dependency Injection** pattern for fonts to ensure platfo
     }
     ```
 2.  **Adapters (`packages/theme-adapters`)**: Map these IDs to platform specifics.
-    -   **Web**: Keeps the variable name (e.g., `var(--font-ibm-plex-sans)`).
-    -   **Native**: Intercepts the variable and returns the Family Name (e.g., `"IBM Plex Sans"`).
+    - **Web**: Keeps the variable name (e.g., `var(--font-ibm-plex-sans)`).
+    - **Native**: Intercepts the variable and returns the Family Name (e.g., `"IBM Plex Sans"`).
 3.  **Loaders (App Layer)**: Responsible for actually loading the font files.
-    -   **Next.js**: Uses `next/font/google`.
-    -   **Expo**: Uses `@expo-google-fonts` + `expo-font`.
+    - **Next.js**: Uses `next/font/google`.
+    - **Expo**: Uses `@expo-google-fonts` + `expo-font`.
 
 ---
 
@@ -66,18 +66,21 @@ If you eject from Expo or move to a bare CLI workflow, you will switch from "Run
 Download `.ttf` files for IBM Plex Sans and Work Sans.
 
 **Step 2: Add to Native Projects**
--   **Android**: Copy `.ttf` files to `android/app/src/main/assets/fonts`.
--   **iOS**: Add `.ttf` files to the Xcode project and update `Info.plist` with the font filenames.
+
+- **Android**: Copy `.ttf` files to `android/app/src/main/assets/fonts`.
+- **iOS**: Add `.ttf` files to the Xcode project and update `Info.plist` with the font filenames.
 
 **Step 3: Remove Expo Loaders**
 In `apps/mobile/app/_layout.tsx`:
--   Remove `useFonts` hook.
--   Remove `@expo-google-fonts/*` dependencies.
+
+- Remove `useFonts` hook.
+- Remove `@expo-google-fonts/*` dependencies.
 
 **Step 4: Verify Names**
 Ensure the "Family Name" of the `.ttf` files matches what the Adapter expects.
--   The Adapter maps `var(--font-ibm-plex-sans)` -> `"IBM Plex Sans"`.
--   Verify your font files are recognized as "IBM Plex Sans" by the OS (standard behavior).
--   If you need to change the mapped name, update `packages/theme-adapters/src/native/index.ts`.
+
+- The Adapter maps `var(--font-ibm-plex-sans)` -> `"IBM Plex Sans"`.
+- Verify your font files are recognized as "IBM Plex Sans" by the OS (standard behavior).
+- If you need to change the mapped name, update `packages/theme-adapters/src/native/index.ts`.
 
 **Result**: React Native will look for "IBM Plex Sans" and find the system-linked font. No UI code changes required.

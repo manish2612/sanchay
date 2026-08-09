@@ -1,13 +1,7 @@
-"use client";
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
-import { usePathname } from "next/navigation";
-import { NAVIGATION_TREE } from "../../data/navigationTree";
+'use client';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
+import { NAVIGATION_TREE } from '../../data/navigationTree';
 
 interface SidebarContextType {
   isPanelOpen: boolean;
@@ -42,9 +36,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
         return l1.children.some((l2) => {
           if (l2.href && pathname.startsWith(l2.href)) return true;
           if (l2.children) {
-            return l2.children.some(
-              (l3) => l3.href && pathname.startsWith(l3.href),
-            );
+            return l2.children.some((l3) => l3.href && pathname.startsWith(l3.href));
           }
           return false;
         });
@@ -78,7 +70,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 export function useSidebar() {
   const context = useContext(SidebarContext);
   if (!context) {
-    throw new Error("useSidebar must be used within a SidebarProvider");
+    throw new Error('useSidebar must be used within a SidebarProvider');
   }
   return context;
 }

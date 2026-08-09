@@ -1,25 +1,15 @@
-import React, { useMemo } from "react";
-import { View, Text, ScrollView } from "react-native";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalTitle,
-  ModalDescription,
-} from "../Modal";
-import { TextInput } from "../TextInput/TextInput.native";
-import { ShortcutCheatSheetProps } from "./types";
-import { createStyles } from "./styles";
-import { useTheme } from "@prime/theme-provider";
+import React, { useMemo } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription } from '../Modal';
+import { TextInput } from '../TextInput/TextInput.native';
+import { ShortcutCheatSheetProps } from './types';
+import { createStyles } from './styles';
+import { useTheme } from '@prime/theme-provider';
 
-export const ShortcutCheatSheet = ({
-  open,
-  onOpenChange,
-  categories,
-}: ShortcutCheatSheetProps) => {
+export const ShortcutCheatSheet = ({ open, onOpenChange, categories }: ShortcutCheatSheetProps) => {
   const { theme } = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredCategories = useMemo(() => {
     if (!searchQuery) return categories;
@@ -28,16 +18,14 @@ export const ShortcutCheatSheet = ({
 
     return categories
       .map((category) => {
-        const categoryTitleMatches = category.title
-          .toLowerCase()
-          .includes(lowerQuery);
+        const categoryTitleMatches = category.title.toLowerCase().includes(lowerQuery);
 
         if (categoryTitleMatches) {
           return category;
         }
 
         const filteredItems = category.items.filter((item) =>
-          item.label.toLowerCase().includes(lowerQuery)
+          item.label.toLowerCase().includes(lowerQuery),
         );
 
         return {
@@ -56,18 +44,14 @@ export const ShortcutCheatSheet = ({
       <ModalContent>
         <ModalHeader>
           <ModalTitle>Keyboard Shortcuts</ModalTitle>
-          <ModalDescription>
-            List of available keyboard shortcuts.
-          </ModalDescription>
+          <ModalDescription>List of available keyboard shortcuts.</ModalDescription>
         </ModalHeader>
 
         <ScrollView style={styles.container}>
           <TextInput
-            style={{ marginBottom: theme.space[4] }}
+            style={{ marginBottom: theme.space[4] as any }}
             placeholder="Search shortcuts..."
-            placeholderTextColor={
-              (theme.colors as any).mutedForeground || "#999"
-            }
+            placeholderTextColor={theme.colors.mutedForeground || '#999'}
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -77,9 +61,9 @@ export const ShortcutCheatSheet = ({
               style={[
                 styles.itemLabel,
                 {
-                  textAlign: "center",
+                  textAlign: 'center',
                   marginVertical: 20,
-                  color: (theme.colors as any).mutedForeground || "#999",
+                  color: theme.colors.mutedForeground || '#999',
                 },
               ]}
             >
@@ -96,10 +80,7 @@ export const ShortcutCheatSheet = ({
 
                     <View style={styles.keysContainer}>
                       {item.keys.map((key, index) => (
-                        <View
-                          key={`${item.id}-key-${index}`}
-                          style={styles.keyCap}
-                        >
+                        <View key={`${item.id}-key-${index}`} style={styles.keyCap}>
                           <Text style={styles.keyText}>{key}</Text>
                         </View>
                       ))}

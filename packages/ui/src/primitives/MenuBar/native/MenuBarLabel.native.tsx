@@ -1,6 +1,6 @@
-import React from "react";
-import { Text, ViewStyle } from "react-native";
-import { useTheme } from "@prime/theme-provider";
+import React from 'react';
+import { Text, ViewStyle } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
 
 export function MenuBarLabel({
   children,
@@ -18,7 +18,7 @@ export function MenuBarLabel({
       style={[
         {
           fontSize: 12,
-          fontWeight: "600",
+          fontWeight: '600',
           paddingHorizontal: 8,
           paddingVertical: 4,
           marginTop: 4,

@@ -3,6 +3,7 @@
 ## Purpose
 
 This document defines the role and constraints of **application shells** for:
+
 - Web (Next.js)
 - Mobile (React Native)
 
@@ -22,6 +23,7 @@ Apps must remain thin and replaceable.
 ## What Is an App Shell?
 
 An app shell is responsible for:
+
 - Bootstrapping the runtime
 - Wiring providers
 - Handling platform-specific lifecycle
@@ -36,6 +38,7 @@ An app shell does **not** define business behavior.
 ### Primary Responsibilities (Illustrative, Not Exhaustive)
 
 The web app typically handles:
+
 - Routing (App Router / Pages)
 - SSR / RSC orchestration
 - SEO and metadata
@@ -48,6 +51,7 @@ The web app typically handles:
 ### Explicit Non-Responsibilities
 
 The web app **must not**:
+
 - Contain Prime business logic
 - Own global business state
 - Perform API logic directly
@@ -73,6 +77,7 @@ packages/* → apps/web
 ### Primary Responsibilities (Illustrative, Not Exhaustive)
 
 The mobile app typically handles:
+
 - Navigation setup
 - Native permissions
 - App lifecycle handling
@@ -85,6 +90,7 @@ The mobile app typically handles:
 ### Explicit Non-Responsibilities
 
 The mobile app **must not**:
+
 - Implement Prime rules
 - Own shared business state
 - Perform API logic

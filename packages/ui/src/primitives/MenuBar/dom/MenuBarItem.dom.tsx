@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import * as MenubarPrimitive from "@radix-ui/react-menubar";
-import { cn } from "../../../utils";
-import { menuBarStyles } from "./styles.dom";
+import * as React from 'react';
+import * as MenubarPrimitive from '@radix-ui/react-menubar';
+import { cn } from '../../../utils';
+import { menuBarStyles } from './styles.dom';
 
 const MenuBarItem = React.forwardRef<
   React.ElementRef<typeof MenubarPrimitive.Item>,
@@ -13,7 +13,7 @@ const MenuBarItem = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <MenubarPrimitive.Item
     ref={ref}
-    className={cn(menuBarStyles.item, inset && "pl-8", className)}
+    className={cn(menuBarStyles.item, inset && 'pl-8', className)}
     {...props}
   />
 ));

@@ -1,4 +1,3 @@
-
 export interface MenuBarProps {
   children?: React.ReactNode;
   style?: any;

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, useCallback } from "react";
-import { FormWizardContextValue, FormWizardStep } from "./types";
+import { createContext, useContext, useState, useCallback } from 'react';
+import { FormWizardContextValue, FormWizardStep } from '../types';
 
 export const FormWizardContext = createContext<FormWizardContextValue | null>(null);
 
 export const useFormWizardContext = () => {
   const context = useContext(FormWizardContext);
   if (!context) {
-    throw new Error("useFormWizardContext must be used within a FormWizard");
+    throw new Error('useFormWizardContext must be used within a FormWizard');
   }
   return context;
 };
@@ -25,11 +25,14 @@ export const useFormWizard = (initialStep = 1, steps: FormWizardStep[] = []) => 
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   }, []);
 
-  const goToStep = useCallback((step: number) => {
-    if (step >= 1 && step <= (steps.length || 1)) {
-      setCurrentStep(step);
-    }
-  }, [steps.length]);
+  const goToStep = useCallback(
+    (step: number) => {
+      if (step >= 1 && step <= (steps.length || 1)) {
+        setCurrentStep(step);
+      }
+    },
+    [steps.length],
+  );
 
   return {
     currentStep,

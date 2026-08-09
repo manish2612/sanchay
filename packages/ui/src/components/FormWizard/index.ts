@@ -1,10 +1,10 @@
-import { FormWizardRoot } from "./FormWizard";
-import { StepNav } from "./components/StepNav";
-import { FormHeader } from "./components/FormHeader";
-import { FormContainer } from "./components/FormContainer";
-import { FormContent } from "./components/FormContent";
-import { FormFooter } from "./components/FormFooter";
-import { FormSeparator } from "./components/FormSeparator";
+import { FormWizardRoot } from './FormWizard';
+import { StepNav } from './components/StepNav';
+import { FormHeader } from './components/FormHeader';
+import { FormContainer } from './components/FormContainer';
+import { FormContent } from './components/FormContent';
+import { FormFooter } from './components/FormFooter';
+import { FormSeparator } from './components/FormSeparator';
 
 export const FormWizard = Object.assign(FormWizardRoot, {
   StepNav,
@@ -15,5 +15,6 @@ export const FormWizard = Object.assign(FormWizardRoot, {
   Separator: FormSeparator,
 });
 
-export * from "./types";
-export { useFormWizardContext } from "./hooks/useFormWizard";
+export * from './types';
+export type { StepNavProps } from './components/StepNav';
+export { useFormWizardContext } from './hooks/useFormWizard';

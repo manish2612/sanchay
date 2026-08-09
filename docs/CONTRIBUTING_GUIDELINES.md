@@ -26,6 +26,7 @@ within the ERP frontend architecture.
 ## Reviews
 
 Code reviews must check:
+
 - Boundary violations
 - Duplication
 - Long-term maintainability

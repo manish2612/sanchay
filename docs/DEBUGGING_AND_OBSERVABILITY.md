@@ -10,6 +10,7 @@ are implemented for a large ERP frontend without impacting production.
 ## Core Constraints
 
 Debugging must:
+
 - Be fast
 - Be accurate
 - Not increase production bundle size
@@ -20,6 +21,7 @@ Debugging must:
 ## Debugging Strategy
 
 Debugging is implemented via:
+
 - Dev-only debug layer
 - Structured logging
 - Request and response tracing
@@ -38,6 +40,7 @@ Debugging is implemented via:
 ## What Is Observable
 
 Typical observable signals include:
+
 - API calls
 - Navigation events
 - State transitions
@@ -50,6 +53,7 @@ This list is illustrative.
 ## What Is Not Allowed
 
 Debugging must not:
+
 - Mutate state
 - Alter behavior
 - Leak sensitive data

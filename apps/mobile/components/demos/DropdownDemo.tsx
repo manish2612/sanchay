@@ -1,7 +1,7 @@
-import { View, StyleSheet, ViewStyle, TextStyle, Alert } from "react-native";
+import { View, StyleSheet, ViewStyle, TextStyle, Alert } from 'react-native';
 
-import { DropdownMenu, Text } from "@prime/ui";
-import { useTheme } from "@prime/theme-provider";
+import { DropdownMenu, Text } from '@prime/ui';
+import { useTheme } from '@prime/theme-provider';
 
 export const DropdownDemo = () => {
   const { theme } = useTheme();
@@ -21,16 +21,16 @@ export const DropdownDemo = () => {
             triggerLabel="Options"
             items={[
               {
-                id: "1",
-                label: "Edit Profile",
-                icon: "Pencil",
-                onSelect: () => Alert.alert("Edit Profile"),
+                id: '1',
+                label: 'Edit Profile',
+                icon: 'Pencil',
+                onSelect: () => Alert.alert('Edit Profile'),
               },
               {
-                id: "2",
-                label: "Preferences",
-                icon: "Settings",
-                onSelect: () => Alert.alert("Preferences"),
+                id: '2',
+                label: 'Preferences',
+                icon: 'Settings',
+                onSelect: () => Alert.alert('Preferences'),
               },
             ]}
           />
@@ -46,28 +46,28 @@ export const DropdownDemo = () => {
             searchable
             items={[
               {
-                id: "1",
-                label: "Alice Johnson",
-                icon: "User",
-                onSelect: () => Alert.alert("Selected Alice"),
+                id: '1',
+                label: 'Alice Johnson',
+                icon: 'User',
+                onSelect: () => Alert.alert('Selected Alice'),
               },
               {
-                id: "2",
-                label: "Bob Smith",
-                icon: "User",
-                onSelect: () => Alert.alert("Selected Bob"),
+                id: '2',
+                label: 'Bob Smith',
+                icon: 'User',
+                onSelect: () => Alert.alert('Selected Bob'),
               },
               {
-                id: "3",
-                label: "Charlie Brown",
-                icon: "User",
-                onSelect: () => Alert.alert("Selected Charlie"),
+                id: '3',
+                label: 'Charlie Brown',
+                icon: 'User',
+                onSelect: () => Alert.alert('Selected Charlie'),
               },
               {
-                id: "4",
-                label: "David Williams",
-                icon: "User",
-                onSelect: () => Alert.alert("Selected David"),
+                id: '4',
+                label: 'David Williams',
+                icon: 'User',
+                onSelect: () => Alert.alert('Selected David'),
               },
             ]}
           />

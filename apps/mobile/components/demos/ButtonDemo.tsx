@@ -1,10 +1,10 @@
-import React from "react";
-import { View } from "react-native";
-import { Button, Text, useResponsiveValues } from "@prime/ui";
+import React from 'react';
+import { View } from 'react-native';
+import { Button, Text, useResponsiveValues } from '@prime/ui';
 
 export function ButtonDemo() {
   const { width } = useResponsiveValues({
-    width: { base: "100%", xl: "48%" } as const,
+    width: { base: '100%', xl: '48%' } as const,
   });
 
   return (

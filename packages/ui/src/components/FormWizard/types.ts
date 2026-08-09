@@ -1,10 +1,10 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export interface FormWizardStep {
   id: string | number;
   title: string;
   description?: string;
-  status?: "pending" | "in-progress" | "done";
+  status?: 'pending' | 'in-progress' | 'done';
   isOptional?: boolean;
   fields?: string[];
 }

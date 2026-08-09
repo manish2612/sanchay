@@ -12,7 +12,7 @@ export interface CommandPaletteProps {
   className?: string; // Web only
 }
 
-export interface CommandDialogProps extends RadixDialogProps { 
+export interface CommandDialogProps extends RadixDialogProps {
   children?: ReactNode;
 }
 

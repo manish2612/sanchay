@@ -17,8 +17,10 @@ export interface DatePickerProps {
   calendarType?: 'gregorian' | 'nepali';
   /** If using calendarType='nepali', controls whether to display the text in English or Nepali script. Defaults to english. */
   nepaliLanguage?: 'english' | 'nepali';
-  /** Optional props strictly for the underlying react-day-picker (only applies when calendarType is gregorian) */
-  dayPickerProps?: Omit<DayPickerProps, 'mode' | 'selected' | 'onSelect' | 'fromDate' | 'toDate'>;
+  dayPickerProps?: Omit<
+    DayPickerProps,
+    'mode' | 'selected' | 'onSelect' | 'fromDate' | 'toDate' | 'startMonth' | 'endMonth'
+  >;
   label?: string;
-  labelVariant?: "default" | "in-field" | "inline" | "hidden";
+  labelVariant?: 'default' | 'in-field' | 'inline' | 'hidden';
 }

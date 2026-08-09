@@ -1,6 +1,6 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import { Icon } from "@prime/ui";
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import { Icon } from '@prime/ui';
 
 interface SidebarRailUserProps {
   user: {
@@ -28,9 +28,9 @@ export function SidebarRailUser({
 
   const getInitials = (name: string) => {
     return name
-      .split(" ")
+      .split(' ')
       .map((n) => n[0])
-      .join("")
+      .join('')
       .toUpperCase()
       .slice(0, 2);
   };
@@ -51,9 +51,9 @@ export function SidebarRailUser({
       }
     }
     if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onPopoverToggle]);
 
   const handleToggle = () => {
@@ -73,8 +73,8 @@ export function SidebarRailUser({
         onMouseLeave={onMouseLeave}
         className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold shadow-sm transition-all ${
           isOpen
-            ? "bg-sidebar-avatar-bg text-sidebar-avatar-text ring-2 ring-focus-ring/60 ring-offset-1 ring-offset-primary scale-105"
-            : "bg-sidebar-avatar-bg text-sidebar-avatar-text hover:scale-105 hover:ring-2 hover:ring-focus-ring/60 hover:ring-offset-1 hover:ring-offset-primary"
+            ? 'bg-sidebar-avatar-bg text-sidebar-avatar-text ring-2 ring-focus-ring/60 ring-offset-1 ring-offset-primary scale-105'
+            : 'bg-sidebar-avatar-bg text-sidebar-avatar-text hover:scale-105 hover:ring-2 hover:ring-focus-ring/60 hover:ring-offset-1 hover:ring-offset-primary'
         }`}
       >
         {user.avatarUrl ? (
@@ -92,18 +92,11 @@ export function SidebarRailUser({
       {isOpen && (
         <div className="absolute left-full ml-4 bottom-0 w-[240px] bg-surface border border-border shadow-xl rounded-lg p-2 z-[100] flex flex-col cursor-default">
           <div className="px-3 py-3 border-b border-border mb-1">
-            <div className="font-bold text-sm text-foreground truncate">
-              {user.name}
-            </div>
-            <div className="text-xs text-mutedForeground truncate">
-              {user.email}
-            </div>
+            <div className="font-bold text-sm text-foreground truncate">{user.name}</div>
+            <div className="text-xs text-mutedForeground truncate">{user.email}</div>
           </div>
           <button className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left">
-            <Icon
-              name="User"
-              className="text-[18px] mr-2 text-mutedForeground"
-            />
+            <Icon name="User" className="text-[18px] mr-2 text-mutedForeground" />
             Profile & Account
           </button>
           {onLogout && (

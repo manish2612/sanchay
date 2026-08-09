@@ -41,6 +41,8 @@
         "@hookform/resolvers": "^3.0.0 || ^4.0.0 || ^5.0.0"
     },
     "devDependencies": {
+        "@storybook/react": "^10.5.7",
+        "@testing-library/jest-dom": "^6.4.2",
         "@types/react": "^19.0.0",
         "@types/react-native": "^0.73.0",
         "@types/react-native-vector-icons": "^6.4.18",

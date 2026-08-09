@@ -1,19 +1,10 @@
-"use client";
+'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import {
-  ThemeProvider as NextThemesProvider,
-  useTheme as useNextTheme,
-} from "next-themes";
-import { useThemeAdapter } from "@prime/theme-adapters";
-import { Brand, Mode, Density } from "@prime/design-tokens";
-import { ThemeProviderProps, UseThemeResult } from "../types";
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from 'next-themes';
+import { useThemeAdapter } from '@prime/theme-adapters';
+import { Brand, Mode, Density } from '@prime/design-tokens';
+import { ThemeProviderProps, UseThemeResult } from '../types';
 
 const ThemeContext = createContext<UseThemeResult | null>(null);
 
@@ -40,37 +31,40 @@ const InnerProvider = ({
     document.cookie = `prime-density=${newDensity}; path=/; max-age=31536000`;
   }, []);
 
-  const setMode = React.useCallback((newMode: Mode | "system") => {
-    setNextThemeMode(newMode);
-    document.cookie = `prime-mode=${newMode}; path=/; max-age=31536000`;
-  }, [setNextThemeMode]);
+  const setMode = React.useCallback(
+    (newMode: Mode | 'system') => {
+      setNextThemeMode(newMode);
+      document.cookie = `prime-mode=${newMode}; path=/; max-age=31536000`;
+    },
+    [setNextThemeMode],
+  );
 
   // Determine current effective mode for tokens
   // next-themes can return 'system' for resolvedTheme during SSR before mounting.
   // We MUST enforce it to be either 'light' or 'dark' to prevent token crashes.
-  let currentMode = (resolvedTheme as Mode) || "light";
-  if (currentMode !== "light" && currentMode !== "dark") {
-    currentMode = "light";
+  let currentMode = (resolvedTheme as Mode) || 'light';
+  if (currentMode !== 'light' && currentMode !== 'dark') {
+    currentMode = 'light';
   }
 
   // Get current raw theme object using the adapter
   const adapterResult = useMemo(() => {
-    return useThemeAdapter(brand, currentMode as Mode, density, "web");
+    return useThemeAdapter(brand, currentMode as Mode, density, 'web');
   }, [brand, currentMode, density]);
 
   // Generate Global CSS for all Mode x Density combinations
   const globalStyles = useMemo(() => {
-    const modes: Mode[] = ["light", "dark"];
-    const densities: Density[] = ["comfortable", "compact", "spacious"];
+    const modes: Mode[] = ['light', 'dark'];
+    const densities: Density[] = ['comfortable', 'compact', 'spacious'];
 
-    let css = "";
+    let css = '';
 
     modes.forEach((m) => {
       densities.forEach((d) => {
-        const result = useThemeAdapter(brand, m, d, "web");
+        const result = useThemeAdapter(brand, m, d, 'web');
         const selector = `[data-theme='${m}'] .prime-density-${d}, [data-theme='${m}'].prime-density-${d}`;
-        const block = (result.webCSSVariables || "").replace(":root", selector);
-        css += block + "\n";
+        const block = (result.webCSSVariables || '').replace(':root', selector);
+        css += block + '\n';
       });
     });
 
@@ -93,9 +87,9 @@ const InnerProvider = ({
   // Apply density class to body
   useEffect(() => {
     const classes = [
-      "prime-density-compact",
-      "prime-density-comfortable",
-      "prime-density-spacious",
+      'prime-density-compact',
+      'prime-density-comfortable',
+      'prime-density-spacious',
     ];
     document.body.classList.remove(...classes);
     document.body.classList.add(`prime-density-${density}`);
@@ -108,17 +102,17 @@ const InnerProvider = ({
   const value = useMemo<UseThemeResult>(
     () => ({
       theme: adapterResult.theme,
-      // We must expose the user's PREFERENCE (e.g., 'system'), not the resolved currentMode, 
+      // We must expose the user's PREFERENCE (e.g., 'system'), not the resolved currentMode,
       // so that UI toggles correctly reflect if 'system' is selected.
-      mode: (userPreference as Mode | "system") || "system",
+      mode: (userPreference as Mode | 'system') || 'system',
       brand,
       density,
       setMode,
       setBrand,
       setDensity,
-      isDark: currentMode === "dark",
+      isDark: currentMode === 'dark',
     }),
-    [adapterResult.theme, userPreference, brand, density, setMode, currentMode]
+    [adapterResult.theme, userPreference, brand, density, setMode, currentMode],
   );
 
   return (
@@ -131,9 +125,9 @@ const InnerProvider = ({
 
 export const ThemeProvider = ({
   children,
-  initialBrand = "classic",
+  initialBrand = 'classic',
   initialMode,
-  initialDensity = "comfortable",
+  initialDensity = 'comfortable',
 }: ThemeProviderProps) => {
   return (
     // @ts-ignore
@@ -143,10 +137,7 @@ export const ThemeProvider = ({
       enableSystem
       disableTransitionOnChange
     >
-      <InnerProvider
-        initialBrand={initialBrand}
-        initialDensity={initialDensity}
-      >
+      <InnerProvider initialBrand={initialBrand} initialDensity={initialDensity}>
         {children}
       </InnerProvider>
     </NextThemesProvider>
@@ -156,7 +147,7 @@ export const ThemeProvider = ({
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
 };

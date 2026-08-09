@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@config "../../../apps/web/tailwind.config.js";
+
+/* Standard Tailwind setup */
+@layer base {
+  :root {
+    /* Base fallbacks */
+  }
+}

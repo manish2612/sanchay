@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { Pressable, Text, ViewStyle } from "react-native";
-import { useTheme } from "@prime/theme-provider";
-import { MenuBarContext, MenuContext } from "./contexts.native";
-import { getMenuBarStyles } from "./styles";
+import React, { useContext } from 'react';
+import { Pressable, Text, ViewStyle } from 'react-native';
+import { useTheme } from '@prime/theme-provider';
+import { MenuBarContext, MenuContext } from './contexts.native';
+import { getMenuBarStyles } from './styles';
 
 export function MenuBarTrigger({
   children,
@@ -29,11 +29,7 @@ export function MenuBarTrigger({
       onPress={handlePress}
       style={[styles.trigger, isOpen && styles.triggerActive, style]}
     >
-      {typeof children === "string" ? (
-        <Text style={styles.triggerText}>{children}</Text>
-      ) : (
-        children
-      )}
+      {typeof children === 'string' ? <Text style={styles.triggerText}>{children}</Text> : children}
     </Pressable>
   );
 }

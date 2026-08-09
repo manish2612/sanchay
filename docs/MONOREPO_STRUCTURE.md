@@ -5,6 +5,7 @@
 This document defines the **physical and logical structure** of the Prime ERP frontend monorepo.
 
 The structure is designed to:
+
 - Enforce architectural boundaries
 - Maximize code reuse
 - Scale to large teams and large codebases
@@ -15,6 +16,7 @@ The structure is designed to:
 ## Top-Level Layout
 
 prime/
+
 - apps/
 - packages/
 - tooling/
@@ -30,6 +32,7 @@ prime/
 Navigation is a **platform concern**.
 
 Rules:
+
 - Navigation libraries live only in app shells
 - Shared code triggers navigation via abstraction only
 - No module or UI component imports platform navigation APIs
@@ -44,16 +47,17 @@ apps/
 ├── web/
 └── mobile/
 
-
 ### apps/web (Next.js)
 
 Some of the responsibilities:
+
 - Routing
 - SSR / RSC
 - SEO
 - Web-only providers
 
 Rules:
+
 - May import from `packages/*`
 - Must not export logic back to packages
 - Must not contain Prime ERP business rules
@@ -63,11 +67,13 @@ Rules:
 ### apps/mobile (React Native)
 
 Some of the responsibilities:
+
 - Navigation
 - Native permissions
 - Native lifecycle handling
 
 Rules:
+
 - Same rules as web app
 - No Prime ERP logic
 - No shared state ownership
@@ -89,12 +95,12 @@ packages/
 ├── types/
 └── debug/
 
-
 ---
 
 ## packages/ui/
 
 Purpose:
+
 - Shared UI system across web and mobile
 
 Sample Structure:
@@ -104,8 +110,8 @@ ui/
 ├── theme/
 └── index.ts
 
-
 Rules:
+
 - Use platform files where required
 - No business logic
 - No API calls
@@ -116,6 +122,7 @@ Rules:
 ## packages/modules/
 
 Purpose:
+
 - Prime ERP business domains
 
 Sample Structure:
@@ -126,14 +133,15 @@ modules/
 ├── inventory/
 └── reports/
 
-
 Each module may contain:
+
 - API usage
 - Domain state
 - Domain components
 - Screens
 
 Rules:
+
 - Modules must not depend on apps
 - Modules must not access platform APIs
 - Modules must not manage navigation directly
@@ -143,15 +151,18 @@ Rules:
 ## packages/hooks/
 
 Purpose:
+
 - Cross-cutting reusable logic
 
 Some of the examples:
+
 - Auth helpers
 - Permissions
 - Feature flag readers
 - Utility hooks
 
 Rules:
+
 - No platform assumptions
 - No side effects without explicit intent
 
@@ -160,15 +171,18 @@ Rules:
 ## packages/services/
 
 Purpose:
+
 - Infrastructure layer
 
 Some of the includes:
+
 - API client
 - Auth handling
 - Storage abstraction
 - Network abstraction
 
 Rules:
+
 - Platform differences handled via adapters
 - Prime ERP modules consume services, not implementations
 
@@ -177,15 +191,18 @@ Rules:
 ## packages/state/
 
 Purpose:
+
 - Shared global state
 
 Sample use cases:
+
 - Auth
 - User
 - Settings
 - Cached data
 
 Rules:
+
 - No business rules
 - No API orchestration
 - Optional persistence only
@@ -195,15 +212,18 @@ Rules:
 ## packages/offline/
 
 Purpose:
+
 - Optional offline-first infrastructure
 
 Contains:
+
 - Offline engine
 - Sync manager
 - Mutation queue
 - Conflict resolution strategies
 
 Rules:
+
 - Must be invisible to Prime ERP modules
 - Must be disabled by default
 - Must introduce zero overhead when disabled
@@ -213,14 +233,17 @@ Rules:
 ## packages/config/
 
 Purpose:
+
 - Centralized configuration
 
 Includes:
+
 - Environment config
 - Feature toggles
 - Build-time flags
 
 Rules:
+
 - Typed access only
 - No direct env access in modules
 
@@ -229,14 +252,17 @@ Rules:
 ## packages/types/
 
 Purpose:
+
 - Shared contracts
 
 Includes:
+
 - API payloads
 - Domain models
 - Shared enums
 
 Rules:
+
 - Treated as contracts
 - Changes require coordination with backend
 
@@ -245,14 +271,17 @@ Rules:
 ## packages/debug/
 
 Purpose:
+
 - Dev-only debugging and observability
 
 Includes:
+
 - Loggers
 - Tracing
 - Debug panels
 
 Rules:
+
 - Never included in production builds
 - Fully gated by environment flags
 
@@ -261,14 +290,17 @@ Rules:
 ## tooling/
 
 Purpose:
+
 - Developer experience and consistency
 
 Includes:
+
 - ESLint config
 - TS config
 - Metro / Next tooling
 
 Rules:
+
 - Tooling must not affect runtime behavior
 
 ---
@@ -284,7 +316,6 @@ packages → apps
 modules → platform APIs
 ui → business logic
 
-
 Breaking these rules is an architectural violation.
 
 ---
@@ -294,8 +325,8 @@ Breaking these rules is an architectural violation.
 This structure is intentionally strict.
 
 It trades short-term freedom for:
+
 - Long-term velocity
 - Safety
 - Predictability
 - ERP-grade maintainability
-

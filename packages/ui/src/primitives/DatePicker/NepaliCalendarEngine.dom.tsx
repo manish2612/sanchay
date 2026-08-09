@@ -1,12 +1,39 @@
-import React, { useState, useEffect, useRef } from "react";
-import NepaliDate from "nepali-datetime";
-import { Icon } from "../Icon/Icon.dom";
-import { DatePickerProps } from "./types";
-import { DatePickerDropdown } from "./DatePickerDropdown.dom";
+import React, { useState, useEffect, useRef } from 'react';
+import NepaliDate from 'nepali-datetime';
+import { format } from 'date-fns';
+import { Icon } from '../Icon/Icon.dom';
+import { DatePickerProps } from './types';
+import { DatePickerDropdown } from './DatePickerDropdown.dom';
 
 const BS_MONTHS = {
-  english: ['Baisakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra', 'Ashwin', 'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'],
-  nepali: ['वैशाख', 'जेठ', 'असार', 'साउन', 'भदौ', 'असोज', 'कात्तिक', 'मंसिर', 'पुष', 'माघ', 'फागुन', 'चैत'],
+  english: [
+    'Baisakh',
+    'Jestha',
+    'Ashadh',
+    'Shrawan',
+    'Bhadra',
+    'Ashwin',
+    'Kartik',
+    'Mangsir',
+    'Poush',
+    'Magh',
+    'Falgun',
+    'Chaitra',
+  ],
+  nepali: [
+    'वैशाख',
+    'जेठ',
+    'असार',
+    'साउन',
+    'भदौ',
+    'असोज',
+    'कात्तिक',
+    'मंसिर',
+    'पुष',
+    'माघ',
+    'फागुन',
+    'चैत',
+  ],
 };
 
 const BS_DAYS = {
@@ -15,7 +42,8 @@ const BS_DAYS = {
 };
 
 const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
-const toNepaliNumber = (num: number) => num.toString().replace(/\d/g, (d) => nepaliDigits[parseInt(d)]);
+const toNepaliNumber = (num: number) =>
+  num.toString().replace(/\d/g, (d) => nepaliDigits[parseInt(d)]);
 
 // Helper to get number of days in a BS month by catching out-of-range errors
 const getDaysInBSMonth = (year: number, month: number) => {
@@ -42,20 +70,21 @@ export function NepaliCalendarEngine({
   const maxNd = maxDate ? new NepaliDate(maxDate) : null;
 
   const clampNepali = (nd: NepaliDate) => {
-    if (minNd && (nd.getYear() * 100 + nd.getMonth()) < (minNd.getYear() * 100 + minNd.getMonth())) {
+    if (minNd && nd.getYear() * 100 + nd.getMonth() < minNd.getYear() * 100 + minNd.getMonth()) {
       return new NepaliDate(minNd.getYear(), minNd.getMonth(), 1);
     }
-    if (maxNd && (nd.getYear() * 100 + nd.getMonth()) > (maxNd.getYear() * 100 + maxNd.getMonth())) {
+    if (maxNd && nd.getYear() * 100 + nd.getMonth() > maxNd.getYear() * 100 + maxNd.getMonth()) {
       return new NepaliDate(maxNd.getYear(), maxNd.getMonth(), 1);
     }
     return nd;
   };
 
   const initialNd = clampNepali(date ? new NepaliDate(date) : new NepaliDate());
-  
+
   const [currentYear, setCurrentYear] = useState(initialNd.getYear());
   const [currentMonth, setCurrentMonth] = useState(initialNd.getMonth());
   const [focusedDate, setFocusedDate] = useState<number | null>(null);
+  const [hoveredDate, setHoveredDate] = useState<number | null>(null);
 
   const dayRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -78,19 +107,33 @@ export function NepaliCalendarEngine({
   const handleNextMonth = () => {
     let y = currentYear;
     let m = currentMonth + 1;
-    if (m > 11) { m = 0; y += 1; }
+    if (m > 11) {
+      m = 0;
+      y += 1;
+    }
     updateCalendar(y, m);
   };
 
   const handlePrevMonth = () => {
     let y = currentYear;
     let m = currentMonth - 1;
-    if (m < 0) { m = 11; y -= 1; }
+    if (m < 0) {
+      m = 11;
+      y -= 1;
+    }
     updateCalendar(y, m);
   };
 
-  const isPrevDisabled = Boolean(minNd && (currentYear < minNd.getYear() || (currentYear === minNd.getYear() && currentMonth <= minNd.getMonth())));
-  const isNextDisabled = Boolean(maxNd && (currentYear > maxNd.getYear() || (currentYear === maxNd.getYear() && currentMonth >= maxNd.getMonth())));
+  const isPrevDisabled = Boolean(
+    minNd &&
+    (currentYear < minNd.getYear() ||
+      (currentYear === minNd.getYear() && currentMonth <= minNd.getMonth())),
+  );
+  const isNextDisabled = Boolean(
+    maxNd &&
+    (currentYear > maxNd.getYear() ||
+      (currentYear === maxNd.getYear() && currentMonth >= maxNd.getMonth())),
+  );
 
   const daysInMonth = getDaysInBSMonth(currentYear, currentMonth);
 
@@ -99,21 +142,31 @@ export function NepaliCalendarEngine({
     let newMonth = currentMonth;
     let newYear = currentYear;
 
-    if (e.key === 'ArrowRight') { newDate += 1; }
-    else if (e.key === 'ArrowLeft') { newDate -= 1; }
-    else if (e.key === 'ArrowDown') { newDate += 7; }
-    else if (e.key === 'ArrowUp') { newDate -= 7; }
-    else return;
+    if (e.key === 'ArrowRight') {
+      newDate += 1;
+    } else if (e.key === 'ArrowLeft') {
+      newDate -= 1;
+    } else if (e.key === 'ArrowDown') {
+      newDate += 7;
+    } else if (e.key === 'ArrowUp') {
+      newDate -= 7;
+    } else return;
 
     e.preventDefault();
 
     if (newDate > daysInMonth) {
       newMonth += 1;
       newDate -= daysInMonth;
-      if (newMonth > 11) { newMonth = 0; newYear += 1; }
+      if (newMonth > 11) {
+        newMonth = 0;
+        newYear += 1;
+      }
     } else if (newDate < 1) {
       newMonth -= 1;
-      if (newMonth < 0) { newMonth = 11; newYear -= 1; }
+      if (newMonth < 0) {
+        newMonth = 11;
+        newYear -= 1;
+      }
       newDate = getDaysInBSMonth(newYear, newMonth) + newDate;
     }
 
@@ -123,7 +176,7 @@ export function NepaliCalendarEngine({
       if (maxNd && targetTime > maxNd.getDateObject().getTime()) return;
     } catch (err) {
       // Invalid date block (e.g. out of BS 2000-2099 bounds)
-      return; 
+      return;
     }
 
     if (newMonth !== currentMonth || newYear !== currentYear) {
@@ -144,14 +197,21 @@ export function NepaliCalendarEngine({
 
   const startDayOfWeek = new NepaliDate(currentYear, currentMonth, 1).getDay();
   const todayNd = new NepaliDate();
-  const isToday = (d: number) => todayNd.getYear() === currentYear && todayNd.getMonth() === currentMonth && todayNd.getDate() === d;
-  
+  const isToday = (d: number) =>
+    todayNd.getYear() === currentYear &&
+    todayNd.getMonth() === currentMonth &&
+    todayNd.getDate() === d;
+
   const selectedNd = date ? new NepaliDate(date) : null;
-  const isSelected = (d: number) => selectedNd && selectedNd.getYear() === currentYear && selectedNd.getMonth() === currentMonth && selectedNd.getDate() === d;
+  const isSelected = (d: number) =>
+    selectedNd &&
+    selectedNd.getYear() === currentYear &&
+    selectedNd.getMonth() === currentMonth &&
+    selectedNd.getDate() === d;
 
   const displayMonths = BS_MONTHS[nepaliLanguage];
   const displayDays = BS_DAYS[nepaliLanguage];
-  
+
   // nepali-datetime supports strictly BS 2000 to 2099. We must not exceed these bounds.
   const MIN_BS_YEAR = 2000;
   const MAX_BS_YEAR = 2099;
@@ -160,8 +220,14 @@ export function NepaliCalendarEngine({
   // Roving tabindex target resolution
   const getTabTargetDate = () => {
     if (focusedDate !== null) return focusedDate;
-    if (selectedNd && selectedNd.getYear() === currentYear && selectedNd.getMonth() === currentMonth) return selectedNd.getDate();
-    if (todayNd.getYear() === currentYear && todayNd.getMonth() === currentMonth) return todayNd.getDate();
+    if (
+      selectedNd &&
+      selectedNd.getYear() === currentYear &&
+      selectedNd.getMonth() === currentMonth
+    )
+      return selectedNd.getDate();
+    if (todayNd.getYear() === currentYear && todayNd.getMonth() === currentMonth)
+      return todayNd.getDate();
     return 1;
   };
   const tabTargetDate = getTabTargetDate();
@@ -179,17 +245,18 @@ export function NepaliCalendarEngine({
     return { label: m, value: idx, disabled };
   });
 
-  const yearOptions = years.map(y => ({
-    label: nepaliLanguage === 'nepali' ? toNepaliNumber(y) : String(y),
-    value: y,
-    disabled: (minNd && y < minNd.getYear()) || (maxNd && y > maxNd.getYear())
-  })).filter(o => !o.disabled);
+  const yearOptions = years
+    .map((y) => ({
+      label: nepaliLanguage === 'nepali' ? toNepaliNumber(y) : String(y),
+      value: y,
+      disabled: Boolean((minNd && y < minNd.getYear()) || (maxNd && y > maxNd.getYear())),
+    }))
+    .filter((o) => !o.disabled);
 
   return (
     <div className="p-3">
       {/* Navigation Header */}
       <div className="flex justify-between items-center mb-4">
-        
         {/* Month / Year Selectors */}
         <div className="flex gap-1 items-center">
           <DatePickerDropdown
@@ -206,10 +273,20 @@ export function NepaliCalendarEngine({
 
         {/* Prev / Next Arrows */}
         <div className="flex gap-1">
-          <button type="button" disabled={isPrevDisabled} onClick={handlePrevMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
+          <button
+            type="button"
+            disabled={isPrevDisabled}
+            onClick={handlePrevMonth}
+            className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none"
+          >
             <Icon name="ChevronLeft" size={18} />
           </button>
-          <button type="button" disabled={isNextDisabled} onClick={handleNextMonth} className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none">
+          <button
+            type="button"
+            disabled={isNextDisabled}
+            onClick={handleNextMonth}
+            className="h-7 w-7 bg-transparent p-0 flex items-center justify-center rounded-md hover:bg-surface-variant transition-colors text-foreground focus:outline-none focus:ring-2 focus:ring-focus-ring disabled:opacity-30 disabled:pointer-events-none"
+          >
             <Icon name="ChevronRight" size={18} />
           </button>
         </div>
@@ -220,7 +297,10 @@ export function NepaliCalendarEngine({
         <thead>
           <tr className="flex">
             {displayDays.map((d) => (
-              <th key={d} className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]">
+              <th
+                key={d}
+                className="text-muted-foreground rounded-md w-10 font-normal text-[0.8rem]"
+              >
                 {d}
               </th>
             ))}
@@ -232,39 +312,70 @@ export function NepaliCalendarEngine({
               {Array.from({ length: 7 }).map((_, col) => {
                 const dayIndex = row * 7 + col;
                 const d = dayIndex - startDayOfWeek + 1;
-                
-                const isOutOfBounds = 
-                  (minNd && (currentYear < minNd.getYear() || (currentYear === minNd.getYear() && currentMonth < minNd.getMonth()) || (currentYear === minNd.getYear() && currentMonth === minNd.getMonth() && d < minNd.getDate()))) ||
-                  (maxNd && (currentYear > maxNd.getYear() || (currentYear === maxNd.getYear() && currentMonth > maxNd.getMonth()) || (currentYear === maxNd.getYear() && currentMonth === maxNd.getMonth() && d > maxNd.getDate())));
+
+                const isOutOfBounds =
+                  (minNd &&
+                    (currentYear < minNd.getYear() ||
+                      (currentYear === minNd.getYear() && currentMonth < minNd.getMonth()) ||
+                      (currentYear === minNd.getYear() &&
+                        currentMonth === minNd.getMonth() &&
+                        d < minNd.getDate()))) ||
+                  (maxNd &&
+                    (currentYear > maxNd.getYear() ||
+                      (currentYear === maxNd.getYear() && currentMonth > maxNd.getMonth()) ||
+                      (currentYear === maxNd.getYear() &&
+                        currentMonth === maxNd.getMonth() &&
+                        d > maxNd.getDate())));
 
                 const isInvalid = d < 1 || d > daysInMonth;
 
                 if (isInvalid) {
-                  return <td key={col} className="p-0 text-center w-9 h-9" />;
+                  return <td key={col} className="p-0 text-center w-10 h-10" />;
                 }
 
                 const isTodayDate = isToday(d);
                 const isSelectedDate = isSelected(d);
 
-                let btnClasses = "hover:bg-surface-variant text-foreground focus:ring-focus-ring";
+                let btnClasses = 'hover:bg-surface-variant text-foreground focus:ring-focus-ring';
                 if (isSelectedDate) {
-                  btnClasses = "bg-primary text-primary-foreground font-bold hover:opacity-90 focus:ring-foreground";
+                  btnClasses =
+                    'bg-primary text-primary-foreground font-bold hover:opacity-90 focus:ring-foreground';
                 } else if (isTodayDate) {
-                  btnClasses = "bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-focus-ring";
+                  btnClasses =
+                    'bg-secondary text-secondary-foreground hover:bg-secondary/80 focus:ring-focus-ring';
                 }
+
+                let secondaryTextClass = 'text-muted-foreground';
+                if (isSelectedDate || isTodayDate) {
+                  secondaryTextClass = 'opacity-80'; // Inherit high-contrast parent text color
+                }
+
+                const engDate = new NepaliDate(currentYear, currentMonth, d).getDateObject();
 
                 return (
                   <td key={col} className={`p-0 text-center`}>
                     <button
                       type="button"
                       disabled={Boolean(isOutOfBounds)}
-                      ref={el => dayRefs.current[d] = el}
+                      ref={(el) => {
+                        dayRefs.current[d] = el;
+                      }}
                       tabIndex={d === tabTargetDate ? 0 : -1}
                       onKeyDown={(e) => handleGridKeyDown(e, d)}
                       onClick={() => handleSelectDate(d)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-full transition-colors mx-auto text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
+                      onMouseEnter={() => setHoveredDate(d)}
+                      onMouseLeave={() => setHoveredDate(null)}
+                      onFocus={() => setFocusedDate(d)}
+                      className={`relative w-10 h-10 flex items-center justify-center leading-none rounded-full transition-colors mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-popover disabled:opacity-30 disabled:pointer-events-none ${btnClasses}`}
                     >
-                      {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
+                      <span className="text-sm font-medium">
+                        {nepaliLanguage === 'nepali' ? toNepaliNumber(d) : d}
+                      </span>
+                      <span
+                        className={`absolute bottom-0 right-1 text-[10px] font-medium ${secondaryTextClass}`}
+                      >
+                        {engDate.getDate()}
+                      </span>
                     </button>
                   </td>
                 );
@@ -273,6 +384,27 @@ export function NepaliCalendarEngine({
           ))}
         </tbody>
       </table>
+
+      {/* English Date Footer */}
+      <div className="mt-4 pt-3 border-t border-border flex items-center justify-center h-8">
+        <span className="text-sm text-muted-foreground font-medium">
+          {(() => {
+            try {
+              const activeDate = hoveredDate ?? focusedDate;
+              if (activeDate !== null) {
+                const activeNd = new NepaliDate(currentYear, currentMonth, activeDate);
+                return format(activeNd.getDateObject(), 'dd MMMM yyyy');
+              }
+              if (selectedNd) {
+                return format(selectedNd.getDateObject(), 'dd MMMM yyyy');
+              }
+            } catch (e) {
+              // Ignore invalid dates out of library bounds
+            }
+            return <>&nbsp;</>;
+          })()}
+        </span>
+      </div>
     </div>
   );
 }
