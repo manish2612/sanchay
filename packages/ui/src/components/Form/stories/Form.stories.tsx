@@ -60,8 +60,20 @@ const RHFCompositionDemo = () => {
       </div>
 
       <div className="border border-border p-6 rounded-xl bg-surface shadow-sm">
+        <div className="mb-4 p-4 bg-blue-50 text-blue-800 rounded-md">
+          <p className="text-sm font-medium mb-2">Navigation Testing:</p>
+          <div className="flex gap-4">
+            <a href="https://google.com" className="text-blue-600 underline">External Link</a>
+            <a href="/?path=/story/components-form--composition" className="text-blue-600 underline">Internal Link</a>
+            <button onClick={() => window.history.pushState(null, '', '/test')} className="text-blue-600 underline">Programmatic pushState</button>
+          </div>
+          <p className="text-xs text-blue-600 mt-2 opacity-80">
+            Note: Clicking different stories in the Storybook sidebar will trigger the prompt via replaceState, but Storybook will still change the story because it forces React renders via cross-frame postMessage, bypassing standard browser routing blocks. Test using the links above instead!
+          </p>
+        </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <Form.LeavePrompt />
             <Form.Section
               title="Basic Information"
               description="General details about the department."

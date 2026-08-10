@@ -9,6 +9,7 @@ import { FormDescription } from './FormDescription';
 import { FormMessage } from './FormMessage';
 import { FormSection } from './FormSection';
 import { useFormField } from './useFormField';
+import { FormLeavePrompt } from './FormLeavePrompt';
 
 export const Form = Object.assign(FormRoot, {
   Field: FormField,
@@ -18,6 +19,7 @@ export const Form = Object.assign(FormRoot, {
   Description: FormDescription,
   Message: FormMessage,
   Section: FormSection,
+  LeavePrompt: FormLeavePrompt,
 });
 
 export { useFormField };

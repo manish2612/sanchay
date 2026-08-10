@@ -99,6 +99,7 @@ export const FormWizardRoot = ({
           onSubmit={onSubmit ? form.handleSubmit(onSubmit) : undefined}
           className={`flex flex-col lg:flex-row h-full w-full overflow-hidden ${className}`}
         >
+          <Form.LeavePrompt />
           {children}
         </form>
       </Form>
