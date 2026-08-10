@@ -90,13 +90,13 @@ const CreateLedgerPage = () => {
   const getHeaderIcon = (step: number) => {
     switch (step) {
       case 1:
-        return <GeneralInfoGraphic className="w-64 h-auto" primaryOffset={{ x: 20, y: 15 }} />;
+        return <GeneralInfoGraphic className="w-54 h-auto" primaryOffset={{ x: 20, y: 15 }} />;
       case 2:
-        return <BillingCreditGraphic className="w-64 h-auto" primaryOffset={{ x: 0, y: 16 }} />;
+        return <BillingCreditGraphic className="w-54 h-auto" primaryOffset={{ x: 0, y: 16 }} />;
       case 3:
-        return <ContactLocationGraphic className="w-64 h-auto" primaryOffset={{ x: 0, y: -8 }} />;
+        return <ContactLocationGraphic className="w-54 h-auto" primaryOffset={{ x: 0, y: -8 }} />;
       case 4:
-        return <ContactGraphic className="w-64 h-auto" primaryOffset={{ x: 0, y: -15 }} />;
+        return <ContactGraphic className="w-54 h-auto" primaryOffset={{ x: 0, y: -15 }} />;
       default:
         return <Icon name="Book" size={48} className="stroke-[1.25] text-primary" />;
     }
