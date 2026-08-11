@@ -2,6 +2,11 @@
 
 @config "../tailwind.config.js";
 
+:root {
+    --font-ibm-plex-sans: 'IBM Plex Sans', sans-serif;
+    --font-work-sans: 'Work Sans', sans-serif;
+}
+
 @layer base {
     /* 
    * Global font defaults are handled by ThemeProvider (via CSS vars) 

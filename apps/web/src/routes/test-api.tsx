@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import { apiClient } from '@prime/services';
 
-export default function TestApiPage() {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/test-api')({
+  component: TestApiPage,
+})
+
+function TestApiPage() {
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);

@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useNavigate } from "@tanstack/react-router";
 import { FormWizard, Icon, useFormWizardContext } from "@prime/ui";
 
 import { companyFormSchema, type CompanyFormValues } from "./schema";
@@ -48,7 +48,7 @@ const FormWizardHeaderWithContext = ({
 };
 
 const CreateCompanyPage = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const form = useForm<CompanyFormValues>({
     mode: "onChange",
@@ -73,7 +73,7 @@ const CreateCompanyPage = () => {
   const onSubmit = (data: CompanyFormValues) => {
     console.log("Submitted company data:", data);
     alert("Company created successfully! Check console for details.");
-    router.push("/");
+    navigate({ to: "/" });
   };
 
   const getHeaderIcon = (step: number) => {
@@ -119,7 +119,7 @@ const CreateCompanyPage = () => {
 
           <WizardContent form={form} />
 
-          <FormWizard.Footer onCancel={() => router.push("/")} />
+          <FormWizard.Footer onCancel={() => navigate({ to: "/" })} />
         </FormWizard.Container>
       </FormWizard>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
+import { useLocation } from '@tanstack/react-router';
 import { Sidebar } from '../../features/Navigation/components/Sidebar';
 import { APP_NAME } from '@prime/config';
 
@@ -10,7 +10,8 @@ interface AppLayoutProps {
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   // TODO: [AUTHENTICATION]
   // Once authentication is implemented, you can check user session here.

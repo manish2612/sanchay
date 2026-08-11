@@ -4,7 +4,13 @@ import { useState } from 'react';
 import LoginLayout from '../../features/Auth/Login/Login'; // Importing the new Login layout
 import { createClient } from '@prime/api';
 
-export default function LoginPage() {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/login')({
+  component: LoginPage,
+})
+
+function LoginPage() {
   const [responseMsg, setResponseMsg] = useState<string | null>(null);
 
   // The actual login form implementation will be added to the left panel of LoginLayout later.

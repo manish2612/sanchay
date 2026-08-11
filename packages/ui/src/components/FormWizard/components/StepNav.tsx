@@ -90,7 +90,9 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
           {/* Entity Zone */}
           <div className="px-6 pt-7 pb-4 relative flex-shrink-0">
             {typeof title === 'string' ? (
-              <h2 className="font-head text-[17px] font-bold text-fg leading-tight">{title}</h2>
+              <h2 className="font-head text-xl font-extrabold text-foreground truncate tracking-tight leading-none">
+                {title}
+              </h2>
             ) : (
               title
             )}

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { FormWizard, Icon, useFormWizardContext } from '@prime/ui';
 
 import { ledgerFormSchema, type LedgerFormValues } from './schema';
@@ -51,7 +51,7 @@ const FormWizardHeaderWithContext = ({
 };
 
 const CreateLedgerPage = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const form = useForm<LedgerFormValues>({
     mode: 'onChange',
@@ -84,7 +84,7 @@ const CreateLedgerPage = () => {
   const onSubmit = (data: LedgerFormValues) => {
     console.log('Submitted ledger data:', data);
     alert('Ledger created successfully! Check console for details.');
-    router.push('/accounts/masters/ledger');
+    navigate({ to: '/accounts/masters/ledger' });
   };
 
   const getHeaderIcon = (step: number) => {
@@ -112,7 +112,7 @@ const CreateLedgerPage = () => {
 
           <WizardContent form={form} />
 
-          <FormWizard.Footer onCancel={() => router.push('/accounts/masters/ledger')} />
+          <FormWizard.Footer onCancel={() => navigate({ to: '/accounts/masters/ledger' })} />
         </FormWizard.Container>
       </FormWizard>
     </div>
