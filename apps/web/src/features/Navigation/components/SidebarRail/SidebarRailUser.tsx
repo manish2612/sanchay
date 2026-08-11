@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Icon } from '@prime/ui';
+import { Icon, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 
 interface SidebarRailUserProps {
   user: {
@@ -9,8 +9,6 @@ interface SidebarRailUserProps {
     avatarUrl?: string;
   };
   onLogout?: () => void;
-  onMouseEnter: (e: React.MouseEvent, text: string) => void;
-  onMouseLeave: () => void;
   onPopoverToggle: (isOpen: boolean) => void;
   forceClose: boolean;
 }
@@ -18,8 +16,6 @@ interface SidebarRailUserProps {
 export function SidebarRailUser({
   user,
   onLogout,
-  onMouseEnter,
-  onMouseLeave,
   onPopoverToggle,
   forceClose,
 }: SidebarRailUserProps) {
@@ -60,33 +56,33 @@ export function SidebarRailUser({
     const nextState = !isOpen;
     setIsOpen(nextState);
     onPopoverToggle(nextState);
-    if (nextState) {
-      onMouseLeave(); // Hide tooltip when popover opens
-    }
   };
 
   return (
     <div className="relative flex justify-center w-full" ref={menuRef}>
-      <button
-        onClick={handleToggle}
-        onMouseEnter={(e) => !isOpen && onMouseEnter(e, user.name)}
-        onMouseLeave={onMouseLeave}
-        className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold shadow-sm transition-all ${
-          isOpen
-            ? 'bg-sidebar-avatar-bg text-sidebar-avatar-text ring-2 ring-focus-ring/60 ring-offset-1 ring-offset-primary scale-105'
-            : 'bg-sidebar-avatar-bg text-sidebar-avatar-text hover:scale-105 hover:ring-2 hover:ring-focus-ring/60 hover:ring-offset-1 hover:ring-offset-primary'
-        }`}
-      >
-        {user.avatarUrl ? (
-          <img
-            src={user.avatarUrl}
-            alt={user.name}
-            className="w-full h-full rounded-full object-cover"
-          />
-        ) : (
-          getInitials(user.name)
-        )}
-      </button>
+      <Tooltip open={isOpen ? false : undefined}>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleToggle}
+            className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold shadow-sm transition-all ${
+              isOpen
+                ? 'bg-white/30 text-white ring-2 ring-white/50'
+                : 'bg-white/20 text-white hover:ring-2 hover:ring-white/50'
+            }`}
+          >
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                className="w-full h-full rounded-full object-cover"
+              />
+            ) : (
+              getInitials(user.name)
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right">{user.name}</TooltipContent>
+      </Tooltip>
 
       {/* Popover Menu */}
       {isOpen && (

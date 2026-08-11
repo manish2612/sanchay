@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import { Icon } from '@prime/ui';
+import { Icon, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 import { useTheme } from '@prime/theme-provider/web';
 import { Brand, Density, Mode } from '@prime/design-tokens';
 
@@ -18,15 +18,11 @@ const AVAILABLE_DENSITIES: { id: Density; label: string }[] = [
 ];
 
 interface SidebarRailSettingsProps {
-  onMouseEnter: (e: React.MouseEvent, text: string) => void;
-  onMouseLeave: () => void;
   onPopoverToggle: (isOpen: boolean) => void;
   forceClose: boolean;
 }
 
 export function SidebarRailSettings({
-  onMouseEnter,
-  onMouseLeave,
   onPopoverToggle,
   forceClose,
 }: SidebarRailSettingsProps) {
@@ -60,23 +56,23 @@ export function SidebarRailSettings({
     const nextState = !isOpen;
     setIsOpen(nextState);
     onPopoverToggle(nextState);
-    if (nextState) {
-      onMouseLeave(); // Hide tooltip when popover opens
-    }
   };
 
   return (
     <div className="relative flex justify-center w-full" ref={menuRef}>
-      <button
-        onClick={handleToggle}
-        onMouseEnter={(e) => !isOpen && onMouseEnter(e, 'Settings & Theme')}
-        onMouseLeave={onMouseLeave}
-        className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
-          isOpen ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
-        }`}
-      >
-        <Icon name="Settings" className="text-[22px]" />
-      </button>
+      <Tooltip open={isOpen ? false : undefined}>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleToggle}
+            className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+              isOpen ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <Icon name="Settings" className="text-[22px]" />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right">Settings & Theme</TooltipContent>
+      </Tooltip>
 
       {/* Settings Popover */}
       {isOpen && (

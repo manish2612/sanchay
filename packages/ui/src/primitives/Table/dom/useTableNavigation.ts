@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Row, Table } from '@tanstack/react-table';
+import { TABLE_ROW_COMMIT_ACTIONS } from './constants';
 
 interface UseTableNavigationProps<TData> {
   table: Table<TData>;
@@ -215,7 +216,7 @@ export function useTableNavigation<TData>({
 
                 const action = meta.onRowCommitFn(currentIndex, columnId, cellValue);
 
-                if (action === 'ADVANCE') {
+                if (action === TABLE_ROW_COMMIT_ACTIONS.ADVANCE) {
                   setSuccessRowIndex(currentIndex);
                   setTimeout(() => setSuccessRowIndex(null), 400);
 
@@ -225,7 +226,7 @@ export function useTableNavigation<TData>({
                     setEditingRowIndex(newIndex);
                     focusNewRowInput(newIndex, 0);
                   }, 0);
-                } else if (action === 'EXIT') {
+                } else if (action === TABLE_ROW_COMMIT_ACTIONS.EXIT) {
                   setEditingRowIndex(-1);
                   setSuccessRowIndex(currentIndex);
                   setTimeout(() => setSuccessRowIndex(null), 400);
@@ -302,7 +303,7 @@ export function useTableNavigation<TData>({
             // Delegate validation and routing to the consumer's business logic
             const action = meta.onRowCommitFn(focusedRowIndex, columnId, cellValue);
 
-            if (action === 'ADVANCE') {
+            if (action === TABLE_ROW_COMMIT_ACTIONS.ADVANCE) {
               // Consumer validated successfully and requested to advance to the next row
               setSuccessRowIndex(focusedRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400); // Trigger success flash animation
@@ -328,13 +329,13 @@ export function useTableNavigation<TData>({
                 // Otherwise, preserve the current column index (Edit Mode).
                 focusNewRowInput(newIndex, isTargetPhantom ? 0 : colIndex);
               }, 0);
-            } else if (action === 'EXIT') {
+            } else if (action === TABLE_ROW_COMMIT_ACTIONS.EXIT) {
               // Consumer validated successfully and requested to end the edit session
               setEditingRowIndex(-1);
               setSuccessRowIndex(focusedRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400);
               rootRef.current?.focus(); // Return global focus to the table grid for arrow navigation
-            } else if (action === 'STAY') {
+            } else if (action === TABLE_ROW_COMMIT_ACTIONS.STAY) {
               // Consumer rejected the commit (e.g., validation failed).
               // Stay in edit mode and do nothing here; consumer handles showing the error state.
             }

@@ -5,6 +5,9 @@ import { ThemeProvider as NextThemesProvider, useTheme as useNextTheme } from 'n
 import { useThemeAdapter } from '@prime/theme-adapters';
 import { Brand, Mode, Density } from '@prime/design-tokens';
 import { ThemeProviderProps, UseThemeResult } from '../types';
+import { THEME_STORAGE_KEYS } from '../constants';
+
+export * from '../constants';
 
 const ThemeContext = createContext<UseThemeResult | null>(null);
 
@@ -23,18 +26,18 @@ const InnerProvider = ({
 
   const setBrand = React.useCallback((newBrand: Brand) => {
     setBrandState(newBrand);
-    document.cookie = `prime-brand=${newBrand}; path=/; max-age=31536000`;
+    localStorage.setItem(THEME_STORAGE_KEYS.BRAND, newBrand);
   }, []);
 
   const setDensity = React.useCallback((newDensity: Density) => {
     setDensityState(newDensity);
-    document.cookie = `prime-density=${newDensity}; path=/; max-age=31536000`;
+    localStorage.setItem(THEME_STORAGE_KEYS.DENSITY, newDensity);
   }, []);
 
   const setMode = React.useCallback(
     (newMode: Mode | 'system') => {
       setNextThemeMode(newMode);
-      document.cookie = `prime-mode=${newMode}; path=/; max-age=31536000`;
+      localStorage.setItem(THEME_STORAGE_KEYS.MODE, newMode);
     },
     [setNextThemeMode],
   );

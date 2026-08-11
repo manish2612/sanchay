@@ -24,3 +24,7 @@ export * from './components/SplitButton';
 export * from './primitives/SegmentedControl';
 export * from './primitives/Sheet';
 export * from './components/FormWizard';
+export * from './primitives/Tooltip';
+export * from './primitives/Accordion';
+export * from './primitives/Toast';
+
