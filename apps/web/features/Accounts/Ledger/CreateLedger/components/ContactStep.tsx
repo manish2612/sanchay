@@ -10,7 +10,7 @@ import {
   MobileInputField, 
   WhatsappInputField, 
   TelephoneInputField 
-} from "../../../../../../components/shared-fields/ContactFields";
+} from "@/components/shared-fields/ContactFields";
 
 interface ContactStepProps {
   form: UseFormReturn<LedgerFormValues>;

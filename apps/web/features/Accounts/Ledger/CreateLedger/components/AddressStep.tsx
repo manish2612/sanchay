@@ -9,7 +9,7 @@ import {
   StateSelectField, 
   AddressTextareaField, 
   PincodeInputField 
-} from "../../../../../../components/shared-fields/AddressFields";
+} from "@/components/shared-fields/AddressFields";
 
 interface AddressStepProps {
   form: UseFormReturn<LedgerFormValues>;

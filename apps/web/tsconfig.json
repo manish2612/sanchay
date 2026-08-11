@@ -18,7 +18,10 @@
     "jsx": "react-jsx",
     "target": "ES2017",
     "types": ["vite/client"],
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": [
     "**/*.ts",

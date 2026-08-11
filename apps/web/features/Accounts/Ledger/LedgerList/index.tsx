@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import CreateNewLedger from './new/page';
+import CreateLedgerPage from '../CreateLedger';
 
 export default function VouchersPage() {
-  return <CreateNewLedger />;
+  return <CreateLedgerPage />;
 }

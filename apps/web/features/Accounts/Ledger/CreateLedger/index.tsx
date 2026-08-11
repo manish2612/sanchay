@@ -16,7 +16,7 @@ import { ContactStep } from './components/ContactStep';
 import { GeneralInfoGraphic } from './components/graphics/GeneralInfoGraphic';
 import { BillingCreditGraphic } from './components/graphics/BillingCreditGraphic';
 import { ContactGraphic } from './components/graphics/ContactGraphic';
-import { ContactLocationGraphic } from '../../../../company/new/components/graphics/ContactLocationGraphic';
+import { ContactLocationGraphic } from '@/features/Company/CreateCompany/components/graphics/ContactLocationGraphic';
 
 const WizardContent = ({ form }: { form: any }) => {
   const { currentStep } = useFormWizardContext();

@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { VoucherPageHeader } from "../../../../features/Vouchers/components/VoucherPageHeader";
-import { VoucherDetailsForm } from "../../../../features/Vouchers/components/VoucherDetailsForm";
-import { VoucherItemTable } from "../../../../features/Vouchers/components/VoucherItemTable/VoucherItemTable";
-import { LedgerEntryTable } from "../../../../features/Vouchers/components/LedgerEntryTable/LedgerEntryTable";
-import { VoucherFooter } from "../../../../features/Vouchers/components/VoucherFooter";
-import { useVoucherDetailsForm } from "../../../../features/Vouchers/hooks/useVoucherDetailsForm";
-import { useVoucherFooter } from "../../../../features/Vouchers/hooks/useVoucherFooter";
+import { VoucherPageHeader } from "@/features/Vouchers/components/VoucherPageHeader";
+import { VoucherDetailsForm } from "@/features/Vouchers/components/VoucherDetailsForm";
+import { VoucherItemTable } from "@/features/Vouchers/components/VoucherItemTable/VoucherItemTable";
+import { LedgerEntryTable } from "@/features/Vouchers/components/LedgerEntryTable/LedgerEntryTable";
+import { VoucherFooter } from "@/features/Vouchers/components/VoucherFooter";
+import { useVoucherDetailsForm } from "@/features/Vouchers/hooks/useVoucherDetailsForm";
+import { useVoucherFooter } from "@/features/Vouchers/hooks/useVoucherFooter";
 
 export default function VouchersPage() {
   const voucherState = useVoucherDetailsForm();

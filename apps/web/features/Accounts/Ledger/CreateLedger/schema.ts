@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { LEDGER_FORM_FIELDS } from "./constants";
-import { baseAddressSchema, baseContactSchema } from "../../../../../utils/shared-schemas";
+import { baseAddressSchema, baseContactSchema } from '@/utils/shared-schemas';
 
 export const ledgerFormSchema = z.object({
   // Step 1
