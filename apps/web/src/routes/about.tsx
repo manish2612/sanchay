@@ -1,6 +1,12 @@
 import { UniversalLink } from '@prime/ui';
 
-export default function AboutPage() {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/about')({
+  component: AboutPage,
+})
+
+function AboutPage() {
   return (
     <div style={{ padding: 40, fontFamily: 'var(--font-ibm-plex-sans)' }}>
       <h1 style={{ fontSize: 32, marginBottom: 20 }}>About Prime (Web)</h1>

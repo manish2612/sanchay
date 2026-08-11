@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import Link from 'next/link';
+import { Link, useLocation } from '@tanstack/react-router';
 import { Icon } from '@prime/ui';
 import { NavItemConfig } from '../../data/navigationTree';
-import { usePathname } from 'next/navigation';
 
 interface SidebarPanelItemProps {
   item: NavItemConfig;
@@ -11,7 +10,8 @@ interface SidebarPanelItemProps {
 }
 
 export function SidebarPanelItem({ item, level = 0 }: SidebarPanelItemProps) {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   // Since this is now a flat list (L3 or standalone L2), we just check exact/starts-with path matching
   const isActive = item.href ? pathname?.startsWith(item.href) : false;
@@ -44,7 +44,7 @@ export function SidebarPanelItem({ item, level = 0 }: SidebarPanelItemProps) {
 
   if (item.href) {
     return (
-      <Link href={item.href} className="block w-full">
+      <Link to={item.href} className="block w-full">
         {content}
       </Link>
     );

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { Icon, type IconName } from '@prime/ui';
 import { NavItemConfig } from '../../data/navigationTree';
 import { useSidebar } from '../Sidebar/useSidebar';
@@ -20,7 +20,7 @@ interface SidebarRailProps {
 
 export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps) {
   const { activeL1ItemId, setActiveL1ItemId, setPanelOpen, isPanelOpen } = useSidebar();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   // Shared popover state to ensure only one is open at a time
   const [openPopover, setOpenPopover] = useState<'settings' | 'user' | null>(null);
@@ -40,10 +40,10 @@ export function SidebarRail({ appName, items, user, onLogout }: SidebarRailProps
     setActiveL1ItemId(item.id);
     if (item.children && item.children.length > 0) {
       setPanelOpen(true);
-      if (item.href) router.push(item.href);
+      if (item.href) navigate({ to: item.href });
     } else {
       setPanelOpen(false);
-      if (item.href) router.push(item.href);
+      if (item.href) navigate({ to: item.href });
     }
   };
 

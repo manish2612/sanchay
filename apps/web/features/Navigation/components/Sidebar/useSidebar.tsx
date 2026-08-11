@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { usePathname } from 'next/navigation';
+import { useLocation } from '@tanstack/react-router';
 import { NAVIGATION_TREE } from '../../data/navigationTree';
 
 interface SidebarContextType {
@@ -16,7 +16,8 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [activeL1ItemId, setActiveL1ItemId] = useState<string | null>(null);
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   // Set initial panel state based on screen size, but do not override on resize
   useEffect(() => {

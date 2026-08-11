@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { LoginScreen } from '@prime/modules';
 import { createClient } from '@prime/api';
 
-export default function LoginPage() {
+import { createFileRoute } from '@tanstack/react-router';
+
+export const Route = createFileRoute('/login')({
+  component: LoginPage,
+})
+
+function LoginPage() {
   const [responseMsg, setResponseMsg] = useState<string | null>(null);
 
   const handleLogin = async (data: any) => {
