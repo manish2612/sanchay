@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { Icon } from '@prime/ui';
+import React from 'react';
+import { Icon, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 import { NavItemConfig } from '../../data/navigationTree';
 import { useSidebar } from '../Sidebar/useSidebar';
 import { SidebarPanelItem } from '../SidebarPanelItem';
@@ -13,32 +13,11 @@ interface SidebarPanelProps {
 export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
   const { setPanelOpen } = useSidebar();
 
-  // Fixed tooltip state to escape overflow-hidden clipping
-  const [tooltip, setTooltip] = useState<{
-    text: string;
-    top: number;
-    left: number;
-  } | null>(null);
-
   // If no children, we don't render the panel contents
   const hasChildren = activeL1Config?.children && activeL1Config.children.length > 0;
 
   // Calculate width: if closed or no children, width is 0 (hidden). Otherwise 240px.
   const panelWidth = isOpen && hasChildren ? 'w-[240px]' : 'w-0';
-
-  const handleMouseEnter = (e: React.MouseEvent, text: string) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    // Position tooltip to the right of the hovered element, vertically centered
-    setTooltip({
-      text,
-      top: rect.top + rect.height / 2,
-      left: rect.right + 12,
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTooltip(null);
-  };
 
   return (
     <>
@@ -53,14 +32,17 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
                 {activeL1Config.label}
               </h2>
               <div className="flex-shrink-0">
-                <button
-                  onClick={() => setPanelOpen(false)}
-                  onMouseEnter={(e) => handleMouseEnter(e, 'Collapse Menu')}
-                  onMouseLeave={handleMouseLeave}
-                  className="w-8 h-8 flex items-center justify-center rounded-md text-mutedForeground hover:text-foreground hover:bg-surfaceHover transition-all cursor-pointer"
-                >
-                  <Icon name="PanelLeftClose" className="text-[22px]" />
-                </button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => setPanelOpen(false)}
+                      className="w-8 h-8 flex items-center justify-center rounded-md text-mutedForeground hover:text-foreground hover:bg-surfaceHover transition-all cursor-pointer"
+                    >
+                      <Icon name="PanelLeftClose" className="text-[22px]" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">Collapse Menu</TooltipContent>
+                </Tooltip>
               </div>
             </div>
 
@@ -97,19 +79,6 @@ export function SidebarPanel({ activeL1Config, isOpen }: SidebarPanelProps) {
         )}
       </div>
 
-      {/* Global Fixed Tooltip (escapes all overflow clipping) */}
-      {tooltip && (
-        <div
-          className="fixed px-2.5 py-1.5 bg-gray-900 text-white text-[13px] rounded shadow-xl border border-white/10 z-[999] font-medium whitespace-nowrap pointer-events-none"
-          style={{
-            top: tooltip.top,
-            left: tooltip.left,
-            transform: 'translateY(-50%)', // Vertically center relative to the top coordinate
-          }}
-        >
-          {tooltip.text}
-        </div>
-      )}
     </>
   );
 }

@@ -15,7 +15,7 @@ import '@fontsource/work-sans/600.css';
 import '@fontsource/work-sans/700.css';
 
 import { ThemeProvider, THEME_STORAGE_KEYS } from '@prime/theme-provider/web';
-import { LinkProvider, ShortcutProvider } from '@prime/ui';
+import { LinkProvider, ShortcutProvider, TooltipProvider } from '@prime/ui';
 import { RouterLinkAdapter } from '@/providers/RouterLinkAdapter';
 import { ApiProvider } from '@/providers/ApiProvider';
 import { AppLayout } from '../components/AppLayout';
@@ -42,13 +42,15 @@ function RootComponent() {
           initialDensity={initialDensity}
         >
           <ShortcutProvider>
-            <ApiProvider>
-              <LinkProvider value={RouterLinkAdapter}>
-                <AppLayout>
-                  <Outlet />
-                </AppLayout>
-              </LinkProvider>
-            </ApiProvider>
+            <TooltipProvider>
+              <ApiProvider>
+                <LinkProvider value={RouterLinkAdapter}>
+                  <AppLayout>
+                    <Outlet />
+                  </AppLayout>
+                </LinkProvider>
+              </ApiProvider>
+            </TooltipProvider>
           </ShortcutProvider>
         </ThemeProvider>
       </div>
