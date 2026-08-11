@@ -65,6 +65,12 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
       },
     ],
   },
+   {
+    id: "masters",
+    label: "Masters Hub",
+    icon: "LibraryBig",
+    href: "/masters"
+  },
   {
     id: "inventory",
     label: "Inventory",

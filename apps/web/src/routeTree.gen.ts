@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MastersRouteImport } from './routes/masters'
 import { Route as TestApiRouteImport } from './routes/test-api'
 import { Route as CompanyNewRouteImport } from './routes/company/new'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
@@ -38,6 +39,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MastersRoute = MastersRouteImport.update({
+  id: '/masters',
+  path: '/masters',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TestApiRoute = TestApiRouteImport.update({
@@ -79,6 +85,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/masters': typeof MastersRoute
   '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
   '/signup/': typeof SignupIndexRoute
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/masters': typeof MastersRoute
   '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
   '/signup': typeof SignupIndexRoute
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
+  '/masters': typeof MastersRoute
   '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
   '/signup/': typeof SignupIndexRoute
@@ -118,6 +127,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
+    | '/masters'
     | '/test-api'
     | '/company/new'
     | '/signup/'
@@ -130,6 +140,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
+    | '/masters'
     | '/test-api'
     | '/company/new'
     | '/signup'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/login'
+    | '/masters'
     | '/test-api'
     | '/company/new'
     | '/signup/'
@@ -155,6 +167,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
+  MastersRoute: typeof MastersRoute
   TestApiRoute: typeof TestApiRoute
   CompanyNewRoute: typeof CompanyNewRoute
   SignupIndexRoute: typeof SignupIndexRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/masters': {
+      id: '/masters'
+      path: '/masters'
+      fullPath: '/masters'
+      preLoaderRoute: typeof MastersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/test-api': {
@@ -243,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
+  MastersRoute: MastersRoute,
   TestApiRoute: TestApiRoute,
   CompanyNewRoute: CompanyNewRoute,
   SignupIndexRoute: SignupIndexRoute,
