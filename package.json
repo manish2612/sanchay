@@ -6,6 +6,7 @@
     "refresh": "turbo run build --filter=@prime/design-tokens && turbo run dev",
     "dev:web": "turbo run dev --filter=web",
     "refresh:web": "turbo run build --filter=@prime/design-tokens && turbo run dev --filter=web",
+    "storybook": "turbo run storybook",
     "dev:mobile": "pnpm --filter mobile dev",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
