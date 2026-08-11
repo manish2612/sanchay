@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Preview } from '@storybook/react-vite';
 import { ThemeProvider, useTheme } from '@prime/theme-provider';
+import { ToastProvider, ToastViewport } from '@prime/ui';
 import '../src/index.css';
 import type { Brand, Mode, Density } from '@prime/design-tokens';
 
@@ -105,9 +106,12 @@ const preview: Preview = {
         <ThemeProvider initialBrand={brand} initialMode={mode} initialDensity={density}>
           <ThemeSync brand={brand} mode={mode} density={density} />
           {/* We remove the full-height wrapper so components only take required space */}
-          <div className="p-4">
-            <Story />
-          </div>
+          <ToastProvider>
+            <div className="p-4">
+              <Story />
+            </div>
+            <ToastViewport position="bottom-right" />
+          </ToastProvider>
         </ThemeProvider>
       );
     },
