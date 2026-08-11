@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Sidebar } from '../../features/Navigation/components/Sidebar';
+import { Sidebar } from '@/features/Navigation/components/Sidebar';
 import { APP_NAME } from '@prime/config';
 
 interface AppLayoutProps {
