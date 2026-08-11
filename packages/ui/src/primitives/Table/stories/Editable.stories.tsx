@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
-import { Table } from '../../../index';
+import { Table, TABLE_ROW_COMMIT_ACTIONS } from '../../../index';
 import { flexRender } from '@tanstack/react-table';
 import { editableColumns } from './mockData';
 
@@ -57,7 +57,7 @@ export const Editable: Story = {
         setTimeout(() => {
           setRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
         }, 500);
-        return 'STAY';
+        return TABLE_ROW_COMMIT_ACTIONS.STAY;
       }
       if (row.isPhantom) {
         setData((old: any[]) => {
@@ -77,9 +77,9 @@ export const Editable: Story = {
           });
           return newData;
         });
-        return 'ADVANCE';
+        return TABLE_ROW_COMMIT_ACTIONS.ADVANCE;
       }
-      return 'EXIT';
+      return TABLE_ROW_COMMIT_ACTIONS.EXIT;
     };
 
     return (

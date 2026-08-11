@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Table as TanStackTable, RowData, Row, TableState } from '@tanstack/react-table';
 import { Virtualizer } from '@tanstack/react-virtual';
+import { TableRowCommitAction } from './constants';
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
@@ -16,7 +17,7 @@ declare module '@tanstack/react-table' {
       rowIndex: number,
       columnId?: string,
       cellValue?: string,
-    ) => 'ADVANCE' | 'STAY' | 'EXIT';
+    ) => TableRowCommitAction;
     rowErrors?: Record<number, boolean>;
     phantomRowConfig?: {
       isPhantom: (row: Row<TData>) => boolean;
