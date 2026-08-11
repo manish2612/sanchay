@@ -17,8 +17,8 @@ import '@fontsource/work-sans/700.css';
 
 import { ThemeProvider } from '@prime/theme-provider/web';
 import { LinkProvider, ShortcutProvider } from '@prime/ui';
-import { RouterLinkAdapter } from '../../providers/RouterLinkAdapter';
-import { ApiProvider } from '../../providers/ApiProvider';
+import { RouterLinkAdapter } from '@/providers/RouterLinkAdapter';
+import { ApiProvider } from '@/providers/ApiProvider';
 import { AppLayout } from '../components/AppLayout';
 
 export const Route = createRootRoute({

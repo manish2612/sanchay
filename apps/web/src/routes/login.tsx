@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import LoginLayout from '../../features/Auth/Login/Login'; // Importing the new Login layout
+import LoginLayout from '@/features/Auth/Login/Login'; // Importing the new Login layout
 import { createClient } from '@prime/api';
 
 import { createFileRoute } from '@tanstack/react-router';
