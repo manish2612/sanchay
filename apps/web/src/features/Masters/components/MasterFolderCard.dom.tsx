@@ -11,7 +11,6 @@ import {
   folderTabClasses,
   iconContainerClasses,
   primaryBadgeClasses,
-  viewListClasses,
   addNewButtonClasses,
   backgroundSvgClasses,
   radialGlowClasses,
@@ -48,33 +47,21 @@ export function MasterFolderCard({ config }: MasterFolderCardProps) {
           {isPrimary && <div className={primaryBadgeClasses}>Primary</div>}
 
           <div>
-            <h3 className="text-base font-semibold text-foreground leading-tight">
-              {label}
-            </h3>
-            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              {description}
-            </p>
+            <h3 className="text-base font-semibold text-foreground leading-tight">{label}</h3>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{description}</p>
           </div>
         </Link>
 
         <hr className="my-4 border-border opacity-50" />
 
-        <div className="flex items-center justify-between gap-2 relative z-10">
-          <Link to={href as any} className={viewListClasses} aria-label={`View ${label} list`}>
-            <Icon name="List" size={12} />
-            <span>View List</span>
-          </Link>
-
+        <div className="flex items-center justify-end gap-2 relative z-10">
           <Button
             variant="outline"
-            size="sm"
             className={addNewButtonClasses}
             aria-label={`Add new ${label}`}
             asChild
           >
-            <Link to={`${href}/new` as any}>
-              + Add New
-            </Link>
+            <Link to={`${href}/new` as any}>+ Add New</Link>
           </Button>
         </div>
 

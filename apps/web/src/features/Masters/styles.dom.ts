@@ -26,14 +26,17 @@ export const addNewButtonClasses =
   'transition-all duration-150 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary group-focus-within:bg-primary group-focus-within:text-primary-foreground group-focus-within:border-primary';
 
 export const backgroundSvgClasses =
-  'absolute top-0 -right-5 opacity-[0.13] -rotate-15 pointer-events-none overflow-hidden';
+  'absolute top-0 -right-5 opacity-[0.08] dark:opacity-[0.13] -rotate-15 pointer-events-none overflow-hidden';
 
 export const radialGlowClasses =
   'absolute bottom-0 right-0 w-24 h-24 rounded-full bg-primary/5 blur-2xl pointer-events-none group-hover:bg-primary/10 transition-colors duration-150';
 
 export const pageHeaderWrapperClasses =
-  'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 bg-surface';
+  'sticky top-0 z-20 flex flex-col sm:flex-col md:flex-row md:items-center md:justify-between gap-4 p-4 bg-surface border-b border-border/50 shadow-sm';
 
 // export const pageBackgroundClasses =
 //   'bg-gradient-to-br from-bg to-surface min-h-full';
 export const pageBackgroundClasses = 'flex-1 min-h-0 w-full overflow-y-auto pb-10';
+
+export const controlPanelWrapperClasses =
+  'flex flex-1 flex-col sm:flex-row items-center justify-between gap-4 ';
