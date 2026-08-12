@@ -38,7 +38,7 @@ export function MasterFolderCard({ config }: MasterFolderCardProps) {
 
         <Link
           to={href as any}
-          className="block relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 rounded-md"
+          className="flex-1 block relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 rounded-md"
           aria-label={`View ${label} list`}
         >
           <div className={iconContainerClasses}>

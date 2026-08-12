@@ -8,7 +8,7 @@ export const paper1Classes = `${paperLayerBase} z-0 group-hover:translate-y-[-6p
 export const paper2Classes = `${paperLayerBase} z-[1] group-hover:translate-y-[-3px] group-hover:rotate-[1.5deg] group-hover:translate-x-[2px] group-focus-within:translate-y-[-3px] group-focus-within:rotate-[1.5deg] group-focus-within:translate-x-[2px]`;
 
 export const mainCardClasses =
-  'relative z-[2] rounded-xl bg-surface border border-border shadow-sm transition-all duration-150 ease-out group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:border-primary/30 group-hover:-translate-y-1 group-focus-within:shadow-lg group-focus-within:shadow-primary/10 group-focus-within:border-primary/30 group-focus-within:-translate-y-1 overflow-hidden p-5';
+  'relative h-full flex flex-col z-[2] rounded-xl bg-surface border border-border shadow-sm transition-all duration-150 ease-out group-hover:shadow-lg group-hover:shadow-primary/10 group-hover:border-primary/30 group-hover:-translate-y-1 group-focus-within:shadow-lg group-focus-within:shadow-primary/10 group-focus-within:border-primary/30 group-focus-within:-translate-y-1 overflow-hidden p-5';
 
 export const folderTabClasses =
   'absolute -top-[10px] left-4 w-16 h-[10px] bg-surface border-t border-l border-r border-border rounded-t-md z-[3] transition-all duration-150 ease-out group-hover:border-primary/30 group-focus-within:border-primary/30';
