@@ -43,24 +43,24 @@ export function MasterHub() {
         </div>
       </div>
 
-      <hr className="border-border opacity-50 mb-6" />
-
-      {hasResults ? (
-        MASTER_GROUPS.map((group) => {
-          const groupMasters = filteredMasters.filter((m) => m.group === group.id);
-          return (
-            <MasterCategorySection key={group.id} label={group.label} masters={groupMasters} />
-          );
-        })
-      ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <Icon name="SearchX" size={48} className="text-muted-foreground opacity-50 mb-4" />
-          <p className="text-lg font-medium text-foreground">
-            No masters found for "{searchQuery}"
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">Try adjusting your search terms</p>
-        </div>
-      )}
+      <div className="px-4 sm:px-6 pt-6">
+        {hasResults ? (
+          MASTER_GROUPS.map((group) => {
+            const groupMasters = filteredMasters.filter((m) => m.group === group.id);
+            return (
+              <MasterCategorySection key={group.id} label={group.label} masters={groupMasters} />
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <Icon name="SearchX" size={48} className="text-muted-foreground opacity-50 mb-4" />
+            <p className="text-lg font-medium text-foreground">
+              No masters found for "{searchQuery}"
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">Try adjusting your search terms</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

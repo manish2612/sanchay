@@ -36,4 +36,4 @@ export const pageHeaderWrapperClasses =
 
 // export const pageBackgroundClasses =
 //   'bg-gradient-to-br from-bg to-surface min-h-full';
-export const pageBackgroundClasses ='';
+export const pageBackgroundClasses = 'flex-1 min-h-0 w-full overflow-y-auto pb-10';

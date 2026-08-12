@@ -11,7 +11,7 @@ export function MasterCategorySection({ label, masters }: MasterCategorySectionP
   if (masters.length === 0) return null;
 
   return (
-    <section className="mb-10 px-4 sm:px-6" role="region" aria-label={label}>
+    <section className="mb-10" role="region" aria-label={label}>
       <div className="mb-6 flex items-center">
         <div className="w-1 h-4 bg-gradient-to-b from-primary/40 to-transparent mr-2 rounded-sm" />
         <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
