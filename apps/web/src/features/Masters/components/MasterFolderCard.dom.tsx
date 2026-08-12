@@ -4,6 +4,7 @@ import { Icon, Button } from '@prime/ui';
 import { MasterConfig } from '../data/mastersConfig';
 import { AccountingBgGraphic } from './graphics/AccountingBgGraphic.dom';
 import { InventoryBgGraphic } from './graphics/InventoryBgGraphic.dom';
+import { useMasterFolderCard } from './useMasterFolderCard';
 import {
   paper1Classes,
   paper2Classes,
@@ -18,10 +19,12 @@ import {
 
 interface MasterFolderCardProps {
   config: MasterConfig;
+  onOpenSheet: (config: MasterConfig) => void;
 }
 
-export function MasterFolderCard({ config }: MasterFolderCardProps) {
+export function MasterFolderCard({ config, onOpenSheet }: MasterFolderCardProps) {
   const { id, label, description, href, icon, group, isPrimary } = config;
+  const { handleAddNew } = useMasterFolderCard(config, onOpenSheet);
 
   return (
     <div className="group relative cursor-pointer">
@@ -59,9 +62,13 @@ export function MasterFolderCard({ config }: MasterFolderCardProps) {
             variant="outline"
             className={addNewButtonClasses}
             aria-label={`Add new ${label}`}
-            asChild
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleAddNew();
+            }}
           >
-            <Link to={`${href}/new` as any}>+ Add New</Link>
+            + Add New
           </Button>
         </div>
 

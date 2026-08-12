@@ -34,18 +34,18 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
     label: "Accounts",
     icon: "Landmark",
     children: [
-      {
-        id: "accounts-masters",
-        label: "Masters",
-        children: [
-          { id: "group", label: "Group", href: "/accounts/masters/group" },
-          { id: "ledger", label: "Ledger", href: "/accounts/masters/ledger" },
-          { id: "voucher-type", label: "Voucher Type", href: "/accounts/masters/voucher-type" },
-          { id: "cost-category", label: "Cost Category", href: "/accounts/masters/cost-category" },
-          { id: "cost-centre", label: "Cost Centre", href: "/accounts/masters/cost-centre" },
-          { id: "tax-group", label: "TaX Group", href: "/accounts/masters/tax-group" },
-        ],
-      },
+      // {
+      //   id: "accounts-masters",
+      //   label: "Masters",
+      //   children: [
+      //     { id: "group", label: "Group", href: "/accounts/masters/group" },
+      //     { id: "ledger", label: "Ledger", href: "/accounts/masters/ledger" },
+      //     { id: "voucher-type", label: "Voucher Type", href: "/accounts/masters/voucher-type" },
+      //     { id: "cost-category", label: "Cost Category", href: "/accounts/masters/cost-category" },
+      //     { id: "cost-centre", label: "Cost Centre", href: "/accounts/masters/cost-centre" },
+      //     { id: "tax-group", label: "TaX Group", href: "/accounts/masters/tax-group" },
+      //   ],
+      // },
       {
         id: "accounts-transactions",
         label: "Transactions",
@@ -76,17 +76,17 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
     label: "Inventory",
     icon: "Blocks",
     children: [
-      {
-        id: "inventory-masters",
-        label: "Masters",
-        children: [
-          { id: "stock-group", label: "Stock Group", href: "/inventory/masters/stock-group" },
-          { id: "stock-category", label: "Stock Category", href: "/inventory/masters/stock-category" },
-          { id: "unit-of-measure", label: "Unit of Measure", href: "/inventory/masters/unit-of-measure" },
-          { id: "stock-item", label: "Stock Item", href: "/inventory/masters/stock-item" },
-          { id: "godown", label: "Godown", href: "/inventory/masters/godown" },
-        ],
-      },
+      // {
+      //   id: "inventory-masters",
+      //   label: "Masters",
+      //   children: [
+      //     { id: "stock-group", label: "Stock Group", href: "/inventory/masters/stock-group" },
+      //     { id: "stock-category", label: "Stock Category", href: "/inventory/masters/stock-category" },
+      //     { id: "unit-of-measure", label: "Unit of Measure", href: "/inventory/masters/unit-of-measure" },
+      //     { id: "stock-item", label: "Stock Item", href: "/inventory/masters/stock-item" },
+      //     { id: "godown", label: "Godown", href: "/inventory/masters/godown" },
+      //   ],
+      // },
       {
         id: "inventory-transactions",
         label: "Transactions",

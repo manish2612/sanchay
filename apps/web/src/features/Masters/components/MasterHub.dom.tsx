@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from 'react';
-import { TextInput, Icon, SegmentedControl } from '@prime/ui';
-import { MASTERS_CONFIG, MASTER_GROUPS } from '../data/mastersConfig';
+import React from 'react';
+import { TextInput, Icon, SegmentedControl, Button } from '@prime/ui';
+import { Sheet, SheetContent, SheetHeader, SheetFooter, SheetTitle } from '@prime/ui';
 import { MasterFolderCard } from './MasterFolderCard.dom';
+import { useMasterHub } from './useMasterHub';
 import {
   pageHeaderWrapperClasses,
   pageBackgroundClasses,
@@ -9,32 +10,21 @@ import {
 } from '../styles.dom';
 
 export function MasterHub() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('all');
-
-  const filteredMasters = useMemo(() => {
-    let filtered = MASTERS_CONFIG;
-    if (activeTab !== 'all') {
-      filtered = filtered.filter((m) => m.group === activeTab);
-    }
-    if (searchQuery.trim()) {
-      const lowerQuery = searchQuery.toLowerCase();
-      filtered = filtered.filter((m) => m.label.toLowerCase().includes(lowerQuery));
-    }
-    return filtered;
-  }, [searchQuery, activeTab]);
+  const {
+    searchQuery,
+    setSearchQuery,
+    activeTab,
+    setActiveTab,
+    filteredMasters,
+    activeSheetMaster,
+    setActiveSheetMaster,
+  } = useMasterHub();
 
   const hasResults = filteredMasters.length > 0;
 
   return (
     <div className={`${pageBackgroundClasses}`}>
       <div className={pageHeaderWrapperClasses}>
-        {/* <div className="">
-          <h1 className="font-bold text-foreground font-heading mr-2">Master Data</h1>
-          <p className="text-xs text-muted-foreground mt-1 min-[768px]:max-[946px]:truncate min-[768px]:max-[946px]:max-w-[200px]">
-            Configure your foundational business records
-          </p>
-        </div> */}
         <div className={controlPanelWrapperClasses}>
           <SegmentedControl.Root
             className="sm:max-w-[350px]"
@@ -69,7 +59,11 @@ export function MasterHub() {
         {hasResults ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-6">
             {filteredMasters.map((master) => (
-              <MasterFolderCard key={master.id} config={master} />
+              <MasterFolderCard
+                key={master.id}
+                config={master}
+                onOpenSheet={setActiveSheetMaster}
+              />
             ))}
           </div>
         ) : (
@@ -82,6 +76,34 @@ export function MasterHub() {
           </div>
         )}
       </div>
+
+      <Sheet
+        open={!!activeSheetMaster}
+        onOpenChange={(open) => !open && setActiveSheetMaster(null)}
+      >
+        <SheetContent className="flex flex-col h-full sm:max-w-md">
+          {activeSheetMaster && (
+            <>
+              <SheetHeader>
+                <SheetTitle>Add {activeSheetMaster.label}</SheetTitle>
+              </SheetHeader>
+
+              <div className="flex-1 overflow-y-auto py-4">
+                <p className="text-sm text-muted-foreground">
+                  Dummy Form Content for {activeSheetMaster.label}
+                </p>
+              </div>
+
+              <SheetFooter className="mt-auto border-t pt-4 bg-surface">
+                <Button variant="outline" onClick={() => setActiveSheetMaster(null)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => {}}>Save</Button>
+              </SheetFooter>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

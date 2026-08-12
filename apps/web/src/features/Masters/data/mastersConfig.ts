@@ -1,5 +1,10 @@
 import { IconName } from '@prime/ui'; // Or standard lucide icon names
 
+export const CREATION_MODES = {
+  SHEET: 'sheet',
+  PAGE: 'page',
+} as const;
+
 export type MasterConfig = {
   id: string;
   label: string;
@@ -8,6 +13,8 @@ export type MasterConfig = {
   icon: string;
   group: 'accounting' | 'inventory';
   isPrimary?: boolean;
+  creationMode?: typeof CREATION_MODES[keyof typeof CREATION_MODES];
+  createHref?: string;
 };
 
 export const MASTERS_CONFIG: MasterConfig[] = [
@@ -19,6 +26,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/accounts/masters/group',
     icon: 'Layers',
     group: 'accounting',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/accounts/masters/group/new',
   },
   {
     id: 'ledger',
@@ -28,6 +37,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     icon: 'BookOpen',
     group: 'accounting',
     isPrimary: true,
+    creationMode: CREATION_MODES.PAGE,
+    createHref: '/accounts/masters/ledger/new',
   },
   {
     id: 'voucher-type',
@@ -37,6 +48,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     icon: 'FileText',
     group: 'accounting',
     isPrimary: true,
+    creationMode: CREATION_MODES.PAGE,
+    createHref: '/accounts/masters/voucher-type',
   },
   {
     id: 'cost-category',
@@ -45,6 +58,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/accounts/masters/cost-category',
     icon: 'Tag',
     group: 'accounting',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/accounts/masters/cost-category/new',
   },
   {
     id: 'cost-centre',
@@ -53,6 +68,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/accounts/masters/cost-centre',
     icon: 'Target',
     group: 'accounting',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/accounts/masters/cost-centre/new',
   },
   {
     id: 'tax-group',
@@ -61,6 +78,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/accounts/masters/tax-group',
     icon: 'Percent',
     group: 'accounting',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/accounts/masters/tax-group/new',
   },
   // Inventory Masters
   {
@@ -70,6 +89,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/inventory/masters/stock-group',
     icon: 'FolderOpen',
     group: 'inventory',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/inventory/masters/stock-group/new',
   },
   {
     id: 'stock-category',
@@ -78,6 +99,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/inventory/masters/stock-category',
     icon: 'LayoutGrid',
     group: 'inventory',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/inventory/masters/stock-category/new',
   },
   {
     id: 'unit-of-measure',
@@ -86,6 +109,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/inventory/masters/unit-of-measure',
     icon: 'Ruler',
     group: 'inventory',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/inventory/masters/unit-of-measure/new',
   },
   {
     id: 'stock-item',
@@ -95,6 +120,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     icon: 'Package',
     group: 'inventory',
     isPrimary: true,
+    creationMode: CREATION_MODES.PAGE,
+    createHref: '/inventory/masters/stock-item/new',
   },
   {
     id: 'godown',
@@ -103,6 +130,8 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     href: '/inventory/masters/godown',
     icon: 'Warehouse',
     group: 'inventory',
+    creationMode: CREATION_MODES.SHEET,
+    createHref: '/inventory/masters/godown/new',
   }
 ];
 
