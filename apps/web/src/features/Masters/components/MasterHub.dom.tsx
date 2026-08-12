@@ -3,6 +3,7 @@ import { TextInput, Icon, SegmentedControl, Button } from '@prime/ui';
 import { Sheet, SheetContent, SheetHeader, SheetFooter, SheetTitle } from '@prime/ui';
 import { MasterFolderCard } from './MasterFolderCard.dom';
 import { useMasterHub } from './useMasterHub';
+import { useGlobalMasterSheet } from './MasterFormSheet/MasterFormSheetContext';
 import {
   pageHeaderWrapperClasses,
   pageBackgroundClasses,
@@ -16,9 +17,9 @@ export function MasterHub() {
     activeTab,
     setActiveTab,
     filteredMasters,
-    activeSheetMaster,
-    setActiveSheetMaster,
   } = useMasterHub();
+
+  const { openMasterSheet } = useGlobalMasterSheet();
 
   const hasResults = filteredMasters.length > 0;
 
@@ -62,7 +63,7 @@ export function MasterHub() {
               <MasterFolderCard
                 key={master.id}
                 config={master}
-                onOpenSheet={setActiveSheetMaster}
+                onOpenSheet={(config) => openMasterSheet(config.id as any)}
               />
             ))}
           </div>
@@ -76,34 +77,6 @@ export function MasterHub() {
           </div>
         )}
       </div>
-
-      <Sheet
-        open={!!activeSheetMaster}
-        onOpenChange={(open) => !open && setActiveSheetMaster(null)}
-      >
-        <SheetContent className="flex flex-col h-full sm:max-w-md">
-          {activeSheetMaster && (
-            <>
-              <SheetHeader>
-                <SheetTitle>Add {activeSheetMaster.label}</SheetTitle>
-              </SheetHeader>
-
-              <div className="flex-1 overflow-y-auto py-4">
-                <p className="text-sm text-muted-foreground">
-                  Dummy Form Content for {activeSheetMaster.label}
-                </p>
-              </div>
-
-              <SheetFooter className="mt-auto border-t pt-4 bg-surface">
-                <Button variant="outline" onClick={() => setActiveSheetMaster(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => {}}>Save</Button>
-              </SheetFooter>
-            </>
-          )}
-        </SheetContent>
-      </Sheet>
     </div>
   );
 }

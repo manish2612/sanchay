@@ -9,6 +9,8 @@ import {
 } from '@prime/ui';
 import { RouterLinkAdapter } from './RouterLinkAdapter';
 import { ApiProvider } from './ApiProvider';
+import { GlobalMasterSheetProvider } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
+import { MasterFormSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheet.dom';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -29,10 +31,13 @@ export function AppProvider({ children }: AppProviderProps) {
         <TooltipProvider>
           <ToastProvider>
             <ApiProvider>
-              <LinkProvider value={RouterLinkAdapter}>
-                {children}
-                <ToastViewport />
-              </LinkProvider>
+              <GlobalMasterSheetProvider>
+                <LinkProvider value={RouterLinkAdapter}>
+                  {children}
+                  <ToastViewport />
+                  <MasterFormSheet />
+                </LinkProvider>
+              </GlobalMasterSheetProvider>
             </ApiProvider>
           </ToastProvider>
         </TooltipProvider>

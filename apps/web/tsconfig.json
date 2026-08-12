@@ -20,7 +20,8 @@
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@master-forms/*": ["./src/features/Masters/components/forms/*"]
     }
   },
   "include": [

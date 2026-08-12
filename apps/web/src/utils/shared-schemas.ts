@@ -1,10 +1,16 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const baseAddressSchema = z.object({
   country: z.string().min(1, "Country is required"),
   state: z.string().min(1, "State is required"),
   address: z.string().min(1, "Address is required"),
   pincode: z.string().min(1, "Pincode is required"),
+});
+
+export const baseMasterSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100, 'Name must be 100 characters or less'),
+  alias: z.string().max(50, 'Alias must be 50 characters or less').optional(),
+  parentId: z.string().optional(),
 });
 
 export const baseContactSchema = z.object({

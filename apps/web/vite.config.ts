@@ -12,6 +12,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      '@master-forms': path.resolve(__dirname, './src/features/Masters/components/forms'),
       '@prime/theme-adapters': path.resolve(__dirname, '../../packages/theme-adapters/src/index.ts'),
       '@prime/ui': path.resolve(__dirname, '../../packages/ui/src/index.ts'),
       '@prime/theme-provider/web': path.resolve(__dirname, '../../packages/theme-provider/src/web/index.tsx'),
