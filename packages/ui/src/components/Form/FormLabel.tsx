@@ -14,7 +14,7 @@ export const FormLabel = React.forwardRef<
   return (
     <LabelPrimitive.Root
       ref={ref}
-      className={cn(error && 'text-danger', className)}
+      className={cn('text-sm font-medium leading-none', error && 'text-danger', className)}
       htmlFor={formItemId}
       {...props}
     />

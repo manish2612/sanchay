@@ -32,9 +32,9 @@ export interface ToastRootProps
 const defaultVariantIconMap: Record<ToastVariant, IconName> = {
   default: 'Bell',
   info: 'Info',
-  success: 'CircleCheck',
+  success: 'BadgeCheck',
   warning: 'TriangleAlert',
-  destructive: 'CircleAlert',
+  destructive: 'BadgeAlert',
 };
 
 const defaultVariantIconColorMap: Record<ToastVariant, string> = {
@@ -46,9 +46,9 @@ const defaultVariantIconColorMap: Record<ToastVariant, string> = {
 };
 
 const iconSizeMap: Record<ToastDensity, number> = {
-  compact: 16,
-  comfortable: 20,
-  spacious: 24,
+  compact: 20,
+  comfortable: 24,
+  spacious: 32,
 };
 
 const ToastRoot = React.forwardRef<
