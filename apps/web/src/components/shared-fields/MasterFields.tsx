@@ -67,21 +67,20 @@ export function MasterParentField({ control, label, placeholder = 'Search parent
               value={field.value ?? ''}
               onChange={field.onChange}
               options={dummyOptions}
-              virtualized={true}
             >
               <AutoSuggest.Input 
                 placeholder={placeholder} 
                 leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
               />
               <AutoSuggest.Content>
-                <AutoSuggest.VirtualizedList
-                  emptyMessage="No parents found."
-                  renderItem={(opt) => (
-                    <AutoSuggest.Item key={opt.value} value={opt.value}>
+                <AutoSuggest.List>
+                  <AutoSuggest.Empty>No parents found.</AutoSuggest.Empty>
+                  {dummyOptions.map((opt) => (
+                    <AutoSuggest.Item key={opt.value} value={opt.value} keywords={[opt.label]}>
                       {opt.label}
                     </AutoSuggest.Item>
-                  )}
-                />
+                  ))}
+                </AutoSuggest.List>
               </AutoSuggest.Content>
             </AutoSuggest>
           </Form.Control>
