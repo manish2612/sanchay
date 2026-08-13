@@ -75,6 +75,7 @@ export interface AutoSuggestItemProps {
   className?: string;
   leadingVisual?: React.ReactNode;
   reserveLeadingSpace?: boolean;
+  keywords?: string[];
 }
 
 export interface AutoSuggestGroupProps {

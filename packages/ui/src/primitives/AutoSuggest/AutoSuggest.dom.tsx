@@ -44,15 +44,17 @@ export function AutoSuggestRoot<T extends boolean = false>({
   const contextValue = useAutoSuggest(hookProps);
   const containerRef = React.useRef<HTMLDivElement>(null);
 
+  const shouldFilter =
+    contextValue.virtualized || contextValue.exactMatchSelected
+      ? false
+      : !contextValue.isControlledInput;
+
   return (
     <AutoSuggestContext.Provider value={{ ...contextValue, containerRef }}>
       <Popover.Root open={contextValue.open} onOpenChange={contextValue.setOpen}>
         <CommandPrimitive
-          shouldFilter={
-            contextValue.virtualized || contextValue.exactMatchSelected
-              ? false
-              : !contextValue.isControlledInput
-          }
+          shouldFilter={shouldFilter}
+          filter={shouldFilter ? undefined : () => 1}
           className={cn('w-full relative', className)}
           ref={containerRef}
         >
@@ -232,7 +234,7 @@ export const AutoSuggestContent = React.forwardRef<HTMLDivElement, AutoSuggestCo
             }
           }}
           style={{ width: 'var(--radix-popover-trigger-width)' }}
-          className={cn('z-50', className)}
+          className={cn('z-[1000]', className)}
           ref={ref}
         >
           <div
@@ -315,7 +317,7 @@ AutoSuggestGroup.displayName = 'AutoSuggestGroup';
 // Item
 // ---------------------------
 export const AutoSuggestItem = React.forwardRef<HTMLDivElement, AutoSuggestItemProps>(
-  ({ className, value, disabled, onSelect, leadingVisual, reserveLeadingSpace, children }, ref) => {
+  ({ className, value, disabled, onSelect, leadingVisual, reserveLeadingSpace, keywords, children }, ref) => {
     const { currentValue, multiple, handleSelect } = useAutoSuggestContext();
 
     const isSelected = multiple
@@ -326,6 +328,7 @@ export const AutoSuggestItem = React.forwardRef<HTMLDivElement, AutoSuggestItemP
       <CommandPrimitive.Item
         ref={ref}
         value={value}
+        keywords={keywords}
         disabled={disabled}
         onSelect={() => {
           handleSelect(value);
@@ -407,7 +410,9 @@ export const AutoSuggestVirtualizedList = React.forwardRef<
       className={cn('overflow-y-auto overflow-x-hidden p-1 max-h-[300px]', className)}
     >
       {filteredFlatOptions.length === 0 && !showCreate ? (
-        <div className="py-6 text-center text-sm text-muted-foreground">{emptyMessage}</div>
+        <CommandPrimitive.Empty className="py-6 text-center text-sm text-muted-foreground">
+          {emptyMessage}
+        </CommandPrimitive.Empty>
       ) : (
         <div
           style={{
