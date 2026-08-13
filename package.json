@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "preview": "turbo run start",
     "dev": "turbo run dev",
     "refresh": "turbo run build --filter=@prime/design-tokens && turbo run dev",
     "dev:web": "turbo run dev --filter=web",
