@@ -11,7 +11,8 @@
     "dev:mobile": "pnpm --filter mobile dev",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "clean": "rm -rf .turbo && rm -rf packages/*/dist packages/*/*.tsbuildinfo apps/*/.next"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
