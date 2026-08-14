@@ -49,7 +49,7 @@ export const MASTERS_CONFIG: MasterConfig[] = [
     group: 'accounting',
     isPrimary: true,
     creationMode: CREATION_MODES.PAGE,
-    createHref: '/accounts/masters/voucher-type',
+    createHref: '/accounts/masters/voucher-type/new',
   },
   {
     id: 'cost-category',

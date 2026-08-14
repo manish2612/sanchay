@@ -19,7 +19,7 @@ import { Route as CompanyNewRouteImport } from './routes/company/new'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as AccountsMastersLedgerIndexRouteImport } from './routes/accounts/masters/ledger/index'
 import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/masters/ledger/new'
-import { Route as AccountsMastersVoucherTypeIndexRouteImport } from './routes/accounts/masters/voucher-type/index'
+import { Route as InventoryTransactionsVoucherTypeIndexRouteImport } from './routes/inventory/transactions/voucher-type/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -73,10 +73,10 @@ const AccountsMastersLedgerNewRoute =
     path: '/accounts/masters/ledger/new',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AccountsMastersVoucherTypeIndexRoute =
-  AccountsMastersVoucherTypeIndexRouteImport.update({
-    id: '/accounts/masters/voucher-type/',
-    path: '/accounts/masters/voucher-type/',
+const InventoryTransactionsVoucherTypeIndexRoute =
+  InventoryTransactionsVoucherTypeIndexRouteImport.update({
+    id: '/inventory/transactions/voucher-type/',
+    path: '/inventory/transactions/voucher-type/',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -91,7 +91,7 @@ export interface FileRoutesByFullPath {
   '/signup/': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
-  '/accounts/masters/voucher-type/': typeof AccountsMastersVoucherTypeIndexRoute
+  '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -104,7 +104,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
-  '/accounts/masters/voucher-type': typeof AccountsMastersVoucherTypeIndexRoute
+  '/inventory/transactions/voucher-type': typeof InventoryTransactionsVoucherTypeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,7 +118,7 @@ export interface FileRoutesById {
   '/signup/': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
-  '/accounts/masters/voucher-type/': typeof AccountsMastersVoucherTypeIndexRoute
+  '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,7 +133,7 @@ export interface FileRouteTypes {
     | '/signup/'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
-    | '/accounts/masters/voucher-type/'
+    | '/inventory/transactions/voucher-type/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -146,7 +146,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger'
-    | '/accounts/masters/voucher-type'
+    | '/inventory/transactions/voucher-type'
   id:
     | '__root__'
     | '/'
@@ -159,7 +159,7 @@ export interface FileRouteTypes {
     | '/signup/'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
-    | '/accounts/masters/voucher-type/'
+    | '/inventory/transactions/voucher-type/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -173,7 +173,7 @@ export interface RootRouteChildren {
   SignupIndexRoute: typeof SignupIndexRoute
   AccountsMastersLedgerNewRoute: typeof AccountsMastersLedgerNewRoute
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
-  AccountsMastersVoucherTypeIndexRoute: typeof AccountsMastersVoucherTypeIndexRoute
+  InventoryTransactionsVoucherTypeIndexRoute: typeof InventoryTransactionsVoucherTypeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -248,11 +248,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsMastersLedgerNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/accounts/masters/voucher-type/': {
-      id: '/accounts/masters/voucher-type/'
-      path: '/accounts/masters/voucher-type'
-      fullPath: '/accounts/masters/voucher-type/'
-      preLoaderRoute: typeof AccountsMastersVoucherTypeIndexRouteImport
+    '/inventory/transactions/voucher-type/': {
+      id: '/inventory/transactions/voucher-type/'
+      path: '/inventory/transactions/voucher-type'
+      fullPath: '/inventory/transactions/voucher-type/'
+      preLoaderRoute: typeof InventoryTransactionsVoucherTypeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -269,7 +269,8 @@ const rootRouteChildren: RootRouteChildren = {
   SignupIndexRoute: SignupIndexRoute,
   AccountsMastersLedgerNewRoute: AccountsMastersLedgerNewRoute,
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,
-  AccountsMastersVoucherTypeIndexRoute: AccountsMastersVoucherTypeIndexRoute,
+  InventoryTransactionsVoucherTypeIndexRoute:
+    InventoryTransactionsVoucherTypeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

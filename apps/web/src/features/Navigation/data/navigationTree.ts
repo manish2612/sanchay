@@ -92,6 +92,7 @@ export const NAVIGATION_TREE: NavItemConfig[] = [
         label: "Transactions",
         children: [
           { id: "quotation", label: "Quotation", href: "/inventory/transactions/quotation" },
+          { id: "voucher-type", label: "Voucher Entry", href: "/inventory/transactions/voucher-type" },
           { id: "sales-order", label: "Sales Order", href: "/inventory/transactions/sales-order" },
           { id: "sales", label: "Sales", href: "/inventory/transactions/sales" },
           { id: "credit-note", label: "Credit Note", href: "/inventory/transactions/credit-note" },
