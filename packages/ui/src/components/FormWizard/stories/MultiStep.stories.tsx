@@ -1,10 +1,58 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { FormWizard, Form, useFormWizardContext } from '../../../index';
+import { FormWizard, Form, useFormWizardContext, Switch, Table } from '../../../index';
 import { Monitor } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { flexRender, createColumnHelper } from '@tanstack/react-table';
+
+type SellingPrice = {
+  srNo: string;
+  fromDate: string;
+  mrp: string;
+  netRate: string;
+  rate: string;
+};
+
+const columnHelper = createColumnHelper<SellingPrice>();
+const columns = [
+  columnHelper.accessor('srNo', {
+    header: 'Sr.No.',
+    cell: info => info.getValue(),
+    size: 60,
+  }),
+  columnHelper.accessor('fromDate', {
+    header: 'From Date',
+    cell: info => <input type="date" defaultValue={info.getValue()} className="h-8 px-2 w-full bg-transparent border border-border rounded-md focus:ring-1 focus:ring-primary outline-none" />,
+    size: 150,
+  }),
+  columnHelper.accessor('mrp', {
+    header: 'MRP',
+    cell: info => <span className="text-muted-fg">{info.getValue()}</span>,
+    size: 100,
+  }),
+  columnHelper.accessor('netRate', {
+    header: 'Net Rate',
+    cell: info => <span className="text-muted-fg">{info.getValue()}</span>,
+    size: 100,
+  }),
+  columnHelper.accessor('rate', {
+    header: 'Rate',
+    cell: info => <input type="number" placeholder="0.00" defaultValue={info.getValue()} className="h-8 px-2 w-full bg-transparent border border-border rounded-md focus:ring-1 focus:ring-primary outline-none" />,
+    size: 150,
+  })
+];
+
+const mockData = [
+  {
+    srNo: '1',
+    fromDate: '2026-08-13',
+    mrp: 'MRP',
+    netRate: 'Net Rate',
+    rate: '',
+  }
+];
 
 const meta = {
   title: 'Components/FormWizard/MultiStep',
@@ -21,6 +69,7 @@ const formSchema = z.object({
   accountName: z.string().min(1, 'Account Name is required'),
   accountCode: z.string().min(1, 'Account Code is required'),
   internalNotes: z.string().optional(),
+  setStandardRates: z.boolean().optional(),
 });
 
 const STEPS = [
@@ -89,6 +138,77 @@ const DemoWizardContent = ({ form }: { form: any }) => {
                 </Form.Item>
               )}
             />
+
+            <FormWizard.Separator />
+
+            <div className="flex flex-col gap-1">
+              <Form.Field
+                control={form.control}
+                name="setStandardRates"
+                render={({ field }) => (
+                  <Form.Item className="flex items-center gap-3 space-y-0">
+                    <Form.Control>
+                      <Switch 
+                        checked={field.value} 
+                        onCheckedChange={field.onChange} 
+                      />
+                    </Form.Control>
+                    <div className="space-y-1 leading-none">
+                      <Form.Label>Set Standard Rates</Form.Label>
+                      <p className="text-sm text-muted-fg">
+                        Enable advanced selling price configurations
+                      </p>
+                    </div>
+                  </Form.Item>
+                )}
+              />
+            </div>
+
+            {form.watch('setStandardRates') && (
+              <div className="mt-4 animate-in fade-in slide-in-from-top-4">
+                <Table.Root data={mockData} columns={columns}>
+                  <Table.Header>
+                    {({ table }) => (
+                      <>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                          <Table.HeaderRow key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => (
+                              <Table.Head
+                                key={header.id}
+                                style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}
+                              >
+                                {flexRender(header.column.columnDef.header, header.getContext())}
+                              </Table.Head>
+                            ))}
+                          </Table.HeaderRow>
+                        ))}
+                      </>
+                    )}
+                  </Table.Header>
+                  <Table.Body>
+                    {(row, isFocused) => (
+                      <Table.Row
+                        key={row.id}
+                        data-state={row.getIsSelected() ? 'selected' : undefined}
+                        data-focused={isFocused}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <Table.Cell
+                            key={cell.id}
+                            style={{
+                              width: cell.column.getSize(),
+                              flex: `${cell.column.getSize()} 0 auto`,
+                            }}
+                          >
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </Table.Cell>
+                        ))}
+                      </Table.Row>
+                    )}
+                  </Table.Body>
+                </Table.Root>
+              </div>
+            )}
           </>
         )}
 
@@ -134,6 +254,7 @@ const MultiStepDemo = () => {
       accountName: '',
       accountCode: '',
       internalNotes: '',
+      setStandardRates: false,
     },
   });
 

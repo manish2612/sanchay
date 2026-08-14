@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
-    "build": "tsc",
-    "clean": "rm -rf .turbo node_modules"
+    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
+    "clean": "rm -rf .turbo node_modules dist tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "axios": "^1.7.9"

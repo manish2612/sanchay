@@ -9,12 +9,15 @@ interface SidebarContextType {
   setPanelOpen: (isOpen: boolean) => void;
   activeL1ItemId: string | null;
   setActiveL1ItemId: (id: string | null) => void;
+  isMobileMenuOpen: boolean;
+  setMobileMenuOpen: (isOpen: boolean) => void;
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeL1ItemId, setActiveL1ItemId] = useState<string | null>(null);
   const location = useLocation();
   const pathname = location.pathname;
@@ -52,6 +55,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
   const togglePanel = () => setIsPanelOpen((prev) => !prev);
   const setPanelOpen = (isOpen: boolean) => setIsPanelOpen(isOpen);
+  const setMobileMenuOpen = (isOpen: boolean) => setIsMobileMenuOpen(isOpen);
 
   return (
     <SidebarContext.Provider
@@ -61,6 +65,8 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
         setPanelOpen,
         activeL1ItemId,
         setActiveL1ItemId,
+        isMobileMenuOpen,
+        setMobileMenuOpen,
       }}
     >
       {children}

@@ -3,6 +3,8 @@
 import React from 'react';
 import { useLocation } from '@tanstack/react-router';
 import { Sidebar } from '@/features/Navigation/components/Sidebar';
+import { SidebarProvider } from '@/features/Navigation/components/Sidebar/useSidebar';
+import { MobileHeader } from '@/features/Navigation/components/MobileHeader';
 import { APP_NAME } from '@prime/config';
 
 interface AppLayoutProps {
@@ -29,21 +31,26 @@ export function AppLayout({ children }: AppLayoutProps) {
   const mockUser = { name: 'Admin User', email: 'admin@example.com' };
 
   return (
-    <div className="h-dvh w-full overflow-hidden flex bg-background text-foreground selection:bg-primary/30">
-      {/* Global Navigation Sidebar */}
-      <Sidebar
-        appName={APP_NAME}
-        user={mockUser}
-        onLogout={() => {
-          // TODO: [AUTHENTICATION] Implement real logout logic here
-          console.log('Logout clicked');
-        }}
-      />
+    <SidebarProvider>
+      <div className="h-dvh w-full overflow-hidden flex flex-col lg:flex-row bg-background text-foreground selection:bg-primary/30">
+        {/* Mobile Header (Hidden on Desktop) */}
+        <MobileHeader appName={APP_NAME} />
 
-      {/* Main Content Area */}
-      <main className="flex flex-col flex-1 relative overflow-hidden items-center bg-background min-h-0">
-        <div className="w-full max-w-[1440px] flex-1 flex flex-col min-h-0">{children}</div>
-      </main>
-    </div>
+        {/* Global Navigation Sidebar */}
+        <Sidebar
+          appName={APP_NAME}
+          user={mockUser}
+          onLogout={() => {
+            // TODO: [AUTHENTICATION] Implement real logout logic here
+            console.log('Logout clicked');
+          }}
+        />
+
+        {/* Main Content Area */}
+        <main className="flex flex-col flex-1 relative overflow-hidden items-center bg-background">
+          <div className="w-full max-w-[1440px] flex-1 flex flex-col">{children}</div>
+        </main>
+      </div>
+    </SidebarProvider>
   );
 }
