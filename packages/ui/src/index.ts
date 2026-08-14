@@ -27,4 +27,7 @@ export * from './components/FormWizard';
 export * from './primitives/Tooltip';
 export * from './primitives/Accordion';
 export * from './primitives/Toast';
-
+export { Checkbox as CheckboxPrimitive, type CheckboxProps as CheckboxPrimitiveProps } from './primitives/Checkbox';
+export * from './components/Checkbox';
+export { RadioGroup as RadioGroupPrimitive, RadioGroupItem as RadioGroupPrimitiveItem, type RadioGroupProps as RadioGroupPrimitiveProps, type RadioGroupItemProps as RadioGroupPrimitiveItemProps } from './primitives/RadioGroup';
+export * from './components/RadioGroup';
