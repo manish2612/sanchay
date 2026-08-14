@@ -9,9 +9,9 @@
         "dist"
     ],
     "scripts": {
-        "build": "tsc",
+        "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
         "test": "tsc --noEmit",
-        "clean": "rm -rf dist"
+        "clean": "rm -rf dist tsconfig.tsbuildinfo"
     },
     "devDependencies": {
         "typescript": "^5.0.0"

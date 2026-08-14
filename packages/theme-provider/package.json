@@ -23,8 +23,8 @@
         "src"
     ],
     "scripts": {
-        "build": "tsc",
-        "clean": "rm -rf dist .turbo node_modules"
+        "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
+        "clean": "rm -rf dist .turbo node_modules tsconfig.tsbuildinfo"
     },
     "dependencies": {
         "@prime/theme-adapters": "workspace:^",

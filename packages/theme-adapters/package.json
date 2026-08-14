@@ -6,7 +6,8 @@
     "source": "src/index.ts",
     "types": "dist/index.d.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "rm -rf dist tsconfig.tsbuildinfo && tsc",
+        "clean": "rm -rf dist .turbo node_modules tsconfig.tsbuildinfo",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
