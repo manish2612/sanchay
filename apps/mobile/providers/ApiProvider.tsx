@@ -1,25 +1,15 @@
-import { ApiService } from '@prime/services';
-import { ReactNode, useRef } from 'react';
-
-// In a real mobile app, this might come from expo-constants or react-native-dotenv
-// For now, hardcoded as requested
-const API_BASE_URL = 'https://jsonplaceholder.typicode.com';
+/**
+ * Mobile API Provider — Phase 3 placeholder.
+ *
+ * The mobile app's API registry will be set up here in Phase 3 when
+ * RTK Query + Redux is introduced for mobile. For now, the mobile app
+ * creates its registry on-demand in individual screens (e.g. login.tsx).
+ *
+ * TODO (Phase 3): Create apps/mobile/store/api.ts with createApiRegistry,
+ * add a Redux Provider here, and remove per-screen registry creation.
+ */
+import { ReactNode } from 'react';
 
 export function ApiProvider({ children }: { children: ReactNode }) {
-  const initialized = useRef(false);
-
-  if (!initialized.current) {
-    ApiService.initialize({
-      baseURL: API_BASE_URL,
-      timeout: 30000,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // Note: In Phase 2, we will wire up the mobile-specific token storage
-      // (e.g. SecureStore) and refresh logic here via props.
-    });
-    initialized.current = true;
-  }
-
   return <>{children}</>;
 }
