@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Provider } from 'react-redux';
 import { ThemeProvider, THEME_STORAGE_KEYS } from '@prime/theme-provider/web';
 import {
   LinkProvider,
@@ -8,7 +9,7 @@ import {
   ToastViewport,
 } from '@prime/ui';
 import { RouterLinkAdapter } from './RouterLinkAdapter';
-import { ApiProvider } from './ApiProvider';
+import { store } from '@/store';
 
 interface AppProviderProps {
   children: React.ReactNode;
@@ -20,23 +21,23 @@ export function AppProvider({ children }: AppProviderProps) {
   const [initialMode] = useState<any>(() => localStorage.getItem(THEME_STORAGE_KEYS.MODE) || 'system');
 
   return (
-    <ThemeProvider
-      initialBrand={initialBrand}
-      initialMode={initialMode}
-      initialDensity={initialDensity}
-    >
-      <ShortcutProvider>
-        <TooltipProvider>
-          <ToastProvider>
-            <ApiProvider>
+    <Provider store={store}>
+      <ThemeProvider
+        initialBrand={initialBrand}
+        initialMode={initialMode}
+        initialDensity={initialDensity}
+      >
+        <ShortcutProvider>
+          <TooltipProvider>
+            <ToastProvider>
               <LinkProvider value={RouterLinkAdapter}>
                 {children}
                 <ToastViewport />
               </LinkProvider>
-            </ApiProvider>
-          </ToastProvider>
-        </TooltipProvider>
-      </ShortcutProvider>
-    </ThemeProvider>
+            </ToastProvider>
+          </TooltipProvider>
+        </ShortcutProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
