@@ -1,3 +1,4 @@
 export * from './types';
-export * from './client';
-export * from './config';
+export * from './errors';
+export { createApiRegistry, ApiRegistry } from './clients';
+// interceptors are internal, no need to export
