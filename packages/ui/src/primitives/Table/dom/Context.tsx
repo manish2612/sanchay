@@ -11,13 +11,10 @@ declare module '@tanstack/react-table' {
     editingRowIndex?: number | null;
     successRowIndex?: number | null;
     updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
+    removeRow?: (rowIndex: number) => void;
     state?: TableState;
     features?: unknown[];
-    onRowCommit?: (
-      rowIndex: number,
-      columnId?: string,
-      cellValue?: string,
-    ) => TableRowCommitAction;
+    onRowCommit?: (rowIndex: number, columnId?: string, cellValue?: string) => TableRowCommitAction;
     rowErrors?: Record<number, boolean>;
     phantomRowConfig?: {
       isPhantom: (row: Row<TData>) => boolean;
