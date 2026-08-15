@@ -9,37 +9,16 @@ export function ApiProvider({ children }: { children: ReactNode }) {
   const initialized = useRef(false);
 
   if (!initialized.current) {
-    try {
-      ApiService.initialize({
-        baseURL: API_BASE_URL,
-        timeout: 30000,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const clientInstance = ApiService.getInstance();
-
-      clientInstance.registerRequestInterceptor((config) => {
-        // Simplified logging to prevent circular reference crashes on Android
-        console.log(`[Mobile API Request] ${config.method?.toUpperCase()} ${config.url}`);
-        return config;
-      });
-
-      clientInstance.registerResponseInterceptor(
-        (response) => {
-          console.log(`[Mobile API Response] ${response.status} from ${response.config.url}`);
-          return response;
-        },
-        (error) => {
-          // console.error("[Mobile API Error]", error.message);
-          return Promise.reject(error);
-        },
-      );
-      initialized.current = true;
-    } catch (e) {
-      // Ignroe if already initialized
-    }
+    ApiService.initialize({
+      baseURL: API_BASE_URL,
+      timeout: 30000,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // Note: In Phase 2, we will wire up the mobile-specific token storage
+      // (e.g. SecureStore) and refresh logic here via props.
+    });
+    initialized.current = true;
   }
 
   return <>{children}</>;
