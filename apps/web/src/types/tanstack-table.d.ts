@@ -5,6 +5,7 @@ declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     actions?: {
       updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
+      removeRow?: (rowIndex: number) => void;
       onRowCommit?: (
         rowIndex: number,
         columnId?: string,

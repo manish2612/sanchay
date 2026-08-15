@@ -6,7 +6,7 @@ import { useMultiUnitTable } from './useMultiUnitTable';
 import { columns } from './columns';
 
 export const MultiUnitTable = ({ form }: { form: any }) => {
-  const { enableMultiUnit, fields, updateData, onRowCommit } = useMultiUnitTable(form);
+  const { enableMultiUnit, fields, updateData, removeRow, onRowCommit } = useMultiUnitTable(form);
 
   return (
     <div className="space-y-4">
@@ -37,6 +37,7 @@ export const MultiUnitTable = ({ form }: { form: any }) => {
             tableOptions={{
               meta: {
                 updateData,
+                removeRow,
                 onRowCommit,
                 rowErrors: {},
                 isRowEmpty: (row: any) => !row.original.unit,

@@ -5,7 +5,7 @@ import { STOCK_ITEM_FORM_FIELDS } from '../../constants';
 export const useStandardRatesTable = (form: any) => {
   const enableStandardRates = form.watch(STOCK_ITEM_FORM_FIELDS.ENABLE_STANDARD_RATES);
 
-  const { fields, append, update } = useFieldArray({
+  const { fields, append, update, remove } = useFieldArray({
     control: form.control,
     name: STOCK_ITEM_FORM_FIELDS.STANDARD_RATES,
   });
@@ -22,6 +22,15 @@ export const useStandardRatesTable = (form: any) => {
       update(rowIndex, { ...row, [columnId]: value });
     }
   }, [fields, update]);
+
+  const removeRow = useCallback((rowIndex: number) => {
+    remove(rowIndex);
+    // If we removed the last row, turn off the switch to clear validation errors
+    if (fields.length <= 1 || (fields[rowIndex] as any)?.isPhantom) {
+      form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_STANDARD_RATES, false);
+      remove(); // clear all remaining fields
+    }
+  }, [fields, remove, form]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
     const row = fields[rowIndex];
@@ -41,6 +50,7 @@ export const useStandardRatesTable = (form: any) => {
     enableStandardRates,
     fields,
     updateData,
+    removeRow,
     onRowCommit,
   };
 };

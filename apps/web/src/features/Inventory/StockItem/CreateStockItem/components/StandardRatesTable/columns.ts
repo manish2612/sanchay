@@ -1,6 +1,7 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
 import { NumericCell } from '@/components/TableCells/NumericCell';
 import { DateCell } from '@/components/TableCells/DateCell';
+import { ActionCell } from '@/components/TableCells/ActionCell';
 
 const standardRatesColumnHelper = createColumnHelper<any>();
 
@@ -24,5 +25,11 @@ export const columns: ColumnDef<any, any>[] = [
     header: 'Rate',
     cell: NumericCell,
     size: 150,
+  }),
+  standardRatesColumnHelper.display({
+    id: 'actions',
+    header: '',
+    cell: ActionCell,
+    size: 50,
   }),
 ];

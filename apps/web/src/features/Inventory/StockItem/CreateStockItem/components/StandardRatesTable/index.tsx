@@ -6,7 +6,8 @@ import { useStandardRatesTable } from './useStandardRatesTable';
 import { columns } from './columns';
 
 export const StandardRatesTable = ({ form }: { form: any }) => {
-  const { enableStandardRates, fields, updateData, onRowCommit } = useStandardRatesTable(form);
+  const { enableStandardRates, fields, updateData, removeRow, onRowCommit } =
+    useStandardRatesTable(form);
 
   return (
     <div className="space-y-4">
@@ -28,19 +29,20 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
 
       {enableStandardRates && (
         <div className="border border-border rounded-lg overflow-hidden bg-surface-50 flex flex-col">
-          <Table.Root 
-            data={fields} 
+          <Table.Root
+            data={fields}
             columns={columns}
             className="h-full flex-1 rounded-none border-x-0 border-t-0"
             tableOptions={{
               meta: {
                 updateData,
+                removeRow,
                 onRowCommit,
                 rowErrors: {},
                 isRowEmpty: (row: any) => !row.original.mrp && !row.original.fromDate,
                 phantomRowConfig: {
                   isPhantom: (row: any) => (row.original as any).isPhantom,
-                  actionText: "Add New Rate",
+                  actionText: 'Add New Rate',
                 },
               },
             }}
@@ -51,8 +53,8 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
                   {table.getHeaderGroups().map((headerGroup) => (
                     <Table.HeaderRow key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
-                        <Table.Head 
-                          key={header.id} 
+                        <Table.Head
+                          key={header.id}
                           style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}
                           className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground h-8 border-r border-border last:border-r-0"
                         >
@@ -66,22 +68,25 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
             </Table.Header>
             <Table.Body className="bg-background">
               {(row, isFocused) => (
-                <Table.Row 
-                  key={row.id} 
-                  data-state={row.getIsSelected() ? 'selected' : undefined} 
+                <Table.Row
+                  key={row.id}
+                  data-state={row.getIsSelected() ? 'selected' : undefined}
                   data-focused={isFocused}
                   className={`transition-colors border-b border-border last:border-b-0 border-l-3 border-l-transparent group ${
                     (row.original as any).isPhantom
-                      ? "bg-primary/5"
+                      ? 'bg-primary/5'
                       : isFocused
-                        ? "bg-primary/[0.06] border-l-primary"
-                        : "hover:bg-surface-variant/40"
+                        ? 'bg-primary/[0.06] border-l-primary'
+                        : 'hover:bg-surface-variant/40'
                   }`}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <Table.Cell 
-                      key={cell.id} 
-                      style={{ width: cell.column.getSize(), flex: `${cell.column.getSize()} 0 auto` }} 
+                    <Table.Cell
+                      key={cell.id}
+                      style={{
+                        width: cell.column.getSize(),
+                        flex: `${cell.column.getSize()} 0 auto`,
+                      }}
                       className="px-2 py-1 border-r border-border last:border-r-0"
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -1,6 +1,7 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
 import { TextCell } from '@/components/TableCells/TextCell';
 import { NumericCell } from '@/components/TableCells/NumericCell';
+import { ActionCell } from '@/components/TableCells/ActionCell';
 
 const multiUnitColumnHelper = createColumnHelper<any>();
 
@@ -14,5 +15,11 @@ export const columns: ColumnDef<any, any>[] = [
     header: 'Quantity',
     cell: NumericCell,
     size: 150,
+  }),
+  multiUnitColumnHelper.display({
+    id: 'actions',
+    header: '',
+    cell: ActionCell,
+    size: 50,
   }),
 ];
