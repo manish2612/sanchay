@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "@prime/ui";
 
 export const TextCell = ({ getValue, row, column, table }: any) => {
-  const { state, actions } = table.options.meta || {};
-  const error = state?.rowErrors?.[row.index];
-  const { updateData } = actions || {};
+  const meta = table.options.meta || {} as any;
+  const error = meta?.rowErrors?.[row.index];
+  const updateData = meta?.updateData;
 
   const initialValue = getValue() as string;
   const [value, setValue] = useState(initialValue);

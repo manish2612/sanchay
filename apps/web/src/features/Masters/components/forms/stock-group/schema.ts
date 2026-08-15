@@ -1,8 +1,6 @@
 import { z } from 'zod';
-import { baseMasterSchema } from '@/utils/shared-schemas';
+import { baseMasterSchema, taxClassificationSchema } from '@/utils/shared-schemas';
 
-export const stockGroupSchema = baseMasterSchema.extend({
-  localInterstateSales: z.string().optional(), exportSales: z.string().optional(), localInterstatePurchase: z.string().optional(), exportPurchase: z.string().optional()
-});
+export const stockGroupSchema = baseMasterSchema.merge(taxClassificationSchema);
 
 export type StockGroupFormValues = z.infer<typeof stockGroupSchema>;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, TextInput, SegmentedControl } from '@prime/ui';
+import { Form, TextInput, SegmentedControl, AutoSuggest, Icon } from '@prime/ui';
 import { Control, useWatch } from 'react-hook-form';
 
 interface OpeningBalanceFieldProps {
@@ -48,5 +48,30 @@ export function OpeningBalanceField({ control, label = 'Opening Balance', placeh
         />
       </div>
     </div>
+  );
+}
+
+export interface TaxClassificationFieldProps {
+  control: Control<any>;
+  name: string;
+  label: string;
+  placeholder?: string;
+}
+
+export function TaxClassificationField({ control, name, label, placeholder = 'Enter classification...' }: TaxClassificationFieldProps) {
+  return (
+    <Form.Field
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <Form.Item>
+          <Form.Label>{label}</Form.Label>
+          <Form.Control>
+            <TextInput placeholder={placeholder} {...field} value={field.value ?? ''} />
+          </Form.Control>
+          <Form.Message />
+        </Form.Item>
+      )}
+    />
   );
 }

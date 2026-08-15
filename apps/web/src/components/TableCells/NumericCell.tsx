@@ -5,9 +5,9 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig } = column.columnDef.meta || {};
   const { allowNegative = false } = inputConfig || {};
 
-  const { state, actions } = table.options.meta || {};
-  const error = state?.rowErrors?.[row.index];
-  const { updateData } = actions || {};
+  const meta = table.options.meta || {} as any;
+  const error = meta?.rowErrors?.[row.index];
+  const updateData = meta?.updateData;
 
   const initialValue = getValue() as string;
   const regex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;

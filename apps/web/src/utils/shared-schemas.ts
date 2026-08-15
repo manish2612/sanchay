@@ -20,3 +20,10 @@ export const baseContactSchema = z.object({
   whatsappNumber: z.string().optional(),
   landlineNo: z.string().optional(),
 });
+
+export const taxClassificationSchema = z.object({
+  localInterstateSales: z.string().min(1, 'Local/Interstate Sales is required'),
+  exportSales: z.string().min(1, 'Export Sales is required'),
+  localInterstatePurchase: z.string().min(1, 'Local/Interstate Purchase is required'),
+  exportPurchase: z.string().min(1, 'Export Purchase is required'),
+});

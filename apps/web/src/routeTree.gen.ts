@@ -22,6 +22,7 @@ import { Route as TransactionsVouchersRouteImport } from './routes/transactions/
 import { Route as AccountsMastersLedgerIndexRouteImport } from './routes/accounts/masters/ledger/index'
 import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/masters/ledger/new'
 import { Route as InventoryTransactionsVoucherTypeIndexRouteImport } from './routes/inventory/transactions/voucher-type/index'
+import { Route as InventoryMastersStockItemNewIndexRouteImport } from './routes/inventory/masters/stock-item/new/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -91,6 +92,12 @@ const InventoryTransactionsVoucherTypeIndexRoute =
     path: '/inventory/transactions/voucher-type/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InventoryMastersStockItemNewIndexRoute =
+  InventoryMastersStockItemNewIndexRouteImport.update({
+    id: '/inventory/masters/stock-item/new/',
+    path: '/inventory/masters/stock-item/new/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
   '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
+  '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -121,6 +129,7 @@ export interface FileRoutesByTo {
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
   '/inventory/transactions/voucher-type': typeof InventoryTransactionsVoucherTypeIndexRoute
+  '/inventory/masters/stock-item/new': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -137,6 +146,7 @@ export interface FileRoutesById {
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
   '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
+  '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
     | '/inventory/transactions/voucher-type/'
+    | '/inventory/masters/stock-item/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger'
     | '/inventory/transactions/voucher-type'
+    | '/inventory/masters/stock-item/new'
   id:
     | '__root__'
     | '/'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
     | '/inventory/transactions/voucher-type/'
+    | '/inventory/masters/stock-item/new/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -200,6 +213,7 @@ export interface RootRouteChildren {
   AccountsMastersLedgerNewRoute: typeof AccountsMastersLedgerNewRoute
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
   InventoryTransactionsVoucherTypeIndexRoute: typeof InventoryTransactionsVoucherTypeIndexRoute
+  InventoryMastersStockItemNewIndexRoute: typeof InventoryMastersStockItemNewIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -295,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryTransactionsVoucherTypeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory/masters/stock-item/new/': {
+      id: '/inventory/masters/stock-item/new/'
+      path: '/inventory/masters/stock-item/new'
+      fullPath: '/inventory/masters/stock-item/new/'
+      preLoaderRoute: typeof InventoryMastersStockItemNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -313,6 +334,8 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,
   InventoryTransactionsVoucherTypeIndexRoute:
     InventoryTransactionsVoucherTypeIndexRoute,
+  InventoryMastersStockItemNewIndexRoute:
+    InventoryMastersStockItemNewIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
