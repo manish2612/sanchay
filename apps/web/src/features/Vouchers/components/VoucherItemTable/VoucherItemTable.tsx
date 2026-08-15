@@ -1,8 +1,8 @@
-import React from "react";
-import { Table, flexRender } from "@prime/ui";
-import { editableColumns } from "./columns";
-import { useVoucherItemTable } from "../../hooks/useVoucherItemTable";
-import { VoucherSectionHeader } from "../VoucherSectionHeader";
+import React from 'react';
+import { Table, flexRender } from '@prime/ui';
+import { editableColumns } from './columns';
+import { useVoucherItemTable } from '../../hooks/useVoucherItemTable';
+import { VoucherSectionHeader } from '../VoucherSectionHeader';
 
 export function VoucherItemTable() {
   const { data, rowErrors, updateData, onRowCommit } = useVoucherItemTable();
@@ -15,11 +15,7 @@ export function VoucherItemTable() {
       {/* Section header */}
       <VoucherSectionHeader
         title="Item Lines"
-        count={
-          dataRowCount > 0
-            ? `${dataRowCount} row${dataRowCount !== 1 ? "s" : ""}`
-            : undefined
-        }
+        count={dataRowCount > 0 ? `${dataRowCount} row${dataRowCount !== 1 ? 's' : ''}` : undefined}
         hint="↑↓ Arrow keys to navigate rows"
       />
 
@@ -37,13 +33,11 @@ export function VoucherItemTable() {
               },
               state: {
                 rowErrors,
-                isRowEmpty: (row: any) => row.original.item.trim() === "",
+                isRowEmpty: (row: any) => row.original.item.trim() === '',
               },
-              features: {
-                phantomRowConfig: {
-                  isPhantom: (row: any) => row.original.isPhantom,
-                  actionText: "Add New Row",
-                },
+              phantomRowConfig: {
+                isPhantom: (row: any) => row.original.isPhantom,
+                actionText: 'Add New Row',
               },
             },
           }}
@@ -55,29 +49,21 @@ export function VoucherItemTable() {
                 {table.getHeaderGroups().map((headerGroup) => (
                   <Table.HeaderRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
-                      const isFluid = (header.column.columnDef.meta as any)
-                        ?.layout?.fluid;
+                      const isFluid = (header.column.columnDef.meta as any)?.layout?.fluid;
                       return (
                         <Table.Head
                           key={header.id}
                           style={{
-                            flex: isFluid
-                              ? "1 1 0%"
-                              : `0 0 ${header.getSize()}px`,
-                            width: isFluid ? "100%" : `${header.getSize()}px`,
+                            flex: isFluid ? '1 1 0%' : `0 0 ${header.getSize()}px`,
+                            width: isFluid ? '100%' : `${header.getSize()}px`,
                             minWidth: isFluid
                               ? `${header.column.columnDef.minSize || 0}px`
                               : `${header.getSize()}px`,
-                            maxWidth: isFluid
-                              ? undefined
-                              : `${header.getSize()}px`,
+                            maxWidth: isFluid ? undefined : `${header.getSize()}px`,
                           }}
-                          className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ""}`}
+                          className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ''}`}
                         >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          {flexRender(header.column.columnDef.header, header.getContext())}
                         </Table.Head>
                       );
                     })}
@@ -92,43 +78,34 @@ export function VoucherItemTable() {
             {(row, isFocused) => (
               <Table.Row
                 key={row.id}
-                data-state={row.getIsSelected() ? "selected" : undefined}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
                 data-focused={isFocused}
                 className={`transition-colors border-b border-border last:border-b-0 border-l-3 border-l-transparent group ${
                   row.original.isPhantom
-                    ? "bg-primary/5"
+                    ? 'bg-primary/5'
                     : isFocused
-                      ? "bg-primary/[0.06] border-l-primary"
-                      : "hover:bg-surface-variant/40"
+                      ? 'bg-primary/[0.06] border-l-primary'
+                      : 'hover:bg-surface-variant/40'
                 }`}
               >
                 {row.getVisibleCells().map((cell) => {
-                  const isFluid = (cell.column.columnDef.meta as any)?.layout
-                    ?.fluid;
+                  const isFluid = (cell.column.columnDef.meta as any)?.layout?.fluid;
                   return (
                     <Table.Cell
                       key={cell.id}
                       style={{
-                        flex: isFluid
-                          ? "1 1 0%"
-                          : `0 0 ${cell.column.getSize()}px`,
-                        width: isFluid ? "100%" : `${cell.column.getSize()}px`,
+                        flex: isFluid ? '1 1 0%' : `0 0 ${cell.column.getSize()}px`,
+                        width: isFluid ? '100%' : `${cell.column.getSize()}px`,
                         minWidth: isFluid
                           ? `${cell.column.columnDef.minSize || 0}px`
                           : `${cell.column.getSize()}px`,
-                        maxWidth: isFluid
-                          ? undefined
-                          : `${cell.column.getSize()}px`,
+                        maxWidth: isFluid ? undefined : `${cell.column.getSize()}px`,
                       }}
                       className={`py-0 border-r border-border last:border-r-0 ${
-                        (cell.column.columnDef.meta as any)?.layout
-                          ?.cellClassName || ""
+                        (cell.column.columnDef.meta as any)?.layout?.cellClassName || ''
                       }`}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </Table.Cell>
                   );
                 })}
