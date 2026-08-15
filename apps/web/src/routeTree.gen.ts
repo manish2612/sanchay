@@ -14,9 +14,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MastersRouteImport } from './routes/masters'
-import { Route as TestApiRouteImport } from './routes/test-api'
 import { Route as CompanyNewRouteImport } from './routes/company/new'
+import { Route as DevApiSandboxRouteImport } from './routes/dev/api-sandbox'
+import { Route as DevTestApiRouteImport } from './routes/dev/test-api'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
+import { Route as TransactionsVouchersRouteImport } from './routes/transactions/vouchers'
 import { Route as AccountsMastersLedgerIndexRouteImport } from './routes/accounts/masters/ledger/index'
 import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/masters/ledger/new'
 import { Route as InventoryTransactionsVoucherTypeIndexRouteImport } from './routes/inventory/transactions/voucher-type/index'
@@ -46,19 +48,29 @@ const MastersRoute = MastersRouteImport.update({
   path: '/masters',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TestApiRoute = TestApiRouteImport.update({
-  id: '/test-api',
-  path: '/test-api',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompanyNewRoute = CompanyNewRouteImport.update({
   id: '/company/new',
   path: '/company/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevApiSandboxRoute = DevApiSandboxRouteImport.update({
+  id: '/dev/api-sandbox',
+  path: '/dev/api-sandbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevTestApiRoute = DevTestApiRouteImport.update({
+  id: '/dev/test-api',
+  path: '/dev/test-api',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupIndexRoute = SignupIndexRouteImport.update({
   id: '/signup/',
   path: '/signup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsVouchersRoute = TransactionsVouchersRouteImport.update({
+  id: '/transactions/vouchers',
+  path: '/transactions/vouchers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountsMastersLedgerIndexRoute =
@@ -86,8 +98,10 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
-  '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
+  '/dev/api-sandbox': typeof DevApiSandboxRoute
+  '/dev/test-api': typeof DevTestApiRoute
+  '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup/': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
@@ -99,8 +113,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
-  '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
+  '/dev/api-sandbox': typeof DevApiSandboxRoute
+  '/dev/test-api': typeof DevTestApiRoute
+  '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
@@ -113,8 +129,10 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
-  '/test-api': typeof TestApiRoute
   '/company/new': typeof CompanyNewRoute
+  '/dev/api-sandbox': typeof DevApiSandboxRoute
+  '/dev/test-api': typeof DevTestApiRoute
+  '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup/': typeof SignupIndexRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
@@ -128,8 +146,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/masters'
-    | '/test-api'
     | '/company/new'
+    | '/dev/api-sandbox'
+    | '/dev/test-api'
+    | '/transactions/vouchers'
     | '/signup/'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
@@ -141,8 +161,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/masters'
-    | '/test-api'
     | '/company/new'
+    | '/dev/api-sandbox'
+    | '/dev/test-api'
+    | '/transactions/vouchers'
     | '/signup'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger'
@@ -154,8 +176,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/masters'
-    | '/test-api'
     | '/company/new'
+    | '/dev/api-sandbox'
+    | '/dev/test-api'
+    | '/transactions/vouchers'
     | '/signup/'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/ledger/'
@@ -168,8 +192,10 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   MastersRoute: typeof MastersRoute
-  TestApiRoute: typeof TestApiRoute
   CompanyNewRoute: typeof CompanyNewRoute
+  DevApiSandboxRoute: typeof DevApiSandboxRoute
+  DevTestApiRoute: typeof DevTestApiRoute
+  TransactionsVouchersRoute: typeof TransactionsVouchersRoute
   SignupIndexRoute: typeof SignupIndexRoute
   AccountsMastersLedgerNewRoute: typeof AccountsMastersLedgerNewRoute
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
@@ -213,13 +239,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MastersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/test-api': {
-      id: '/test-api'
-      path: '/test-api'
-      fullPath: '/test-api'
-      preLoaderRoute: typeof TestApiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/company/new': {
       id: '/company/new'
       path: '/company/new'
@@ -227,11 +246,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompanyNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dev/api-sandbox': {
+      id: '/dev/api-sandbox'
+      path: '/dev/api-sandbox'
+      fullPath: '/dev/api-sandbox'
+      preLoaderRoute: typeof DevApiSandboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dev/test-api': {
+      id: '/dev/test-api'
+      path: '/dev/test-api'
+      fullPath: '/dev/test-api'
+      preLoaderRoute: typeof DevTestApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup/': {
       id: '/signup/'
       path: '/signup'
       fullPath: '/signup/'
       preLoaderRoute: typeof SignupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions/vouchers': {
+      id: '/transactions/vouchers'
+      path: '/transactions/vouchers'
+      fullPath: '/transactions/vouchers'
+      preLoaderRoute: typeof TransactionsVouchersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accounts/masters/ledger/': {
@@ -264,8 +304,10 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   MastersRoute: MastersRoute,
-  TestApiRoute: TestApiRoute,
   CompanyNewRoute: CompanyNewRoute,
+  DevApiSandboxRoute: DevApiSandboxRoute,
+  DevTestApiRoute: DevTestApiRoute,
+  TransactionsVouchersRoute: TransactionsVouchersRoute,
   SignupIndexRoute: SignupIndexRoute,
   AccountsMastersLedgerNewRoute: AccountsMastersLedgerNewRoute,
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,

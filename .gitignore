@@ -54,3 +54,6 @@ ios/Pods
 ios/build
 android/app/build
 *.tsbuildinfo
+
+# TanStack Router temporary files
+.tanstack

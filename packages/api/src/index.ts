@@ -1,3 +1,5 @@
 export * from './types';
-export * from './client';
-export * from './config';
+export * from './errors';
+export { createApiRegistry, ApiRegistry } from './clients';
+export { createAxiosBaseQuery } from './baseQuery';
+// interceptors are internal — not exported

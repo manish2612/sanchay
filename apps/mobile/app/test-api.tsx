@@ -8,8 +8,15 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
-import { apiClient } from '@prime/services';
+import { createApiRegistry } from '@prime/api';
 import { Stack } from 'expo-router';
+
+// Temporary on-demand registry for the mobile test screen.
+// TODO (Phase 3): Replace with a shared store/api.ts singleton + RTK Query hooks.
+const mobileApi = createApiRegistry<'MAIN'>({
+  clients: { MAIN: { baseURL: 'https://jsonplaceholder.typicode.com' } },
+  defaultClient: 'MAIN',
+});
 
 export default function TestApiScreen() {
   const [result, setResult] = useState<any>(null);
@@ -31,12 +38,12 @@ export default function TestApiScreen() {
     }
   };
 
-  const getList = () => handleRequest('GET List', () => apiClient.get('/posts'));
-  const getDetail = () => handleRequest('GET Detail', () => apiClient.get('/posts/1'));
+  const getList = () => handleRequest('GET List', () => mobileApi.get('/posts'));
+  const getDetail = () => handleRequest('GET Detail', () => mobileApi.get('/posts/1'));
 
   const postCreate = () =>
     handleRequest('POST Create', () =>
-      apiClient.post('/posts', {
+      mobileApi.post('/posts', {
         title: 'foo',
         body: 'bar',
         userId: 1,
@@ -45,7 +52,7 @@ export default function TestApiScreen() {
 
   const putUpdate = () =>
     handleRequest('PUT Update', () =>
-      apiClient.put('/posts/1', {
+      mobileApi.put('/posts/1', {
         id: 1,
         title: 'foo updated',
         body: 'bar updated',
@@ -55,12 +62,12 @@ export default function TestApiScreen() {
 
   const patchUpdate = () =>
     handleRequest('PATCH Update', () =>
-      apiClient.patch('/posts/1', {
+      mobileApi.patch('/posts/1', {
         title: 'foo patched',
       }),
     );
 
-  const deleteItem = () => handleRequest('DELETE', () => apiClient.delete('/posts/1'));
+  const deleteItem = () => handleRequest('DELETE', () => mobileApi.delete('/posts/1'));
 
   const postMultipart = async () => {
     setLoading(true);
@@ -75,7 +82,7 @@ export default function TestApiScreen() {
         name: 'test.txt',
       } as any);
 
-      const res = await apiClient.post('https://httpbin.org/post', formData, {
+      const res = await mobileApi.post('https://httpbin.org/post', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(res);
