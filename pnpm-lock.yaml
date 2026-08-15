@@ -241,9 +241,6 @@ importers:
       '@prime/modules':
         specifier: workspace:*
         version: link:../../packages/modules
-      '@prime/services':
-        specifier: workspace:*
-        version: link:../../packages/services
       '@prime/theme-adapters':
         specifier: workspace:*
         version: link:../../packages/theme-adapters
@@ -254,7 +251,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@reduxjs/toolkit':
-        specifier: ^2.12.0
+        specifier: ^2.0.0
         version: 2.12.0(react-redux@9.3.0(@types/react@19.2.17)(react@19.1.4)(redux@5.0.1))(react@19.1.4)
       '@tanstack/react-router':
         specifier: ^1.112.0
@@ -284,7 +281,7 @@ importers:
         specifier: ^7.81.0
         version: 7.81.0(react@19.1.4)
       react-redux:
-        specifier: ^9.3.0
+        specifier: ^9.0.0
         version: 9.3.0(@types/react@19.2.17)(react@19.1.4)(redux@5.0.1)
       tailwind-merge:
         specifier: ^3.4.0
