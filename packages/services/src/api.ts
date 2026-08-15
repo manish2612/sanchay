@@ -1,19 +1,42 @@
-import { createClient, HttpClient, APIConfig } from '@prime/api';
+import { createApiRegistry, ApiRegistry, IHttpClient } from '@prime/api';
+import type { ITokenStorage, RefreshTokenCallback } from '@prime/api';
+
+type ApiServiceConfig = {
+  baseURL: string;
+  timeout?: number;
+  headers?: Record<string, string>;
+  tokenStorage?: ITokenStorage;
+  onRefreshToken?: RefreshTokenCallback;
+  onUnauthorized?: () => void;
+};
 
 class ApiService {
-  private static instance: HttpClient;
+  private static registry: ApiRegistry<'DEFAULT'>;
 
-  public static initialize(config: APIConfig): void {
-    if (!this.instance) {
-      this.instance = createClient(config);
+  public static initialize(config: ApiServiceConfig): void {
+    if (!this.registry) {
+      this.registry = createApiRegistry<'DEFAULT'>({
+        clients: {
+          DEFAULT: {
+            baseURL: config.baseURL,
+            timeout: config.timeout,
+            headers: config.headers,
+            withCredentials: true,
+          },
+        },
+        defaultClient: 'DEFAULT',
+        tokenStorage: config.tokenStorage,
+        onRefreshToken: config.onRefreshToken,
+        onUnauthorized: config.onUnauthorized,
+      });
     }
   }
 
-  public static getInstance(): HttpClient {
-    if (!this.instance) {
+  public static getInstance(): IHttpClient {
+    if (!this.registry) {
       throw new Error('ApiService not initialized. Call ApiService.initialize(config) first.');
     }
-    return this.instance;
+    return this.registry.getClient('DEFAULT');
   }
 }
 
@@ -26,9 +49,6 @@ export const apiClient = {
   patch: <T, B>(url: string, body?: B, config?: any) =>
     ApiService.getInstance().patch<T, B>(url, body, config),
   delete: <T>(url: string, config?: any) => ApiService.getInstance().delete<T>(url, config),
-
-  // Expose registration methods if needed, proxied to instance
-  getRawClient: () => ApiService.getInstance().getRawClient(),
 };
 
 export { ApiService };
