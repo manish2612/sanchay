@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 
 // --- Error Definitions ---
 export interface ApiError {
@@ -50,6 +50,29 @@ export type RequestConfig = AxiosRequestConfig;
 export type ApiRequestConfig<TClientKey extends string = string> = AxiosRequestConfig & {
   client?: TClientKey;
 };
+
+/**
+ * The universal standard shape for all API calls in this codebase.
+ *
+ * Used by:
+ *  - `ApiRegistry.request()` for raw imperative calls
+ *  - RTK Query endpoint `query()` functions (via `createAxiosBaseQuery`)
+ *
+ * Mapping to Axios:
+ *  - `body`   → `AxiosRequestConfig.data`   (JSON payload / FormData)
+ *  - `params` → `AxiosRequestConfig.params` (URL query string)
+ *  - `client` → resolved to the correct `HttpClient` instance in the registry
+ */
+export type ApiRequestArgs<TClientKey extends string = string> = {
+  url: string;
+  method: Method;
+  /** JSON body, FormData, or any request payload. Maps to Axios `data`. */
+  body?: unknown;
+  /** URL query parameters as a plain object. Maps to Axios `params`. */
+  params?: Record<string, unknown>;
+  /** Target backend client key. Falls back to `defaultClient` if omitted. */
+  client?: TClientKey;
+} & Omit<AxiosRequestConfig, 'url' | 'method' | 'data' | 'params'>;
 
 export type Response<T> = AxiosResponse<T>;
 

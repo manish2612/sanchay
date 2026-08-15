@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import type {
   ApiRegistryConfig,
+  ApiRequestArgs,
   ApiRequestConfig,
   IHttpClient,
   RequestConfig,
@@ -189,6 +190,49 @@ export class ApiRegistry<TClientKey extends string> {
   ): Promise<TResponse> {
     const { client, ...axiosConfig } = config ?? {};
     return this.resolveClient(client).delete<TResponse>(url, axiosConfig);
+  }
+
+  /**
+   * Unified request method — the standard calling convention for the entire codebase.
+   *
+   * Accepts `ApiRequestArgs` shape which is identical to what RTK Query endpoint
+   * `query()` functions return, and what raw imperative callers produce.
+   * Both paths share the same zero-overhead mental model.
+   *
+   * @example
+   * // Raw imperative call
+   * api.request({ url: '/users', method: 'POST', body: { name: 'John' } });
+   *
+   * // RTK Query endpoint (identical shape)
+   * query: (args) => ({ url: '/users', method: 'POST', body: args })
+   */
+  public request<TResponse>({
+    url,
+    method,
+    body,
+    params,
+    client,
+    ...rest
+  }: ApiRequestArgs<TClientKey>): Promise<TResponse> {
+    const httpClient = this.resolveClient(client);
+    const config: RequestConfig = { params, ...rest };
+
+    switch (method.toUpperCase()) {
+      case 'GET':
+        return httpClient.get<TResponse>(url, config);
+      case 'DELETE':
+        return httpClient.delete<TResponse>(url, config);
+      case 'POST':
+        return httpClient.post<TResponse, unknown>(url, body, config);
+      case 'PUT':
+        return httpClient.put<TResponse, unknown>(url, body, config);
+      case 'PATCH':
+        return httpClient.patch<TResponse, unknown>(url, body, config);
+      default:
+        return Promise.reject(
+          new Error(`ApiRegistry.request: unsupported method "${method}"`),
+        );
+    }
   }
 }
 
