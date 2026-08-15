@@ -52,6 +52,13 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
         .animate-headshake {
           animation: headshake 0.4s cubic-bezier(.36,.07,.19,.97) both;
         }
+        @keyframes step-in {
+          from { opacity: 0; transform: translateX(-8px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        .animate-step-in {
+          animation: step-in 0.25s ease-out both;
+        }
       `}</style>
 
       {/* Mobile Header (Visible < 1024px) */}
@@ -125,7 +132,7 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
                       goToStep(stepNumber);
                     }
                   }}
-                  className={`group relative flex items-start p-2.5 rounded-lg cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  className={`animate-step-in group relative flex items-start p-2.5 rounded-lg cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isRejected
                       ? 'bg-danger/10 text-danger shadow-md ring-1 ring-danger/30'
                       : isActive

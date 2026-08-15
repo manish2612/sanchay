@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Form } from '../Form';
 import { FormWizardContext, useFormWizard } from './hooks/useFormWizard';
-import { FormWizardProps } from './types';
+import { FormWizardProps, FormWizardStep } from './types';
 
 export interface FormWizardRootProps extends FormWizardProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,8 +20,18 @@ export const FormWizardRoot = ({
   steps,
   children,
   className = '',
+  autoUnregisterFields = true,
 }: FormWizardRootProps) => {
   const wizard = useFormWizard(initialStep, steps);
+
+  // ── Stale-closure refs ────────────────────────────────────────────────────
+  // Assigned synchronously each render so they always hold the latest value
+  // inside async callbacks (e.g. after an `await form.trigger(...)` gap).
+  const stepsRef = useRef<FormWizardStep[]>(wizard.steps);
+  const currentStepRef = useRef<number>(wizard.currentStep);
+  stepsRef.current = wizard.steps;
+  currentStepRef.current = wizard.currentStep;
+  // ─────────────────────────────────────────────────────────────────────────
 
   // A validation-aware jump function that safely handles step navigation logic.
   // This is passed into the context so it can be invoked by the Next button,
@@ -44,11 +54,26 @@ export const FormWizardRoot = ({
 
     // Jumping forward requires validation of the current step
     const currentStepInfo = wizard.steps[wizard.currentStep - 1];
+    // Capture the step's identity (id) before the async gap so we can verify
+    // it hasn't been removed or replaced while validation was in-flight.
+    const validatingStepId = currentStepInfo?.id;
+
     if (currentStepInfo?.fields && currentStepInfo.fields.length > 0) {
       const isStepValid = await form.trigger(currentStepInfo.fields);
-      // If validation fails, block the jump and shake the current step to indicate error
+
+      // ── Stale-closure guard ───────────────────────────────────────────────
+      // After the await, use refs (not closures) to read latest state.
+      // If the step that was being validated no longer sits at the current
+      // position (e.g. it was removed by a concurrent useEffect), abort silently
+      // to avoid navigating to a stale or non-existent step.
+      const latestCurrentStep = stepsRef.current[currentStepRef.current - 1];
+      if (latestCurrentStep?.id !== validatingStepId) return;
+      if (targetStep > stepsRef.current.length) return;
+      // ─────────────────────────────────────────────────────────────────────
+
+      // If validation fails, block the jump and shake the current step
       if (!isStepValid) {
-        wizard.setRejectedStepIndex(wizard.currentStep);
+        wizard.setRejectedStepIndex(currentStepRef.current);
         return;
       }
     }
@@ -56,6 +81,30 @@ export const FormWizardRoot = ({
     // Validation passed (or no validation required), execute the jump
     wizard.goToStep(targetStep);
   };
+
+  // ── Field unregistration on step removal ──────────────────────────────────
+  // Diffs wizard.steps against the previous render to detect removed steps.
+  // Unregisters their RHF fields so orphaned values are not submitted.
+  // Controlled by the autoUnregisterFields prop (default: true).
+  const prevStepsRef = useRef<FormWizardStep[]>(wizard.steps);
+  useEffect(() => {
+    const prev = prevStepsRef.current;
+    const current = wizard.steps;
+    prevStepsRef.current = current;
+
+    if (!autoUnregisterFields) return;
+
+    const removedSteps = prev.filter((s) => !current.find((cs) => cs.id === s.id));
+    removedSteps.forEach((step) => {
+      if (step.fields?.length) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        form.unregister(step.fields as any);
+      }
+    });
+    // `form` is a stable RHF object reference — safe to omit from deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wizard.steps, autoUnregisterFields]);
+  // ─────────────────────────────────────────────────────────────────────────
 
   // Global hotkey listener for Power Users to navigate steps via keyboard
   useEffect(() => {
@@ -105,3 +154,4 @@ export const FormWizardRoot = ({
     </FormWizardContext.Provider>
   );
 };
+
