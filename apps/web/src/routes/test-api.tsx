@@ -67,11 +67,6 @@ function TestApiPage() {
     setError(null);
     setResult(null);
     try {
-      // Create a client pointing to httpbin just for this test
-      const httpbinClient = apiClient.getRawClient(); // Or create new instance
-      // For demo purposes, we will assume we can use the existing client if we override baseURL in config
-      // But axios instance baseURL is fixed. Let's use full URL.
-
       const formData = new FormData();
       formData.append('test-file', new Blob(['test content'], { type: 'text/plain' }), 'test.txt');
 
