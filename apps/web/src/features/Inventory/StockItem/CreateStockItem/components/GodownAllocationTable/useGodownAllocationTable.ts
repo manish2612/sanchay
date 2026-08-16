@@ -15,10 +15,9 @@ export const useGodownAllocationTable = (form: any) => {
     name: STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS,
   });
 
-  // Calculate sum of allocated quantities (excluding phantom rows)
+  // Calculate sum of allocated quantities (INCLUDING phantom rows so real-time validation works)
   const totalAllocatedQuantity = useMemo(() => {
     return godownAllocations.reduce((sum: number, row: any) => {
-      if (row.isPhantom) return sum;
       return sum + (Number(row.quantity) || 0);
     }, 0);
   }, [godownAllocations]);
@@ -55,16 +54,8 @@ export const useGodownAllocationTable = (form: any) => {
   }, [form, update]);
 
   const removeRow = useCallback((rowIndex: number) => {
-    const currentRows = form.getValues(STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS) || [];
-    
-    // If we removed the last row, turn off the switch to clear validation errors
-    if (currentRows.length <= 1 || (currentRows[rowIndex] as any)?.isPhantom) {
-      form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION, false);
-      remove(); // clear all remaining fields
-    } else {
-      remove(rowIndex);
-    }
-  }, [remove, form]);
+    remove(rowIndex);
+  }, [remove]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
     const row = form.getValues(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
@@ -89,12 +80,10 @@ export const useGodownAllocationTable = (form: any) => {
     let totalAmount = 0;
 
     godownAllocations.forEach((row: any) => {
-      if (!row.isPhantom) {
-        const qty = Number(row.quantity) || 0;
-        const rate = Number(row.rate) || 0;
-        totalRate += rate;
-        totalAmount += (qty * rate);
-      }
+      const qty = Number(row.quantity) || 0;
+      const rate = Number(row.rate) || 0;
+      totalRate += rate;
+      totalAmount += (qty * rate);
     });
 
     // Update main form fields safely without triggering unnecessary re-renders loop

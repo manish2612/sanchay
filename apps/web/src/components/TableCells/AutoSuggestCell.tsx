@@ -32,6 +32,9 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
 
   const onBlur = () => {
     updateData?.(row.index, column.id, value);
+    if (value && value.trim() !== "") {
+      onRowCommit?.(row.index, column.id, value);
+    }
   };
   const MOCK_ITEMS = [
     { label: "MacBook Pro 16", value: "MacBook Pro 16" },
@@ -52,6 +55,9 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
       onInputChange={(val) => {
         setValue(val);
         updateData?.(row.index, column.id, val);
+        if (val && val.trim() !== "") {
+          onRowCommit?.(row.index, column.id, val);
+        }
       }}
       options={filteredOptions}
       creatable

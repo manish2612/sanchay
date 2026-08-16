@@ -9,6 +9,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const rowError = meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
   const updateData = meta?.updateData;
+  const onRowCommit = meta?.onRowCommit;
 
   const initialValue = getValue() as string;
   const regex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;
@@ -32,6 +33,9 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
     const formatted = formatValue(value);
     setValue(formatted);
     updateData?.(row.index, column.id, formatted);
+    if (formatted && formatted !== "0.00") {
+      onRowCommit?.(row.index, column.id, formatted);
+    }
   };
 
   return (
@@ -49,6 +53,9 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
         const val = e.target.value.replace(regex, "");
         setValue(val);
         updateData?.(row.index, column.id, val);
+        if (val && val.trim() !== "") {
+          onRowCommit?.(row.index, column.id, val);
+        }
       }}
       onBlur={onBlur}
       variant={error ? "error" : "default"}

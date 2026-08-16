@@ -4,6 +4,9 @@ import { Button, Icon } from '@prime/ui';
 export const ActionCell = ({ row, table }: any) => {
   const meta = (table.options.meta || {}) as any;
   const removeRow = meta.removeRow;
+  const isPhantom = meta.phantomRowConfig?.isPhantom?.(row) || (row.original as any).isPhantom;
+
+  if (isPhantom) return null;
 
   return (
     <div className="flex items-center justify-center w-full h-full">
@@ -11,7 +14,7 @@ export const ActionCell = ({ row, table }: any) => {
         type="button"
         variant="ghost"
         size="icon"
-        className="h-8 w-8 text-muted-fg hover:text-destructive hover:bg-destructive/10"
+        className="h-8 w-8 text-muted-fg hover:text-danger hover:bg-danger/10"
         onClick={() => removeRow?.(row.index)}
         aria-label="Remove row"
       >
