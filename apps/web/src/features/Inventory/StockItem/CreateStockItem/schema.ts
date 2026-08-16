@@ -15,6 +15,13 @@ export const standardRateSchema = z.object({
   isPhantom: z.boolean().optional(),
 });
 
+export const godownAllocationSchema = z.object({
+  godown: z.string().min(1, 'Godown is required'),
+  quantity: z.coerce.number().min(0, 'Quantity must be positive'),
+  rate: z.coerce.number().min(0, 'Rate must be positive'),
+  isPhantom: z.boolean().optional(),
+});
+
 export const stockItemSchema = baseMasterSchema.extend({
   categoryId: z.string().min(1, 'Category is required'),
   unit: z.coerce.number().min(0, 'Unit is required'),
@@ -29,6 +36,8 @@ export const stockItemSchema = baseMasterSchema.extend({
   openingQuantity: z.coerce.number().min(0, 'Opening quantity is required'),
   openingRate: z.coerce.number().min(0, 'Opening rate is required'),
   openingAmount: z.coerce.number().min(0, 'Opening amount is required'),
+  enableGodownAllocation: z.boolean().optional(),
+  godownAllocations: z.array(godownAllocationSchema).optional(),
 }).merge(taxClassificationSchema);
 
 export type StockItemFormValues = z.infer<typeof stockItemSchema>;
