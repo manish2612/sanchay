@@ -15,6 +15,9 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
   const { currentStep, steps, totalSteps, goToStep, rejectedStepIndex, setRejectedStepIndex } =
     useFormWizardContext();
   const [modifier, setModifier] = React.useState('Alt+');
+  
+  // Track steps that are present on the very first mount so we only animate dynamically injected ones.
+  const initialStepIdsRef = React.useRef(new Set(steps.map(s => s.id)));
 
   // Detect if the user is on macOS to display the native "⌥" symbol for the Option key.
   // Falls back to "Alt+" for Windows/Linux users.
@@ -51,6 +54,74 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
         }
         .animate-headshake {
           animation: headshake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        /* 1. Main Container: Slide down and fade in */
+        @keyframes step-in {
+          0% { 
+            opacity: 0; 
+            transform: translateX(-16px);
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-bottom: -16px;
+          }
+          40% {
+            opacity: 1; /* Fade in quickly so child animations are visible */
+          }
+          100% { 
+            opacity: 1; 
+            transform: translateX(0);
+            max-height: 100px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 0;
+          }
+        }
+
+        /* 2. Attention Flash: Subtle background pulse after sliding in */
+        @keyframes step-highlight {
+          0% { opacity: 0; }
+          15% { opacity: 1; }
+          100% { opacity: 0; }
+        }
+
+        /* 3. Connecting Line: Grows downwards */
+        @keyframes line-draw {
+          0% { transform: scaleY(0.3); opacity:0; }
+          100% { transform: scaleY(1); opacity:1; }
+        }
+
+        /* 4. Step Dot: Spring pop */
+        @keyframes dot-pop {
+          0% { transform: scale(0.5); opacity: 0; }
+          50% { transform: scale(1.3); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Apply the choreography with precise delays */
+        .animate-step-in {
+          animation: step-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+        
+        /* The highlight overlay */
+        /* The highlight overlay (hidden by default, active during animation) */
+        .step-highlight {
+          opacity: 0;
+        }
+        .animate-step-in .step-highlight {
+          animation: step-highlight 1s ease-out 0.2s both;
+        }
+
+        /* Connecting line draws down after the dot pops */
+        .animate-step-in .step-line {
+          transform-origin: top;
+          animation: line-draw 0.4s ease-out 0.35s both; 
+        }
+        
+        /* Dot pops in slightly after container starts expanding */
+        .animate-step-in .step-dot {
+          animation: dot-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
         }
       `}</style>
 
@@ -110,6 +181,11 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
               const isActive = currentStep === stepNumber;
               const isDone = currentStep > stepNumber;
               const isRejected = rejectedStepIndex === stepNumber;
+              
+              // Only apply the entry choreography to steps that were added dynamically
+              // (i.e. not present during the very first render).
+              const isDynamic = !initialStepIdsRef.current.has(step.id);
+              const animClass = isDynamic ? 'animate-step-in' : '';
 
               return (
                 <div
@@ -125,7 +201,7 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
                       goToStep(stepNumber);
                     }
                   }}
-                  className={`group relative flex items-start p-2.5 rounded-lg cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                  className={`${animClass} group relative flex items-start p-2.5 rounded-lg cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                     isRejected
                       ? 'bg-danger/10 text-danger shadow-md ring-1 ring-danger/30'
                       : isActive
@@ -135,10 +211,13 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
                           : 'hover:bg-primary/5'
                   }`}
                 >
+                  {/* Highlight overlay for entry animation (solid color, animates opacity) */}
+                  <div className="step-highlight absolute inset-0 rounded-lg bg-primary pointer-events-none z-0" />
+
                   {/* Connecting Line (Absolute to parent, DOES NOT SHAKE) */}
                   {index !== steps.length - 1 && (
                     <div
-                      className={`absolute left-[23px] top-[24px] -bottom-[40px] w-[2px] rounded-[1px] z-[1] ${
+                      className={`step-line absolute left-[23px] top-[24px] -bottom-[40px] w-[2px] rounded-[1px] z-0 ${
                         isDone ? 'bg-primary' : 'bg-outline'
                       }`}
                     />
@@ -150,7 +229,7 @@ export const StepNav = ({ title = 'Form Wizard', className = '' }: StepNavProps 
                   >
                     {/* Dot */}
                     <div
-                      className={`relative w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-head font-bold border-2 transition-all ${
+                      className={`step-dot relative w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-head font-bold border-2 transition-all ${
                         isRejected
                           ? 'bg-danger border-danger text-danger-foreground ring-4 ring-danger/20'
                           : isActive
