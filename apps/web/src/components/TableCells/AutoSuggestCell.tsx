@@ -15,9 +15,12 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig } = column.columnDef.meta || {};
   const { placeholder = "Search item..." } = inputConfig || {};
 
-  const { state, actions } = table.options.meta || {};
-  const error = state?.rowErrors?.[row.index];
-  const { updateData, onRowCommit } = actions || {};
+  const meta = table.options.meta || {} as any;
+  const { state, actions } = meta;
+  const rowError = meta?.rowErrors?.[row.index] || state?.rowErrors?.[row.index];
+  const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
+  const updateData = meta?.updateData || actions?.updateData;
+  const onRowCommit = meta?.onRowCommit || actions?.onRowCommit;
 
   const initialValue = getValue() as string;
   const [value, setValue] = useState(initialValue);
@@ -58,9 +61,8 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
     >
       <AutoSuggest.Input
         placeholder={placeholder}
-        className={`h-8 !min-h-8 !py-0 w-full my-auto bg-surface transition-all ${
-          error ? "ring-2 ring-destructive ring-offset-1" : ""
-        }`}
+        error={!!error}
+        className="h-8 !min-h-8 !py-0 w-full my-auto bg-surface transition-all"
         inputClassName="text-sm h-full px-1"
         onBlur={onBlur}
       />

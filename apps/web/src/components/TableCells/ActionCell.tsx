@@ -15,7 +15,7 @@ export const ActionCell = ({ row, table }: any) => {
         onClick={() => removeRow?.(row.index)}
         aria-label="Remove row"
       >
-        <Icon name="Trash2" size={16} />
+        <Icon className="text-danger" name="Trash2" size={16} />
       </Button>
     </div>
   );
