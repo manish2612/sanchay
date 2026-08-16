@@ -36,10 +36,20 @@ module.exports = {
                     '0%, 100%': { transform: 'translateX(0)' },
                     '25%': { transform: 'translateX(-4px)' },
                     '75%': { transform: 'translateX(4px)' },
+                },
+                'num-slide-up': {
+                    '0%': { opacity: '0', transform: 'translateY(12px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                'num-fade-in': {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' },
                 }
             },
             animation: {
                 shake: 'shake 0.2s ease-in-out 0s 2',
+                'num-slide-up': 'num-slide-up var(--duration, 0.3s) ease-out both',
+                'num-fade-in': 'num-fade-in var(--duration, 0.3s) ease-out both',
             }
         },
     },
