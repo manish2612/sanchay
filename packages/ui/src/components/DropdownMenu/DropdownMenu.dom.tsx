@@ -109,6 +109,7 @@ const DropdownMenu = ({
             textValue={item.label} // REQUIRED for search to work
             leadingVisual={item.leadingVisual}
             reserveLeadingSpace={item.reserveLeadingSpace}
+            className={item.className}
           >
             {item.icon && <Icon name={item.icon} size={16} />}
             {item.label}

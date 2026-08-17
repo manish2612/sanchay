@@ -10,6 +10,7 @@ export interface DropdownMenuItem {
   reserveLeadingSpace?: boolean;
   shortcut?: string;
   disabled?: boolean;
+  className?: string;
 }
 
 export interface DropdownMenuProps {
