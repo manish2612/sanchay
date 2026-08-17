@@ -45,40 +45,37 @@ export const FormWizardRoot = ({
       return;
     }
 
-    // Restrict forward jumps to next immediate step only to prevent bypassing validation
-    // on intermediate steps. E.g. Prevents jumping from Step 1 straight to Step 3.
-    if (targetStep > wizard.currentStep + 1) {
-      wizard.setRejectedStepIndex(wizard.currentStep);
-      return;
-    }
+    // Jumping forward requires validating the current step and all intermediate steps
+    for (let s = wizard.currentStep; s < targetStep; s++) {
+      const stepInfo = wizard.steps[s - 1];
+      const validatingStepId = stepInfo?.id;
 
-    // Jumping forward requires validation of the current step
-    const currentStepInfo = wizard.steps[wizard.currentStep - 1];
-    // Capture the step's identity (id) before the async gap so we can verify
-    // it hasn't been removed or replaced while validation was in-flight.
-    const validatingStepId = currentStepInfo?.id;
+      if (stepInfo?.fields && stepInfo.fields.length > 0) {
+        const isStepValid = await form.trigger(stepInfo.fields);
 
-    if (currentStepInfo?.fields && currentStepInfo.fields.length > 0) {
-      const isStepValid = await form.trigger(currentStepInfo.fields);
+        // ── Stale-closure guard ───────────────────────────────────────────────
+        // After the await, use refs (not closures) to read latest state.
+        // If the steps array changed during validation such that this step no longer exists, abort.
+        const latestStepInfo = stepsRef.current[s - 1];
+        if (latestStepInfo?.id !== validatingStepId) return;
+        if (targetStep > stepsRef.current.length) return;
+        // ─────────────────────────────────────────────────────────────────────
 
-      // ── Stale-closure guard ───────────────────────────────────────────────
-      // After the await, use refs (not closures) to read latest state.
-      // If the step that was being validated no longer sits at the current
-      // position (e.g. it was removed by a concurrent useEffect), abort silently
-      // to avoid navigating to a stale or non-existent step.
-      const latestCurrentStep = stepsRef.current[currentStepRef.current - 1];
-      if (latestCurrentStep?.id !== validatingStepId) return;
-      if (targetStep > stepsRef.current.length) return;
-      // ─────────────────────────────────────────────────────────────────────
-
-      // If validation fails, block the jump and shake the current step
-      if (!isStepValid) {
-        wizard.setRejectedStepIndex(currentStepRef.current);
-        return;
+        if (!isStepValid) {
+          // If an intermediate step fails validation, flash that specific step
+          wizard.setRejectedStepIndex(s);
+          
+          // Optionally, if they are jumping far ahead and a step in between fails,
+          // we could jump them to the failing step. But for now, we just reject the jump.
+          if (s > wizard.currentStep) {
+             wizard.goToStep(s);
+          }
+          return;
+        }
       }
     }
 
-    // Validation passed (or no validation required), execute the jump
+    // Validation passed for all required steps, execute the jump
     wizard.goToStep(targetStep);
   };
 
