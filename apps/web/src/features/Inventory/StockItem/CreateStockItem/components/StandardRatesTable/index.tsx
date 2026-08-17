@@ -35,14 +35,18 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
             className="h-full flex-1 rounded-none border-x-0 border-t-0"
             tableOptions={{
               meta: {
-                updateData,
-                removeRow,
-                onRowCommit,
-                rowErrors: {},
-                isRowEmpty: (row: any) => !row.original.mrp && !row.original.fromDate,
+                state: {
+                  rowErrors: {},
+                  isRowEmpty: (row: any) => !row.original.mrp && !row.original.fromDate,
+                },
                 phantomRowConfig: {
                   isPhantom: (row: any) => (row.original as any).isPhantom,
                   actionText: 'Add New Rate',
+                },
+                actions: {
+                  updateData,
+                  onRowCommit,
+                  removeRow,
                 },
               },
             }}

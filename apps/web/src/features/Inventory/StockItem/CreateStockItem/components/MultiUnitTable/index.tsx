@@ -36,14 +36,18 @@ export const MultiUnitTable = ({ form }: { form: any }) => {
             className="h-full flex-1 rounded-none border-x-0 border-t-0"
             tableOptions={{
               meta: {
-                updateData,
-                removeRow,
-                onRowCommit,
-                rowErrors: {},
-                isRowEmpty: (row: any) => !row.original.unit,
+                state: {
+                  rowErrors: {},
+                  isRowEmpty: (row: any) => !row.original.unit,
+                },
                 phantomRowConfig: {
                   isPhantom: (row: any) => (row.original as any).isPhantom,
                   actionText: 'Add New Unit',
+                },
+                actions: {
+                  updateData,
+                  onRowCommit,
+                  removeRow,
                 },
               },
             }}

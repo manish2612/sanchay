@@ -3,7 +3,7 @@ import { Button, Icon } from '@prime/ui';
 
 export const ActionCell = ({ row, table }: any) => {
   const meta = (table.options.meta || {}) as any;
-  const removeRow = meta.removeRow;
+  const removeRow = meta.actions?.removeRow || meta.removeRow;
   const isPhantom = meta.phantomRowConfig?.isPhantom?.(row) || (row.original as any).isPhantom;
 
   if (isPhantom) return null;
