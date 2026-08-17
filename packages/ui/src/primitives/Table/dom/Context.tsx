@@ -23,6 +23,7 @@ declare module '@tanstack/react-table' {
       renderRestState?: (row: Row<TData>) => React.ReactNode;
     };
     isRowEmpty?: (row: Row<TData>) => boolean;
+    enableColumnFilter?: boolean;
   }
 }
 

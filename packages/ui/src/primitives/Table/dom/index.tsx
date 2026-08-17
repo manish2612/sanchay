@@ -10,6 +10,8 @@ import { TableBody } from './Body';
 import { TableFooter } from './Footer';
 import { TableStatusPosition } from './StatusPosition';
 import { useTableContext } from './Context';
+import { FilterRow } from './FilterRow';
+import { ColumnResizer } from './ColumnResizer';
 
 export * from './StatusPosition';
 export * from './Context';
@@ -25,6 +27,8 @@ export const Table = {
   Cell: TableCell,
   StatusPosition: TableStatusPosition,
   Footer: TableFooter,
+  FilterRow,
+  ColumnResizer,
   useTableContext,
 };
 

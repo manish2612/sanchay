@@ -5,6 +5,7 @@ import { Table as TanStackTable } from '@tanstack/react-table';
 import { cn } from '../../../utils';
 import { tableStyles } from '../styles';
 import { useTableContext } from './Context';
+import { FilterRow } from './FilterRow';
 
 export const TableHeader = React.forwardRef<
   HTMLDivElement,
@@ -22,6 +23,7 @@ export const TableHeader = React.forwardRef<
       {...props}
     >
       {typeof children === 'function' ? children({ table }) : children}
+      <FilterRow />
     </div>
   );
 });

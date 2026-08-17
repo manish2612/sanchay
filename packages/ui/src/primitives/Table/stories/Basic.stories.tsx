@@ -182,3 +182,127 @@ export const NoData: Story = {
     );
   },
 };
+
+export const WithResizingAndFiltering: Story = {
+  args: { rowHeight: 44 },
+  render: (args) => {
+    const data = useMemo(() => generateData(20), []);
+    const filterableColumns = useMemo(() => {
+      return columns.map(col => {
+        const accessor = (col as any).accessorKey;
+        if (accessor === 'id') {
+          return {
+            ...col,
+            enableColumnFilter: true,
+            enableResizing: true,
+            meta: {
+              ...col.meta,
+              filter: { type: 'text' as const, placeholder: 'Filter by Invoice...' }
+            }
+          };
+        }
+        if (accessor === 'status') {
+          return {
+            ...col,
+            enableColumnFilter: true,
+            enableResizing: true,
+            meta: {
+              ...col.meta,
+              filter: { 
+                type: 'select' as const, 
+                placeholder: 'Filter Status...',
+                options: [
+                  { id: 'pending', label: 'Pending' },
+                  { id: 'paid', label: 'Paid' },
+                  { id: 'failed', label: 'Failed' }
+                ]
+              }
+            }
+          };
+        }
+        if (accessor === 'date') {
+          return {
+            ...col,
+            enableColumnFilter: true,
+            enableResizing: true,
+            meta: {
+              ...col.meta,
+              filter: { type: 'date' as const, placeholder: 'Filter Date...' }
+            }
+          };
+        }
+        if (accessor === 'amount') {
+          return {
+            ...col,
+            enableColumnFilter: true,
+            enableResizing: true,
+            meta: {
+              ...col.meta,
+              filter: { type: 'numeric' as const, placeholder: 'Filter Amount...' }
+            }
+          };
+        }
+        return {
+          ...col,
+          enableColumnFilter: false,
+          enableResizing: true,
+        };
+      });
+    }, []);
+
+    return (
+      <div className="border rounded-md h-[500px]">
+        <Table.Root 
+          {...args} 
+          data={data} 
+          columns={filterableColumns} 
+          tableOptions={{ 
+            meta: { enableColumnFilter: true }
+          }}
+          className="h-full"
+        >
+          <Table.Header>
+            {({ table }) => (
+              <>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <Table.HeaderRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <Table.Head
+                        key={header.id}
+                        header={header}
+                        style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                      </Table.Head>
+                    ))}
+                  </Table.HeaderRow>
+                ))}
+              </>
+            )}
+          </Table.Header>
+          <Table.Body>
+            {(row, isFocused) => (
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table.Root>
+      </div>
+    );
+  },
+};

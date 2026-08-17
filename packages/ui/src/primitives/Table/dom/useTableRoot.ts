@@ -5,6 +5,7 @@ import {
   ColumnDef,
   Row,
   TableOptions,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useTableNavigation } from './useTableNavigation';
@@ -38,11 +39,62 @@ export function useTableRoot<TData>({
     }
   }, [focusedRowIndex]);
 
+  const [columnSizing, setColumnSizing] = React.useState<Record<string, number>>({});
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    enableColumnResizing: true,
+    columnResizeMode: 'onEnd',
     ...tableOptions,
+    state: {
+      ...tableOptions?.state,
+      columnSizing,
+    },
+    onColumnSizingChange: (updater) => {
+      setColumnSizing((oldSizing) => {
+        const rawNewSizing = typeof updater === 'function' ? updater(oldSizing) : updater;
+        
+        let changedColId = null;
+        for (const key in rawNewSizing) {
+          if (rawNewSizing[key] !== oldSizing[key]) {
+            changedColId = key;
+            break;
+          }
+        }
+        
+        if (!changedColId || !rootRef.current) return rawNewSizing;
+        
+        const S_old = oldSizing[changedColId] ?? table.getColumn(changedColId)?.columnDef.size ?? 150;
+        const S_raw = rawNewSizing[changedColId];
+        const D = S_raw - S_old;
+        
+        const C = rootRef.current.clientWidth;
+        
+        let T_old = 0;
+        table.getVisibleLeafColumns().forEach(col => {
+          T_old += oldSizing[col.id] ?? col.columnDef.size ?? 150;
+        });
+        
+        if (C <= T_old) return rawNewSizing;
+        
+        const W_old = S_old * (C / T_old);
+        const W_new = W_old + D;
+        const T_other = T_old - S_old;
+        
+        if (W_new >= C || W_new <= 20) return rawNewSizing;
+        
+        const S_new = (W_new * T_other) / (C - W_new);
+        
+        return {
+          ...rawNewSizing,
+          [changedColId]: S_new,
+        };
+      });
+      tableOptions?.onColumnSizingChange?.(updater);
+    },
     meta: {
       ...tableOptions?.meta,
       focusedRowIndex,
