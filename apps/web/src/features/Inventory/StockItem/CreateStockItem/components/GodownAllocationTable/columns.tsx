@@ -1,8 +1,8 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
 import { AutoSuggestCell } from '@/components/TableCells/AutoSuggestCell';
 import { NumericCell } from '@/components/TableCells/NumericCell';
-import { ReadOnlyNumericCell } from '@/components/TableCells/ReadOnlyNumericCell';
 import { ActionCell } from '@/components/TableCells/ActionCell';
+import { AnimatedNumber } from '@prime/ui';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -14,8 +14,8 @@ export const getColumns = (maxQty: number): ColumnDef<any, any>[] => [
     meta: {
       inputConfig: {
         placeholder: 'Select Godown...',
-      }
-    }
+      },
+    },
   }),
   columnHelper.accessor('quantity', {
     header: 'Quantity',
@@ -24,8 +24,8 @@ export const getColumns = (maxQty: number): ColumnDef<any, any>[] => [
     meta: {
       inputConfig: {
         type: 'number',
-      }
-    }
+      },
+    },
   }),
   columnHelper.accessor('rate', {
     header: 'Rate',
@@ -40,12 +40,15 @@ export const getColumns = (maxQty: number): ColumnDef<any, any>[] => [
       const qty = Number(row.original.quantity) || 0;
       const rate = Number(row.original.rate) || 0;
       const amount = qty * rate;
-      
-      // Use ReadOnlyNumericCell by passing a mock getValue
-      return ReadOnlyNumericCell({
-        getValue: () => amount.toString(),
-        column: {}
-      });
+
+      return (
+        <div className="flex h-full w-full items-center justify-end px-2 text-sm text-foreground my-auto tabular-nums">
+          <AnimatedNumber
+            value={amount}
+            formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+          />
+        </div>
+      );
     },
     size: 120,
   }),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, TextInput, Switch } from '@prime/ui';
+import { Form, TextInput, Switch, AnimatedNumber } from '@prime/ui';
 import { STOCK_ITEM_FORM_FIELDS } from '../constants';
 import { GodownAllocationTable } from './GodownAllocationTable';
 
@@ -7,12 +7,8 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
   const enableGodownAllocation = form.watch(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION);
   const openingQuantity = Number(form.watch(STOCK_ITEM_FORM_FIELDS.OPENING_QUANTITY)) || 0;
 
-  // If godown is enabled and OQI > 0, rate and amount become read-only and borderless
+  // If godown is enabled and OQI > 0, rate and amount become read-only animated numbers
   const isGodownActive = enableGodownAllocation && openingQuantity > 0;
-  
-  const readOnlyClasses = isGodownActive 
-    ? "border-0 shadow-none focus-within:ring-0 focus-within:ring-offset-0 px-0 bg-transparent" 
-    : "";
 
   return (
     <div className="flex flex-col space-y-6">
@@ -23,10 +19,7 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
           render={({ field }) => (
             <Form.Item className="flex flex-row items-center space-x-3 space-y-0">
               <Form.Control>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
               </Form.Control>
               <Form.Label className="font-normal text-sm">
                 Enable Godown Allocation (Testing)
@@ -58,13 +51,16 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
             <Form.Item>
               <Form.Label>Rate</Form.Label>
               <Form.Control>
-                <TextInput 
-                  type="number" 
-                  placeholder="0.00" 
-                  {...field} 
-                  readOnly={isGodownActive}
-                  className={readOnlyClasses}
-                />
+                {isGodownActive ? (
+                  <div className="h-9 flex items-center px-3 text-sm text-foreground">
+                    <AnimatedNumber
+                      value={Number(field.value) || 0}
+                      formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+                    />
+                  </div>
+                ) : (
+                  <TextInput type="number" placeholder="0.00" {...field} />
+                )}
               </Form.Control>
               <Form.Message />
             </Form.Item>
@@ -78,13 +74,16 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
             <Form.Item>
               <Form.Label>Amount</Form.Label>
               <Form.Control>
-                <TextInput 
-                  type="number" 
-                  placeholder="0.00" 
-                  {...field} 
-                  readOnly={isGodownActive}
-                  className={readOnlyClasses}
-                />
+                {isGodownActive ? (
+                  <div className="h-9 flex items-center px-3 text-sm text-foreground text-right">
+                    <AnimatedNumber
+                      value={Number(field.value) || 0}
+                      formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
+                    />
+                  </div>
+                ) : (
+                  <TextInput type="number" placeholder="0.00" {...field} />
+                )}
               </Form.Control>
               <Form.Message />
             </Form.Item>

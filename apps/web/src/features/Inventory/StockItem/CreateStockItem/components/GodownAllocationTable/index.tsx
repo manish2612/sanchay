@@ -6,14 +6,14 @@ import { useMemo } from 'react';
 import { flexRender } from '@tanstack/react-table';
 
 export const GodownAllocationTable = ({ form }: { form: any }) => {
-  const { 
-    enableGodownAllocation, 
-    fields, 
-    updateData, 
-    removeRow, 
+  const {
+    enableGodownAllocation,
+    fields,
+    updateData,
+    removeRow,
     onRowCommit,
     openingQuantity,
-    totalAllocatedQuantity
+    totalAllocatedQuantity,
   } = useGodownAllocationTable(form);
 
   const columns = useMemo(() => getColumns(openingQuantity), [openingQuantity]);
@@ -40,7 +40,11 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium text-foreground">Godown Allocation</h3>
         <span className="text-xs text-muted-fg">
-          Allocated: <span className={totalAllocatedQuantity > openingQuantity ? 'text-danger font-bold' : ''}>{totalAllocatedQuantity}</span> / {openingQuantity}
+          Allocated:{' '}
+          <span className={totalAllocatedQuantity > openingQuantity ? 'text-danger font-bold' : ''}>
+            {totalAllocatedQuantity}
+          </span>{' '}
+          / {openingQuantity}
         </span>
       </div>
       <div className="rounded-md border border-border/40 bg-surface overflow-hidden">
@@ -50,16 +54,20 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
           className="h-full flex-1 rounded-none border-x-0 border-t-0 "
           tableOptions={{
             meta: {
-              updateData,
-              removeRow,
-              onRowCommit,
-              rowErrors,
-              isRowEmpty: (row: any) => !row.original.godown,
+              state: {
+                rowErrors,
+                isRowEmpty: (row: any) => !row.original.godown,
+              },
               phantomRowConfig: {
                 isPhantom: (row: any) => (row.original as any).isPhantom,
                 actionText: 'Add New Godown Allocation',
               },
-            }
+              actions: {
+                updateData,
+                onRowCommit,
+                removeRow,
+              },
+            },
           }}
         >
           <Table.Header className="bg-surface-variant sticky top-0 z-10 border-b border-border h-8">
@@ -73,7 +81,9 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
                         style={{ width: header.getSize(), flex: `${header.getSize()} 0 auto` }}
                         className="px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground h-8 border-r border-border last:border-r-0"
                       >
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(header.column.columnDef.header, header.getContext())}
                       </Table.Head>
                     ))}
                   </Table.HeaderRow>
@@ -112,7 +122,7 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
           </Table.Body>
         </Table.Root>
       </div>
-      
+
       {/* Visual Hint for Full Allocation */}
       {isFullyAllocated && (
         <div className="flex items-center text-xs text-success bg-success/10 px-3 py-2 rounded-md border border-success/20">
@@ -125,7 +135,8 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
       {isOverAllocated && (
         <div className="flex items-center text-xs text-danger bg-danger/10 px-3 py-2 rounded-md border border-danger/20">
           <Icon name="AlertCircle" size={16} className="mr-2 flex-shrink-0" />
-          Total allocated quantity ({totalAllocatedQuantity}) exceeds the opening quantity limit ({openingQuantity}). Please adjust your allocations.
+          Total allocated quantity ({totalAllocatedQuantity}) exceeds the opening quantity limit (
+          {openingQuantity}). Please adjust your allocations.
         </div>
       )}
     </div>
