@@ -22,10 +22,7 @@ interface SidebarRailSettingsProps {
   forceClose: boolean;
 }
 
-export function SidebarRailSettings({
-  onPopoverToggle,
-  forceClose,
-}: SidebarRailSettingsProps) {
+export function SidebarRailSettings({ onPopoverToggle, forceClose }: SidebarRailSettingsProps) {
   const { brand, setBrand, mode, setMode, density, setDensity } = useTheme();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -64,11 +61,11 @@ export function SidebarRailSettings({
         <TooltipTrigger asChild>
           <button
             onClick={handleToggle}
-            className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${
+            className={`flex items-center justify-center w-11 h-11 rounded-full transition-colors ${
               isOpen ? 'bg-white/20 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
             }`}
           >
-            <Icon name="Settings" className="text-[22px]" />
+            <Icon name="SwatchBook" className="text-[26px]" />
           </button>
         </TooltipTrigger>
         <TooltipContent side="right">Settings & Theme</TooltipContent>
