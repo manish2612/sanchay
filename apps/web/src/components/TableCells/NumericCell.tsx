@@ -6,10 +6,10 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const { allowNegative = false, max, type } = inputConfig || {};
 
   const meta = table.options.meta || {} as any;
-  const rowError = meta?.rowErrors?.[row.index];
+  const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
-  const updateData = meta?.updateData;
-  const onRowCommit = meta?.onRowCommit;
+  const updateData = meta?.actions?.updateData;
+  const onRowCommit = meta?.actions?.onRowCommit;
 
   const initialValue = getValue() as string;
   const regex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;
@@ -33,9 +33,6 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
     const formatted = formatValue(value);
     setValue(formatted);
     updateData?.(row.index, column.id, formatted);
-    if (formatted && formatted !== "0.00") {
-      onRowCommit?.(row.index, column.id, formatted);
-    }
   };
 
   return (
@@ -53,13 +50,12 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
         const val = e.target.value.replace(regex, "");
         setValue(val);
         updateData?.(row.index, column.id, val);
-        if (val && val.trim() !== "") {
-          onRowCommit?.(row.index, column.id, val);
-        }
       }}
       onBlur={onBlur}
       variant={error ? "error" : "default"}
-      className="h-8 w-full my-auto bg-surface transition-all px-2"
+      className={`h-8 w-full my-auto bg-transparent border-0 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 transition-all px-2 ${
+        error ? "ring-2 ring-danger ring-offset-0" : ""
+      }`}
       inputClassName="text-sm px-0 text-right h-full"
     />
   );

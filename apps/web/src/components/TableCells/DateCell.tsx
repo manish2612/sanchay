@@ -3,8 +3,8 @@ import { DatePicker } from "@prime/ui";
 
 export const DateCell = ({ getValue, row, column, table }: any) => {
   const meta = table.options.meta || {} as any;
-  const updateData = meta?.updateData;
-  const error = meta?.rowErrors?.[row.index];
+  const updateData = meta?.actions?.updateData;
+  const error = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
 
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -23,8 +23,8 @@ export const DateCell = ({ getValue, row, column, table }: any) => {
       labelVariant="hidden"
       calendarType="nepali"
       nepaliLanguage="english"
-      className={`h-8 w-full my-auto bg-surface transition-all px-2 py-0 ${
-        error ? "ring-2 ring-destructive ring-offset-1" : ""
+      className={`h-8 w-full my-auto bg-transparent border-0 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 transition-all px-2 py-0 ${
+        error ? "ring-2 ring-danger ring-offset-0" : ""
       }`}
     />
   );
