@@ -7,6 +7,7 @@ export interface CharDescriptor {
   key: string;
   animationDelay: string;
   isNumeric: boolean;
+  isGrouping?: boolean;
 }
 
 interface UseAnimatedNumberProps {
@@ -64,6 +65,16 @@ export function useAnimatedNumber({
       const isNumeric = /\d/.test(char);
       const relIdx = i - actualDecIdx;
       
+      // Determine if a non-numeric character is an internal grouping separator (e.g. commas)
+      // vs an external prefix/suffix (e.g. US$). 
+      // Internal separators are surrounded by digits on both sides anywhere in the string.
+      let isGrouping = false;
+      if (!isNumeric) {
+        const hasLeftDigit = /\d/.test(formattedStr.substring(0, i));
+        const hasRightDigit = /\d/.test(formattedStr.substring(i + 1));
+        isGrouping = hasLeftDigit && hasRightDigit;
+      }
+      
       let delayMs = 0;
       if (dir === 'decrease') {
         delayMs = i * delayPerChar;
@@ -75,9 +86,10 @@ export function useAnimatedNumber({
 
       charDescriptors.push({
         char,
-        key: `rel-${relIdx}`, // The key is purely structural now
+        key: `rel-${relIdx}`,
         animationDelay: delayMs.toString(),
         isNumeric,
+        isGrouping,
       });
     }
 
