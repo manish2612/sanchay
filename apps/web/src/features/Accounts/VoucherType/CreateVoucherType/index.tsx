@@ -5,6 +5,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
 import { FormWizard, Icon, useFormWizardContext } from '@prime/ui';
+import { useLeavePrompt } from '@/hooks/useLeavePrompt';
 
 import { voucherTypeSchema, type VoucherTypeFormValues } from './schema';
 import { VOUCHER_TYPE_FIELDS, INITIAL_STEPS, DYNAMIC_STEPS } from './constants';
@@ -118,6 +119,11 @@ export const CreateVoucherType = () => {
     },
   });
 
+  const { LeavePromptDialog } = useLeavePrompt({
+    form,
+    disabled: form.formState.isSubmitSuccessful,
+  });
+
   const onSubmit = (data: VoucherTypeFormValues) => {
     console.log('Submitted voucher type data:', data);
     alert('Voucher Type created successfully! Check console for details.');
@@ -138,6 +144,8 @@ export const CreateVoucherType = () => {
           <FormWizard.Footer onCancel={() => navigate({ to: '/accounts/masters' as any })} />
         </WizardContainerWithWidth>
       </FormWizard>
+      
+      <LeavePromptDialog />
     </div>
   );
 };

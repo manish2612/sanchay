@@ -6,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { VoucherTypeFormValues } from '../schema';
 import { VOUCHER_TYPE_FIELDS } from '../constants';
 
-import { SwitchCard } from '../../../../components/TableCells/SwitchCard';
+import { SwitchCard } from '../../../../../components/TableCells/SwitchCard';
 
 interface ConfigurationsStepProps {
   form: UseFormReturn<VoucherTypeFormValues>;
@@ -21,11 +21,26 @@ export const ConfigurationsStep = ({ form }: ConfigurationsStepProps) => {
           <FormWizard.Separator className="flex-1 my-0" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <SwitchCard name={VOUCHER_TYPE_FIELDS.EXCISE_DUTY_APPLICABLE} label="Excise Duty Applicable" />
-          <SwitchCard name={VOUCHER_TYPE_FIELDS.DISCOUNT_AT_BILL_LEVEL} label="Discount at Bill Level" />
-          <SwitchCard name={VOUCHER_TYPE_FIELDS.DISCOUNT_AT_ITEM_LEVEL} label="Discount at Item Level" />
-          <SwitchCard name={VOUCHER_TYPE_FIELDS.ALLOW_ZERO_VALUE_ITEM} label="Allow Zero Value Item" />
-          <SwitchCard name={VOUCHER_TYPE_FIELDS.ALLOW_ZERO_VALUE_LEDGER} label="Allow Zero Value Ledger" />
+          <SwitchCard
+            name={VOUCHER_TYPE_FIELDS.EXCISE_DUTY_APPLICABLE}
+            label="Excise Duty Applicable"
+          />
+          <SwitchCard
+            name={VOUCHER_TYPE_FIELDS.DISCOUNT_AT_BILL_LEVEL}
+            label="Discount at Bill Level"
+          />
+          <SwitchCard
+            name={VOUCHER_TYPE_FIELDS.DISCOUNT_AT_ITEM_LEVEL}
+            label="Discount at Item Level"
+          />
+          <SwitchCard
+            name={VOUCHER_TYPE_FIELDS.ALLOW_ZERO_VALUE_ITEM}
+            label="Allow Zero Value Item"
+          />
+          <SwitchCard
+            name={VOUCHER_TYPE_FIELDS.ALLOW_ZERO_VALUE_LEDGER}
+            label="Allow Zero Value Ledger"
+          />
           <SwitchCard name={VOUCHER_TYPE_FIELDS.USE_FOR_POS} label="Use for POS" />
         </div>
       </div>
