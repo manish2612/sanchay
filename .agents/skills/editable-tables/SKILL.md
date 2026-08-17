@@ -104,7 +104,9 @@ When extracting `rowErrors` from `meta`, you must specifically check `column.id`
 **Correct Error Resolution Pattern (e.g., in `NumericCell`):**
 ```tsx
 const meta = table.options.meta || {} as any;
-const rowError = meta?.rowErrors?.[row.index];
+// Always check meta.state.rowErrors for the namespaced errors
+const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
+
 // Specifically check for column.id, then fallback to root message if needed
 const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
 
