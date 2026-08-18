@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFieldArray } from 'react-hook-form';
 import { STOCK_ITEM_FORM_FIELDS } from '../../constants';
 
@@ -46,6 +46,8 @@ export const useGodownAllocationTable = (form: any) => {
     }
   }, [enableGodownAllocation, openingQuantity, openingRate, totalAllocatedQuantity, append, remove, form]);
 
+  const [localRowErrors, setLocalRowErrors] = useState<Record<number, boolean>>({});
+
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     const row = form.getValues(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
     if (row) {
@@ -58,19 +60,45 @@ export const useGodownAllocationTable = (form: any) => {
   }, [remove]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
-    const row = form.getValues(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
+    let row = form.getValues(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
+    
+    // Immediately sync the currently typing value before committing
+    if (columnId && cellValue !== undefined) {
+      row = { ...row, [columnId]: cellValue };
+      updateData(rowIndex, columnId, cellValue);
+    }
+
+    // Validation: Godown must be selected, Qty must be valid
+    const qty = Number(row.quantity) || 0;
+    const isValid = row.godown && row.godown.trim() !== '' && qty > 0;
+
+    if (!isValid) {
+      setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
+      setTimeout(() => {
+        setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
+      }, 800);
+      return "STAY";
+    }
+
     if (row && (row as any).isPhantom) {
-      const committedRow = columnId && cellValue !== undefined
-        ? { ...row, [columnId]: cellValue, isPhantom: false }
-        : { ...row, isPhantom: false };
-      
+      const committedRow = { ...row, isPhantom: false };
       update(rowIndex, committedRow);
       
-      // We don't automatically append phantom here, the useEffect will do it if hasRoom is true
+      // Calculate hasRoom synchronously
+      const currentRows = form.getValues(STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS) || [];
+      currentRows[rowIndex] = committedRow;
+      
+      const currentSum = currentRows.reduce((acc: number, r: any) => acc + (r.isPhantom ? 0 : (Number(r.quantity) || 0)), 0);
+      const hasRoom = currentSum < openingQuantity;
+
+      if (hasRoom) {
+        append({ godown: '', quantity: 0, rate: openingRate, isPhantom: true });
+      }
+      
       return "ADVANCE";
     }
     return "EXIT";
-  }, [form, update]);
+  }, [form, update, updateData, append, openingQuantity, openingRate]);
 
   // Sync Godown allocations to outside Rate and Amount
   useEffect(() => {
@@ -80,6 +108,7 @@ export const useGodownAllocationTable = (form: any) => {
     let totalAmount = 0;
 
     godownAllocations.forEach((row: any) => {
+      if (row.isPhantom) return;
       const qty = Number(row.quantity) || 0;
       const rate = Number(row.rate) || 0;
       totalRate += rate;
@@ -99,5 +128,6 @@ export const useGodownAllocationTable = (form: any) => {
     onRowCommit,
     openingQuantity,
     totalAllocatedQuantity,
+    localRowErrors,
   };
 };

@@ -27,13 +27,15 @@ const ModalContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <ModalPortal>
     <ModalOverlay />
-    <DialogPrimitive.Content ref={ref} className={cn(contentVariants(), className)} {...props}>
-      {children}
-      <DialogPrimitive.Close className={cn(closeVariants())}>
-        <Icon name="X" size={16} />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
+    <div className="fixed inset-0 z-[300] flex items-center justify-center pointer-events-none px-4 sm:px-0">
+      <DialogPrimitive.Content ref={ref} className={cn(contentVariants(), "pointer-events-auto", className)} {...props}>
+        {children}
+        <DialogPrimitive.Close className={cn(closeVariants())}>
+          <Icon name="X" size={16} />
+          <span className="sr-only">Close</span>
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </div>
   </ModalPortal>
 ));
 ModalContent.displayName = DialogPrimitive.Content.displayName;

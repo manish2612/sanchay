@@ -21,6 +21,8 @@ interface LeavePromptContextValue {
   register: (entry: BlockerEntry) => void;
   unregister: (id: string) => void;
   update: (id: string, isDirty: boolean) => void;
+  isDirty: boolean;
+  triggerPrompt: (onConfirm: () => void, targetId?: string) => void;
 }
 
 const LeavePromptContext = React.createContext<LeavePromptContextValue | null>(null);
@@ -63,6 +65,16 @@ export function useLeavePromptSlot({
   React.useEffect(() => {
     ctx.update(id, isDirty);
   }, [ctx, id, isDirty]);
+}
+
+/**
+ * Returns a function to manually trigger the leave prompt.
+ * Useful for intercepting non-router closes (like a Sheet's onOpenChange).
+ */
+export function useLeavePromptTrigger() {
+  const ctx = React.useContext(LeavePromptContext);
+  if (!ctx) return (onConfirm: () => void, targetId?: string) => onConfirm();
+  return ctx.triggerPrompt;
 }
 
 // ─── Provider options ─────────────────────────────────────────────────────────
@@ -144,24 +156,58 @@ export function LeavePromptProvider({
     });
   }, []);
 
+  // ── Manual Blocker State (for non-router navigation like Sheets) ────────
+  const [manualBlocker, setManualBlocker] = React.useState<{
+    status: 'blocked' | 'idle';
+    proceed: (() => void) | undefined;
+    reset: (() => void) | undefined;
+  }>({ status: 'idle', proceed: undefined, reset: undefined });
+
+  // Use a ref to access the latest entries inside triggerPrompt without adding it to dependencies
+  const entriesRef = React.useRef(entries);
+  React.useEffect(() => {
+    entriesRef.current = entries;
+  }, [entries]);
+
+  const triggerPrompt = React.useCallback((onConfirm: () => void, targetId?: string) => {
+    // If a targetId is provided, ONLY block if that specific form is dirty
+    // Otherwise, block if ANY form is dirty
+    const shouldBlock = targetId 
+      ? entriesRef.current.get(targetId)?.isDirty 
+      : anyDirty;
+
+    if (!shouldBlock) {
+      onConfirm();
+      return;
+    }
+    setManualBlocker({
+      status: 'blocked',
+      proceed: () => {
+        setManualBlocker({ status: 'idle', proceed: undefined, reset: undefined });
+        onConfirm();
+      },
+      reset: () => {
+        setManualBlocker({ status: 'idle', proceed: undefined, reset: undefined });
+      },
+    });
+  }, [anyDirty]);
+
   const contextValue = React.useMemo(
-    () => ({ register, unregister, update }),
-    [register, unregister, update],
+    () => ({ register, unregister, update, isDirty: anyDirty, triggerPrompt }),
+    [register, unregister, update, anyDirty, triggerPrompt],
   );
 
   // ── Single shared blocker ──────────────────────────────────────────────────
-  const blocker = useBlocker({
+  const routerBlocker = useBlocker({
     shouldBlockFn: () => anyDirty,
     withResolver: true,
     enableBeforeUnload: true,
   });
 
+  const activeBlocker = manualBlocker.status === 'blocked' ? manualBlocker : (routerBlocker as any);
+
   const guardProps = useFormLeaveGuard({
-    blocker: blocker as {
-      status: 'blocked' | 'idle';
-      proceed: (() => void) | undefined;
-      reset: (() => void) | undefined;
-    },
+    blocker: activeBlocker,
     isDirty: anyDirty,
     title,
     description,

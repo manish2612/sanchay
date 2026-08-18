@@ -62,7 +62,11 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
       options={filteredOptions}
       creatable
       onCreate={() => {
-        setIsModalOpen(true);
+        if (inputConfig?.onCreate) {
+          inputConfig.onCreate(value);
+        } else {
+          setIsModalOpen(true);
+        }
       }}
     >
       <AutoSuggest.Input
