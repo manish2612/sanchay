@@ -52,7 +52,7 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
               <Form.Label>Rate</Form.Label>
               <Form.Control>
                 {isGodownActive ? (
-                  <div className="h-9 flex items-center px-3 text-sm text-foreground">
+                  <div className="h-9 flex items-center justify-end px-3 text-sm text-foreground w-full tabular-nums font-medium">
                     <AnimatedNumber
                       value={Number(field.value) || 0}
                       formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}
@@ -75,7 +75,7 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
               <Form.Label>Amount</Form.Label>
               <Form.Control>
                 {isGodownActive ? (
-                  <div className="h-9 flex items-center px-3 text-sm text-foreground text-right">
+                  <div className="h-9 flex items-center justify-end px-3 text-sm text-foreground w-full tabular-nums font-medium">
                     <AnimatedNumber
                       value={Number(field.value) || 0}
                       formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }}

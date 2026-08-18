@@ -6,7 +6,7 @@ import { AnimatedNumber } from '@prime/ui';
 
 const columnHelper = createColumnHelper<any>();
 
-export const getColumns = (maxQty: number): ColumnDef<any, any>[] => [
+export const getColumns = (maxQty: number, onCreateGodown?: () => void): ColumnDef<any, any>[] => [
   columnHelper.accessor('godown', {
     header: 'Godown',
     cell: AutoSuggestCell,
@@ -14,6 +14,7 @@ export const getColumns = (maxQty: number): ColumnDef<any, any>[] => [
     meta: {
       inputConfig: {
         placeholder: 'Select Godown...',
+        onCreate: onCreateGodown,
       },
     },
   }),

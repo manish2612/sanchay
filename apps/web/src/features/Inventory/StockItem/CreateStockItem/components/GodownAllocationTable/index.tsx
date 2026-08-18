@@ -2,10 +2,13 @@ import React from 'react';
 import { Table, Icon } from '@prime/ui';
 import { useGodownAllocationTable } from './useGodownAllocationTable';
 import { getColumns } from './columns';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { flexRender } from '@tanstack/react-table';
+import { useGlobalMasterSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
 
 export const GodownAllocationTable = ({ form }: { form: any }) => {
+  const { openMasterSheet } = useGlobalMasterSheet();
+  
   const {
     enableGodownAllocation,
     fields,
@@ -14,23 +17,32 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
     onRowCommit,
     openingQuantity,
     totalAllocatedQuantity,
+    localRowErrors,
   } = useGodownAllocationTable(form);
 
-  const columns = useMemo(() => getColumns(openingQuantity), [openingQuantity]);
+  const onCreateGodown = useCallback(() => openMasterSheet('godown'), [openMasterSheet]);
+  const columns = useMemo(() => getColumns(openingQuantity, onCreateGodown), [openingQuantity, onCreateGodown]);
   const isFullyAllocated = totalAllocatedQuantity === openingQuantity;
   const isOverAllocated = totalAllocatedQuantity > openingQuantity;
 
-  // Synthesize real-time row errors for the 'quantity' column if overallocated
+  // Synthesize real-time row errors for the 'quantity' column if overallocated, and merge local validation errors
   const rowErrors = useMemo(() => {
-    let errs = form.formState.errors?.godownAllocations || [];
+    let errs = { ...localRowErrors }; // Start with local visual errors
+
+    const rfhErrors = form.formState.errors?.godownAllocations || [];
+    if (Array.isArray(rfhErrors)) {
+      rfhErrors.forEach((err, idx) => {
+        if (err) errs[idx] = true;
+      });
+    }
+
     if (isOverAllocated) {
-      errs = [...errs];
       fields.forEach((_: any, idx: number) => {
-        errs[idx] = { ...errs[idx], quantity: { message: 'Overallocated limit' } };
+        errs[idx] = true;
       });
     }
     return errs;
-  }, [form.formState.errors?.godownAllocations, isOverAllocated, fields]);
+  }, [form.formState.errors?.godownAllocations, isOverAllocated, fields, localRowErrors]);
 
   // If Godown feature is off, or if opening quantity is 0, don't show the table
   if (!enableGodownAllocation || openingQuantity <= 0) return null;
