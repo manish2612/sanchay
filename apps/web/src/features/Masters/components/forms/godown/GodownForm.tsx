@@ -2,9 +2,17 @@ import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { useGodownForm } from './useGodownForm';
+import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 export function GodownForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
   const { form, onSubmit } = useGodownForm(onSuccess || onCancel);
+  
+  useLeavePromptSlot({
+    id: 'godown-form',
+    isDirty: form.formState.isDirty && !form.formState.isSubmitSuccessful,
+    priority: 10,
+  });
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">

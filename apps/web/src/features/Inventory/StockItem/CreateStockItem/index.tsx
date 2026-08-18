@@ -11,6 +11,7 @@ import { GeneralInfoStep } from './components/GeneralInfoStep';
 import { TaxationStep } from './components/TaxationStep';
 import { AdvancedDetailsStep } from './components/AdvancedDetailsStep';
 import { OpeningBalanceStep } from './components/OpeningBalanceStep';
+import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 const WizardContent = ({ form }: { form: any }) => {
   const { currentStep } = useFormWizardContext();
@@ -18,10 +19,10 @@ const WizardContent = ({ form }: { form: any }) => {
   return (
     <FormWizard.Content>
       <div className="space-y-6 max-w-4xl mx-auto mt-4">
-        {currentStep === 1 && <GeneralInfoStep form={form} />}
+        {currentStep === 4 && <GeneralInfoStep form={form} />}
         {currentStep === 2 && <TaxationStep form={form} />}
         {currentStep === 3 && <AdvancedDetailsStep form={form} />}
-        {currentStep === 4 && <OpeningBalanceStep form={form} />}
+        {currentStep === 1 && <OpeningBalanceStep form={form} />}
       </div>
     </FormWizard.Content>
   );
@@ -74,6 +75,12 @@ const CreateStockItemPage = () => {
     console.log('Submitted stock item data:', data);
     alert('Stock Item created successfully! Check console for details.');
   };
+
+  useLeavePromptSlot({
+    id: 'stock-item',
+    isDirty: form.formState.isDirty && !form.formState.isSubmitSuccessful,
+    priority: 0,
+  });
 
   const getHeaderIcon = (step: number) => {
     switch (step) {

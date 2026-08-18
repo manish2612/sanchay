@@ -12,6 +12,7 @@ import {
   ToastClose,
 } from '@prime/ui';
 import { useGlobalMasterSheet } from './MasterFormSheetContext';
+import { useLeavePromptTrigger } from '@/providers/LeavePromptProvider';
 import { GroupForm } from '@master-forms/group/GroupForm';
 import { CostCategoryForm } from '@master-forms/cost-category/CostCategoryForm';
 import { CostCenterForm } from '@master-forms/cost-center/CostCenterForm';
@@ -22,11 +23,18 @@ import { GodownForm } from '@master-forms/godown/GodownForm';
 
 export function MasterFormSheet() {
   const { isOpen, closeMasterSheet, activeMaster } = useGlobalMasterSheet();
+  const triggerPrompt = useLeavePromptTrigger();
   const [toastMessage, setToastMessage] = useState<{ title: string; desc: string } | null>(null);
+
+  const handleClose = () => {
+    triggerPrompt(() => {
+      closeMasterSheet();
+    }, activeMaster ? `${activeMaster}-form` : undefined);
+  };
 
   const handleSuccess = (title: string, desc: string) => {
     setToastMessage({ title, desc });
-    closeMasterSheet();
+    closeMasterSheet(); // success means it's submitted, so form is not dirty anymore
   };
 
   const renderForm = () => {
@@ -34,14 +42,14 @@ export function MasterFormSheet() {
       case 'group':
         return (
           <GroupForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() => handleSuccess('Group Created', 'Successfully created new Group')}
           />
         );
       case 'cost-category':
         return (
           <CostCategoryForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() =>
               handleSuccess('Cost Category Created', 'Successfully created new Cost Category')
             }
@@ -51,7 +59,7 @@ export function MasterFormSheet() {
       case 'cost-centre':
         return (
           <CostCenterForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() =>
               handleSuccess('Cost Center Created', 'Successfully created new Cost Center')
             }
@@ -60,7 +68,7 @@ export function MasterFormSheet() {
       case 'stock-group':
         return (
           <StockGroupForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() =>
               handleSuccess('Stock Group Created', 'Successfully created new Stock Group')
             }
@@ -69,7 +77,7 @@ export function MasterFormSheet() {
       case 'stock-category':
         return (
           <StockCategoryForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() =>
               handleSuccess('Stock Category Created', 'Successfully created new Stock Category')
             }
@@ -78,7 +86,7 @@ export function MasterFormSheet() {
       case 'unit-of-measure':
         return (
           <UnitOfMeasureForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() =>
               handleSuccess('Unit of Measure Created', 'Successfully created new Unit of Measure')
             }
@@ -87,7 +95,7 @@ export function MasterFormSheet() {
       case 'godown':
         return (
           <GodownForm
-            onCancel={closeMasterSheet}
+            onCancel={handleClose}
             onSuccess={() => handleSuccess('Godown Created', 'Successfully created new Godown')}
           />
         );
@@ -109,7 +117,7 @@ export function MasterFormSheet() {
 
   return (
     <>
-      <Sheet open={isOpen} onOpenChange={(open) => !open && closeMasterSheet()}>
+      <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
         <SheetPortal>
           <SheetOverlay />
           <SheetContent className="flex flex-col p-0 overflow-hidden" aria-describedby={undefined}>

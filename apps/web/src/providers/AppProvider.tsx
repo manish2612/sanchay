@@ -11,6 +11,7 @@ import {
 import { RouterLinkAdapter } from './RouterLinkAdapter';
 import { GlobalMasterSheetProvider } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
 import { MasterFormSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheet.dom';
+import { LeavePromptProvider } from '@/providers/LeavePromptProvider';
 import { store } from '@/store';
 
 interface AppProviderProps {
@@ -40,8 +41,10 @@ export function AppProvider({ children }: AppProviderProps) {
             <ToastProvider>
               <GlobalMasterSheetProvider>
                 <LinkProvider value={RouterLinkAdapter}>
-                  {children}
-                  <MasterFormSheet />
+                  <LeavePromptProvider>
+                    {children}
+                    <MasterFormSheet />
+                  </LeavePromptProvider>
                   <ToastViewport />
                 </LinkProvider>
               </GlobalMasterSheetProvider>
