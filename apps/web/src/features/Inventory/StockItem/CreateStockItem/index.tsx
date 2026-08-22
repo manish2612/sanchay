@@ -19,10 +19,10 @@ const WizardContent = ({ form }: { form: any }) => {
   return (
     <FormWizard.Content>
       <div className="space-y-6 max-w-4xl mx-auto mt-4">
-        {currentStep === 4 && <GeneralInfoStep form={form} />}
+        {currentStep === 1 && <GeneralInfoStep form={form} />}
         {currentStep === 2 && <TaxationStep form={form} />}
         {currentStep === 3 && <AdvancedDetailsStep form={form} />}
-        {currentStep === 1 && <OpeningBalanceStep form={form} />}
+        {currentStep === 4 && <OpeningBalanceStep form={form} />}
       </div>
     </FormWizard.Content>
   );
