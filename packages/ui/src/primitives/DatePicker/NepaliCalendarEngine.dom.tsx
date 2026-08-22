@@ -350,7 +350,8 @@ export function NepaliCalendarEngine({
                   secondaryTextClass = 'opacity-80'; // Inherit high-contrast parent text color
                 }
 
-                const engDate = new NepaliDate(currentYear, currentMonth, d).getDateObject();
+                const activeNdForCell = new NepaliDate(currentYear, currentMonth, d);
+                const engDateNum = activeNdForCell.getEnglishDate();
 
                 return (
                   <td key={col} className={`p-0 text-center`}>
@@ -374,7 +375,7 @@ export function NepaliCalendarEngine({
                       <span
                         className={`absolute bottom-[2px] right-1 text-[10px] font-medium ${secondaryTextClass}`}
                       >
-                        {engDate.getDate()}
+                        {engDateNum}
                       </span>
                     </button>
                   </td>
@@ -393,10 +394,12 @@ export function NepaliCalendarEngine({
               const activeDate = hoveredDate ?? focusedDate;
               if (activeDate !== null) {
                 const activeNd = new NepaliDate(currentYear, currentMonth, activeDate);
-                return format(activeNd.getDateObject(), 'dd MMMM yyyy');
+                const localEngDate = new Date(activeNd.getEnglishYear(), activeNd.getEnglishMonth(), activeNd.getEnglishDate());
+                return format(localEngDate, 'dd MMMM yyyy');
               }
               if (selectedNd) {
-                return format(selectedNd.getDateObject(), 'dd MMMM yyyy');
+                const localEngDate = new Date(selectedNd.getEnglishYear(), selectedNd.getEnglishMonth(), selectedNd.getEnglishDate());
+                return format(localEngDate, 'dd MMMM yyyy');
               }
             } catch (e) {
               // Ignore invalid dates out of library bounds
