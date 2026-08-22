@@ -135,9 +135,10 @@ export const NepaliCalendarEnglishScript: Story = {
     labelVariant: 'in-field',
     calendarType: 'nepali',
     placeholder: 'Select BS Date',
+    date: new Date(1786991400000),
   },
   render: (args) => {
-    const [date, setDate] = useState<Date | undefined>(args.date);
+    const [date, setDate] = useState<Date | undefined>(args.date as Date);
     return (
       <div className="max-w-sm">
         <DatePicker {...args} date={date} onDateChange={setDate} />
