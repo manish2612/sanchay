@@ -16,8 +16,7 @@ import { createApiRegistry } from '@prime/api';
 export const api = createApiRegistry<'MAIN'>({
   clients: {
     MAIN: {
-      baseURL: 'https://jsonplaceholder.typicode.com',
-      // TODO: replace with import.meta.env.VITE_API_URL
+      baseURL: import.meta.env.VITE_API_URL || 'http://202.51.1.109:5814/api/v1/',
     },
   },
   defaultClient: 'MAIN',
