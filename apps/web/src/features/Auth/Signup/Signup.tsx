@@ -21,13 +21,6 @@ export default function Signup() {
             <SignupHeaderGraphic className="w-64 h-auto" primaryOffset={{ x: 0, y: -16 }} />
           </div>
 
-          <h1 className="text-3xl font-bold mb-2 text-foreground text-center lg:text-left">
-            Create an account
-          </h1>
-          <p className="text-muted-foreground mb-8 text-center lg:text-left">
-            Please enter your details to sign up.
-          </p>
-
           <SignupForm />
         </div>
       </section>

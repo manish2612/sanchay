@@ -15,6 +15,18 @@ export interface LoginResponse {
   expiresIn: number;
 }
 
+export interface SignupRequest {
+  username: string;
+  email: string;
+  mobileno: string;
+  password: string;
+}
+
+export interface SignupResponse {
+  message?: string;
+  // Based on common patterns; extend as needed if API returns more data
+}
+
 // ---------------------------------------------------------------------------
 // Endpoints
 // ---------------------------------------------------------------------------
@@ -35,6 +47,18 @@ export const authApi = apiSlice.injectEndpoints({
     }),
 
     /**
+     * POST /auth/signup
+     * Creates a new user account.
+     */
+    signup: build.mutation<SignupResponse, SignupRequest>({
+      query: (credentials) => ({
+        url: '/auth/signup',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
+
+    /**
      * POST /auth/logout
      * Invalidates the current session on the server.
      */
@@ -48,4 +72,4 @@ export const authApi = apiSlice.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useLogoutMutation } = authApi;
