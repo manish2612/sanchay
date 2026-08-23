@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, TextInput, AutoSuggest, Icon } from '@prime/ui';
+import { Form, TextInput, AutoSuggest, Icon, DropdownMenu } from '@prime/ui';
 import { MasterNameField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { STOCK_ITEM_FORM_FIELDS } from '../constants';
 
@@ -55,7 +55,18 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
           <Form.Item>
             <Form.Label>Unit</Form.Label>
             <Form.Control>
-              <TextInput type="number" placeholder="Enter Base Unit..." {...field} />
+              <DropdownMenu
+                labelVariant="hidden"
+                triggerLabel={field.value || 'Select Base Unit...'}
+                items={[
+                  { id: 'Pcs', label: 'Pcs', onSelect: () => field.onChange('Pcs') },
+                  { id: 'Kgs', label: 'Kgs', onSelect: () => field.onChange('Kgs') },
+                  { id: 'Box', label: 'Box', onSelect: () => field.onChange('Box') },
+                  { id: 'Ltr', label: 'Ltr', onSelect: () => field.onChange('Ltr') },
+                  { id: 'Mtr', label: 'Mtr', onSelect: () => field.onChange('Mtr') },
+                  { id: 'Nos', label: 'Nos', onSelect: () => field.onChange('Nos') },
+                ]}
+              />
             </Form.Control>
             <Form.Message />
           </Form.Item>
