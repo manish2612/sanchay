@@ -1,17 +1,11 @@
 import { createApiRegistry } from '@prime/api';
+import { cookieTokenStorage } from '@/utils/tokenStorage';
 
 /**
  * The singleton ApiRegistry for the web app.
  *
  * Created once at module level — imported wherever a raw imperative call is needed.
  * RTK Query endpoints go through this via createAxiosBaseQuery() in apiSlice.ts.
- *
- * Token storage and refresh logic will be wired to real implementations
- * (e.g. js-cookie) once the auth flow is built out.
- *
- * TODO: Replace placeholder baseURL values with import.meta.env.VITE_*
- * TODO: Wire up a real ITokenStorage implementation (js-cookie wrapper)
- * TODO: Wire up a real onRefreshToken callback to POST /auth/refresh
  */
 export const api = createApiRegistry<'MAIN'>({
   clients: {
@@ -20,7 +14,41 @@ export const api = createApiRegistry<'MAIN'>({
     },
   },
   defaultClient: 'MAIN',
-  // tokenStorage: cookieTokenStorage,
-  // onRefreshToken: async () => { await api.request({ url: '/auth/refresh', method: 'POST' }); },
-  // onUnauthorized: () => { window.location.href = '/login'; },
+  tokenStorage: cookieTokenStorage,
+  
+  // ==============================================================================
+  // REFRESH TOKEN LOGIC (Commented out for future implementation)
+  // ==============================================================================
+  // To enable silent token refreshes:
+  // 1. Uncomment this `onRefreshToken` method.
+  // 2. Ensure your backend returns the new auth token (and refresh token) in the response.
+  //
+  // onRefreshToken: async () => {
+  //   try {
+  //     // We assume the refresh token is stored securely (e.g. HttpOnly cookie or tokenStorage).
+  //     const response = await api.request({ 
+  //       url: '/auth/refresh', 
+  //       method: 'POST' 
+  //     });
+  //     
+  //     // Extract the new token from the response
+  //     const newToken = response.data.token; // adjust path to match your API response
+  //     
+  //     if (newToken) {
+  //       cookieTokenStorage.setToken(newToken);
+  //     } else {
+  //       throw new Error('No token returned from refresh endpoint');
+  //     }
+  //   } catch (error) {
+  //     // If refresh fails, clear token and let onUnauthorized take over
+  //     cookieTokenStorage.clearToken();
+  //     throw error;
+  //   }
+  // },
+  // ==============================================================================
+
+  onUnauthorized: () => { 
+    cookieTokenStorage.clearToken();
+    window.location.href = '/login'; 
+  },
 });

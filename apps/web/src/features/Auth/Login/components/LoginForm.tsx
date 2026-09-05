@@ -5,10 +5,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, TextInput, Button, Icon, UniversalLink, Switch } from '@prime/ui';
 import { loginSchema, type LoginValues } from '../schema';
+import { useLoginMutation } from '../../api';
+import { cookieTokenStorage } from '@/utils/tokenStorage';
+import { useNavigate } from '@tanstack/react-router';
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [globalError, setGlobalError] = useState<string | null>(null);
+
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -20,14 +26,37 @@ export function LoginForm() {
   });
 
   const onSubmit = async (data: LoginValues) => {
-    // API logic will go here later
     setGlobalError(null);
 
-    // Simulate API delay for UI demonstration
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await login({
+        company_id: 0, // Hardcoded for now as per requirements
+        email: data.email,
+        password: data.password,
+      }).unwrap();
 
-    // Example of how a global error would be set on failure:
-    // setGlobalError('Invalid email or password.');
+      // Store the token natively
+      if (response.token) {
+        cookieTokenStorage.setToken(response.token);
+      }
+
+      // Route to dashboard on success
+      navigate({ to: '/' });
+    } catch (error: any) {
+      const status = error?.status;
+      // Provide conversational error messages based on HTTP status codes
+      if (status === 401 || status === 403) {
+        setGlobalError("The email or password you entered is incorrect. Please try again.");
+      } else if (status === 404) {
+        setGlobalError("We couldn't find an account with that email. Please sign up first.");
+      } else if (status === 400) {
+        setGlobalError("Please check your credentials and try again.");
+      } else if (status >= 500) {
+        setGlobalError("Our servers are taking a little break right now. Please try again in a moment.");
+      } else {
+        setGlobalError("An unexpected error occurred while trying to sign in. Please try again.");
+      }
+    }
   };
 
   return (
@@ -35,7 +64,7 @@ export function LoginForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 w-full">
         {/* Global Error Banner */}
         {globalError && (
-          <div className="p-3 mb-2 text-sm font-medium text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+          <div className="p-3 mb-2 text-sm font-medium text-danger bg-danger/10 border border-danger/20 rounded-md">
             {globalError}
           </div>
         )}
@@ -131,9 +160,9 @@ export function LoginForm() {
           type="submit"
           variant="primary"
           className="w-full mt-4 h-12 text-base font-semibold"
-          disabled={form.formState.isSubmitting}
+          disabled={isLoading || form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
+          {isLoading || form.formState.isSubmitting ? 'Signing in...' : 'Sign in'}
         </Button>
 
         {/* Footer Link */}

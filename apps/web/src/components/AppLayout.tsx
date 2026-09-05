@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useLocation } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Sidebar } from '@/features/Navigation/components/Sidebar';
 import { SidebarProvider } from '@/features/Navigation/components/Sidebar/useSidebar';
 import { MobileHeader } from '@/features/Navigation/components/MobileHeader';
 import { APP_NAME } from '@prime/config';
+import { useLogoutMutation } from '@/features/Auth/api';
+import { cookieTokenStorage } from '@/utils/tokenStorage';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -13,7 +15,10 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location.pathname;
+  
+  const [logoutMutation] = useLogoutMutation();
 
   // TODO: [AUTHENTICATION]
   // Once authentication is implemented, you can check user session here.
@@ -30,6 +35,20 @@ export function AppLayout({ children }: AppLayoutProps) {
   // Temporary mock user until auth is integrated
   const mockUser = { name: 'Admin User', email: 'admin@example.com' };
 
+  const handleLogout = async () => {
+    try {
+      // Attempt to invalidate session on the server
+      await logoutMutation().unwrap();
+    } catch (e) {
+      // Ignore errors on logout (server might already consider the session expired)
+      console.warn('Server logout failed, clearing local session anyway', e);
+    } finally {
+      // Always clear local token and redirect
+      cookieTokenStorage.clearToken();
+      navigate({ to: '/login' });
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="h-dvh w-full overflow-hidden flex flex-col lg:flex-row bg-background text-foreground selection:bg-primary/30">
@@ -40,10 +59,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         <Sidebar
           appName={APP_NAME}
           user={mockUser}
-          onLogout={() => {
-            // TODO: [AUTHENTICATION] Implement real logout logic here
-            console.log('Logout clicked');
-          }}
+          onLogout={handleLogout}
         />
 
         {/* Main Content Area */}
