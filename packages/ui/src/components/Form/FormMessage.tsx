@@ -16,7 +16,12 @@ export const FormMessage = React.forwardRef<
   }
 
   return (
-    <p ref={ref} id={formMessageId} className={cn('text-xs text-danger/90', className)} {...props}>
+    <p
+      ref={ref}
+      id={formMessageId}
+      className={cn('text-xs text-danger/90 mt-1', className)}
+      {...props}
+    >
       {body}
     </p>
   );

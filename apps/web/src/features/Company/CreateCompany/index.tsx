@@ -11,10 +11,8 @@ import { COMPANY_FORM_FIELDS, COMPANY_WIZARD_STEPS } from "./constants";
 
 import { CompanyProfileStep } from "./components/CompanyProfileStep";
 import { ContactLocationStep } from "./components/ContactLocationStep";
-import { OperationsComplianceStep } from "./components/OperationsComplianceStep";
 import { CompanyProfileGraphic } from "./components/graphics/CompanyProfileGraphic";
 import { ContactLocationGraphic } from "./components/graphics/ContactLocationGraphic";
-import { OperationsComplianceGraphic } from "./components/graphics/OperationsComplianceGraphic";
 
 const WizardContent = ({ form }: { form: any }) => {
   const { currentStep } = useFormWizardContext();
@@ -24,7 +22,6 @@ const WizardContent = ({ form }: { form: any }) => {
       <div className="space-y-6 max-w-2xl mx-auto mt-4">
         {currentStep === 1 && <CompanyProfileStep form={form} />}
         {currentStep === 2 && <ContactLocationStep form={form} />}
-        {currentStep === 3 && <OperationsComplianceStep form={form} />}
       </div>
     </FormWizard.Content>
   );
@@ -67,6 +64,7 @@ const CreateCompanyPage = () => {
       [COMPANY_FORM_FIELDS.LANDLINE_NO]: "",
       [COMPANY_FORM_FIELDS.REGISTRATION_TYPE]: "",
       [COMPANY_FORM_FIELDS.REGISTRATION_NUMBER]: "",
+      [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: 2,
     },
   });
 
@@ -90,13 +88,6 @@ const CreateCompanyPage = () => {
           <ContactLocationGraphic
             className="w-54 h-auto"
             primaryOffset={{ x: 0, y: 15 }}
-          />
-        );
-      case 3:
-        return (
-          <OperationsComplianceGraphic
-            className="w-54 h-auto"
-            primaryOffset={{ x: 20, y: 15 }}
           />
         );
       default:
