@@ -10,12 +10,13 @@ export const companyFormSchema = z.object({
 
   // Address and Contact fields will be merged from shared schemas below.
 
-  // Step 3
+  // Operations & Compliance (Step 1 continued)
   [COMPANY_FORM_FIELDS.REGISTRATION_TYPE]: z.string().min(1, "Registration type is required"),
   [COMPANY_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().min(1, "Registration number is required"),
   [COMPANY_FORM_FIELDS.FINANCIAL_YEAR_START_DATE]: z.date(),
   [COMPANY_FORM_FIELDS.BOOKS_START_DATE]: z.date(),
   [COMPANY_FORM_FIELDS.CURRENCY]: z.enum(["NPR", "INR", "USD"]),
+  [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: z.coerce.number().min(0, "Min 0 allowed").max(12, "Max 12 allowed"),
 
 
 })
