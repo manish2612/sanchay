@@ -4,8 +4,23 @@ import { ledgerColumns } from "./columns";
 import { useLedgerEntryTable } from "../../hooks/useLedgerEntryTable";
 import { VoucherSectionHeader } from "../VoucherSectionHeader";
 
-export function LedgerEntryTable() {
+export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: string }) {
   const { data, rowErrors, updateData, onRowCommit } = useLedgerEntryTable();
+
+  // Filter columns based on applyMode
+  const activeColumns = React.useMemo(() => {
+    if (applyMode === "Account Mode") {
+      // Exclude standard 'amount' and 'vatAmt'
+      return ledgerColumns.filter(col => 
+        (col as any).accessorKey !== "amount" && (col as any).accessorKey !== "vatAmt"
+      );
+    } else {
+      // Exclude 'debitAmount' and 'creditAmount'
+      return ledgerColumns.filter(col => 
+        (col as any).accessorKey !== "debitAmount" && (col as any).accessorKey !== "creditAmount"
+      );
+    }
+  }, [applyMode]);
 
   return (
     <div className="flex-1 flex flex-col min-h-[140px] overflow-hidden">
@@ -18,7 +33,7 @@ export function LedgerEntryTable() {
       <div className="flex-1 overflow-hidden flex flex-col">
         <Table.Root
           data={data}
-          columns={ledgerColumns}
+          columns={activeColumns}
           className="h-full flex-1 rounded-none border-x-0 border-t-0 border-b-0"
           tableOptions={{
             meta: {

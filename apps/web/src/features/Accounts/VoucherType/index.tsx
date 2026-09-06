@@ -16,6 +16,8 @@ export default function VouchersPage() {
   const prefs = useVoucherPreferences();
 
   const isAccountInvoice = prefs.applyMode === "Account Invoice";
+  const isAccountMode = prefs.applyMode === "Account Mode";
+  const showLedgerInBody = isAccountInvoice || isAccountMode;
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -31,11 +33,11 @@ export default function VouchersPage() {
 
       {/* Tables section: fills remaining vertical space */}
       <div className="flex-1 flex flex-col overflow-auto min-h-0">
-        {isAccountInvoice ? <LedgerEntryTable /> : <VoucherItemTable />}
+        {showLedgerInBody ? <LedgerEntryTable applyMode={prefs.applyMode} /> : <VoucherItemTable />}
       </div>
 
       {/* Footer: narration + actions + financial summary */}
-      <VoucherFooter {...footerState} hideLedgerEntryTable={isAccountInvoice} />
+      <VoucherFooter {...footerState} hideLedgerEntryTable={showLedgerInBody} />
     </div>
   );
 }

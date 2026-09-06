@@ -6,6 +6,8 @@ export type LedgerEntryRow = {
   id: string;
   name: string;
   amount: string;
+  debitAmount: string;
+  creditAmount: string;
   vatAmt: string;
   isPhantom?: boolean;
 };
@@ -35,6 +37,38 @@ export const ledgerColumns: ColumnDef<LedgerEntryRow>[] = [
       layout: { cellClassName: "px-2", headerClassName: "text-right" }, 
       inputConfig: { allowNegative: true } 
     } 
+  },
+  {
+    accessorKey: "debitAmount",
+    header: "Debit (Dr)",
+    size: 142,
+    cell: NumericCell,
+    meta: {
+      layout: { cellClassName: "px-2", headerClassName: "text-right" },
+      inputConfig: { 
+        allowNegative: false,
+        disabled: (row: any) => {
+          const val = row.original.creditAmount;
+          return val && val !== "0.00" && val.trim() !== "";
+        }
+      }
+    }
+  },
+  {
+    accessorKey: "creditAmount",
+    header: "Credit (Cr)",
+    size: 142,
+    cell: NumericCell,
+    meta: {
+      layout: { cellClassName: "px-2", headerClassName: "text-right" },
+      inputConfig: { 
+        allowNegative: false,
+        disabled: (row: any) => {
+          const val = row.original.debitAmount;
+          return val && val !== "0.00" && val.trim() !== "";
+        }
+      }
+    }
   },
   // { accessorKey: "vatAmt", header: "VAT Amt", size: 118, cell: NumericCell,  meta: { layout: { cellClassName: "px-2" } } },
 ];

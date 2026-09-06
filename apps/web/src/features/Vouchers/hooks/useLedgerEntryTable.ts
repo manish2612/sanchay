@@ -5,6 +5,8 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
   id,
   name: "",
   amount: "",
+  debitAmount: "",
+  creditAmount: "",
   vatAmt: "",
   isPhantom: true,
 });

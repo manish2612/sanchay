@@ -52,7 +52,7 @@ export function VoucherFooter({
       {!hideLedgerEntryTable && (
         <div className="flex flex-col border border-border rounded-lg overflow-hidden bg-surface-variant shadow-sm min-w-0 relative min-h-[160px]">
           <div className="absolute inset-0 flex flex-col">
-            <LedgerEntryTable />
+            <LedgerEntryTable applyMode="Item Mode" />
           </div>
         </div>
       )}

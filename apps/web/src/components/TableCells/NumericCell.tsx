@@ -3,7 +3,8 @@ import { TextInput } from "@prime/ui";
 
 export const NumericCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig } = column.columnDef.meta || {};
-  const { allowNegative = false, max, type } = inputConfig || {};
+  const { allowNegative = false, max, type, disabled: disabledConfig } = inputConfig || {};
+  const isDisabled = typeof disabledConfig === 'function' ? disabledConfig(row) : disabledConfig;
 
   const meta = table.options.meta || {} as any;
   const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
@@ -36,7 +37,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   };
 
   return (
-    <TextInput type={type || "text"} max={max}
+    <TextInput type={type || "text"} max={max} disabled={isDisabled}
       value={value}
       onKeyDown={(e) => {
         // Block all invalid printable characters to prevent selection loss

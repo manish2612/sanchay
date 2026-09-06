@@ -33,6 +33,7 @@ declare module '@tanstack/react-table' {
     inputConfig?: {
       allowNegative?: boolean;
       placeholder?: string;
+      disabled?: boolean | ((row: any) => boolean);
     };
   }
 }
