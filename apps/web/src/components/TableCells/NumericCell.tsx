@@ -54,7 +54,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
       }}
       onBlur={onBlur}
       variant={error ? "error" : "default"}
-      className={`h-8 w-full my-auto bg-transparent border-0 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 transition-all px-2 ${
+      className={`h-8 w-full my-auto bg-surface transition-all px-2 ${
         error ? "ring-2 ring-danger ring-offset-0" : ""
       }`}
       inputClassName="text-sm px-0 text-right h-full"

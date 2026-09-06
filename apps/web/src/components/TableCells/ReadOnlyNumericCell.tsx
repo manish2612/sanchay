@@ -13,7 +13,7 @@ export const ReadOnlyNumericCell = ({ getValue, column }: any) => {
   const formatted = formatValue(initialValue);
 
   return (
-    <div className="h-8 flex items-center justify-end px-2 text-sm text-foreground w-full truncate">
+    <div className="h-8 flex items-center justify-end px-2 text-sm text-foreground w-full truncate bg-surface border border-input rounded-md shadow-sm">
       {formatted}
     </div>
   );
