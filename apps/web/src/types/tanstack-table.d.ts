@@ -18,11 +18,9 @@ declare module '@tanstack/react-table' {
       isRowEmpty?: (row: any) => boolean;
       successRowIndex?: number | null;
     };
-    features?: {
-      phantomRowConfig?: {
-        isPhantom: (row: any) => boolean;
-        actionText: string;
-      };
+    phantomRowConfig?: {
+      isPhantom: (row: any) => boolean;
+      actionText: string;
     };
   }
 

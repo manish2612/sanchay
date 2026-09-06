@@ -13,7 +13,7 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
     onRowCommit,
     activeDetailsRowIndex,
     setActiveDetailsRowIndex
-  } = useLedgerEntryTable();
+  } = useLedgerEntryTable(applyMode);
 
   // Filter columns based on applyMode
   const activeColumns = React.useMemo(() => {
@@ -54,11 +54,9 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
                 rowErrors,
                 isRowEmpty: (row: any) => row.original.name.trim() === "",
               },
-              features: {
-                phantomRowConfig: {
-                  isPhantom: (row: any) => row.original.isPhantom,
-                  actionText: "Add New Entry",
-                },
+              phantomRowConfig: {
+                isPhantom: (row: any) => row.original.isPhantom,
+                actionText: "Add New Entry",
               },
             },
           }}

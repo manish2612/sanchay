@@ -11,7 +11,7 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
   isPhantom: true,
 });
 
-export function useLedgerEntryTable() {
+export function useLedgerEntryTable(applyMode: string = "Item Mode") {
   const [data, setData] = useState<LedgerEntryRow[]>([generateEmptyRow("row-1")]);
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
   const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
@@ -40,7 +40,17 @@ export function useLedgerEntryTable() {
     }
 
     // Validation: Name must be selected
-    const isValid = row.name.trim() !== "";
+    let isValid = row.name.trim() !== "";
+
+    // Amount validation based on mode
+    if (applyMode === "Account Mode") {
+      const debit = parseFloat(row.debitAmount.replace(/[^0-9.-]+/g, ""));
+      const credit = parseFloat(row.creditAmount.replace(/[^0-9.-]+/g, ""));
+      if (isNaN(debit) && isNaN(credit)) isValid = false;
+    } else {
+      const amt = parseFloat(row.amount.replace(/[^0-9.-]+/g, ""));
+      if (isNaN(amt) || amt <= 0) isValid = false;
+    }
 
     if (!isValid) {
       setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
@@ -66,7 +76,7 @@ export function useLedgerEntryTable() {
     }
     
     return "EXIT";
-  }, [data, updateData]);
+  }, [data, updateData, applyMode]);
 
   return {
     data,
