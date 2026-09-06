@@ -8,12 +8,14 @@ import {
   ModalTitle,
   ModalDescription,
   ModalClose,
-  Button
+  Button,
+  Icon
 } from "@prime/ui";
 
 export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
-  const { inputConfig } = column.columnDef.meta || {};
+  const { inputConfig, features } = column.columnDef.meta || {};
   const { placeholder = "Search item..." } = inputConfig || {};
+  const { enableLineDetails } = features || {};
 
   const meta = table.options.meta || {} as any;
   const { state, actions } = meta;
@@ -75,6 +77,43 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
         className="h-8 !min-h-8 !py-0 w-full my-auto bg-surface transition-all"
         inputClassName="text-sm h-full px-1"
         onBlur={onBlur}
+        rightSlot={
+          enableLineDetails ? (
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={!value || value.trim() === ""}
+              className={`h-6 w-6 !p-0 mr-1 transition-colors ${
+                !value || value.trim() === ""
+                  ? "opacity-50 text-muted-foreground"
+                  : "text-muted-foreground"
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (value && value.trim() !== "") {
+                  actions?.openLineDetails?.(row.index);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (value && value.trim() !== "") {
+                    actions?.openLineDetails?.(row.index);
+                  }
+                }
+              }}
+              title="Add/Edit Description"
+            >
+              <Icon 
+                name={row.original.description ? "MessageCircleCheck" : "MessageCircle"} 
+                size={16} 
+                className={row.original.description ? "text-primary" : ""}
+              />
+            </Button>
+          ) : undefined
+        }
       />
       <AutoSuggest.Content>
         <AutoSuggest.List>

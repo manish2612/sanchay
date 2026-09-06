@@ -20,6 +20,7 @@ const generateEmptyRow = (id: string): VoucherRow => ({
 export function useVoucherItemTable() {
   const [data, setData] = useState<VoucherRow[]>([generateEmptyRow("row-1")]);
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
+  const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     setData((old) =>
@@ -79,5 +80,7 @@ export function useVoucherItemTable() {
     rowErrors,
     updateData,
     onRowCommit,
+    activeDetailsRowIndex,
+    setActiveDetailsRowIndex,
   };
 }

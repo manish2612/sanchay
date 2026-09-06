@@ -6,6 +6,7 @@ import { TextCell } from "../../../../components/TableCells/TextCell";
 export type VoucherRow = {
   id: string;
   item: string;
+  description?: string;
   qty: string;
   freeQty: string;
   altQty: string;
@@ -33,7 +34,10 @@ export const editableColumns: ColumnDef<VoucherRow>[] = [
     size: 180, 
     minSize: 150,
     cell: AutoSuggestCell,
-    meta: { layout: { fluid: true } }
+    meta: { 
+      features: { enableLineDetails: true },
+      layout: { fluid: true }
+    }
   },
   { accessorKey: "qty", header: "Qty", size: 105, cell: NumericCell, ...columnPaddingX2 },
   { accessorKey: "freeQty", header: "Free Qty", size: 90, cell: NumericCell, ...columnPaddingX2 },

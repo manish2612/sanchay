@@ -5,6 +5,7 @@ import { NumericCell } from "../../../../components/TableCells/NumericCell";
 export type LedgerEntryRow = {
   id: string;
   name: string;
+  description?: string;
   amount: string;
   debitAmount: string;
   creditAmount: string;
@@ -24,6 +25,7 @@ export const ledgerColumns: ColumnDef<LedgerEntryRow>[] = [
     minSize: 150,
     cell: AutoSuggestCell, 
     meta: { 
+      features: { enableLineDetails: true },
       layout: { fluid: true },
       inputConfig: { placeholder: "Search Ledger" } 
     } 

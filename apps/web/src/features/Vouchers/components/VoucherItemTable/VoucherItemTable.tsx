@@ -3,15 +3,23 @@ import { Table, flexRender } from '@prime/ui';
 import { editableColumns } from './columns';
 import { useVoucherItemTable } from '../../hooks/useVoucherItemTable';
 import { VoucherSectionHeader } from '../VoucherSectionHeader';
+import { LineDetailsSheet } from '../LineDetailsSheet';
 
 export function VoucherItemTable() {
-  const { data, rowErrors, updateData, onRowCommit } = useVoucherItemTable();
+  const { 
+    data, 
+    rowErrors, 
+    updateData, 
+    onRowCommit,
+    activeDetailsRowIndex,
+    setActiveDetailsRowIndex
+  } = useVoucherItemTable();
 
   // Count non-phantom (real data) rows
   const dataRowCount = data.filter((r) => !r.isPhantom).length;
 
   return (
-    <div className="flex-1 flex flex-col min-h-[220px] border-b border-border overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-[220px] border-b border-border overflow-hidden relative">
       {/* Section header */}
       <VoucherSectionHeader
         title="Item Lines"
@@ -30,6 +38,7 @@ export function VoucherItemTable() {
               actions: {
                 updateData,
                 onRowCommit,
+                openLineDetails: setActiveDetailsRowIndex,
               },
               state: {
                 rowErrors,
@@ -114,6 +123,18 @@ export function VoucherItemTable() {
           </Table.Body>
         </Table.Root>
       </div>
+      
+      {activeDetailsRowIndex !== null && (
+        <LineDetailsSheet
+          open={activeDetailsRowIndex !== null}
+          onOpenChange={(open) => {
+            if (!open) setActiveDetailsRowIndex(null);
+          }}
+          rowIndex={activeDetailsRowIndex}
+          row={data[activeDetailsRowIndex]}
+          updateData={updateData}
+        />
+      )}
     </div>
   );
 }

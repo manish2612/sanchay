@@ -6,6 +6,7 @@ declare module '@tanstack/react-table' {
     actions?: {
       updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
       removeRow?: (rowIndex: number) => void;
+      openLineDetails?: (rowIndex: number) => void;
       onRowCommit?: (
         rowIndex: number,
         columnId?: string,
@@ -26,6 +27,9 @@ declare module '@tanstack/react-table' {
   }
 
   interface ColumnMeta<TData extends RowData, TValue> {
+    features?: {
+      enableLineDetails?: boolean;
+    };
     layout?: {
       cellClassName?: string;
       headerClassName?: string;

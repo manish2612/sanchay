@@ -3,9 +3,17 @@ import { Table, flexRender } from "@prime/ui";
 import { ledgerColumns } from "./columns";
 import { useLedgerEntryTable } from "../../hooks/useLedgerEntryTable";
 import { VoucherSectionHeader } from "../VoucherSectionHeader";
+import { LineDetailsSheet } from "../LineDetailsSheet";
 
 export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: string }) {
-  const { data, rowErrors, updateData, onRowCommit } = useLedgerEntryTable();
+  const { 
+    data, 
+    rowErrors, 
+    updateData, 
+    onRowCommit,
+    activeDetailsRowIndex,
+    setActiveDetailsRowIndex
+  } = useLedgerEntryTable();
 
   // Filter columns based on applyMode
   const activeColumns = React.useMemo(() => {
@@ -23,7 +31,7 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
   }, [applyMode]);
 
   return (
-    <div className="flex-1 flex flex-col min-h-[140px] overflow-hidden">
+    <div className="flex-1 flex flex-col min-h-[140px] overflow-hidden relative">
       {/* Section header */}
       {/* <VoucherSectionHeader
         title="Ledger / Tax & Charges"
@@ -40,6 +48,7 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
               actions: {
                 updateData,
                 onRowCommit,
+                openLineDetails: setActiveDetailsRowIndex,
               },
               state: {
                 rowErrors,
@@ -125,6 +134,18 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
           </Table.Body>
         </Table.Root>
       </div>
+
+      {activeDetailsRowIndex !== null && (
+        <LineDetailsSheet
+          open={activeDetailsRowIndex !== null}
+          onOpenChange={(open) => {
+            if (!open) setActiveDetailsRowIndex(null);
+          }}
+          rowIndex={activeDetailsRowIndex}
+          row={data[activeDetailsRowIndex]}
+          updateData={updateData}
+        />
+      )}
     </div>
   );
 }

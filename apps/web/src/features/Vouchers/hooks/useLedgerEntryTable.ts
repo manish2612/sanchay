@@ -14,6 +14,7 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
 export function useLedgerEntryTable() {
   const [data, setData] = useState<LedgerEntryRow[]>([generateEmptyRow("row-1")]);
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
+  const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     setData((old) =>
@@ -72,5 +73,7 @@ export function useLedgerEntryTable() {
     rowErrors,
     updateData,
     onRowCommit,
+    activeDetailsRowIndex,
+    setActiveDetailsRowIndex,
   };
 }
