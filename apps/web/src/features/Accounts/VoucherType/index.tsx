@@ -8,10 +8,14 @@ import { LedgerEntryTable } from "@/features/Vouchers/components/LedgerEntryTabl
 import { VoucherFooter } from "@/features/Vouchers/components/VoucherFooter";
 import { useVoucherDetailsForm } from "@/features/Vouchers/hooks/useVoucherDetailsForm";
 import { useVoucherFooter } from "@/features/Vouchers/hooks/useVoucherFooter";
+import { useVoucherPreferences } from "@/features/Vouchers/hooks/useVoucherPreferences";
 
 export default function VouchersPage() {
   const voucherState = useVoucherDetailsForm();
   const footerState = useVoucherFooter();
+  const prefs = useVoucherPreferences();
+
+  const isAccountInvoice = prefs.applyMode === "Account Invoice";
 
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
@@ -19,6 +23,7 @@ export default function VouchersPage() {
       <VoucherPageHeader
         voucherMode="Creation Mode"
         entryMode={voucherState.mode}
+        prefs={prefs}
       />
 
       {/* Document details form */}
@@ -26,11 +31,11 @@ export default function VouchersPage() {
 
       {/* Tables section: fills remaining vertical space */}
       <div className="flex-1 flex flex-col overflow-auto min-h-0">
-        <VoucherItemTable />
+        {isAccountInvoice ? <LedgerEntryTable /> : <VoucherItemTable />}
       </div>
 
       {/* Footer: narration + actions + financial summary */}
-      <VoucherFooter {...footerState} />
+      <VoucherFooter {...footerState} hideLedgerEntryTable={isAccountInvoice} />
     </div>
   );
 }

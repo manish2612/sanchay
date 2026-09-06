@@ -9,6 +9,10 @@ import { VoucherSummaryPanel } from "./VoucherSummaryPanel";
 
 // ─── Main Component ─────────────────────────────────────────────────────────
 
+export interface VoucherFooterProps extends VoucherFooterState {
+  hideLedgerEntryTable?: boolean;
+}
+
 export function VoucherFooter({
   narration,
   setNarration,
@@ -18,10 +22,11 @@ export function VoucherFooter({
   onPrint,
   onPrintConfig,
   onExportPdf,
-}: VoucherFooterState) {
+  hideLedgerEntryTable,
+}: VoucherFooterProps) {
   return (
     <footer
-      className="bg-surface border-t border-border px-5 py-3 grid grid-cols-[450px_1fr_350px] gap-5 items-stretch flex-shrink-0"
+      className={`bg-surface border-t border-border px-5 py-3 grid ${hideLedgerEntryTable ? 'grid-cols-[1fr_350px]' : 'grid-cols-[450px_1fr_350px]'} gap-5 items-stretch flex-shrink-0`}
       aria-label="Voucher actions and totals"
     >
       {/* Left: Narration */}
@@ -44,11 +49,13 @@ export function VoucherFooter({
       </div>
 
       {/* Middle: Ledger Table */}
-      <div className="flex flex-col border border-border rounded-lg overflow-hidden bg-surface-variant shadow-sm min-w-0 relative min-h-[160px]">
-        <div className="absolute inset-0 flex flex-col">
-          <LedgerEntryTable />
+      {!hideLedgerEntryTable && (
+        <div className="flex flex-col border border-border rounded-lg overflow-hidden bg-surface-variant shadow-sm min-w-0 relative min-h-[160px]">
+          <div className="absolute inset-0 flex flex-col">
+            <LedgerEntryTable />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Right: Summary panel & Actions */}
       <div className="flex flex-col gap-3">

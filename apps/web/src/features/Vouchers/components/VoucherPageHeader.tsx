@@ -12,15 +12,18 @@ import {
 } from "@prime/ui";
 
 import { VoucherPreferencesSidebar } from "./VoucherPreferencesSidebar";
+import { useVoucherPreferences } from "../hooks/useVoucherPreferences";
 
 interface VoucherPageHeaderProps {
   voucherMode?: string;
   entryMode?: string;
+  prefs: ReturnType<typeof useVoucherPreferences>;
 }
 
 export function VoucherPageHeader({
   voucherMode = "Creation Mode",
   entryMode = "Item Mode",
+  prefs,
 }: VoucherPageHeaderProps) {
   return (
     <header className="h-12.5 shrink-0 bg-surface border-b border-border flex items-center px-5 gap-3">
@@ -57,7 +60,7 @@ export function VoucherPageHeader({
 
       {/* Right-side chips */}
       <div className="flex items-center gap-2">
-        <VoucherPreferencesSidebar>
+        <VoucherPreferencesSidebar prefs={prefs}>
           <button
             aria-label="Preferences"
             title="Preferences"

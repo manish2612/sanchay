@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export type ApplyTaxOption = "Item Level" | "Invoice Level" | "No Tax";
-export type ApplyModeOption = "Item Mode" | "Account Mode";
+export type ApplyModeOption = "Item Mode" | "Account Mode" | "Account Invoice";
 
 export function useVoucherPreferences() {
   const [applyTax, setApplyTax] = useState<ApplyTaxOption>("Item Level");

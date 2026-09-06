@@ -9,17 +9,20 @@ import {
   SegmentedControl,
   Switch,
   Icon,
+  DropdownMenu,
+  Button,
 } from "@prime/ui";
 import { useVoucherPreferences } from "../hooks/useVoucherPreferences";
 
 interface VoucherPreferencesSidebarProps {
   children: React.ReactNode;
+  prefs: ReturnType<typeof useVoucherPreferences>;
 }
 
 export function VoucherPreferencesSidebar({
   children,
+  prefs,
 }: VoucherPreferencesSidebarProps) {
-  const prefs = useVoucherPreferences();
 
   return (
     <Sheet>
@@ -61,17 +64,23 @@ export function VoucherPreferencesSidebar({
             <label className="text-sm font-medium text-foreground">
               Apply Mode
             </label>
-            <SegmentedControl.Root
-              value={prefs.applyMode}
-              onValueChange={(val: any) => prefs.setApplyMode(val)}
-              size="sm"
+            <DropdownMenu
+              items={[
+                { id: "Item Mode", label: "Item Mode", onSelect: () => prefs.setApplyMode("Item Mode") },
+                { id: "Account Mode", label: "Account Mode", onSelect: () => prefs.setApplyMode("Account Mode") },
+                { id: "Account Invoice", label: "Account Invoice", onSelect: () => prefs.setApplyMode("Account Invoice") },
+              ]}
+              align="start"
             >
-              <SegmentedControl.Item value="Item Mode" label="Item Mode" />
-              <SegmentedControl.Item
-                value="Account Mode"
-                label="Account Mode"
-              />
-            </SegmentedControl.Root>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full justify-between font-semibold text-sm h-9"
+              >
+                <span className="truncate">{prefs.applyMode}</span>
+                <Icon name="ChevronDown" size={14} className="opacity-70 ml-2 shrink-0" />
+              </Button>
+            </DropdownMenu>
           </div>
 
           <div className="h-px bg-border mt-0 mb-3 opacity-40" />
