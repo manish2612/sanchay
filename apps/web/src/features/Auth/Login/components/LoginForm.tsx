@@ -30,7 +30,7 @@ export function LoginForm() {
 
     try {
       const response = await login({
-        cmp_id: '', // Empty string as per requirements
+        company_id: '', // Empty string as per requirements
         email: data.email,
         password: data.password,
       }).unwrap();
@@ -46,15 +46,17 @@ export function LoginForm() {
       const status = error?.status;
       // Provide conversational error messages based on HTTP status codes
       if (status === 401 || status === 403) {
-        setGlobalError("The email or password you entered is incorrect. Please try again.");
+        setGlobalError('The email or password you entered is incorrect. Please try again.');
       } else if (status === 404) {
         setGlobalError("We couldn't find an account with that email. Please sign up first.");
       } else if (status === 400) {
-        setGlobalError("Please check your credentials and try again.");
+        setGlobalError('Please check your credentials and try again.');
       } else if (status >= 500) {
-        setGlobalError("Our servers are taking a little break right now. Please try again in a moment.");
+        setGlobalError(
+          'Our servers are taking a little break right now. Please try again in a moment.',
+        );
       } else {
-        setGlobalError("An unexpected error occurred while trying to sign in. Please try again.");
+        setGlobalError('An unexpected error occurred while trying to sign in. Please try again.');
       }
     }
   };

@@ -5,7 +5,7 @@ import { apiSlice } from '@/store/apiSlice';
 // ---------------------------------------------------------------------------
 
 export interface LoginRequest {
-  cmp_id: string;
+  company_id: string;
   email: string;
   password: string;
 }
@@ -17,10 +17,16 @@ export interface Company {
   role: string;
 }
 
+export interface User {
+  full_name: string;
+  email: string;
+  mobile_no: string;
+}
+
 export interface LoginResponse {
-  active_company: Company;
   companies: Company[];
   token: string;
+  user: User;
 }
 
 export interface SignupRequest {
