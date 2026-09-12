@@ -11,6 +11,7 @@ export interface DropdownMenuItem {
   shortcut?: string;
   disabled?: boolean;
   className?: string;
+  textValue?: string;
 }
 
 export interface DropdownMenuProps {
@@ -21,4 +22,5 @@ export interface DropdownMenuProps {
   align?: 'start' | 'center' | 'end';
   label?: string;
   labelVariant?: LabelVariant;
+  disabled?: boolean;
 }

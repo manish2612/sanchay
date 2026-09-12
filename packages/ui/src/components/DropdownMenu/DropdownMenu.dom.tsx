@@ -21,6 +21,7 @@ const DropdownMenu = ({
   align = 'end',
   label,
   labelVariant = 'default',
+  disabled = false,
 }: DropdownMenuProps) => {
   const hasCustomTrigger = !!children;
 
@@ -31,6 +32,7 @@ const DropdownMenu = ({
       ) : (
         <Button
           variant="outline"
+          disabled={disabled}
           className={cn(
             'w-full justify-between font-normal text-sm',
             labelVariant === 'in-field' &&
@@ -106,7 +108,7 @@ const DropdownMenu = ({
             onClick={item.onSelect} // Radix uses onClick/onSelect
             disabled={item.disabled}
             shortcut={item.shortcut}
-            textValue={item.label} // REQUIRED for search to work
+            textValue={item.textValue || item.label} // REQUIRED for search to work
             leadingVisual={item.leadingVisual}
             reserveLeadingSpace={item.reserveLeadingSpace}
             className={item.className}
