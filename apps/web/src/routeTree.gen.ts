@@ -15,6 +15,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MastersRouteImport } from './routes/masters'
 import { Route as CompanyNewRouteImport } from './routes/company/new'
+import { Route as CompanySelectRouteImport } from './routes/company/select'
 import { Route as DevApiSandboxRouteImport } from './routes/dev/api-sandbox'
 import { Route as DevTestApiRouteImport } from './routes/dev/test-api'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
@@ -53,6 +54,11 @@ const MastersRoute = MastersRouteImport.update({
 const CompanyNewRoute = CompanyNewRouteImport.update({
   id: '/company/new',
   path: '/company/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompanySelectRoute = CompanySelectRouteImport.update({
+  id: '/company/select',
+  path: '/company/select',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevApiSandboxRoute = DevApiSandboxRouteImport.update({
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
   '/company/new': typeof CompanyNewRoute
+  '/company/select': typeof CompanySelectRoute
   '/dev/api-sandbox': typeof DevApiSandboxRoute
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
   '/company/new': typeof CompanyNewRoute
+  '/company/select': typeof CompanySelectRoute
   '/dev/api-sandbox': typeof DevApiSandboxRoute
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/masters': typeof MastersRoute
   '/company/new': typeof CompanyNewRoute
+  '/company/select': typeof CompanySelectRoute
   '/dev/api-sandbox': typeof DevApiSandboxRoute
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/masters'
     | '/company/new'
+    | '/company/select'
     | '/dev/api-sandbox'
     | '/dev/test-api'
     | '/transactions/vouchers'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/masters'
     | '/company/new'
+    | '/company/select'
     | '/dev/api-sandbox'
     | '/dev/test-api'
     | '/transactions/vouchers'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/masters'
     | '/company/new'
+    | '/company/select'
     | '/dev/api-sandbox'
     | '/dev/test-api'
     | '/transactions/vouchers'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MastersRoute: typeof MastersRoute
   CompanyNewRoute: typeof CompanyNewRoute
+  CompanySelectRoute: typeof CompanySelectRoute
   DevApiSandboxRoute: typeof DevApiSandboxRoute
   DevTestApiRoute: typeof DevTestApiRoute
   TransactionsVouchersRoute: typeof TransactionsVouchersRoute
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       path: '/company/new'
       fullPath: '/company/new'
       preLoaderRoute: typeof CompanyNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/company/select': {
+      id: '/company/select'
+      path: '/company/select'
+      fullPath: '/company/select'
+      preLoaderRoute: typeof CompanySelectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dev/api-sandbox': {
@@ -347,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MastersRoute: MastersRoute,
   CompanyNewRoute: CompanyNewRoute,
+  CompanySelectRoute: CompanySelectRoute,
   DevApiSandboxRoute: DevApiSandboxRoute,
   DevTestApiRoute: DevTestApiRoute,
   TransactionsVouchersRoute: TransactionsVouchersRoute,
