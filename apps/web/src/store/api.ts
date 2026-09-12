@@ -49,6 +49,10 @@ export const api = createApiRegistry<'MAIN'>({
 
   onUnauthorized: () => { 
     cookieTokenStorage.clearToken();
-    window.location.href = '/login'; 
+    // Do not force a page reload if we are already on the login page.
+    // This prevents the 'Leave site?' prompt when a 401 occurs during login.
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login'; 
+    }
   },
 });
