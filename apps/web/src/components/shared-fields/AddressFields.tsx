@@ -1,29 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, AutoSuggest, Icon, TextInput } from "@prime/ui";
 import { UseFormReturn } from "react-hook-form";
-
-export const COUNTRY_OPTIONS = [
-  { label: "Nepal", value: "Nepal", icon: "🇳🇵" },
-  { label: "India", value: "India", icon: "🇮🇳" },
-  { label: "United States", value: "United States", icon: "🇺🇸" },
-];
-
-export const STATE_OPTIONS = [
-  { label: "Bagmati", value: "Bagmati" },
-  { label: "Gandaki", value: "Gandaki" },
-  { label: "Lumbini", value: "Lumbini" },
-];
+import { useCountrySelectField, useStateSelectField } from "./useAddressFields";
 
 export const CountrySelectField = ({ control, name, getValues }: { control: any, name: string, getValues: any }) => {
-  const [query, setQuery] = useState(getValues(name) || "");
+  const { countryOptions } = useCountrySelectField();
+  
+  const initialValue = getValues(name);
+  const initialLabel = countryOptions.find(c => c.value === initialValue)?.label || "";
+  const [query, setQuery] = useState(initialLabel);
 
-  const filtered = COUNTRY_OPTIONS.filter((c) =>
+  useEffect(() => {
+    const currentVal = getValues(name);
+    const label = countryOptions.find(c => c.value === currentVal)?.label || "";
+    setQuery(label);
+  }, [countryOptions, getValues, name]);
+
+  const filtered = countryOptions.filter((c) =>
     c.label.toLowerCase().includes(query.toLowerCase())
   );
 
-  const selectedOption = COUNTRY_OPTIONS.find(c => c.value === getValues(name));
+  const selectedOption = countryOptions.find(c => c.value === getValues(name));
   const activeIcon = selectedOption ? <span className="text-base">{selectedOption.icon}</span> : <Icon name="Globe" size={16} className="text-muted-foreground" />;
 
   return (
@@ -36,7 +35,8 @@ export const CountrySelectField = ({ control, name, getValues }: { control: any,
             inputValue={query}
             onInputChange={(v) => {
               setQuery(v);
-              field.onChange(v);
+              // if user is typing, we shouldn't necessarily update the id until they select, but 
+              // typically auto suggest allows free text. If it requires selection, the id is set onSelect.
             }}
             options={filtered}
           >
@@ -52,10 +52,10 @@ export const CountrySelectField = ({ control, name, getValues }: { control: any,
                 {filtered.map((opt) => (
                   <AutoSuggest.Item 
                     key={opt.value} 
-                    value={opt.value}
+                    value={opt.value} // value here is used internally by primitive, we need id for form
                     onSelect={() => {
                       field.onChange(opt.value);
-                      setQuery(opt.value);
+                      setQuery(opt.label);
                     }}
                   >
                     <span className="mr-2">{opt.icon}</span>
@@ -72,10 +72,20 @@ export const CountrySelectField = ({ control, name, getValues }: { control: any,
   );
 };
 
-export const StateSelectField = ({ control, name, getValues }: { control: any, name: string, getValues: any }) => {
-  const [query, setQuery] = useState(getValues(name) || "");
+export const StateSelectField = ({ control, name, getValues, watchCountryName = 'country' }: { control: any, name: string, getValues: any, watchCountryName?: string }) => {
+  const { stateOptions } = useStateSelectField(control, watchCountryName);
+  
+  const initialValue = getValues(name);
+  const initialLabel = stateOptions.find(s => s.value === initialValue)?.label || "";
+  const [query, setQuery] = useState(initialLabel);
 
-  const filtered = STATE_OPTIONS.filter((s) =>
+  useEffect(() => {
+    const currentVal = getValues(name);
+    const label = stateOptions.find(s => s.value === currentVal)?.label || "";
+    setQuery(label);
+  }, [stateOptions, getValues, name]);
+
+  const filtered = stateOptions.filter((s) =>
     s.label.toLowerCase().includes(query.toLowerCase())
   );
 
@@ -89,7 +99,6 @@ export const StateSelectField = ({ control, name, getValues }: { control: any, n
             inputValue={query}
             onInputChange={(v) => {
               setQuery(v);
-              field.onChange(v);
             }}
             options={filtered}
           >
@@ -108,7 +117,7 @@ export const StateSelectField = ({ control, name, getValues }: { control: any, n
                     value={opt.value}
                     onSelect={() => {
                       field.onChange(opt.value);
-                      setQuery(opt.value);
+                      setQuery(opt.label);
                     }}
                   >
                     {opt.label}
