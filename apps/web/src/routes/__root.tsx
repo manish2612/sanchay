@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { Helmet } from 'react-helmet-async';
 
@@ -17,6 +17,11 @@ import '@fontsource/work-sans/700.css';
 import { AppLayout } from '../components/AppLayout';
 import { AppProvider } from '@/providers/AppProvider';
 
+// Zero-bundle strategy: lazy load the devtools only in development
+const MockDevTools = import.meta.env.DEV 
+  ? React.lazy(() => import('../mocks/components/MockDevTools'))
+  : () => null;
+
 export const Route = createRootRoute({
   component: RootComponent,
 });
@@ -33,6 +38,11 @@ function RootComponent() {
           <AppLayout>
             <Outlet />
           </AppLayout>
+          {import.meta.env.DEV && (
+            <Suspense fallback={null}>
+              <MockDevTools />
+            </Suspense>
+          )}
         </AppProvider>
       </div>
     </>
