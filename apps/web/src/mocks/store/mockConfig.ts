@@ -1,10 +1,12 @@
 import { authRegistry } from '../domains/auth/registry';
+import { globalRegistry } from '../domains/global/registry';
 
 const STORAGE_KEY = 'erp_mock_settings';
 
 // Centralized defaults built by composing decentralized domain registries
 export const defaultRegistry = {
   auth: authRegistry,
+  global: globalRegistry,
 };
 
 // TypeScript automatically infers the massive global registry type

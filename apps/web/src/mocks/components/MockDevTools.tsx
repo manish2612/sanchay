@@ -109,9 +109,9 @@ export default function MockDevTools() {
   const toggleEndpoint = (module: keyof MockRegistry, endpoint: string) => {
     const newConfig = { ...config };
     newConfig[module] = {
-      ...newConfig[module],
+      ...(newConfig[module] as any),
       [endpoint]: !(newConfig[module] as any)[endpoint],
-    };
+    } as any;
     setConfig(newConfig);
     setMockConfig(newConfig);
   };
