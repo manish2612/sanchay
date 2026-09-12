@@ -126,26 +126,31 @@ export function useLeavePrompt({
   confirmLabel,
   cancelLabel,
 }: UseLeavePromptOptions = {}): UseLeavePromptReturn {
-  // ── Resolve dirty flag ────────────────────────────────────────────────────
-  // Priority: explicit isDirtyProp > form.formState.isDirty
   const isFormDirty =
     isDirtyProp !== undefined ? isDirtyProp : (form?.formState?.isDirty ?? false);
 
-  // When reset() is called for a POP action (browser back/forward), TanStack
-  // internally calls window.history.go(±delta) to restore the prior URL.
-  // That history.go() fires another popstate event. If shouldBlockFn is still
-  // returning true, TanStack intercepts the restoration and blocks it too —
-  // the URL stays wrong and the history stack becomes corrupted.
   const isResettingRef = React.useRef(false);
+  const isDirtyRef = React.useRef(isFormDirty);
+
+  // Keep ref in sync without triggering useEffect re-runs in useBlocker
+  React.useEffect(() => {
+    isDirtyRef.current = isFormDirty;
+  }, [isFormDirty]);
+
+  const shouldBlockFn = React.useCallback(() => {
+    // Allow TanStack's own restoration navigation to pass through unblocked.
+    if (isResettingRef.current) return false;
+    return isDirtyRef.current;
+  }, []);
+
+  const enableBeforeUnload = React.useCallback(() => {
+    return isDirtyRef.current;
+  }, []);
 
   const blocker = useBlocker({
-    shouldBlockFn: () => {
-      // Allow TanStack's own restoration navigation to pass through unblocked.
-      if (isResettingRef.current) return false;
-      return isFormDirty;
-    },
+    shouldBlockFn,
     withResolver: true,
-    enableBeforeUnload: true,
+    enableBeforeUnload,
     disabled,
   });
 
