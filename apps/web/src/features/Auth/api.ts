@@ -5,7 +5,7 @@ import { apiSlice } from '@/store/apiSlice';
 // ---------------------------------------------------------------------------
 
 export interface LoginRequest {
-  company_id: number;
+  cmp_id: string;
   email: string;
   password: string;
 }
@@ -24,9 +24,9 @@ export interface LoginResponse {
 }
 
 export interface SignupRequest {
-  username: string;
   email: string;
-  mobileno: string;
+  full_name: string;
+  mobile_no: string;
   password: string;
 }
 
@@ -42,25 +42,25 @@ export interface SignupResponse {
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     /**
-     * POST /auth/signin
+     * POST /auth/login
      * Authenticates a user and returns tokens.
      * Use the `useLoginMutation` hook in components.
      */
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: '/auth/signin',
+        url: '/auth/login',
         method: 'POST',
         body: credentials,
       }),
     }),
 
     /**
-     * POST /auth/signup
+     * POST /auth/register
      * Creates a new user account.
      */
     signup: build.mutation<SignupResponse, SignupRequest>({
       query: (credentials) => ({
-        url: '/auth/signup',
+        url: '/auth/register',
         method: 'POST',
         body: credentials,
       }),

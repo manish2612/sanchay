@@ -28,9 +28,9 @@ export function useSignupForm() {
     try {
       // Exclude 'terms' for the API request as it's typically just UI validation
       await signup({
-        username: data.username,
         email: data.email,
-        mobileno: data.mobileno,
+        full_name: data.username,
+        mobile_no: data.mobileno,
         password: data.password,
       }).unwrap();
 

@@ -30,7 +30,7 @@ export function LoginForm() {
 
     try {
       const response = await login({
-        company_id: 0, // Hardcoded for now as per requirements
+        cmp_id: '', // Empty string as per requirements
         email: data.email,
         password: data.password,
       }).unwrap();
