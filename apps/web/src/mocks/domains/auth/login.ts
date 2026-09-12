@@ -11,31 +11,29 @@ export const loginHandler = http.post<never, LoginRequest, LoginResponse>(
     
     await delay(800);
 
-    return HttpResponse.json(
-      {
-        active_company: {
+    const requestData = await request.json();
+
+    return HttpResponse.json<LoginResponse>({
+      token: 'mock-jwt-token-1234567890',
+      companies: [
+        {
           company_id: 1,
-          company_name: 'Mock Company Inc.',
-          registration_no: 'REG-123456',
-          role: 'admin',
+          company_name: 'Acme Corp',
+          registration_no: 'REG12345',
+          role: 'Admin',
         },
-        companies: [
-          {
-            company_id: 1,
-            company_name: 'Mock Company Inc.',
-            registration_no: 'REG-123456',
-            role: 'admin',
-          },
-          {
-            company_id: 2,
-            company_name: 'Secondary Mock Ltd.',
-            registration_no: 'REG-654321',
-            role: 'user',
-          },
-        ],
-        token: 'mock-jwt-token-1234567890',
+        {
+          company_id: 2,
+          company_name: 'Secondary Mock Ltd.',
+          registration_no: 'REG-654321',
+          role: 'user',
+        },
+      ],
+      user: {
+        full_name: 'Mock User',
+        email: requestData.email || 'mock@example.com',
+        mobile_no: '9999999999',
       },
-      { status: 200 }
-    );
+    }, { status: 200 });
   }
 );

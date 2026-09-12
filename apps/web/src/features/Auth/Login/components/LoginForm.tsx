@@ -40,8 +40,32 @@ export function LoginForm() {
         cookieTokenStorage.setToken(response.token);
       }
 
-      // Route to dashboard on success
-      navigate({ to: '/' });
+      // Update global auth state with user and companies
+      if (response.user && response.companies) {
+        import('@/store/authSlice').then(({ setCredentials, setActiveCompany }) => {
+          import('@/store').then(({ store }) => {
+            store.dispatch(
+              setCredentials({
+                user: response.user,
+                companies: response.companies,
+              })
+            );
+
+            // Redirection logic based on companies count
+            if (response.companies.length === 0) {
+              navigate({ to: '/company/new' });
+            } else if (response.companies.length === 1) {
+              store.dispatch(setActiveCompany(response.companies[0].company_id));
+              navigate({ to: '/dashboard' });
+            } else {
+              navigate({ to: '/company/select' });
+            }
+          });
+        });
+      } else {
+         // Fallback if the user object is not present in the response
+         navigate({ to: '/' });
+      }
     } catch (error: any) {
       const status = error?.status;
       // Provide conversational error messages based on HTTP status codes
