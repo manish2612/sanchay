@@ -29,3 +29,7 @@ Act as a Senior Frontend Architect specifying strictly in scalable and predictab
 - Always destructure the `isLoading` or `isFetching` states from the RTK query hook.
 - Disable submit buttons and show loading text/spinners when requests are in-flight.
 - Never duplicate code. Ensure your logic remains clean, maintainable, and aligned with standard React best practices.
+
+### 5. API Mocking
+- After integrating a new API endpoint, evaluate if a local development mock is required.
+- If a mock is requested, ALWAYS trigger the `/api-mocking` skill to correctly scaffold the MSW handler and automatically wire it into the Mock DevTools UI.
