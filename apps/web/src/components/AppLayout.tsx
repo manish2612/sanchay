@@ -29,8 +29,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isAuthPage = 
     pathname === '/login' || 
     pathname === '/signup' || 
-    pathname === '/company/select' || 
-    pathname === '/company/new';
+    pathname === '/company/select';
 
   if (isAuthPage) {
     return <>{children}</>;

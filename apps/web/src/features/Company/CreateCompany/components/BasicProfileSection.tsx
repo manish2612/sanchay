@@ -1,16 +1,11 @@
 "use client";
 
 import React from "react";
-import { Form, TextInput, DropdownMenu, Icon } from "@prime/ui";
+import { Form, TextInput, Icon } from "@prime/ui";
 import { UseFormReturn } from "react-hook-form";
 import { CompanyFormValues } from "../schema";
 import { COMPANY_FORM_FIELDS } from "../constants";
-
-const TIMEZONE_OPTIONS = [
-  { id: "Asia/Kathmandu", label: "Asia/Kathmandu" },
-  { id: "Asia/Kolkata", label: "Asia/Kolkata" },
-  { id: "America/New_York", label: "America/New_York" },
-];
+import { TimezoneSelectField } from "../../../../components/shared-fields/TimezoneSelectField";
 
 interface BasicProfileSectionProps {
   form: UseFormReturn<CompanyFormValues>;
@@ -57,27 +52,7 @@ export const BasicProfileSection = ({ form }: BasicProfileSectionProps) => {
         )}
       />
 
-      <Form.Field
-        control={form.control}
-        name={COMPANY_FORM_FIELDS.TIMEZONE}
-        render={({ field }: any) => (
-          <Form.Item>
-            <Form.Control>
-              <DropdownMenu
-                label="Timezone *"
-                labelVariant="in-field"
-                triggerLabel={field.value || "Select timezone"}
-                items={TIMEZONE_OPTIONS.map((opt) => ({
-                  id: opt.id,
-                  label: opt.label,
-                  onSelect: () => field.onChange(opt.id),
-                }))}
-              />
-            </Form.Control>
-            <Form.Message />
-          </Form.Item>
-        )}
-      />
+      <TimezoneSelectField form={form} name={COMPANY_FORM_FIELDS.TIMEZONE} />
     </div>
   );
 };

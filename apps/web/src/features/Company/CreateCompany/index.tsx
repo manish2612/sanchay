@@ -96,7 +96,7 @@ const CreateCompanyPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background overflow-hidden relative">
+    <div className="flex flex-col h-[100dvh] bg-background overflow-hidden relative">
       <FormWizard
         form={form}
         initialStep={1}

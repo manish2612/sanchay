@@ -15,7 +15,7 @@ export const ContactLocationStep = ({ form }: ContactLocationStepProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <CountrySelectField control={form.control} name={COMPANY_FORM_FIELDS.COUNTRY} getValues={form.getValues} />
-      <StateSelectField control={form.control} name={COMPANY_FORM_FIELDS.STATE} getValues={form.getValues} />
+      <StateSelectField control={form.control} name={COMPANY_FORM_FIELDS.STATE} getValues={form.getValues} watchCountryName={COMPANY_FORM_FIELDS.COUNTRY} />
       
       <AddressTextareaField 
         control={form.control} 
