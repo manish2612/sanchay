@@ -8,11 +8,13 @@ export const useCountrySelectField = () => {
 
   const countryOptions = useMemo(() => {
     if (!data?.countries) return [];
-    return data.countries.map((c) => ({
-      label: c.name,
-      value: c.id,
-      icon: getCountryFlag(c.iso3) 
-    }));
+    return data.countries
+      .filter((c) => c.is_active !== false) // fallback to true if undefined
+      .map((c) => ({
+        label: c.name,
+        value: c.id,
+        icon: getCountryFlag(c.iso3) 
+      }));
   }, [data?.countries]);
 
   return { countryOptions };
@@ -28,10 +30,12 @@ export const useStateSelectField = (control: any, watchCountryName: string) => {
     const country = data.countries.find(c => c.id === selectedCountryId);
     if (!country?.state_info) return [];
 
-    return country.state_info.map((s) => ({
-      label: s.name,
-      value: s.id,
-    }));
+    return country.state_info
+      .filter((s) => s.is_active !== false)
+      .map((s) => ({
+        label: s.name,
+        value: s.id,
+      }));
   }, [data?.countries, selectedCountryId]);
 
   return { stateOptions };
