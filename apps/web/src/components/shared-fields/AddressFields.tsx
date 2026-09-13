@@ -1,134 +1,85 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Form, AutoSuggest, Icon, TextInput } from "@prime/ui";
-import { UseFormReturn } from "react-hook-form";
+import { Form, DropdownMenu, Icon, TextInput } from "@prime/ui";
 import { useCountrySelectField, useStateSelectField } from "./useAddressFields";
 
 export const CountrySelectField = ({ control, name, getValues }: { control: any, name: string, getValues: any }) => {
   const { countryOptions } = useCountrySelectField();
-  
-  const initialValue = getValues(name);
-  const initialLabel = countryOptions.find(c => c.value === initialValue)?.label || "";
-  const [query, setQuery] = useState(initialLabel);
-
-  useEffect(() => {
-    const currentVal = getValues(name);
-    const label = countryOptions.find(c => c.value === currentVal)?.label || "";
-    setQuery(label);
-  }, [countryOptions, getValues, name]);
-
-  const filtered = countryOptions.filter((c) =>
-    c.label.toLowerCase().includes(query.toLowerCase())
-  );
-
-  const selectedOption = countryOptions.find(c => c.value === getValues(name));
-  const activeIcon = selectedOption ? <span className="text-base">{selectedOption.icon}</span> : <Icon name="Globe" size={16} className="text-muted-foreground" />;
 
   return (
     <Form.Field
       control={control}
       name={name}
-      render={({ field }) => (
-        <Form.Item>
-          <AutoSuggest
-            inputValue={query}
-            onInputChange={(v) => {
-              setQuery(v);
-              // if user is typing, we shouldn't necessarily update the id until they select, but 
-              // typically auto suggest allows free text. If it requires selection, the id is set onSelect.
-            }}
-            options={filtered}
-          >
-            <AutoSuggest.Input
-              label="Country *"
-              labelVariant="in-field"
-              placeholder="Search country..."
-              leftSlot={activeIcon}
-            />
-            <AutoSuggest.Content>
-              <AutoSuggest.List>
-                <AutoSuggest.Empty>No country found.</AutoSuggest.Empty>
-                {filtered.map((opt) => (
-                  <AutoSuggest.Item 
-                    key={opt.value} 
-                    value={opt.value} // value here is used internally by primitive, we need id for form
-                    onSelect={() => {
-                      field.onChange(opt.value);
-                      setQuery(opt.label);
-                    }}
-                  >
-                    <span className="mr-2">{opt.icon}</span>
-                    {opt.label}
-                  </AutoSuggest.Item>
-                ))}
-              </AutoSuggest.List>
-            </AutoSuggest.Content>
-          </AutoSuggest>
-          <Form.Message />
-        </Form.Item>
-      )}
+      render={({ field }) => {
+        const selectedOption = countryOptions.find(c => c.value === field.value);
+        return (
+          <Form.Item>
+            <Form.Control>
+              <DropdownMenu
+                label="Country *"
+                labelVariant="in-field"
+                triggerLabel={
+                  selectedOption ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{selectedOption.icon}</span>
+                      <span>{selectedOption.label}</span>
+                    </div>
+                  ) : (
+                    "Select country"
+                  )
+                }
+                searchable={true}
+                items={countryOptions.map((opt) => ({
+                  id: opt.value,
+                  label: (
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{opt.icon}</span>
+                      <span>{opt.label}</span>
+                    </div>
+                  ),
+                  textValue: opt.label,
+                  onSelect: () => field.onChange(opt.value),
+                }))}
+              />
+            </Form.Control>
+            <Form.Message />
+          </Form.Item>
+        );
+      }}
     />
   );
 };
 
 export const StateSelectField = ({ control, name, getValues, watchCountryName = 'country' }: { control: any, name: string, getValues: any, watchCountryName?: string }) => {
   const { stateOptions } = useStateSelectField(control, watchCountryName);
-  
-  const initialValue = getValues(name);
-  const initialLabel = stateOptions.find(s => s.value === initialValue)?.label || "";
-  const [query, setQuery] = useState(initialLabel);
-
-  useEffect(() => {
-    const currentVal = getValues(name);
-    const label = stateOptions.find(s => s.value === currentVal)?.label || "";
-    setQuery(label);
-  }, [stateOptions, getValues, name]);
-
-  const filtered = stateOptions.filter((s) =>
-    s.label.toLowerCase().includes(query.toLowerCase())
-  );
 
   return (
     <Form.Field
       control={control}
       name={name}
-      render={({ field }) => (
-        <Form.Item>
-          <AutoSuggest
-            inputValue={query}
-            onInputChange={(v) => {
-              setQuery(v);
-            }}
-            options={filtered}
-          >
-            <AutoSuggest.Input
-              label="State *"
-              labelVariant="in-field"
-              placeholder="Search state..."
-              leftSlot={<Icon name="Map" size={16} className="text-muted-foreground" />}
-            />
-            <AutoSuggest.Content>
-              <AutoSuggest.List>
-                <AutoSuggest.Empty>No state found.</AutoSuggest.Empty>
-                {filtered.map((opt) => (
-                  <AutoSuggest.Item 
-                    key={opt.value} 
-                    value={opt.value}
-                    onSelect={() => {
-                      field.onChange(opt.value);
-                      setQuery(opt.label);
-                    }}
-                  >
-                    {opt.label}
-                  </AutoSuggest.Item>
-                ))}
-              </AutoSuggest.List>
-            </AutoSuggest.Content>
-          </AutoSuggest>
-          <Form.Message />
-        </Form.Item>
-      )}
+      render={({ field }) => {
+        const selectedLabel = stateOptions.find(s => s.value === field.value)?.label;
+        return (
+          <Form.Item>
+            <Form.Control>
+              <DropdownMenu
+                label="State *"
+                labelVariant="in-field"
+                triggerLabel={selectedLabel || "Select state"}
+                searchable={true}
+                items={stateOptions.map((opt) => ({
+                  id: opt.value,
+                  label: opt.label,
+                  textValue: opt.label,
+                  onSelect: () => field.onChange(opt.value),
+                }))}
+              />
+            </Form.Control>
+            <Form.Message />
+          </Form.Item>
+        );
+      }}
     />
   );
 };
@@ -145,7 +96,7 @@ export const AddressTextareaField = ({ control, name, className }: { control: an
           </div>
           <div className="flex-1 flex flex-col justify-center min-w-0">
             <label className="text-[10px] uppercase text-muted-foreground font-semibold leading-none tracking-wider cursor-text w-full mb-1">
-              Address *
+              Address
             </label>
             <textarea
               {...field}
@@ -171,7 +122,7 @@ export const PincodeInputField = ({ control, name }: { control: any, name: strin
         <Form.Control>
           <TextInput
             {...field}
-            label="Pincode *"
+            label="Pincode"
             labelVariant="in-field"
             placeholder="e.g. 44600"
             leftSlot={<Icon name="Hash" size={16} className="text-muted-foreground" />}

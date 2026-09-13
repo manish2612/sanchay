@@ -62,9 +62,7 @@ export const CURRENCY_OPTIONS = [
 ];
 
 export const REGISTRATION_TYPES = [
-  { label: "Private Limited", value: "private_limited" },
-  { label: "Public Limited", value: "public_limited" },
-  { label: "Sole Proprietorship", value: "sole_proprietorship" },
-  { label: "Partnership", value: "partnership" },
-  { label: "LLP", value: "llp" },
+  { label: "PAN", value: "PAN" },
+  { label: "VAT", value: "VAT" },
+  { label: "GST", value: "GST" },
 ];

@@ -33,7 +33,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
             <Form.Item>
               <Form.Control>
                 <DropdownMenu
-                  label="Registration Type *"
+                  label="Registration Type"
                   labelVariant="in-field"
                   triggerLabel={
                     REGISTRATION_TYPES.find((t) => t.value === field.value)?.label ||
@@ -59,7 +59,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
               <Form.Control>
                 <TextInput
                   {...field}
-                  label="Registration Number *"
+                  label="Registration Number"
                   labelVariant="in-field"
                   placeholder="e.g. PAN-123456789"
                   leftSlot={<Icon name="FileText" size={16} className="text-muted-foreground" />}
@@ -108,7 +108,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
           )}
         />
 
-        <Form.Field
+        {/* <Form.Field
           control={form.control}
           name={COMPANY_FORM_FIELDS.CURRENCY}
           render={({ field }: any) => (
@@ -143,7 +143,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
               <Form.Message />
             </Form.Item>
           )}
-        />
+        /> */}
 
         <Form.Field
           control={form.control}

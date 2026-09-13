@@ -55,7 +55,7 @@ export const MobileInputField = ({ control, name }: { control: any, name: string
         <Form.Control>
           <TextInput
             {...field}
-            label="Mobile Number *"
+            label="Mobile Number"
             labelVariant="in-field"
             placeholder="e.g. +977-9800000000"
             leftSlot={<Icon name="Smartphone" size={16} className="text-muted-foreground" />}
