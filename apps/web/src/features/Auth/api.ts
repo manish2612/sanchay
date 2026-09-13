@@ -1,4 +1,5 @@
 import { apiSlice } from '@/store/apiSlice';
+import { Company } from '@/types/models/Company';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -8,13 +9,6 @@ export interface LoginRequest {
   company_id: string;
   email: string;
   password: string;
-}
-
-export interface Company {
-  company_id: number;
-  company_name: string;
-  registration_no: string;
-  role: string;
 }
 
 export interface User {
