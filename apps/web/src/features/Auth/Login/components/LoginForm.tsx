@@ -8,6 +8,8 @@ import { loginSchema, type LoginValues } from '../schema';
 import { useLoginMutation } from '../../api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 import { useNavigate } from '@tanstack/react-router';
+import { useDispatch } from 'react-redux';
+import { setCredentials, setActiveCompany } from '@/store/authSlice';
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +17,7 @@ export function LoginForm() {
 
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -41,27 +44,24 @@ export function LoginForm() {
       }
 
       // Update global auth state with user and companies
-      if (response.user && response.companies) {
-        import('@/store/authSlice').then(({ setCredentials, setActiveCompany }) => {
-          import('@/store').then(({ store }) => {
-            store.dispatch(
-              setCredentials({
-                user: response.user,
-                companies: response.companies,
-              })
-            );
+      const companies = response.companies || [];
+      if (response.user) {
+        dispatch(
+          setCredentials({
+            user: response.user,
+            companies: companies,
+          })
+        );
 
-            // Redirection logic based on companies count
-            if (response.companies.length === 0) {
-              navigate({ to: '/company/new' });
-            } else if (response.companies.length === 1) {
-              store.dispatch(setActiveCompany(response.companies[0].company_id));
-              navigate({ to: '/dashboard' });
-            } else {
-              navigate({ to: '/company/select' });
-            }
-          });
-        });
+        // Redirection logic based on companies count
+        if (companies.length === 0) {
+          navigate({ to: '/company/new' });
+        } else if (companies.length === 1) {
+          dispatch(setActiveCompany(companies[0].id));
+          navigate({ to: '/dashboard' });
+        } else {
+          navigate({ to: '/company/select' });
+        }
       } else {
          // Fallback if the user object is not present in the response
          navigate({ to: '/' });

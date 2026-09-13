@@ -17,16 +17,18 @@ export const loginHandler = http.post<never, LoginRequest, LoginResponse>(
       token: 'mock-jwt-token-1234567890',
       companies: [
         {
-          company_id: 1,
-          company_name: 'Acme Corp',
-          registration_no: 'REG12345',
-          role: 'Admin',
+          id: '01a098e5-8747-71a4-95de-f72ab84344bf',
+          name: 'Test company',
+          mailing_name: 'test pvt ltd',
+          no_of_decimal: 2,
+          registration_no: '4234234',
         },
         {
-          company_id: 2,
-          company_name: 'Secondary Mock Ltd.',
+          id: '02b198e5-8747-71a4-95de-f72ab84344b0',
+          name: 'Secondary Mock Ltd.',
+          mailing_name: 'Secondary Mock Ltd.',
+          no_of_decimal: 2,
           registration_no: 'REG-654321',
-          role: 'user',
         },
       ],
       user: {

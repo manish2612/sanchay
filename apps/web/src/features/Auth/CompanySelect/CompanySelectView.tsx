@@ -12,15 +12,16 @@ import { CompanyProfileGraphic } from '@/features/Company/CreateCompany/componen
 
 export default function CompanySelectView() {
   const companies = useSelector(selectCompanies);
+  console.log('>>>>> companies ', companies);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSelect = (companyId: number) => {
+  const handleSelect = (companyId: string) => {
     dispatch(setActiveCompany(companyId));
     navigate({ to: '/dashboard' });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, companyId: number) => {
+  const handleKeyDown = (e: React.KeyboardEvent, companyId: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleSelect(companyId);
@@ -53,12 +54,12 @@ export default function CompanySelectView() {
         <div className="border border-surface-border rounded-xl overflow-hidden shadow-sm">
           <ul className="divide-y divide-surface-border">
             {companies.map((company, index) => (
-              <li key={company.company_id}>
+              <li key={company.id}>
                 <button
-                  onClick={() => handleSelect(company.company_id)}
-                  onKeyDown={(e) => handleKeyDown(e, company.company_id)}
+                  onClick={() => handleSelect(company.id)}
+                  onKeyDown={(e) => handleKeyDown(e, company.id)}
                   className="w-full flex items-center gap-4 px-5 py-4 text-left transition-colors bg-surface hover:bg-muted/50 focus:outline-none focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary group"
-                  aria-label={`Select company ${company.company_name}`}
+                  aria-label={`Select company ${company.name}`}
                 >
                   {/* Number Indicator */}
                   <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:bg-primary group-focus-visible:text-primary-foreground transition-colors">
@@ -68,10 +69,10 @@ export default function CompanySelectView() {
                   {/* Company Details */}
                   <div className="flex-grow min-w-0">
                     <div className="text-base font-semibold text-foreground truncate group-hover:text-primary group-focus-visible:text-primary transition-colors">
-                      {company.company_name}
+                      {company.name}
                     </div>
                     <div className="text-sm text-muted-foreground truncate mt-0.5">
-                      {company.role} &bull; Reg: {company.registration_no}
+                      Reg: {company.registration_no || 'N/A'}
                     </div>
                   </div>
 

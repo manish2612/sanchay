@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { User, Company } from '@/features/Auth/api';
+import type { User } from '@/features/Auth/api';
+import type { Company } from '@/types/models/Company';
 
 // We can't import RootState directly from index.ts because index.ts will import us
 // to configure the store (circular dependency). We'll define the state type shape here 
@@ -9,7 +10,7 @@ import type { User, Company } from '@/features/Auth/api';
 interface AuthState {
   user: User | null;
   companies: Company[];
-  activeCompanyId: number | null;
+  activeCompanyId: string | null;
 }
 
 const initialState: AuthState = {
@@ -29,8 +30,11 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
       state.companies = action.payload.companies;
     },
-    setActiveCompany: (state, action: PayloadAction<number>) => {
+    setActiveCompany: (state, action: PayloadAction<string>) => {
       state.activeCompanyId = action.payload;
+    },
+    addCompany: (state, action: PayloadAction<Company>) => {
+      state.companies.push(action.payload);
     },
     logout: (state) => {
       state.user = null;
@@ -40,13 +44,13 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, setActiveCompany, logout } = authSlice.actions;
+export const { setCredentials, setActiveCompany, addCompany, logout } = authSlice.actions;
 
 // Selectors
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectCompanies = (state: { auth: AuthState }) => state.auth.companies;
 export const selectActiveCompanyId = (state: { auth: AuthState }) => state.auth.activeCompanyId;
 export const selectActiveCompany = (state: { auth: AuthState }) =>
-  state.auth.companies.find((c) => c.company_id === state.auth.activeCompanyId) || null;
+  state.auth.companies.find((c) => c.id === state.auth.activeCompanyId) || null;
 
 export default authSlice.reducer;
