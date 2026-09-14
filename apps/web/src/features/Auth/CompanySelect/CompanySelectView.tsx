@@ -1,24 +1,47 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from '@tanstack/react-router';
 import { Button, Icon } from '@prime/ui';
-import { selectCompanies, setActiveCompany } from '@/store/authSlice';
-import { Company } from '@/features/Auth/api';
+import { selectCompanies, setActiveCompany, selectActiveCompanyId } from '@/store/authSlice';
+import { useSwitchCompanyMutation } from '@/features/Auth/api';
 import { LoginHeaderGraphic } from '../Login/components/LoginHeaderGraphic';
 import { LoginGraphic } from '../Login/components/LoginGraphic';
 import { CompanyProfileGraphic } from '@/features/Company/CreateCompany/components/graphics/CompanyProfileGraphic';
+import { cookieTokenStorage } from '@/utils/tokenStorage';
 
 export default function CompanySelectView() {
   const companies = useSelector(selectCompanies);
-  console.log('>>>>> companies ', companies);
+  const activeCompanyId = useSelector(selectActiveCompanyId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSelect = (companyId: string) => {
-    dispatch(setActiveCompany(companyId));
-    navigate({ to: '/dashboard' });
+  const [switchCompany, { isLoading }] = useSwitchCompanyMutation();
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSelect = async (companyId: string) => {
+    if (isLoading) return;
+
+    if (companyId === activeCompanyId) {
+      navigate({ to: '/dashboard' });
+      return;
+    }
+
+    setError(null);
+    try {
+      const data = await switchCompany({ company_id: companyId }).unwrap();
+
+      if (data.token) {
+        cookieTokenStorage.setToken(data.token);
+      }
+
+      dispatch(setActiveCompany(companyId));
+      navigate({ to: '/dashboard' });
+    } catch (err) {
+      console.error('Failed to switch company:', err);
+      setError('Failed to select the company. Please try again.');
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, companyId: string) => {
@@ -51,39 +74,52 @@ export default function CompanySelectView() {
         </div>
 
         {/* Companies List */}
-        <div className="border border-surface-border rounded-xl overflow-hidden shadow-sm">
-          <ul className="divide-y divide-surface-border">
-            {companies.map((company, index) => (
-              <li key={company.id}>
-                <button
-                  onClick={() => handleSelect(company.id)}
-                  onKeyDown={(e) => handleKeyDown(e, company.id)}
-                  className="w-full flex items-center gap-4 px-5 py-4 text-left transition-colors bg-surface hover:bg-muted/50 focus:outline-none focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary group"
-                  aria-label={`Select company ${company.name}`}
-                >
-                  {/* Number Indicator */}
-                  <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:bg-primary group-focus-visible:text-primary-foreground transition-colors">
-                    {index + 1}
-                  </div>
-
-                  {/* Company Details */}
-                  <div className="flex-grow min-w-0">
-                    <div className="text-base font-semibold text-foreground truncate group-hover:text-primary group-focus-visible:text-primary transition-colors">
-                      {company.name}
+        <div className="flex flex-col gap-4">
+          {error && (
+            <div className="bg-destructive/10 text-destructive text-sm px-4 py-3 rounded-lg flex items-center gap-2 border border-destructive/20">
+              <Icon name="AlertCircle" size={16} />
+              {error}
+            </div>
+          )}
+          <div className="border border-surface-border rounded-xl overflow-hidden shadow-sm">
+            <ul className="divide-y divide-surface-border">
+              {companies.map((company, index) => (
+                <li key={company.id}>
+                  <button
+                    onClick={() => handleSelect(company.id)}
+                    onKeyDown={(e) => handleKeyDown(e, company.id)}
+                    disabled={isLoading}
+                    className="w-full flex items-center gap-4 px-5 py-4 text-left transition-colors bg-surface hover:bg-muted/50 focus:outline-none focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary group disabled:opacity-50 disabled:cursor-not-allowed"
+                    aria-label={`Select company ${company.name}`}
+                  >
+                    {/* Number Indicator */}
+                    <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-sm group-hover:bg-primary group-hover:text-primary-foreground group-focus-visible:bg-primary group-focus-visible:text-primary-foreground transition-colors">
+                      {index + 1}
                     </div>
-                    <div className="text-sm text-muted-foreground truncate mt-0.5">
-                      Reg: {company.registration_no || 'N/A'}
-                    </div>
-                  </div>
 
-                  {/* Action Icon */}
-                  <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-focus-visible:text-primary group-focus-visible:translate-x-1 transition-all">
-                    <Icon name="ChevronRight" size={20} />
-                  </div>
-                </button>
-              </li>
-            ))}
-          </ul>
+                    {/* Company Details */}
+                    <div className="flex-grow min-w-0">
+                      <div className="text-base font-semibold text-foreground truncate group-hover:text-primary group-focus-visible:text-primary transition-colors">
+                        {company.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground truncate mt-0.5">
+                        Reg: {company.registration_no || 'N/A'}
+                      </div>
+                    </div>
+
+                    {/* Action Icon */}
+                    <div className="flex-shrink-0 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-focus-visible:text-primary group-focus-visible:translate-x-1 transition-all">
+                      {isLoading ? (
+                        <Icon name="Loader2" size={20} className="animate-spin" />
+                      ) : (
+                        <Icon name="ChevronRight" size={20} />
+                      )}
+                    </div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Footer Action */}
@@ -91,6 +127,7 @@ export default function CompanySelectView() {
           <Button
             variant="outline"
             onClick={() => navigate({ to: '/company/new' })}
+            disabled={isLoading}
             className="gap-2 font-medium bg-background hover:bg-muted"
           >
             <Icon name="Plus" size={16} />

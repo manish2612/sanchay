@@ -1,6 +1,9 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from '@tanstack/react-router';
 import { Icon, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
+import { selectActiveCompany } from '@/store/authSlice';
 
 interface SidebarRailUserProps {
   user: {
@@ -21,6 +24,8 @@ export function SidebarRailUser({
 }: SidebarRailUserProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const activeCompany = useSelector(selectActiveCompany);
 
   const getInitials = (name: string) => {
     return name
@@ -91,6 +96,21 @@ export function SidebarRailUser({
             <div className="font-bold text-sm text-foreground truncate">{user.name}</div>
             <div className="text-xs text-mutedForeground truncate">{user.email}</div>
           </div>
+          
+          {activeCompany && (
+            <button 
+              onClick={() => {
+                setIsOpen(false);
+                onPopoverToggle(false);
+                navigate({ to: '/company/select' });
+              }}
+              className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left"
+            >
+              <Icon name="Building" className="text-[18px] mr-2 text-mutedForeground" />
+              <span className="truncate flex-1">{activeCompany.name}</span>
+            </button>
+          )}
+
           <button className="flex items-center px-3 py-2 text-sm text-foreground hover:bg-surfaceHover rounded-md transition-colors w-full text-left">
             <Icon name="User" className="text-[18px] mr-2 text-mutedForeground" />
             Profile & Account

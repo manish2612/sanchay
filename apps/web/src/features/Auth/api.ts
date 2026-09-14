@@ -17,6 +17,15 @@ export interface User {
   mobile_no: string;
 }
 
+export interface SwitchCompanyRequest {
+  company_id: string;
+}
+
+export interface SwitchCompanyResponse {
+  message: string;
+  token: string;
+}
+
 export interface LoginResponse {
   companies: Company[];
   token: string;
@@ -75,9 +84,20 @@ export const authApi = apiSlice.injectEndpoints({
       // Invalidate all cached data on logout for security
       invalidatesTags: ['Post', 'User', 'Auth'],
     }),
+    /**
+     * POST /auth/switch-company
+     * Switches the active company context.
+     */
+    switchCompany: build.mutation<SwitchCompanyResponse, SwitchCompanyRequest>({
+      query: (body) => ({
+        url: '/auth/switch-company',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
   // overrideExisting prevents accidental duplicate endpoint collisions in dev
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useSignupMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useLogoutMutation, useSwitchCompanyMutation } = authApi;
