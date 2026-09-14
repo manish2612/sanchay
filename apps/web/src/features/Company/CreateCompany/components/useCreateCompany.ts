@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { useCreateCompanyMutation } from '../../api/companyApi';
 import { CompanyFormValues } from '../schema';
-import { useGetGlobalMastersQuery } from '../../../Masters/api/globalMastersApi';
-import { useDispatch } from 'react-redux';
+import { globalMastersApi } from '../../../Masters/api/globalMastersApi';
+import { useDispatch, useStore } from 'react-redux';
 import { addCompany, setActiveCompany } from '@/store/authSlice';
 
 export const useCreateCompany = () => {
   const dispatch = useDispatch();
+  const store = useStore();
   const [createCompany, { isLoading, isSuccess, isError, error }] = useCreateCompanyMutation();
-  const { data: globalMasters } = useGetGlobalMastersQuery();
 
   const onSubmit = async (data: CompanyFormValues) => {
-    // 1. Resolve currency ID based on selected country
+    // 1. Resolve currency ID based on selected country from Redux store (avoids stale closures)
+    const state = store.getState();
+    const globalMasters = globalMastersApi.endpoints.getGlobalMasters.select()(state as any).data;
+    
     const selectedCountry = globalMasters?.countries?.find(c => c.id === data.country);
     const fk_country_currency_id = selectedCountry?.currency_info?.id || "";
 

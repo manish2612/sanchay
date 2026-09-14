@@ -4,6 +4,8 @@ export interface Company {
   mailing_name: string;
   no_of_decimal: number;
   registration_no: string;
+  fy_start_date?: string;
+  book_start_date?: string;
 
   /** @deprecated */
   created_at?: string;
@@ -11,10 +13,6 @@ export interface Company {
   updated_at?: string;
   /** @deprecated */
   deleted_at?: string | null;
-  /** @deprecated */
-  fy_start_date?: string;
-  /** @deprecated */
-  book_start_date?: string;
   /** @deprecated */
   mobile_no?: string;
   /** @deprecated */

@@ -1,7 +1,7 @@
-import React from "react";
-import { Form, DropdownMenu } from "@prime/ui";
-import { UseFormReturn } from "react-hook-form";
-import { useTimezoneSelectField } from "./useTimezoneSelectField";
+import React from 'react';
+import { Form, DropdownMenu } from '@prime/ui';
+import { UseFormReturn } from 'react-hook-form';
+import { useTimezoneSelectField } from './useTimezoneSelectField';
 
 interface TimezoneSelectFieldProps {
   form: UseFormReturn<any>;
@@ -23,7 +23,7 @@ export const TimezoneSelectField = ({ form, name }: TimezoneSelectFieldProps) =>
               <DropdownMenu
                 label="Timezone *"
                 labelVariant="in-field"
-                triggerLabel={isLoading ? "Loading..." : (selectedLabel || "Select timezone")}
+                triggerLabel={isLoading ? 'Loading...' : selectedLabel || 'Select timezone'}
                 searchable={true}
                 disabled={isLoading}
                 items={timezoneOptions.map((opt) => ({

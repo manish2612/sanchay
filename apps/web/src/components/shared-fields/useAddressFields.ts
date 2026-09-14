@@ -9,7 +9,6 @@ export const useCountrySelectField = () => {
   const countryOptions = useMemo(() => {
     if (!data?.countries) return [];
     return data.countries
-      .filter((c) => c.is_active !== false) // fallback to true if undefined
       .map((c) => ({
         label: c.name,
         value: c.id,
@@ -31,7 +30,6 @@ export const useStateSelectField = (control: any, watchCountryName: string) => {
     if (!country?.state_info) return [];
 
     return country.state_info
-      .filter((s) => s.is_active !== false)
       .map((s) => ({
         label: s.name,
         value: s.id,

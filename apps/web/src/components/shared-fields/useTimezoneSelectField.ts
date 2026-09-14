@@ -7,7 +7,7 @@ export const useTimezoneSelectField = () => {
   const timezoneOptions = useMemo(() => {
     if (!data?.timezones) return [];
     return data.timezones.map((tz) => ({
-      id: tz.id,
+      id: tz.name,
       label: `(GMT${tz.utc_offset}) ${tz.representative_region}`,
       searchName: tz.name,
     }));
