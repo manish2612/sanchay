@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Form, TextInput, DropdownMenu, Icon, DatePicker, FormWizard } from "@prime/ui";
-import { UseFormReturn } from "react-hook-form";
-import { CompanyFormValues } from "../schema";
-import { COMPANY_FORM_FIELDS, CURRENCY_OPTIONS, REGISTRATION_TYPES } from "../constants";
+import React from 'react';
+import { Form, TextInput, DropdownMenu, Icon, DatePicker, FormWizard } from '@prime/ui';
+import { UseFormReturn } from 'react-hook-form';
+import { CompanyFormValues } from '../schema';
+import { COMPANY_FORM_FIELDS, CURRENCY_OPTIONS, REGISTRATION_TYPES } from '../constants';
 
 interface OperationsComplianceSectionProps {
   form: UseFormReturn<CompanyFormValues>;
@@ -36,8 +36,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
                   label="Registration Type"
                   labelVariant="in-field"
                   triggerLabel={
-                    REGISTRATION_TYPES.find((t) => t.value === field.value)?.label ||
-                    "Select type"
+                    REGISTRATION_TYPES.find((t) => t.value === field.value)?.label || 'Select type'
                   }
                   items={REGISTRATION_TYPES.map((opt) => ({
                     id: opt.value,
@@ -72,35 +71,17 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
 
         <Form.Field
           control={form.control}
-          name={COMPANY_FORM_FIELDS.FINANCIAL_YEAR_START_DATE}
-          render={({ field }: any) => (
-            <Form.Item>
-              <Form.Control>
-                <DatePicker
-                  label="Financial Year Start Date *"
-                  labelVariant="in-field"
-                  date={field.value}
-                  onDateChange={field.onChange}
-                  placeholder="Select Date"
-                />
-              </Form.Control>
-              <Form.Message />
-            </Form.Item>
-          )}
-        />
-
-        <Form.Field
-          control={form.control}
           name={COMPANY_FORM_FIELDS.BOOKS_START_DATE}
           render={({ field }: any) => (
-            <Form.Item>
+            <Form.Item className="col-span-1">
               <Form.Control>
                 <DatePicker
-                  label="Books Start Date *"
+                  label="Books Start Date (Fixed)"
                   labelVariant="in-field"
                   date={field.value}
                   onDateChange={field.onChange}
                   placeholder="Select Date"
+                  disabled={true}
                 />
               </Form.Control>
               <Form.Message />

@@ -4,6 +4,7 @@ import { CompanyFormValues } from '../schema';
 import { globalMastersApi } from '../../../Masters/api/globalMastersApi';
 import { useDispatch, useStore } from 'react-redux';
 import { addCompany, setActiveCompany } from '@/store/authSlice';
+import { calculateFiscalYear } from '../utils/fiscalYearCalc';
 
 export const useCreateCompany = () => {
   const dispatch = useDispatch();
@@ -18,16 +19,20 @@ export const useCreateCompany = () => {
     const selectedCountry = globalMasters?.countries?.find(c => c.id === data.country);
     const fk_country_currency_id = selectedCountry?.currency_info?.id || "";
 
-    // 2. Format Dates
-    const fyStartDateISO = data.financialYearStartDate.toISOString();
+    // 2. Automate Fiscal Year Calculations
+    const isNepali = selectedCountry?.iso3 === 'NPL' || selectedCountry?.name?.toLowerCase() === 'nepal';
+    const { fyStartDateEnglish, fyEndDateEnglish } = calculateFiscalYear(data.booksStartDate, isNepali);
+
+    const fyStartDateISO = fyStartDateEnglish.toISOString();
+    const fyEndDateISO = fyEndDateEnglish.toISOString();
     const booksStartDateISO = data.booksStartDate.toISOString();
 
-    // 3. Construct Fiscal Years (as requested: pass booksStartDate for both for now)
+    // 3. Construct Fiscal Years array
     const company_fiscal_years = [
       {
-        from_date: booksStartDateISO,
+        from_date: fyStartDateISO,
         sr_no: 0,
-        to_date: booksStartDateISO,
+        to_date: fyEndDateISO,
       }
     ];
 

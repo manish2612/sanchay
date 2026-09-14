@@ -68,6 +68,7 @@ const CreateCompanyPage = () => {
       [COMPANY_FORM_FIELDS.REGISTRATION_TYPE]: '',
       [COMPANY_FORM_FIELDS.REGISTRATION_NUMBER]: '',
       [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: 2,
+      [COMPANY_FORM_FIELDS.BOOKS_START_DATE]: new Date(),
     },
   });
 

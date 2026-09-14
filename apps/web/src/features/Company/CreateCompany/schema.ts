@@ -13,8 +13,7 @@ export const companyFormSchema = z.object({
   // Operations & Compliance (Step 1 continued)
   [COMPANY_FORM_FIELDS.REGISTRATION_TYPE]: z.string().optional(),
   [COMPANY_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().optional(),
-  [COMPANY_FORM_FIELDS.FINANCIAL_YEAR_START_DATE]: z.date(),
-  [COMPANY_FORM_FIELDS.BOOKS_START_DATE]: z.date(),
+  [COMPANY_FORM_FIELDS.BOOKS_START_DATE]: z.date().default(() => new Date()),
   [COMPANY_FORM_FIELDS.CURRENCY]: z.string().optional(), // Now derived from country
   [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: z.coerce.number().min(0, "Min 0 allowed").max(12, "Max 12 allowed"),
 
