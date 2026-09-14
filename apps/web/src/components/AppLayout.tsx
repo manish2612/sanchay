@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from '@tanstack/react-router';
 import { Sidebar } from '@/features/Navigation/components/Sidebar';
 import { SidebarProvider } from '@/features/Navigation/components/Sidebar/useSidebar';
 import { MobileHeader } from '@/features/Navigation/components/MobileHeader';
+import { GlobalCompanyRibbon } from '@/features/Navigation/components/GlobalCompanyRibbon';
 import { APP_NAME } from '@prime/config';
 import { useLogoutMutation } from '@/features/Auth/api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
@@ -67,7 +68,10 @@ export function AppLayout({ children }: AppLayoutProps) {
 
         {/* Main Content Area */}
         <main className="flex flex-col flex-1 min-h-0 relative overflow-hidden items-center bg-background">
-          <div className="w-full max-w-[1440px] flex-1 min-h-0 flex flex-col">{children}</div>
+          <div className="w-full max-w-[1440px] flex-1 min-h-0 flex flex-col">
+            <GlobalCompanyRibbon />
+            {children}
+          </div>
         </main>
       </div>
     </SidebarProvider>
