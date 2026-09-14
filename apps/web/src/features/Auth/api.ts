@@ -85,12 +85,12 @@ export const authApi = apiSlice.injectEndpoints({
       invalidatesTags: ['Post', 'User', 'Auth'],
     }),
     /**
-     * POST /auth/switch-company
+     * POST /core/switch-company
      * Switches the active company context.
      */
     switchCompany: build.mutation<SwitchCompanyResponse, SwitchCompanyRequest>({
       query: (body) => ({
-        url: '/auth/switch-company',
+        url: '/core/switch-company',
         method: 'POST',
         body,
       }),
