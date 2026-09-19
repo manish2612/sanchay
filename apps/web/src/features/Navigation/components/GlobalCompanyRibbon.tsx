@@ -5,26 +5,45 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from '@tanstack/react-router';
 import { Icon } from '@prime/ui';
 import { selectActiveCompany } from '@/store/authSlice';
+import { useGetGlobalMastersQuery } from '@/features/Masters/api/globalMastersApi';
+import { NepaliDate } from '@prime/ui';
 
 export function GlobalCompanyRibbon() {
   const navigate = useNavigate();
   const activeCompany = useSelector(selectActiveCompany);
+  const { data: globalMasters } = useGetGlobalMastersQuery();
 
   if (!activeCompany) return null;
 
-  // Helper to format "2026-09-01T..." into "26-27"
-  const getFYDisplay = (dateString?: string) => {
+  const activeCountry = globalMasters?.countries?.find((c) => c.id === activeCompany.fk_country_id);
+
+  const currencySymbol = activeCountry?.currency_info?.symbol;
+  const isNepali = activeCountry?.iso3 === 'NPL' || activeCountry?.name?.toLowerCase() === 'nepal';
+
+  // Helper to format "2026-09-01T..." into "26-27" or "83-84"
+  const getFYDisplay = (dateString?: string, isNepali = false) => {
     try {
       if (!dateString) return null;
       const date = new Date(dateString);
-      const startYear = date.getFullYear();
-      const endYear = startYear + 1;
-      return `${startYear.toString().slice(-2)}-${endYear.toString().slice(-2)}`;
+
+      let startYear, endYear;
+      if (isNepali) {
+        const bs = new NepaliDate(date);
+        startYear = bs.getYear();
+        endYear = startYear + 1;
+      } else {
+        startYear = date.getFullYear();
+        endYear = startYear + 1;
+      }
+      return `${startYear.toString()}-${endYear.toString()}`;
     } catch {
       return null;
     }
   };
-  const fyDisplay = getFYDisplay(activeCompany.fy_start_date);
+
+  const activeFiscalYearDate =
+    activeCompany.company_fiscal_years?.[0]?.from_date || activeCompany.fy_start_date;
+  const fyDisplay = getFYDisplay(activeFiscalYearDate, isNepali);
 
   return (
     <div className="w-full bg-background border-b border-border/60 flex items-center justify-between px-5 py-1.5 shrink-0 z-40 transition-colors">
@@ -54,6 +73,13 @@ export function GlobalCompanyRibbon() {
           <div className="flex items-center gap-1.5" title="Registration Number">
             <span className="text-muted-foreground/50">REG:</span>
             <span className="text-foreground/80 font-medium">{activeCompany.registration_no}</span>
+          </div>
+        )}
+
+        {currencySymbol && (
+          <div className="flex items-center gap-1.5" title="Currency">
+            <span className="text-muted-foreground/50">CUR:</span>
+            <span className="text-foreground/80 font-medium">{currencySymbol}</span>
           </div>
         )}
 
