@@ -1,12 +1,26 @@
+export interface CompanyFiscalYear {
+  from_date: string;
+  to_date: string;
+}
+
 export interface Company {
   id: string;
   name: string;
-  mailing_name: string;
+  iso3?: string;
   no_of_decimal: number;
+  registration_type?: string;
   registration_no: string;
-  fy_start_date?: string;
-  book_start_date?: string;
+  cin_no?: string;
+  fk_country_id?: string;
+  fk_state_id?: string;
+  company_fiscal_years?: CompanyFiscalYear[];
 
+  /** @deprecated */
+  mailing_name?: string;
+  /** @deprecated */
+  fy_start_date?: string;
+  /** @deprecated */
+  book_start_date?: string;
   /** @deprecated */
   created_at?: string;
   /** @deprecated */
@@ -22,15 +36,7 @@ export interface Company {
   /** @deprecated */
   email?: string;
   /** @deprecated */
-  registration_type?: string;
-  /** @deprecated */
-  cin_no?: string;
-  /** @deprecated */
   address?: string;
-  /** @deprecated */
-  fk_country_id?: string;
-  /** @deprecated */
-  fk_state_id?: string;
   /** @deprecated */
   timezone?: string;
   /** @deprecated */
@@ -41,6 +47,4 @@ export interface Company {
   last_vch_date?: string;
   /** @deprecated */
   is_active?: boolean;
-  /** @deprecated */
-  company_fiscal_years?: any;
 }
