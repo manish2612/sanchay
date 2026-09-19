@@ -2,11 +2,11 @@ import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite(),
+    tanstackRouter({ autoCodeSplitting: true }),
     react(),
     tsconfigPaths(),
   ],
@@ -23,6 +23,20 @@ export default defineConfig({
       '@prime/modules': path.resolve(__dirname, '../../packages/modules/src/index.ts'),
       '@prime/services': path.resolve(__dirname, '../../packages/services/src/index.ts'),
       '@prime/design-tokens': path.resolve(__dirname, '../../packages/design-tokens/src/index.ts'),
+    }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('lucide-react')) return 'vendor-lucide';
+            if (id.includes('@tanstack')) return 'vendor-tanstack';
+            if (id.includes('react-day-picker')) return 'vendor-date';
+            // Let Vite handle react natively to avoid execution order issues
+          }
+        }
+      }
     }
   }
 });

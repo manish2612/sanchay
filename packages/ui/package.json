@@ -4,6 +4,7 @@
     "main": "./src/index.ts",
     "react-native": "src/index.native.ts",
     "types": "./src/index.ts",
+    "sideEffects": false,
     "scripts": {
         "lint": "eslint .",
         "type-check": "tsc --noEmit"
