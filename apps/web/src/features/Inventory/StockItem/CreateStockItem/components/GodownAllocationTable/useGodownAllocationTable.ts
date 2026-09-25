@@ -52,6 +52,8 @@ export const useGodownAllocationTable = (form: any) => {
     const row = form.getValues(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
     if (row) {
       update(rowIndex, { ...row, [columnId]: value });
+      // Clear React Hook Form errors for this row since update() doesn't trigger validation
+      form.clearErrors(`${STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS}.${rowIndex}`);
     }
   }, [form, update]);
 
