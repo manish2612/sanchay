@@ -1,16 +1,41 @@
 'use client';
 
 import React from 'react';
-import { Form, TextInput, Switch, SegmentedControl, Icon, Text } from '@prime/ui';
-import { UseFormReturn } from 'react-hook-form';
+import { Form, TextInput, Switch, SegmentedControl, Icon, Text, AnimatedNumber } from '@prime/ui';
+import { UseFormReturn, useWatch } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
 import { LEDGER_FORM_FIELDS } from '../constants';
+import { CostCenterAllocationTable } from '@/features/CostCenter/components/CostCenterAllocationTable';
 
 interface BillingCreditStepProps {
   form: UseFormReturn<LedgerFormValues>;
 }
 
 export const BillingCreditStep = ({ form }: BillingCreditStepProps) => {
+  const openingBalance =
+    useWatch({
+      control: form.control,
+      name: LEDGER_FORM_FIELDS.OPENING_BALANCE,
+    }) || '0';
+
+  const costCenterAllocations =
+    useWatch({
+      control: form.control,
+      name: LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS,
+    }) || [];
+
+  const targetAmount = parseFloat(openingBalance.replace(/[^0-9.-]+/g, '')) || 0;
+
+  const allocatedAmount = costCenterAllocations.reduce((sum, row: any) => {
+    if (row.isPhantom) return sum;
+    const amtString = typeof row.amount === 'string' ? row.amount : String(row.amount || '');
+    const amt = parseFloat(amtString.replace(/[^0-9.-]+/g, '')) || 0;
+    return sum + amt;
+  }, 0);
+
+  const isBalanced = Math.abs(allocatedAmount - targetAmount) < 0.001;
+  const remainingAmount = Math.max(0, targetAmount - allocatedAmount);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
       {/* Bill by Bill */}
@@ -130,6 +155,45 @@ export const BillingCreditStep = ({ form }: BillingCreditStepProps) => {
           )}
         />
       </div>
+
+      {/* Cost Center Allocations */}
+      {targetAmount > 0 && (
+        <Form.Field
+          control={form.control}
+          name={LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS}
+          render={({ field }) => (
+            <Form.Item className="col-span-1 md:col-span-2 mt-4">
+              <Form.Control>
+                <div className="flex flex-col gap-2 bg-surface/50 overflow-hidden">
+                  <div className="flex justify-between items-center mb-2">
+                    <Text variant="body" className="font-medium text-foreground">
+                      Cost Centre Allocations
+                    </Text>
+                    {isBalanced ? (
+                      <span className="text-xs font-medium text-success flex items-center gap-1">
+                        <Icon name="CheckCircle2" size={14} /> Balanced
+                      </span>
+                    ) : (
+                      <span className="text-xs font-medium text-destructive flex items-center gap-1">
+                        Remaining:
+                        <AnimatedNumber value={remainingAmount} formatOptions={{ style: 'currency', currency: 'INR' }} />
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative min-h-0 flex-1">
+                    <CostCenterAllocationTable
+                      initialAllocations={field.value || []}
+                      targetAmount={targetAmount}
+                      onChange={field.onChange}
+                    />
+                  </div>
+                </div>
+              </Form.Control>
+              <Form.Message />
+            </Form.Item>
+          )}
+        />
+      )}
     </div>
   );
 };

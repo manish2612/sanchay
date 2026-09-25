@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Table, Icon } from '@prime/ui';
+import { Table, Icon, AnimatedNumber } from '@prime/ui';
 import { flexRender } from '@tanstack/react-table';
 import { useCostCenterAllocationTable } from './useCostCenterAllocationTable';
 import { getColumns, type CostCenterAllocationRow } from './columns';
@@ -33,12 +33,12 @@ export const CostCenterAllocationTable = ({
     <div className="flex flex-col space-y-3 h-full overflow-hidden">
       <div className="flex items-center justify-between flex-shrink-0">
         <h3 className="text-sm font-medium text-foreground">Allocations</h3>
-        <span className="text-xs text-muted-fg">
-          Allocated:{' '}
+        <span className="text-xs text-muted-fg flex items-center gap-1">
+          Allocated:
           <span className={isOverAllocated ? 'text-danger font-bold' : ''}>
-            {totalAllocatedAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </span>{' '}
-          / {targetAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+            <AnimatedNumber value={totalAllocatedAmount} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+          </span>
+          / <AnimatedNumber value={targetAmount} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
         </span>
       </div>
       <div className="rounded-md border border-border/40 bg-surface overflow-hidden flex-1 flex flex-col min-h-0">
@@ -126,8 +126,13 @@ export const CostCenterAllocationTable = ({
       {isOverAllocated && (
         <div className="flex items-center text-xs text-danger bg-danger/10 px-3 py-2 rounded-md border border-danger/20 flex-shrink-0">
           <Icon name="AlertCircle" size={16} className="mr-2 flex-shrink-0" />
-          Total allocated amount ({totalAllocatedAmount.toLocaleString()}) exceeds the target amount (
-          {targetAmount.toLocaleString()}). Please adjust your allocations.
+          <span>
+            Total allocated amount (
+            <AnimatedNumber value={totalAllocatedAmount} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+            ) exceeds the target amount (
+            <AnimatedNumber value={targetAmount} formatOptions={{ minimumFractionDigits: 2, maximumFractionDigits: 2 }} />
+            ). Please adjust your allocations.
+          </span>
         </div>
       )}
     </div>
