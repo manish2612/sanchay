@@ -35,13 +35,24 @@ export interface LoginResponse {
 export interface SignupRequest {
   email: string;
   full_name: string;
-  mobile_no: string;
+  mobile_number: string;
   password: string;
 }
 
 export interface SignupResponse {
-  message?: string;
-  // Based on common patterns; extend as needed if API returns more data
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  full_name: string;
+  email: string;
+  mobile_number: string;
+  is_email_verified: boolean;
+  role_id: string;
+  is_active: boolean;
+  is_blocked: boolean;
+  no_of_attempts: number;
+  companies: Company[] | null;
 }
 
 // ---------------------------------------------------------------------------

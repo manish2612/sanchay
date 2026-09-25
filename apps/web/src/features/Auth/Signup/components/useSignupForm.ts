@@ -30,7 +30,7 @@ export function useSignupForm() {
       await signup({
         email: data.email,
         full_name: data.username,
-        mobile_no: data.mobileno,
+        mobile_number: data.mobileno,
         password: data.password,
       }).unwrap();
 
