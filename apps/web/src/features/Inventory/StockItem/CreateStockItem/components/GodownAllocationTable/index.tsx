@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table, Icon } from '@prime/ui';
+import { Table } from '@prime/ui';
 import { useGodownAllocationTable } from './useGodownAllocationTable';
 import { getColumns } from './columns';
 import { useMemo, useCallback } from 'react';
 import { flexRender } from '@tanstack/react-table';
+import { AllocationTableLayout } from '@/components/AllocationTableLayout';
 import { useGlobalMasterSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
 
 export const GodownAllocationTable = ({ form }: { form: any }) => {
@@ -48,18 +49,17 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
   if (!enableGodownAllocation || openingQuantity <= 0) return null;
 
   return (
-    <div className="mt-6 flex flex-col space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium text-foreground">Godown Allocation</h3>
-        <span className="text-xs text-muted-fg">
-          Allocated:{' '}
-          <span className={totalAllocatedQuantity > openingQuantity ? 'text-danger font-bold' : ''}>
-            {totalAllocatedQuantity}
-          </span>{' '}
-          / {openingQuantity}
-        </span>
-      </div>
-      <div className="rounded-md border border-border/40 bg-surface overflow-hidden">
+    <div className="mt-6 h-full">
+      <AllocationTableLayout
+        title="Godown Allocation"
+        currentValue={totalAllocatedQuantity}
+        targetValue={openingQuantity}
+        isFullyAllocated={isFullyAllocated}
+        isOverAllocated={isOverAllocated}
+        successMessage="Total quantity is fully allocated. You cannot add more godowns."
+        errorMessagePrefix="Total allocated quantity"
+        errorMessageTargetLabel="opening quantity limit"
+      >
         <Table.Root
           data={fields}
           columns={columns}
@@ -133,24 +133,7 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
             )}
           </Table.Body>
         </Table.Root>
-      </div>
-
-      {/* Visual Hint for Full Allocation */}
-      {isFullyAllocated && (
-        <div className="flex items-center text-xs text-success bg-success/10 px-3 py-2 rounded-md border border-success/20">
-          <Icon name="CheckCircle2" size={16} className="mr-2 flex-shrink-0" />
-          Total quantity is fully allocated. You cannot add more godowns.
-        </div>
-      )}
-
-      {/* Visual Error for Over Allocation */}
-      {isOverAllocated && (
-        <div className="flex items-center text-xs text-danger bg-danger/10 px-3 py-2 rounded-md border border-danger/20">
-          <Icon name="AlertCircle" size={16} className="mr-2 flex-shrink-0" />
-          Total allocated quantity ({totalAllocatedQuantity}) exceeds the opening quantity limit (
-          {openingQuantity}). Please adjust your allocations.
-        </div>
-      )}
+      </AllocationTableLayout>
     </div>
   );
 };
