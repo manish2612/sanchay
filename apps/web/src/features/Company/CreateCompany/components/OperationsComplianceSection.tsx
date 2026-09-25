@@ -136,7 +136,7 @@ export const OperationsComplianceSection = ({ form }: OperationsComplianceSectio
                   {...field}
                   type="number"
                   min={0}
-                  max={12}
+                  max={4}
                   label="Decimal Count"
                   labelVariant="in-field"
                   placeholder="e.g. 2"

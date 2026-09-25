@@ -15,7 +15,7 @@ export const companyFormSchema = z.object({
   [COMPANY_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().optional(),
   [COMPANY_FORM_FIELDS.BOOKS_START_DATE]: z.date().default(() => new Date()),
   [COMPANY_FORM_FIELDS.CURRENCY]: z.string().optional(), // Now derived from country
-  [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: z.coerce.number().min(0, "Min 0 allowed").max(12, "Max 12 allowed"),
+  [COMPANY_FORM_FIELDS.DECIMAL_COUNT]: z.coerce.number().min(0, "Min 0 allowed").max(4, "Max 4 allowed"),
 
 })
 .merge(baseAddressSchema.extend({
