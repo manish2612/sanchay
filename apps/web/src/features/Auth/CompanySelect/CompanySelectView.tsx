@@ -103,7 +103,7 @@ export default function CompanySelectView() {
                         {company.name}
                       </div>
                       <div className="text-sm text-muted-foreground truncate mt-0.5">
-                        Reg: {company.registration_no || 'N/A'}
+                        Reg: {company.tax_identifier || 'N/A'}
                       </div>
                     </div>
 

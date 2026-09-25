@@ -1,35 +1,37 @@
 import { apiSlice } from '@/store/apiSlice';
-import { Company } from '@/types/models/Company';
+import { DetailedCompany } from '@/types/models/Company';
 
 export interface CompanyFiscalYear {
   from_date: string;
-  sr_no: number;
   to_date: string;
 }
 
 export interface CreateCompanyRequest {
   address?: string;
   book_start_date: string;
-  cin_no?: string;
-  company_fiscal_years: CompanyFiscalYear[];
+  cin_number?: string;
+  city?: string;
+  country_currency_id?: string;
+  country_id: string;
+  decimal_places?: number; // or number based on backend expectation
   email?: string;
-  fk_country_currency_id?: string;
-  fk_country_id: string;
-  fk_state_id: string;
+  fiscal_years: CompanyFiscalYear[];
   fy_start_date: string;
   mailing_name: string;
-  mobile_no?: string;
+  mobile_number?: string;
   name: string;
-  no_of_decimal: number;
-  registration_no?: string;
+  pan_number?: string;
+  postal_code?: string;
   registration_type?: string;
-  tele_no?: string;
+  state_id: string;
+  tax_identifier?: string;
+  telephone_number?: string;
   timezone: string;
-  whatsApp_no?: string;
-  zip_code?: string;
+  trade_name?: string;
+  whatsapp_number?: string;
 }
 
-export type CreateCompanyResponse = Company;
+export type CreateCompanyResponse = DetailedCompany;
 
 export const companyApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({

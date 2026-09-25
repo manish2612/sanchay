@@ -15,7 +15,7 @@ export function GlobalCompanyRibbon() {
 
   if (!activeCompany) return null;
 
-  const activeCountry = globalMasters?.countries?.find((c) => c.id === activeCompany.fk_country_id);
+  const activeCountry = globalMasters?.countries?.find((c) => c.id === activeCompany.country_id);
 
   const currencySymbol = activeCountry?.currency_info?.symbol;
   const isNepali = activeCountry?.iso3 === 'NPL' || activeCountry?.name?.toLowerCase() === 'nepal';
@@ -42,7 +42,10 @@ export function GlobalCompanyRibbon() {
   };
 
   const activeFiscalYearDate =
-    activeCompany.company_fiscal_years?.[0]?.from_date || activeCompany.fy_start_date;
+    ('fiscal_years' in activeCompany && activeCompany.fiscal_years?.[0]?.from_date) ||
+    ('company_fiscal_years' in activeCompany && activeCompany.company_fiscal_years?.[0]?.from_date) ||
+    ('fy_start_date' in activeCompany ? activeCompany.fy_start_date : undefined);
+    
   const fyDisplay = getFYDisplay(activeFiscalYearDate, isNepali);
 
   return (
@@ -69,10 +72,10 @@ export function GlobalCompanyRibbon() {
 
       {/* Right: Compliance & Context Metadata */}
       <div className="hidden sm:flex items-center gap-5 text-[11px] font-mono uppercase tracking-wider">
-        {activeCompany.registration_no && (
+        {activeCompany.tax_identifier && (
           <div className="flex items-center gap-1.5" title="Registration Number">
             <span className="text-muted-foreground/50">REG:</span>
-            <span className="text-foreground/80 font-medium">{activeCompany.registration_no}</span>
+            <span className="text-foreground/80 font-medium">{activeCompany.tax_identifier}</span>
           </div>
         )}
 

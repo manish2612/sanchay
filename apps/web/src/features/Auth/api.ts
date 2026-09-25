@@ -1,5 +1,5 @@
 import { apiSlice } from '@/store/apiSlice';
-import { Company } from '@/types/models/Company';
+import { Company, LoginCompany } from '@/types/models/Company';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -14,7 +14,7 @@ export interface LoginRequest {
 export interface User {
   full_name: string;
   email: string;
-  mobile_no: string;
+  mobile_number: string;
 }
 
 export interface SwitchCompanyRequest {
@@ -27,7 +27,7 @@ export interface SwitchCompanyResponse {
 }
 
 export interface LoginResponse {
-  companies: Company[];
+  companies: LoginCompany[];
   token: string;
   user: User;
 }

@@ -28,10 +28,9 @@ export const useCreateCompany = () => {
     const booksStartDateISO = data.booksStartDate.toISOString();
 
     // 3. Construct Fiscal Years array
-    const company_fiscal_years = [
+    const fiscal_years = [
       {
         from_date: fyStartDateISO,
-        sr_no: 0,
         to_date: fyEndDateISO,
       }
     ];
@@ -40,23 +39,26 @@ export const useCreateCompany = () => {
       const response = await createCompany({
         address: data.address || "",
         book_start_date: booksStartDateISO,
-        cin_no: "",
-        company_fiscal_years,
+        cin_number: "",
+        city: "",
+        country_currency_id: fk_country_currency_id,
+        country_id: data.country,
+        decimal_places: data.decimalCount,
         email: data.email || "",
-        fk_country_currency_id,
-        fk_country_id: data.country,
-        fk_state_id: data.state,
+        fiscal_years,
         fy_start_date: fyStartDateISO,
         mailing_name: data.mailingName,
-        mobile_no: data.mobileNumber || "",
+        mobile_number: data.mobileNumber || "",
         name: data.name,
-        no_of_decimal: data.decimalCount,
-        registration_no: data.registrationNumber || "",
+        pan_number: data.registrationType==="PAN"?data.registrationNumber :"",
+        postal_code: data.pincode || "",
         registration_type: data.registrationType || "",
-        tele_no: data.landlineNo || "",
+        state_id: data.state,
+        tax_identifier: data.registrationNumber || "",
+        telephone_number: data.landlineNo || "",
         timezone: data.timezone,
-        whatsApp_no: data.whatsappNumber || "",
-        zip_code: data.pincode || ""
+        trade_name: "",
+        whatsapp_number: data.whatsappNumber || ""
       }).unwrap();
 
       // Dispatch to Redux state
