@@ -115,12 +115,17 @@ export function MasterFormSheet() {
     godown: 'Create Godown',
   };
 
+  const isWide = activeMaster === 'cost-center' || activeMaster === 'cost-centre';
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
         <SheetPortal>
           <SheetOverlay />
-          <SheetContent className="flex flex-col p-0 overflow-hidden" aria-describedby={undefined}>
+          <SheetContent 
+            className={`flex flex-col p-0 overflow-hidden ${isWide ? 'sm:max-w-2xl sm:w-[600px]' : ''}`} 
+            aria-describedby={undefined}
+          >
             <SheetHeader className="p-4 border-b border-border/30">
               <SheetTitle>{activeMaster ? titles[activeMaster] : 'Create Master'}</SheetTitle>
             </SheetHeader>

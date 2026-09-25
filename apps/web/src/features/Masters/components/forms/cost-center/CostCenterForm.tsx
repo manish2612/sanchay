@@ -3,6 +3,7 @@ import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { OpeningBalanceField } from '@/components/shared-fields/AccountingFields';
 import { useCostCenterForm } from './useCostCenterForm';
+import { LedgerAllocationTable } from './components/LedgerAllocationTable';
 
 export function CostCenterForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
   const { form, onSubmit } = useCostCenterForm(onSuccess || onCancel);
@@ -14,9 +15,10 @@ export function CostCenterForm({ onCancel, onSuccess }: { onCancel: () => void, 
           <MasterAliasField control={form.control} />
           <MasterParentField control={form.control} label="Parent Cost Category" />
           <OpeningBalanceField control={form.control} />
+          <LedgerAllocationTable form={form} />
         </div>
         
-        <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2">
+        <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2 flex-shrink-0">
           <Button variant="outline" type="button" onClick={onCancel}>Cancel</Button>
           <Button type="submit">Create Cost Center</Button>
         </SheetFooter>
