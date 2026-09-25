@@ -11,6 +11,7 @@ export type LedgerEntryRow = {
   creditAmount: string;
   vatAmt: string;
   isPhantom?: boolean;
+  costCenterAllocations?: any[];
 };
 
 const columnPaddingX2 = {

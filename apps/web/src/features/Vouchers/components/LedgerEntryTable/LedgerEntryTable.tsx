@@ -4,6 +4,8 @@ import { ledgerColumns } from "./columns";
 import { useLedgerEntryTable } from "../../hooks/useLedgerEntryTable";
 import { VoucherSectionHeader } from "../VoucherSectionHeader";
 import { LineDetailsSheet } from "../LineDetailsSheet";
+import { CostCenterAllocationSheet } from "@/features/CostCenter/components/CostCenterAllocationSheet";
+import { getColumnStyles, rowVariants } from "./styles";
 
 export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: string }) {
   const { 
@@ -12,7 +14,11 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
     updateData, 
     onRowCommit,
     activeDetailsRowIndex,
-    setActiveDetailsRowIndex
+    setActiveDetailsRowIndex,
+    activeCostCenterRowIndex,
+    setActiveCostCenterRowIndex,
+    activeCostCenterRow,
+    activeCostCenterTargetAmount,
   } = useLedgerEntryTable(applyMode);
 
   // Filter columns based on applyMode
@@ -32,12 +38,6 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
 
   return (
     <div className="flex-1 flex flex-col min-h-[140px] overflow-hidden relative">
-      {/* Section header */}
-      {/* <VoucherSectionHeader
-        title="Ledger / Tax & Charges"
-      /> */}
-
-      {/* Table */}
       <div className="flex-1 overflow-hidden flex flex-col">
         <Table.Root
           data={data}
@@ -67,26 +67,18 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
               <>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <Table.HeaderRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      const isFluid = (header.column.columnDef.meta as any)?.layout?.fluid;
-                      return (
-                        <Table.Head
-                          key={header.id}
-                          style={{
-                            flex: isFluid ? "1 1 0%" : `0 0 ${header.getSize()}px`,
-                            width: isFluid ? "100%" : `${header.getSize()}px`,
-                            minWidth: isFluid ? `${header.column.columnDef.minSize || 0}px` : `${header.getSize()}px`,
-                            maxWidth: isFluid ? undefined : `${header.getSize()}px`,
-                          }}
-                          className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ""}`}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                        </Table.Head>
-                      );
-                    })}
+                    {headerGroup.headers.map((header) => (
+                      <Table.Head
+                        key={header.id}
+                        style={getColumnStyles(header.column.columnDef, header.getSize())}
+                        className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ""}`}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </Table.Head>
+                    ))}
                   </Table.HeaderRow>
                 ))}
               </>
@@ -100,33 +92,22 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
                 key={row.id}
                 data-state={row.getIsSelected() ? "selected" : undefined}
                 data-focused={isFocused}
-                className={`transition-colors border-b border-border border-l-3 border-l-transparent group ${
-                  row.original.isPhantom
-                    ? "bg-primary/5"
-                    : isFocused
-                      ? "bg-primary/[0.06] border-l-primary"
-                      : "hover:bg-surface-variant/40"
-                }`}
-              >
-                {row.getVisibleCells().map((cell) => {
-                  const isFluid = (cell.column.columnDef.meta as any)?.layout?.fluid;
-                  return (
-                    <Table.Cell
-                      key={cell.id}
-                      style={{
-                        flex: isFluid ? "1 1 0%" : `0 0 ${cell.column.getSize()}px`,
-                        width: isFluid ? "100%" : `${cell.column.getSize()}px`,
-                        minWidth: isFluid ? `${cell.column.columnDef.minSize || 0}px` : `${cell.column.getSize()}px`,
-                        maxWidth: isFluid ? undefined : `${cell.column.getSize()}px`,
-                      }}
-                      className={`py-0 border-r border-border last:border-r-0 ${
-                        (cell.column.columnDef.meta as any)?.layout?.cellClassName || ""
-                      }`}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Cell>
-                  );
+                className={rowVariants({ 
+                  isPhantom: !!row.original.isPhantom, 
+                  isFocused 
                 })}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <Table.Cell
+                    key={cell.id}
+                    style={getColumnStyles(cell.column.columnDef, cell.column.getSize())}
+                    className={`py-0 border-r border-border last:border-r-0 ${
+                      (cell.column.columnDef.meta as any)?.layout?.cellClassName || ""
+                    }`}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Cell>
+                ))}
               </Table.Row>
             )}
           </Table.Body>
@@ -142,6 +123,23 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
           rowIndex={activeDetailsRowIndex}
           row={data[activeDetailsRowIndex]}
           updateData={updateData}
+        />
+      )}
+
+      {activeCostCenterRow && (
+        <CostCenterAllocationSheet
+          open={activeCostCenterRowIndex !== null}
+          onOpenChange={(open) => {
+            if (!open) setActiveCostCenterRowIndex(null);
+          }}
+          targetAmount={activeCostCenterTargetAmount}
+          ledgerName={activeCostCenterRow.name || 'Unknown Ledger'}
+          initialAllocations={activeCostCenterRow.costCenterAllocations}
+          onSave={(allocations) => {
+            if (activeCostCenterRowIndex !== null) {
+              updateData(activeCostCenterRowIndex, 'costCenterAllocations', allocations);
+            }
+          }}
         />
       )}
     </div>
