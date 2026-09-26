@@ -35,15 +35,11 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const onBlur = () => {
     updateData?.(row.index, column.id, value);
   };
-  const MOCK_ITEMS = [
-    { label: "MacBook Pro 16", value: "MacBook Pro 16" },
-    { label: "iPhone 15 Pro", value: "iPhone 15 Pro" },
-    { label: "Magic Keyboard", value: "Magic Keyboard" },
-    { label: "AirPods Pro", value: "AirPods Pro" },
-    { label: "iPad Air", value: "iPad Air" },
-  ];
 
-  const filteredOptions = MOCK_ITEMS.filter((item) =>
+  const targetKey = inputConfig?.optionsKey || column.id;
+  const dynamicOptions = meta?.options?.[targetKey] || [];
+
+  const filteredOptions = dynamicOptions.filter((item: any) =>
     item.label.toLowerCase().includes((value || "").toLowerCase())
   );
 
@@ -112,7 +108,7 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
       <AutoSuggest.Content>
         <AutoSuggest.List>
           <AutoSuggest.Empty>No items found.</AutoSuggest.Empty>
-          {filteredOptions.map((opt) => (
+          {filteredOptions.map((opt: any) => (
             <AutoSuggest.Item key={opt.value} value={opt.value}>
               {opt.label}
             </AutoSuggest.Item>
