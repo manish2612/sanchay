@@ -5,7 +5,9 @@ import { ActionCell } from "@/components/TableCells/ActionCell";
 
 export type CostCenterAllocationRow = {
   id: string;
+  costCategoryId?: string;
   costCategory: string;
+  costCenterId?: string;
   costCenter: string;
   amount: string;
   isPhantom?: boolean;
@@ -20,7 +22,7 @@ export const getColumns = (): ColumnDef<CostCenterAllocationRow>[] => [
     cell: AutoSuggestCell,
     meta: {
       layout: { fluid: true },
-      inputConfig: { placeholder: "Search Category..." },
+      inputConfig: { placeholder: "Search Category...", optionsKey: "costCategories", idKey: "costCategoryId" },
     },
   },
   {
@@ -31,7 +33,7 @@ export const getColumns = (): ColumnDef<CostCenterAllocationRow>[] => [
     cell: AutoSuggestCell,
     meta: {
       layout: { fluid: true },
-      inputConfig: { placeholder: "Search Cost Centre..." },
+      inputConfig: { placeholder: "Search Cost Centre...", optionsKey: "costCenters", idKey: "costCenterId" },
     },
   },
   {

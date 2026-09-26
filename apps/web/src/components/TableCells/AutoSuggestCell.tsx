@@ -47,12 +47,19 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
     <>
       <AutoSuggest
         inputValue={value}
-      onInputChange={(val) => {
-        setValue(val);
-        updateData?.(row.index, column.id, val);
-      }}
-      options={filteredOptions}
-      creatable
+        onInputChange={(val) => {
+          setValue(val);
+          updateData?.(row.index, column.id, val);
+
+          if (inputConfig?.idKey) {
+            const matchedOption = dynamicOptions.find(
+              (opt: any) => opt.value === val || opt.label === val
+            );
+            updateData?.(row.index, inputConfig.idKey, matchedOption?.id || "");
+          }
+        }}
+        options={filteredOptions}
+        creatable
       onCreate={() => {
         if (inputConfig?.onCreate) {
           inputConfig.onCreate(value);

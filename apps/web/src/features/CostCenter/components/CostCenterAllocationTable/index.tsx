@@ -61,6 +61,10 @@ export const CostCenterAllocationTable = ({
               onRowCommit,
               removeRow,
             },
+            options: {
+              costCategories: [],
+              costCenters: []
+            }
           },
         }}
       >

@@ -55,7 +55,7 @@ export function useVoucherItemTable() {
 
     if ((row as any).isPhantom) {
       update(rowIndex, { ...row, isPhantom: false });
-      append(generateEmptyRow(`row-${fields.length + 1}`));
+      append(generateEmptyRow(`item-row-${fields.length + 1}`));
       return "ADVANCE";
     }
     

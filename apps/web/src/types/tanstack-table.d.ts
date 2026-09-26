@@ -38,6 +38,7 @@ declare module '@tanstack/react-table' {
       placeholder?: string;
       disabled?: boolean | ((row: any) => boolean);
       optionsKey?: string;
+      idKey?: string;
     };
   }
 }

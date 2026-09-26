@@ -17,7 +17,7 @@ export function useCostCenterAllocationTable(
   const [data, setData] = useState<CostCenterAllocationRow[]>(() => {
     const initial = initialAllocations.length > 0 ? initialAllocations : [];
     if (initial.length === 0 || !initial[initial.length - 1].isPhantom) {
-      return [...initial, generateEmptyRow(`row-${initial.length + 1}`)];
+      return [...initial, generateEmptyRow(`cc-row-${initial.length + 1}`)];
     }
     return initial;
   });
@@ -115,7 +115,7 @@ export function useCostCenterAllocationTable(
         const committedRow = { ...newData[rowIndex]!, isPhantom: false };
         
         newData[rowIndex] = committedRow;
-        newData.push(generateEmptyRow(`row-${newData.length + 1}`));
+        newData.push(generateEmptyRow(`cc-row-${newData.length + 1}`));
         
         setTimeout(() => notifyChange(newData), 0);
         return newData;
@@ -130,7 +130,7 @@ export function useCostCenterAllocationTable(
     setData((old) => {
       const newData = old.filter((_, index) => index !== rowIndex);
       if (newData.length === 0 || !newData[newData.length - 1].isPhantom) {
-        newData.push(generateEmptyRow(`row-${newData.length + 1}`));
+        newData.push(generateEmptyRow(`cc-row-${newData.length + 1}`));
       }
       setTimeout(() => notifyChange(newData), 0);
       return newData;

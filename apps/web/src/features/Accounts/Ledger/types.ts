@@ -27,6 +27,7 @@ export interface Ledger {
   id: string;
   name: string;
   code: string;
+  is_cost_entre_enabled: boolean;
   is_bill_wise_enabled: boolean;
   block_sales_on_credit_limit_exceed: boolean;
   credit_period_days: number;

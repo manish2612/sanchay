@@ -3,6 +3,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { type LedgerEntryRow } from "../components/LedgerEntryTable/columns";
 import { VOUCHER_FIELDS } from "../constants/voucherFields";
 import { VoucherFormValues } from "../schema/voucherSchema";
+import { type Ledger } from "@/features/Accounts/Ledger/types";
 
 const generateEmptyRow = (id: string): LedgerEntryRow => ({
   id,
@@ -14,7 +15,7 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
   isPhantom: true,
 });
 
-export function useLedgerEntryTable(applyMode: string = "Item Mode") {
+export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Ledger[] = []) {
   const { control } = useFormContext<VoucherFormValues>();
 
   const { fields, append, update } = useFieldArray({
@@ -59,17 +60,20 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode") {
 
     const isAmountColumn = !columnId || columnId === "debitAmount" || columnId === "creditAmount" || columnId === "amount";
     if (isAmountColumn && amtValue > 0) {
-      setTimeout(() => setActiveCostCenterRowIndex(rowIndex), 0);
+      const selectedLedger = ledgers.find((l) => l.name === row?.name);
+      if (selectedLedger?.is_cost_entre_enabled) {
+        setTimeout(() => setActiveCostCenterRowIndex(rowIndex), 0);
+      }
     }
 
     if (row.isPhantom) {
       update(rowIndex, { ...row, isPhantom: false });
-      append(generateEmptyRow(`row-${fields.length + 1}`));
+      append(generateEmptyRow(`ledger-row-${fields.length + 1}`));
       return "ADVANCE";
     }
     
     return "EXIT";
-  }, [fields, update, append, applyMode]);
+  }, [fields, update, append, applyMode, ledgers]);
 
   const activeCostCenterRow = activeCostCenterRowIndex !== null ? fields[activeCostCenterRowIndex] : null;
   

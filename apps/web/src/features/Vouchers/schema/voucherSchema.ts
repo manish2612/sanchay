@@ -3,7 +3,9 @@ import { VOUCHER_FIELDS } from '../constants/voucherFields';
 
 const costCenterAllocationSchema = z.object({
   id: z.string(),
+  costCategoryId: z.string().optional(),
   costCategory: z.string(),
+  costCenterId: z.string().optional(),
   costCenter: z.string(),
   amount: z.string(),
   isPhantom: z.boolean().optional(),
@@ -11,6 +13,7 @@ const costCenterAllocationSchema = z.object({
 
 const ledgerEntrySchema = z.object({
   id: z.string(),
+  ledgerId: z.string().optional(),
   name: z.string(),
   description: z.string().optional(),
   amount: z.string().optional(),
@@ -23,6 +26,7 @@ const ledgerEntrySchema = z.object({
 
 const itemEntrySchema = z.object({
   id: z.string(),
+  itemId: z.string().optional(),
   item: z.string(),
   description: z.string().optional(),
   qty: z.string().optional(),

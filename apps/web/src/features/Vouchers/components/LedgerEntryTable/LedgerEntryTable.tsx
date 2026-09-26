@@ -22,10 +22,11 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
     setActiveCostCenterRowIndex,
     activeCostCenterRow,
     activeCostCenterTargetAmount,
-  } = useLedgerEntryTable(applyMode);
+  } = useLedgerEntryTable(applyMode, ledgers || []);
 
   const ledgerOptions = React.useMemo(() => {
     return ledgers?.map((ledger: any) => ({
+      id: ledger.id,
       label: ledger.name,
       value: ledger.name
     })) || [];

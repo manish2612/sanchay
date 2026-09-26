@@ -5,6 +5,7 @@ import { TextCell } from "../../../../components/TableCells/TextCell";
 
 export type VoucherRow = {
   id: string;
+  itemId?: string;
   item: string;
   description?: string;
   qty: string;
@@ -36,7 +37,8 @@ export const editableColumns: ColumnDef<VoucherRow>[] = [
     cell: AutoSuggestCell,
     meta: { 
       features: { enableLineDetails: true },
-      layout: { fluid: true }
+      layout: { fluid: true },
+      inputConfig: { placeholder: "Search Item", optionsKey: "items", idKey: "itemId" }
     }
   },
   { accessorKey: "qty", header: "Qty", size: 105, cell: NumericCell, ...columnPaddingX2 },
