@@ -39,6 +39,7 @@ declare module '@tanstack/react-table' {
       disabled?: boolean | ((row: any) => boolean);
       optionsKey?: string;
       idKey?: string;
+      optionsFilter?: (opt: any, row: any) => boolean;
     };
   }
 }

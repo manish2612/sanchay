@@ -14,8 +14,10 @@ import {
 
 export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig, features } = column.columnDef.meta || {};
-  const { placeholder = "Search item..." } = inputConfig || {};
+  const { placeholder = "Search item...", disabled: disabledConfig } = inputConfig || {};
   const { enableLineDetails } = features || {};
+  
+  const isDisabled = typeof disabledConfig === 'function' ? disabledConfig(row) : disabledConfig;
 
   const meta = table.options.meta || {} as any;
   const { state, actions } = meta;
@@ -37,7 +39,11 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   };
 
   const targetKey = inputConfig?.optionsKey || column.id;
-  const dynamicOptions = meta?.options?.[targetKey] || [];
+  let dynamicOptions = meta?.options?.[targetKey] || [];
+
+  if (inputConfig?.optionsFilter) {
+    dynamicOptions = dynamicOptions.filter((opt: any) => inputConfig.optionsFilter(opt, row.original));
+  }
 
   const filteredOptions = dynamicOptions.filter((item: any) =>
     item.label.toLowerCase().includes((value || "").toLowerCase())
@@ -70,6 +76,7 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
     >
       <AutoSuggest.Input
         placeholder={placeholder}
+        disabled={isDisabled}
         error={!!error}
         className="h-8 !min-h-8 !py-0 w-full my-auto bg-surface transition-all"
         inputClassName="text-sm h-full px-1"
