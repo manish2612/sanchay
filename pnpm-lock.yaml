@@ -256,6 +256,9 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.112.0
         version: 1.170.25(react-dom@19.1.4(react@19.1.4))(react@19.1.4)
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
