@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { SidebarProvider, useSidebar } from './useSidebar';
 import { SidebarRail } from '../SidebarRail';
 import { SidebarPanel } from '../SidebarPanel';
-import { NAVIGATION_TREE } from '../../data/navigationTree';
 import { useSidebarNavigation } from './useSidebarNavigation';
 import { SidebarPanelItem } from '../SidebarPanelItem';
 import { MobileSidebarSettings } from './MobileSidebarSettings';
@@ -20,8 +19,8 @@ interface SidebarContentProps {
 }
 
 function SidebarContent({ appName, user, onLogout }: SidebarContentProps) {
-  const { isPanelOpen, activeL1ItemId } = useSidebar();
-  const activeL1Config = NAVIGATION_TREE.find((item) => item.id === activeL1ItemId);
+  const { isPanelOpen, activeL1ItemId, navigationTree } = useSidebar();
+  const activeL1Config = navigationTree.find((item) => item.id === activeL1ItemId);
 
   const { isMobileMenuOpen, isDrilldown, handleMobileMenuClick, handleBack, closeMobileSidebar } =
     useSidebarNavigation();
@@ -75,7 +74,7 @@ function SidebarContent({ appName, user, onLogout }: SidebarContentProps) {
               </button>
             </div>
             <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-              {NAVIGATION_TREE.map((item) => {
+              {navigationTree.map((item) => {
                 const hasChildren = item.children && item.children.length > 0;
                 const isActive = activeL1ItemId === item.id;
                 return (
@@ -186,7 +185,7 @@ function SidebarContent({ appName, user, onLogout }: SidebarContentProps) {
       {/* sticky top-0 h-dvh ensures the sidebar doesn't scroll with the main body content. */}
       <div className="hidden lg:flex relative h-dvh sticky top-0 bg-background z-[100] flex-shrink-0">
         {/* Level 1 Icon Rail (Primary Color Scheme) */}
-        <SidebarRail appName={appName} user={user} items={NAVIGATION_TREE} onLogout={onLogout} />
+        <SidebarRail appName={appName} user={user} items={navigationTree} onLogout={onLogout} />
 
         {/* Level 2/3 Panel (Secondary Color Scheme) */}
         <SidebarPanel activeL1Config={activeL1Config} isOpen={isPanelOpen} />

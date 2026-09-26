@@ -1,7 +1,8 @@
 'use client';
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { NAVIGATION_TREE } from '../../data/navigationTree';
+import { NAVIGATION_TREE, NavItemConfig } from '../../data/navigationTree';
+import { useGetVoucherTypesQuery } from '@/features/Accounts/VoucherType/api';
 
 interface SidebarContextType {
   isPanelOpen: boolean;
@@ -11,6 +12,7 @@ interface SidebarContextType {
   setActiveL1ItemId: (id: string | null) => void;
   isMobileMenuOpen: boolean;
   setMobileMenuOpen: (isOpen: boolean) => void;
+  navigationTree: NavItemConfig[];
 }
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined);
@@ -21,6 +23,68 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   const [activeL1ItemId, setActiveL1ItemId] = useState<string | null>(null);
   const location = useLocation();
   const pathname = location.pathname;
+
+  const { data: voucherTypes } = useGetVoucherTypesQuery();
+
+  // Compute dynamic navigation tree
+  const navigationTree = useMemo(() => {
+    // Deep clone the static tree to avoid mutating the original reference
+    const dynamicTree: NavItemConfig[] = JSON.parse(JSON.stringify(NAVIGATION_TREE));
+
+    if (voucherTypes && voucherTypes.length > 0) {
+      // Group voucher types by category to avoid duplicate sidebar items
+      const accountsMenuMap = new Map<string, any>();
+      const inventoryMenuMap = new Map<string, any>();
+
+      voucherTypes.forEach((vt) => {
+        const item = {
+          id: vt.category.toLowerCase(),
+          label: vt.name, // Will be overridden by default voucher if needed
+          category: vt.category,
+          voucherId: vt.id,
+          is_default: vt.is_set_as_default,
+        };
+
+        if (vt.posting === 'A' || vt.posting === 'IA') {
+          if (!accountsMenuMap.has(vt.category) || vt.is_set_as_default) {
+            accountsMenuMap.set(vt.category, item);
+          }
+        } else if (vt.posting === 'I') {
+          if (!inventoryMenuMap.has(vt.category) || vt.is_set_as_default) {
+            inventoryMenuMap.set(vt.category, item);
+          }
+        }
+      });
+
+      const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+      const buildChildren = (map: Map<string, any>, module: string) => {
+        return Array.from(map.values()).map((vt) => ({
+          id: vt.id,
+          label: vt.label,
+          href: `/${module}/transactions/${slugify(vt.label)}/${vt.voucherId}`,
+        }));
+      };
+
+      const accountsTransactions = buildChildren(accountsMenuMap, 'accounts');
+      const inventoryTransactions = buildChildren(inventoryMenuMap, 'inventory');
+
+      // Inject dynamically generated items into the accounts and inventory nodes
+      const accountsNode = dynamicTree.find((n) => n.id === 'accounts');
+      if (accountsNode?.children) {
+        const transNode = accountsNode.children.find((c) => c.id === 'accounts-transactions');
+        if (transNode) transNode.children = accountsTransactions;
+      }
+
+      const inventoryNode = dynamicTree.find((n) => n.id === 'inventory');
+      if (inventoryNode?.children) {
+        const transNode = inventoryNode.children.find((c) => c.id === 'inventory-transactions');
+        if (transNode) transNode.children = inventoryTransactions;
+      }
+    }
+
+    return dynamicTree;
+  }, [voucherTypes]);
 
   // Set initial panel state based on screen size, but do not override on resize
   useEffect(() => {
@@ -34,7 +98,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     if (!pathname) return;
 
     // Find which L1 item contains the current pathname
-    const activeL1 = NAVIGATION_TREE.find((l1) => {
+    const activeL1 = navigationTree.find((l1) => {
       if (l1.href && pathname.startsWith(l1.href)) return true;
       if (l1.children) {
         return l1.children.some((l2) => {
@@ -51,7 +115,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     if (activeL1) {
       setActiveL1ItemId(activeL1.id);
     }
-  }, [pathname]);
+  }, [pathname, navigationTree]);
 
   const togglePanel = () => setIsPanelOpen((prev) => !prev);
   const setPanelOpen = (isOpen: boolean) => setIsPanelOpen(isOpen);
@@ -67,6 +131,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
         setActiveL1ItemId,
         isMobileMenuOpen,
         setMobileMenuOpen,
+        navigationTree,
       }}
     >
       {children}
