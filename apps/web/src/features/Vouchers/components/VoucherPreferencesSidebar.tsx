@@ -65,11 +65,15 @@ export function VoucherPreferencesSidebar({
               Apply Mode
             </label>
             <DropdownMenu
-              items={[
-                { id: "Item Mode", label: "Item Mode", onSelect: () => prefs.setApplyMode("Item Mode") },
-                { id: "Account Mode", label: "Account Mode", onSelect: () => prefs.setApplyMode("Account Mode") },
-                { id: "Account Invoice", label: "Account Invoice", onSelect: () => prefs.setApplyMode("Account Invoice") },
-              ]}
+              items={
+                prefs.isApplyModeReadonly
+                  ? [{ id: "Account Mode", label: "Account Mode", onSelect: () => {} }]
+                  : [
+                      { id: "Item Mode", label: "Item Mode", onSelect: () => prefs.setApplyMode("Item Mode") },
+                      { id: "Account Mode", label: "Account Mode", onSelect: () => prefs.setApplyMode("Account Mode") },
+                      { id: "Account Invoice", label: "Account Invoice", onSelect: () => prefs.setApplyMode("Account Invoice") },
+                    ]
+              }
               align="start"
             >
               <Button
