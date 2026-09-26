@@ -14,6 +14,7 @@ export const getColumns = (onCreateLedger?: () => void): ColumnDef<any, any>[] =
       inputConfig: {
         placeholder: 'Select Ledger...',
         onCreate: onCreateLedger,
+        optionsKey: 'ledgers',
       },
     },
   }),

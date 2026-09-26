@@ -6,10 +6,19 @@ import { useMemo, useCallback } from 'react';
 import { flexRender } from '@tanstack/react-table';
 import { AllocationTableLayout } from '@/components/AllocationTableLayout';
 import { useGlobalMasterSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
+import { useGetLedgersQuery } from '@/features/Accounts/Ledger/api';
 
 export const LedgerAllocationTable = ({ form }: { form: any }) => {
   const { openMasterSheet } = useGlobalMasterSheet();
+  const { data: ledgers, isLoading: isLedgersLoading } = useGetLedgersQuery();
   
+  const ledgerOptions = useMemo(() => {
+    return ledgers?.map((ledger: any) => ({
+      label: ledger.name,
+      value: ledger.name
+    })) || [];
+  }, [ledgers]);
+
   const {
     fields,
     updateData,
@@ -68,6 +77,9 @@ export const LedgerAllocationTable = ({ form }: { form: any }) => {
               state: {
                 rowErrors,
                 isRowEmpty: (row: any) => !row.original.ledger,
+              },
+              options: {
+                ledgers: ledgerOptions,
               },
               phantomRowConfig: {
                 isPhantom: (row: any) => (row.original as any).isPhantom,
