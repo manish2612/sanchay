@@ -16,10 +16,14 @@ import { type VoucherDetailsFormState } from "../hooks/useVoucherDetailsForm";
 interface VoucherTypeSelectorProps {
   value: string;
   onChange: (v: string) => void;
-  options: string[];
+  options: { id: string; name: string }[];
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
-function VoucherTypeSelector({ value, onChange, options }: VoucherTypeSelectorProps) {
+function VoucherTypeSelector({ value, onChange, options, isLoading, isError }: VoucherTypeSelectorProps) {
+  const displayValue = isLoading ? "Loading..." : isError ? "Error loading" : value || "Select...";
+
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground select-none leading-none">
@@ -27,9 +31,9 @@ function VoucherTypeSelector({ value, onChange, options }: VoucherTypeSelectorPr
       </span>
       <DropdownMenu
         items={options.map((opt) => ({
-          id: opt,
-          label: opt,
-          onSelect: () => onChange(opt),
+          id: opt.id,
+          label: opt.name,
+          onSelect: () => onChange(opt.name), // Keeping onChange(name) since 'value' stores the name
         }))}
         align="start"
       >
@@ -38,8 +42,9 @@ function VoucherTypeSelector({ value, onChange, options }: VoucherTypeSelectorPr
           variant="primary"
           size="sm"
           className="w-full justify-between font-semibold text-sm h-9"
+          disabled={isLoading || isError}
         >
-          <span className="truncate">{value}</span>
+          <span className="truncate">{displayValue}</span>
           <Icon
             name="ChevronDown"
             size={14}
@@ -80,6 +85,8 @@ export function VoucherDetailsForm({
   setSalesAc,
   voucherTypeOptions,
   filteredPartyOptions,
+  isLoading,
+  isError,
 }: VoucherDetailsFormState) {
   return (
     <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
@@ -92,6 +99,8 @@ export function VoucherDetailsForm({
               value={voucherType}
               onChange={setVoucherType}
               options={voucherTypeOptions}
+              isLoading={isLoading}
+              isError={isError}
             />
           </div>
 
