@@ -22,6 +22,7 @@
     "@prime/ui": "workspace:*",
     "@reduxjs/toolkit": "^2.0.0",
     "@tanstack/react-router": "^1.112.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "js-cookie": "^3.0.0",
