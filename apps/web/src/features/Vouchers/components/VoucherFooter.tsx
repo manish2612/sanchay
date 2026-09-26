@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
-import { Button, Icon } from "@prime/ui";
-import { SplitButton } from "@prime/ui";
+import { Button, Icon, Form, SplitButton } from "@prime/ui";
 import { type VoucherFooterState } from "../hooks/useVoucherFooter";
 import { LedgerEntryTable } from "./LedgerEntryTable/LedgerEntryTable";
 import { VoucherSummaryPanel } from "./VoucherSummaryPanel";
+import { useFormContext } from "react-hook-form";
+import { VOUCHER_FIELDS } from "../constants/voucherFields";
+import { cleanPayload } from "../utils/cleanPayload";
 
 // ─── Main Component ─────────────────────────────────────────────────────────
 
@@ -14,16 +16,15 @@ export interface VoucherFooterProps extends VoucherFooterState {
 }
 
 export function VoucherFooter({
-  narration,
-  setNarration,
   summary,
-  onSave,
   onPreview,
   onPrint,
   onPrintConfig,
   onExportPdf,
   hideLedgerEntryTable,
 }: VoucherFooterProps) {
+  const { control, handleSubmit } = useFormContext();
+
   return (
     <footer
       className={`bg-surface border-t border-border px-5 py-3 grid ${hideLedgerEntryTable ? 'grid-cols-[1fr_350px]' : 'grid-cols-[450px_1fr_350px]'} gap-5 items-stretch flex-shrink-0`}
@@ -31,21 +32,27 @@ export function VoucherFooter({
     >
       {/* Left: Narration */}
       <div id="narrationActions" className="flex flex-col gap-2.5">
-        <label
-          htmlFor="voucher-narration"
-          className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground select-none"
-        >
-          Narration / Notes
-        </label>
-        <div className="border border-input rounded-md bg-surface focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all flex-1 flex">
-          <textarea
-            id="voucher-narration"
-            value={narration}
-            onChange={(e) => setNarration(e.target.value)}
-            placeholder="Enter additional notes, remarks, or narration for this voucher…"
-            className="w-full resize-none bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none flex-1"
-          />
-        </div>
+        <Form.Field
+          control={control}
+          name={VOUCHER_FIELDS.NARRATION}
+          render={({ field }) => (
+            <Form.Item className="flex-1 flex flex-col h-full">
+              <Form.Label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground select-none mb-2">
+                Narration / Notes
+              </Form.Label>
+              <Form.Control>
+                <div className="border border-input rounded-md bg-surface focus-within:border-primary focus-within:ring-1 focus-within:ring-primary/20 transition-all flex-1 flex h-full">
+                  <textarea
+                    {...field}
+                    id="voucher-narration"
+                    placeholder="Enter additional notes, remarks, or narration for this voucher…"
+                    className="w-full resize-none bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none flex-1 min-h-[80px]"
+                  />
+                </div>
+              </Form.Control>
+            </Form.Item>
+          )}
+        />
       </div>
 
       {/* Middle: Ledger Table */}
@@ -58,7 +65,7 @@ export function VoucherFooter({
       )}
 
       {/* Right: Summary panel & Actions */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 justify-end h-full">
         <VoucherSummaryPanel summary={summary} />
 
         {/* Action Buttons Row */}
@@ -69,6 +76,7 @@ export function VoucherFooter({
             onClick={onPreview}
             className="gap-1.5"
             aria-label="Preview voucher"
+            type="button"
           >
             <Icon name="Eye" size={13} />
             Preview
@@ -104,7 +112,11 @@ export function VoucherFooter({
           <Button
             variant="primary"
             size="sm"
-            onClick={onSave}
+            type="button"
+            onClick={handleSubmit((data) => {
+              const cleanedData = cleanPayload(data);
+              console.log("Submitted Form Data (Cleaned):", cleanedData);
+            })}
             className="gap-1.5 px-4 ml-2"
             aria-label="Save voucher"
           >

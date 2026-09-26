@@ -1,5 +1,8 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { type LedgerEntryRow } from "../components/LedgerEntryTable/columns";
+import { VOUCHER_FIELDS } from "../constants/voucherFields";
+import { VoucherFormValues } from "../schema/voucherSchema";
 
 const generateEmptyRow = (id: string): LedgerEntryRow => ({
   id,
@@ -12,43 +15,28 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
 });
 
 export function useLedgerEntryTable(applyMode: string = "Item Mode") {
-  const [data, setData] = useState<LedgerEntryRow[]>([generateEmptyRow("row-1")]);
-  
-  const dataRef = useRef(data);
-  dataRef.current = data;
+  const { control } = useFormContext<VoucherFormValues>();
+
+  const { fields, append, update } = useFieldArray({
+    control,
+    name: VOUCHER_FIELDS.LEDGER_ENTRIES,
+  });
 
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
   const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
   const [activeCostCenterRowIndex, setActiveCostCenterRowIndex] = useState<number | null>(null);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
-    // Synchronously mutate ref for immediate intra-tick reads by onRowCommit
-    dataRef.current = dataRef.current.map((row, index) =>
-      index === rowIndex ? { ...row, [columnId]: value } : row
-    );
-
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex]!,
-            [columnId]: value,
-          };
-        }
-        return row;
-      })
-    );
-  }, []);
+    update(rowIndex, { ...fields[rowIndex]!, [columnId]: value });
+  }, [update, fields]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string) => {
-    let row = dataRef.current[rowIndex];
+    let row = fields[rowIndex];
     if (!row) return "STAY";
 
-    // Validation: Name must be selected
     let isValid = row.name.trim() !== "";
     let amtValue = 0;
 
-    // Amount validation based on mode
     if (applyMode === "Account Mode") {
       const debitString = typeof row.debitAmount === 'string' ? row.debitAmount : String(row.debitAmount || "");
       const creditString = typeof row.creditAmount === 'string' ? row.creditAmount : String(row.creditAmount || "");
@@ -65,48 +53,39 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode") {
 
     if (!isValid) {
       setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
-      setTimeout(() => {
-        setRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
-      }, 800);
+      setTimeout(() => setRowErrors((prev) => ({ ...prev, [rowIndex]: false })), 800);
       return "STAY";
     }
 
-    // Check if we need to open the Cost Center Allocation Sheet
     const isAmountColumn = !columnId || columnId === "debitAmount" || columnId === "creditAmount" || columnId === "amount";
     if (isAmountColumn && amtValue > 0) {
       setTimeout(() => setActiveCostCenterRowIndex(rowIndex), 0);
     }
 
     if (row.isPhantom) {
-      setData((old) => {
-        const newData = [...old];
-        const committedRow = { ...newData[rowIndex]!, isPhantom: false };
-
-        newData[rowIndex] = committedRow;
-        newData.push(generateEmptyRow(`row-${newData.length + 1}`));
-        return newData;
-      });
+      update(rowIndex, { ...row, isPhantom: false });
+      append(generateEmptyRow(`row-${fields.length + 1}`));
       return "ADVANCE";
     }
     
     return "EXIT";
-  }, [updateData, applyMode]);
+  }, [fields, update, append, applyMode]);
 
-  const activeCostCenterRow = activeCostCenterRowIndex !== null ? data[activeCostCenterRowIndex] : null;
+  const activeCostCenterRow = activeCostCenterRowIndex !== null ? fields[activeCostCenterRowIndex] : null;
   
   let activeCostCenterTargetAmount = 0;
   if (activeCostCenterRow) {
     if (applyMode === "Account Mode") {
-      const debit = parseFloat(activeCostCenterRow.debitAmount.replace(/[^0-9.-]+/g, ""));
-      const credit = parseFloat(activeCostCenterRow.creditAmount.replace(/[^0-9.-]+/g, ""));
+      const debit = parseFloat((activeCostCenterRow as any).debitAmount?.replace(/[^0-9.-]+/g, "") || "0");
+      const credit = parseFloat((activeCostCenterRow as any).creditAmount?.replace(/[^0-9.-]+/g, "") || "0");
       activeCostCenterTargetAmount = isNaN(debit) || debit === 0 ? (isNaN(credit) ? 0 : credit) : debit;
     } else {
-      activeCostCenterTargetAmount = parseFloat(activeCostCenterRow.amount.replace(/[^0-9.-]+/g, "")) || 0;
+      activeCostCenterTargetAmount = parseFloat((activeCostCenterRow as any).amount?.replace(/[^0-9.-]+/g, "") || "0") || 0;
     }
   }
 
   return {
-    data,
+    data: fields as LedgerEntryRow[],
     rowErrors,
     updateData,
     onRowCommit,

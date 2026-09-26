@@ -1,5 +1,8 @@
 import { useState, useCallback } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { type VoucherRow } from "../components/VoucherItemTable/columns";
+import { VOUCHER_FIELDS } from "../constants/voucherFields";
+import { VoucherFormValues } from "../schema/voucherSchema";
 
 const generateEmptyRow = (id: string): VoucherRow => ({
   id,
@@ -18,65 +21,49 @@ const generateEmptyRow = (id: string): VoucherRow => ({
 });
 
 export function useVoucherItemTable() {
-  const [data, setData] = useState<VoucherRow[]>([generateEmptyRow("row-1")]);
+  const { control } = useFormContext<VoucherFormValues>();
+
+  const { fields, append, update } = useFieldArray({
+    control,
+    name: VOUCHER_FIELDS.ITEM_ENTRIES,
+  });
+
   const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
   const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
-    setData((old) =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          return {
-            ...old[rowIndex]!,
-            [columnId]: value,
-          };
-        }
-        return row;
-      })
-    );
-  }, []);
+    update(rowIndex, { ...fields[rowIndex]!, [columnId]: value });
+  }, [update, fields]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
-    let row = data[rowIndex];
+    let row = fields[rowIndex];
+    if (!row) return "STAY";
 
-    // Immediately sync the currently typing value before committing
     if (columnId && cellValue !== undefined) {
       row = { ...row, [columnId]: cellValue };
-      updateData(rowIndex, columnId, cellValue);
+      update(rowIndex, row);
     }
 
-    // Validation: Item must be selected, Qty must be valid
-    const qty = parseFloat(row.qty.replace(/[^0-9.-]+/g, ""));
-    const isValid = row.item.trim() !== "" && !isNaN(qty) && qty > 0;
+    const qty = parseFloat((row as any).qty?.replace(/[^0-9.-]+/g, "") || "");
+    const isValid = (row as any).item?.trim() !== "" && !isNaN(qty) && qty > 0;
 
     if (!isValid) {
       setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
-      setTimeout(() => {
-        setRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
-      }, 800);
+      setTimeout(() => setRowErrors((prev) => ({ ...prev, [rowIndex]: false })), 800);
       return "STAY";
     }
 
-    if (row.isPhantom) {
-      setData((old) => {
-        const newData = [...old];
-        const committedRow = columnId && cellValue !== undefined
-          ? { ...newData[rowIndex]!, [columnId]: cellValue, isPhantom: false }
-          : { ...newData[rowIndex]!, isPhantom: false };
-
-        newData[rowIndex] = committedRow;
-
-        newData.push(generateEmptyRow(`row-${newData.length + 1}`));
-        return newData;
-      });
+    if ((row as any).isPhantom) {
+      update(rowIndex, { ...row, isPhantom: false });
+      append(generateEmptyRow(`row-${fields.length + 1}`));
       return "ADVANCE";
     }
     
     return "EXIT";
-  }, [data, updateData]);
+  }, [fields, update, append]);
 
   return {
-    data,
+    data: fields as VoucherRow[],
     rowErrors,
     updateData,
     onRowCommit,

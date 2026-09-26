@@ -13,13 +13,10 @@ export interface VoucherSummary {
 }
 
 export interface VoucherFooterState {
-  narration: string;
-  setNarration: (value: string) => void;
   isPrintMenuOpen: boolean;
   togglePrintMenu: () => void;
   closePrintMenu: () => void;
   summary: VoucherSummary;
-  onSave: () => void;
   onPreview: () => void;
   onPrint: () => void;
   onPrintConfig: () => void;
@@ -42,15 +39,10 @@ const STATIC_SUMMARY: VoucherSummary = {
 };
 
 export function useVoucherFooter(): VoucherFooterState {
-  const [narration, setNarration] = useState("");
   const [isPrintMenuOpen, setIsPrintMenuOpen] = useState(false);
 
   const togglePrintMenu = () => setIsPrintMenuOpen((prev) => !prev);
   const closePrintMenu = () => setIsPrintMenuOpen(false);
-
-  const onSave = () => {
-    console.log("Save voucher", { narration });
-  };
 
   const onPreview = () => {
     console.log("Preview voucher");
@@ -80,13 +72,10 @@ export function useVoucherFooter(): VoucherFooterState {
   };
 
   return {
-    narration,
-    setNarration,
     isPrintMenuOpen,
     togglePrintMenu,
     closePrintMenu,
     summary: STATIC_SUMMARY,
-    onSave,
     onPreview,
     onPrint,
     onPrintConfig,

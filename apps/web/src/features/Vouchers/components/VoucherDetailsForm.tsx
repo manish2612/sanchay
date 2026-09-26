@@ -52,43 +52,35 @@ function VoucherTypeSelector({
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────────
+import { useFormContext } from "react-hook-form";
+import { Form } from "@prime/ui";
+import { VOUCHER_FIELDS } from "../constants/voucherFields";
+
+type VoucherDetailsFormProps = {
+  voucherType: string;
+  setVoucherType: (val: string) => void;
+  voucherTypeOptions: any[];
+  filteredPartyOptions: any[];
+  isLoading: boolean;
+  isError: boolean;
+};
 
 export function VoucherDetailsForm({
-  isDrawerOpen,
-  setIsDrawerOpen,
-  mitiDate,
-  setMitiDate,
-  setMitiString,
-  adDate,
-  setAdDate,
-  refMitiDate,
-  setRefMitiString,
-  setRefMitiDate,
-  refAdDate,
-  setRefAdDate,
-  partyQuery,
-  setPartyQuery,
   voucherType,
   setVoucherType,
-  applyTax,
-  setApplyTax,
-  mode,
-  setMode,
-  paymentMode,
-  setPaymentMode,
-  salesAc,
-  setSalesAc,
   voucherTypeOptions,
   filteredPartyOptions,
   isLoading,
   isError,
-}: VoucherDetailsFormState) {
+}: VoucherDetailsFormProps) {
+  const { control, setValue } = useFormContext();
+
   return (
     <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
       <section className="flex-1 px-4 pt-3 pb-2 flex flex-col gap-2">
-        {/* ── Primary Row: Core document identifiers ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-2 items-end">
-          {/* Voucher Type — Primary accent control */}
+          
+          {/* Voucher Type */}
           <div className="lg:col-span-1">
             <VoucherTypeSelector
               value={voucherType}
@@ -99,182 +91,183 @@ export function VoucherDetailsForm({
             />
           </div>
 
-          {/* Voucher No — Read-only, monospace */}
+          {/* Voucher No */}
           <div className="lg:col-span-1">
-            <TextInput
-              label="Voucher No."
-              labelVariant="in-field"
-              disabled
-              tabIndex={-1}
-              className="pointer-events-none"
-              inputClassName="font-mono font-medium pointer-events-none text-muted-foreground bg-muted"
-              value="8384/003"
-              readOnly
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.VOUCHER_NO}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <TextInput
+                      {...field}
+                      label="Voucher No."
+                      labelVariant="in-field"
+                      inputClassName="font-mono font-medium text-foreground"
+                      placeholder="Enter voucher no..."
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
             />
           </div>
 
           {/* Payment Mode */}
           <div className="lg:col-span-1">
-            <DropdownMenu
-              label="Payment Mode"
-              labelVariant="in-field"
-              triggerLabel={paymentMode}
-              items={[
-                {
-                  id: 'Credit',
-                  label: 'Credit',
-                  onSelect: () => setPaymentMode('Credit'),
-                },
-                {
-                  id: 'Cash',
-                  label: 'Cash',
-                  onSelect: () => setPaymentMode('Cash'),
-                },
-                {
-                  id: 'Bank Transfer',
-                  label: 'Bank Transfer',
-                  onSelect: () => setPaymentMode('Bank Transfer'),
-                },
-                {
-                  id: 'Cheque',
-                  label: 'Cheque',
-                  onSelect: () => setPaymentMode('Cheque'),
-                },
-              ]}
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.PAYMENT_MODE}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <DropdownMenu
+                      label="Payment Mode"
+                      labelVariant="in-field"
+                      triggerLabel={field.value}
+                      items={[
+                        { id: 'Credit', label: 'Credit', onSelect: () => field.onChange('Credit') },
+                        { id: 'Cash', label: 'Cash', onSelect: () => field.onChange('Cash') },
+                        { id: 'Bank Transfer', label: 'Bank Transfer', onSelect: () => field.onChange('Bank Transfer') },
+                        { id: 'Cheque', label: 'Cheque', onSelect: () => field.onChange('Cheque') },
+                      ]}
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
             />
           </div>
 
-          {/* Voucher Date (Auto Country-Aware) */}
+          {/* Voucher Date */}
           <div className="lg:col-span-1">
-            <DatePicker
-              label="Date"
-              labelVariant="in-field"
-              date={adDate}
-              onDateChange={(date, meta) => {
-                setAdDate(date);
-                setMitiDate(date);
-                if (meta?.nepaliDateString) {
-                  setMitiString(meta.nepaliDateString);
-                }
-              }}
-              placeholder="Select Date"
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.VOUCHER_DATE_AD}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <DatePicker
+                      label="Date"
+                      labelVariant="in-field"
+                      date={field.value}
+                      onDateChange={(date, meta) => {
+                        field.onChange(date);
+                        if (meta?.nepaliDateString) {
+                          setValue(VOUCHER_FIELDS.VOUCHER_DATE_BS, meta.nepaliDateString, { shouldDirty: true });
+                        }
+                      }}
+                      placeholder="Select Date"
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
             />
           </div>
 
-          {/* Apply Tax — Neutral, no yellow styling per design decision */}
-          {/* <div className="lg:col-span-1">
-            <DropdownMenu
-              label="Apply Tax"
-              labelVariant="in-field"
-              triggerLabel={applyTax}
-              items={[
-                {
-                  id: "Item Level",
-                  label: "Item Level",
-                  onSelect: () => setApplyTax("Item Level"),
-                },
-                {
-                  id: "Invoice Level",
-                  label: "Invoice Level",
-                  onSelect: () => setApplyTax("Invoice Level"),
-                },
-                {
-                  id: "No Tax",
-                  label: "No Tax",
-                  onSelect: () => setApplyTax("No Tax"),
-                },
-              ]}
-            />
-          </div> */}
-
-          {/* Mode — Neutral, no green styling per design decision */}
-          {/* <div className="lg:col-span-1">
-            <DropdownMenu
-              label="Mode"
-              labelVariant="in-field"
-              triggerLabel={mode}
-              items={[
-                {
-                  id: "Item Mode",
-                  label: "Item Mode",
-                  onSelect: () => setMode("Item Mode"),
-                },
-                {
-                  id: "Account Mode",
-                  label: "Account Mode",
-                  onSelect: () => setMode("Account Mode"),
-                },
-              ]}
-            />
-          </div> */}
-
+          {/* Party A/C */}
           <div className="lg:col-span-2">
-            <AutoSuggest
-              inputValue={partyQuery}
-              onInputChange={setPartyQuery}
-              options={filteredPartyOptions}
-            >
-              <AutoSuggest.Input
-                label="Party A/C"
-                labelVariant="in-field"
-                placeholder="Search party account..."
-              />
-              <AutoSuggest.Content>
-                <AutoSuggest.List>
-                  <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
-                  {filteredPartyOptions.map((opt) => (
-                    <AutoSuggest.Item key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </AutoSuggest.Item>
-                  ))}
-                </AutoSuggest.List>
-              </AutoSuggest.Content>
-            </AutoSuggest>
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.PARTY_ACCOUNT}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <AutoSuggest
+                      inputValue={field.value}
+                      onInputChange={field.onChange}
+                      options={filteredPartyOptions}
+                    >
+                      <AutoSuggest.Input
+                        label="Party A/C"
+                        labelVariant="in-field"
+                        placeholder="Search party account..."
+                      />
+                      <AutoSuggest.Content>
+                        <AutoSuggest.List>
+                          <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
+                          {filteredPartyOptions.map((opt) => (
+                            <AutoSuggest.Item key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </AutoSuggest.Item>
+                          ))}
+                        </AutoSuggest.List>
+                      </AutoSuggest.Content>
+                    </AutoSuggest>
+                  </Form.Control>
+                </Form.Item>
+              )}
+            />
           </div>
 
           {/* Sales A/C */}
           <div className="lg:col-span-1">
-            <DropdownMenu
-              label="Sales A/C"
-              labelVariant="in-field"
-              triggerLabel={salesAc}
-              items={[
-                {
-                  id: '13% Sales',
-                  label: '13% Sales',
-                  onSelect: () => setSalesAc('13% Sales'),
-                },
-                {
-                  id: '0% Sales',
-                  label: '0% Sales',
-                  onSelect: () => setSalesAc('0% Sales'),
-                },
-                {
-                  id: 'Exempt Sales',
-                  label: 'Exempt Sales',
-                  onSelect: () => setSalesAc('Exempt Sales'),
-                },
-              ]}
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.SALES_AC}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <DropdownMenu
+                      label="Sales A/C"
+                      labelVariant="in-field"
+                      triggerLabel={field.value}
+                      items={[
+                        { id: '13% Sales', label: '13% Sales', onSelect: () => field.onChange('13% Sales') },
+                        { id: '0% Sales', label: '0% Sales', onSelect: () => field.onChange('0% Sales') },
+                        { id: 'Exempt Sales', label: 'Exempt Sales', onSelect: () => field.onChange('Exempt Sales') },
+                      ]}
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
             />
           </div>
+
+          {/* Ref No */}
           <div className="lg:col-span-1">
-            <TextInput label="Ref. No." labelVariant="in-field" placeholder="Reference number..." />
-          </div>
-          <div className="lg:col-span-1">
-            <DatePicker
-              label="Ref. Date"
-              labelVariant="in-field"
-              date={refAdDate}
-              onDateChange={(date, meta) => {
-                setRefAdDate(date);
-                setRefMitiDate(date);
-                if (meta?.nepaliDateString) {
-                  setRefMitiString(meta.nepaliDateString);
-                }
-              }}
-              placeholder="Select Date"
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.REFERENCE_NO}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <TextInput 
+                      {...field}
+                      label="Ref. No." 
+                      labelVariant="in-field" 
+                      placeholder="Reference number..." 
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
             />
           </div>
+
+          {/* Ref Date */}
+          <div className="lg:col-span-1">
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.REF_DATE_AD}
+              render={({ field }) => (
+                <Form.Item>
+                  <Form.Control>
+                    <DatePicker
+                      label="Ref. Date"
+                      labelVariant="in-field"
+                      date={field.value}
+                      onDateChange={(date, meta) => {
+                        field.onChange(date);
+                        if (meta?.nepaliDateString) {
+                          setValue(VOUCHER_FIELDS.REF_DATE_BS, meta.nepaliDateString, { shouldDirty: true });
+                        }
+                      }}
+                      placeholder="Select Date"
+                    />
+                  </Form.Control>
+                </Form.Item>
+              )}
+            />
+          </div>
+
         </div>
       </section>
     </div>
