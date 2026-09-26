@@ -20,10 +20,10 @@ import { Route as DevApiSandboxRouteImport } from './routes/dev/api-sandbox'
 import { Route as DevTestApiRouteImport } from './routes/dev/test-api'
 import { Route as SignupIndexRouteImport } from './routes/signup/index'
 import { Route as TransactionsVouchersRouteImport } from './routes/transactions/vouchers'
+import { Route as ModuleTransactionsVoucherNameVoucherIdRouteImport } from './routes/$module/transactions/$voucherName/$voucherId'
 import { Route as AccountsMastersLedgerIndexRouteImport } from './routes/accounts/masters/ledger/index'
 import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/masters/ledger/new'
 import { Route as AccountsMastersVoucherTypeNewRouteImport } from './routes/accounts/masters/voucher-type/new'
-import { Route as InventoryTransactionsVoucherTypeIndexRouteImport } from './routes/inventory/transactions/voucher-type/index'
 import { Route as InventoryMastersStockItemNewIndexRouteImport } from './routes/inventory/masters/stock-item/new/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -81,6 +81,12 @@ const TransactionsVouchersRoute = TransactionsVouchersRouteImport.update({
   path: '/transactions/vouchers',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModuleTransactionsVoucherNameVoucherIdRoute =
+  ModuleTransactionsVoucherNameVoucherIdRouteImport.update({
+    id: '/$module/transactions/$voucherName/$voucherId',
+    path: '/$module/transactions/$voucherName/$voucherId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AccountsMastersLedgerIndexRoute =
   AccountsMastersLedgerIndexRouteImport.update({
     id: '/accounts/masters/ledger/',
@@ -97,12 +103,6 @@ const AccountsMastersVoucherTypeNewRoute =
   AccountsMastersVoucherTypeNewRouteImport.update({
     id: '/accounts/masters/voucher-type/new',
     path: '/accounts/masters/voucher-type/new',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const InventoryTransactionsVoucherTypeIndexRoute =
-  InventoryTransactionsVoucherTypeIndexRouteImport.update({
-    id: '/inventory/transactions/voucher-type/',
-    path: '/inventory/transactions/voucher-type/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const InventoryMastersStockItemNewIndexRoute =
@@ -124,10 +124,10 @@ export interface FileRoutesByFullPath {
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup/': typeof SignupIndexRoute
+  '/$module/transactions/$voucherName/$voucherId': typeof ModuleTransactionsVoucherNameVoucherIdRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/voucher-type/new': typeof AccountsMastersVoucherTypeNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
-  '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesByTo {
@@ -142,10 +142,10 @@ export interface FileRoutesByTo {
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup': typeof SignupIndexRoute
+  '/$module/transactions/$voucherName/$voucherId': typeof ModuleTransactionsVoucherNameVoucherIdRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/voucher-type/new': typeof AccountsMastersVoucherTypeNewRoute
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
-  '/inventory/transactions/voucher-type': typeof InventoryTransactionsVoucherTypeIndexRoute
   '/inventory/masters/stock-item/new': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesById {
@@ -161,10 +161,10 @@ export interface FileRoutesById {
   '/dev/test-api': typeof DevTestApiRoute
   '/transactions/vouchers': typeof TransactionsVouchersRoute
   '/signup/': typeof SignupIndexRoute
+  '/$module/transactions/$voucherName/$voucherId': typeof ModuleTransactionsVoucherNameVoucherIdRoute
   '/accounts/masters/ledger/new': typeof AccountsMastersLedgerNewRoute
   '/accounts/masters/voucher-type/new': typeof AccountsMastersVoucherTypeNewRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
-  '/inventory/transactions/voucher-type/': typeof InventoryTransactionsVoucherTypeIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRouteTypes {
@@ -181,10 +181,10 @@ export interface FileRouteTypes {
     | '/dev/test-api'
     | '/transactions/vouchers'
     | '/signup/'
+    | '/$module/transactions/$voucherName/$voucherId'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/voucher-type/new'
     | '/accounts/masters/ledger/'
-    | '/inventory/transactions/voucher-type/'
     | '/inventory/masters/stock-item/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -199,10 +199,10 @@ export interface FileRouteTypes {
     | '/dev/test-api'
     | '/transactions/vouchers'
     | '/signup'
+    | '/$module/transactions/$voucherName/$voucherId'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/voucher-type/new'
     | '/accounts/masters/ledger'
-    | '/inventory/transactions/voucher-type'
     | '/inventory/masters/stock-item/new'
   id:
     | '__root__'
@@ -217,10 +217,10 @@ export interface FileRouteTypes {
     | '/dev/test-api'
     | '/transactions/vouchers'
     | '/signup/'
+    | '/$module/transactions/$voucherName/$voucherId'
     | '/accounts/masters/ledger/new'
     | '/accounts/masters/voucher-type/new'
     | '/accounts/masters/ledger/'
-    | '/inventory/transactions/voucher-type/'
     | '/inventory/masters/stock-item/new/'
   fileRoutesById: FileRoutesById
 }
@@ -236,10 +236,10 @@ export interface RootRouteChildren {
   DevTestApiRoute: typeof DevTestApiRoute
   TransactionsVouchersRoute: typeof TransactionsVouchersRoute
   SignupIndexRoute: typeof SignupIndexRoute
+  ModuleTransactionsVoucherNameVoucherIdRoute: typeof ModuleTransactionsVoucherNameVoucherIdRoute
   AccountsMastersLedgerNewRoute: typeof AccountsMastersLedgerNewRoute
   AccountsMastersVoucherTypeNewRoute: typeof AccountsMastersVoucherTypeNewRoute
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
-  InventoryTransactionsVoucherTypeIndexRoute: typeof InventoryTransactionsVoucherTypeIndexRoute
   InventoryMastersStockItemNewIndexRoute: typeof InventoryMastersStockItemNewIndexRoute
 }
 
@@ -322,6 +322,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransactionsVouchersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$module/transactions/$voucherName/$voucherId': {
+      id: '/$module/transactions/$voucherName/$voucherId'
+      path: '/$module/transactions/$voucherName/$voucherId'
+      fullPath: '/$module/transactions/$voucherName/$voucherId'
+      preLoaderRoute: typeof ModuleTransactionsVoucherNameVoucherIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accounts/masters/ledger/': {
       id: '/accounts/masters/ledger/'
       path: '/accounts/masters/ledger'
@@ -341,13 +348,6 @@ declare module '@tanstack/react-router' {
       path: '/accounts/masters/voucher-type/new'
       fullPath: '/accounts/masters/voucher-type/new'
       preLoaderRoute: typeof AccountsMastersVoucherTypeNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/inventory/transactions/voucher-type/': {
-      id: '/inventory/transactions/voucher-type/'
-      path: '/inventory/transactions/voucher-type'
-      fullPath: '/inventory/transactions/voucher-type/'
-      preLoaderRoute: typeof InventoryTransactionsVoucherTypeIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inventory/masters/stock-item/new/': {
@@ -372,11 +372,11 @@ const rootRouteChildren: RootRouteChildren = {
   DevTestApiRoute: DevTestApiRoute,
   TransactionsVouchersRoute: TransactionsVouchersRoute,
   SignupIndexRoute: SignupIndexRoute,
+  ModuleTransactionsVoucherNameVoucherIdRoute:
+    ModuleTransactionsVoucherNameVoucherIdRoute,
   AccountsMastersLedgerNewRoute: AccountsMastersLedgerNewRoute,
   AccountsMastersVoucherTypeNewRoute: AccountsMastersVoucherTypeNewRoute,
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,
-  InventoryTransactionsVoucherTypeIndexRoute:
-    InventoryTransactionsVoucherTypeIndexRoute,
   InventoryMastersStockItemNewIndexRoute:
     InventoryMastersStockItemNewIndexRoute,
 }
