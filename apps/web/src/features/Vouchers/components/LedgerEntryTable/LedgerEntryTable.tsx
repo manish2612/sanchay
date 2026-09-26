@@ -6,8 +6,11 @@ import { VoucherSectionHeader } from "../VoucherSectionHeader";
 import { LineDetailsSheet } from "../LineDetailsSheet";
 import { CostCenterAllocationSheet } from "@/features/CostCenter/components/CostCenterAllocationSheet";
 import { getColumnStyles, rowVariants } from "./styles";
+import { useGetLedgersQuery } from "@/features/Accounts/Ledger/api";
 
 export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: string }) {
+  const { data: ledgers, isLoading: isLedgersLoading } = useGetLedgersQuery();
+
   const { 
     data, 
     rowErrors, 
@@ -20,6 +23,13 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
     activeCostCenterRow,
     activeCostCenterTargetAmount,
   } = useLedgerEntryTable(applyMode);
+
+  const ledgerOptions = React.useMemo(() => {
+    return ledgers?.map((ledger: any) => ({
+      label: ledger.name,
+      value: ledger.name
+    })) || [];
+  }, [ledgers]);
 
   // Filter columns based on applyMode
   const activeColumns = React.useMemo(() => {
@@ -53,6 +63,9 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
               state: {
                 rowErrors,
                 isRowEmpty: (row: any) => row.original.name.trim() === "",
+              },
+              options: {
+                ledgers: ledgerOptions,
               },
               phantomRowConfig: {
                 isPhantom: (row: any) => row.original.isPhantom,

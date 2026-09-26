@@ -28,7 +28,7 @@ export const ledgerColumns: ColumnDef<LedgerEntryRow>[] = [
     meta: { 
       features: { enableLineDetails: true },
       layout: { fluid: true },
-      inputConfig: { placeholder: "Search Ledger" } 
+      inputConfig: { placeholder: "Search Ledger", optionsKey: "ledgers" } 
     } 
   },
   { 
