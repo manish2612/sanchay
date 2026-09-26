@@ -1,13 +1,6 @@
-import React from "react";
-import {
-  TextInput,
-  DatePicker,
-  Icon,
-  AutoSuggest,
-  DropdownMenu,
-  Button,
-} from "@prime/ui";
-import { type VoucherDetailsFormState } from "../hooks/useVoucherDetailsForm";
+import React from 'react';
+import { TextInput, DatePicker, Icon, AutoSuggest, DropdownMenu, Button } from '@prime/ui';
+import { type VoucherDetailsFormState } from '../hooks/useVoucherDetailsForm';
 
 // ─── Voucher Type Primary Dropdown ─────────────────────────────────────────
 // Uses children-as-custom-trigger pattern to apply brand primary styling.
@@ -21,8 +14,14 @@ interface VoucherTypeSelectorProps {
   isError?: boolean;
 }
 
-function VoucherTypeSelector({ value, onChange, options, isLoading, isError }: VoucherTypeSelectorProps) {
-  const displayValue = isLoading ? "Loading..." : isError ? "Error loading" : value || "Select...";
+function VoucherTypeSelector({
+  value,
+  onChange,
+  options,
+  isLoading,
+  isError,
+}: VoucherTypeSelectorProps) {
+  const displayValue = isLoading ? 'Loading...' : isError ? 'Error loading' : value || 'Select...';
 
   return (
     <div className="flex flex-col gap-1">
@@ -45,11 +44,7 @@ function VoucherTypeSelector({ value, onChange, options, isLoading, isError }: V
           disabled={isLoading || isError}
         >
           <span className="truncate">{displayValue}</span>
-          <Icon
-            name="ChevronDown"
-            size={14}
-            className="opacity-70 ml-2 shrink-0"
-          />
+          <Icon name="ChevronDown" size={14} className="opacity-70 ml-2 shrink-0" />
         </Button>
       </DropdownMenu>
     </div>
@@ -126,56 +121,42 @@ export function VoucherDetailsForm({
               triggerLabel={paymentMode}
               items={[
                 {
-                  id: "Credit",
-                  label: "Credit",
-                  onSelect: () => setPaymentMode("Credit"),
+                  id: 'Credit',
+                  label: 'Credit',
+                  onSelect: () => setPaymentMode('Credit'),
                 },
                 {
-                  id: "Cash",
-                  label: "Cash",
-                  onSelect: () => setPaymentMode("Cash"),
+                  id: 'Cash',
+                  label: 'Cash',
+                  onSelect: () => setPaymentMode('Cash'),
                 },
                 {
-                  id: "Bank Transfer",
-                  label: "Bank Transfer",
-                  onSelect: () => setPaymentMode("Bank Transfer"),
+                  id: 'Bank Transfer',
+                  label: 'Bank Transfer',
+                  onSelect: () => setPaymentMode('Bank Transfer'),
                 },
                 {
-                  id: "Cheque",
-                  label: "Cheque",
-                  onSelect: () => setPaymentMode("Cheque"),
+                  id: 'Cheque',
+                  label: 'Cheque',
+                  onSelect: () => setPaymentMode('Cheque'),
                 },
               ]}
             />
           </div>
 
-          {/* Miti (BS) */}
+          {/* Voucher Date (Auto Country-Aware) */}
           <div className="lg:col-span-1">
             <DatePicker
-              label="Miti (bs)"
-              labelVariant="in-field"
-              date={mitiDate}
-              onDateChange={(date, meta) => {
-                setMitiDate(date);
-                setAdDate(date);
-                if (meta?.nepaliDateString) setMitiString(meta.nepaliDateString);
-              }}
-              calendarType="nepali"
-              placeholder="Select Miti"
-            />
-          </div>
-
-          {/* Date (AD) */}
-          <div className="lg:col-span-1">
-            <DatePicker
-              label="Date (ad)"
+              label="Date"
               labelVariant="in-field"
               date={adDate}
-              onDateChange={(date) => {
+              onDateChange={(date, meta) => {
                 setAdDate(date);
                 setMitiDate(date);
+                if (meta?.nepaliDateString) {
+                  setMitiString(meta.nepaliDateString);
+                }
               }}
-              calendarType="gregorian"
               placeholder="Select Date"
             />
           </div>
@@ -227,7 +208,7 @@ export function VoucherDetailsForm({
             />
           </div> */}
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-2">
             <AutoSuggest
               inputValue={partyQuery}
               onInputChange={setPartyQuery}
@@ -259,54 +240,38 @@ export function VoucherDetailsForm({
               triggerLabel={salesAc}
               items={[
                 {
-                  id: "13% Sales",
-                  label: "13% Sales",
-                  onSelect: () => setSalesAc("13% Sales"),
+                  id: '13% Sales',
+                  label: '13% Sales',
+                  onSelect: () => setSalesAc('13% Sales'),
                 },
                 {
-                  id: "0% Sales",
-                  label: "0% Sales",
-                  onSelect: () => setSalesAc("0% Sales"),
+                  id: '0% Sales',
+                  label: '0% Sales',
+                  onSelect: () => setSalesAc('0% Sales'),
                 },
                 {
-                  id: "Exempt Sales",
-                  label: "Exempt Sales",
-                  onSelect: () => setSalesAc("Exempt Sales"),
+                  id: 'Exempt Sales',
+                  label: 'Exempt Sales',
+                  onSelect: () => setSalesAc('Exempt Sales'),
                 },
               ]}
             />
           </div>
           <div className="lg:col-span-1">
-            <TextInput
-              label="Ref. No."
-              labelVariant="in-field"
-              placeholder="Reference number..."
-            />
+            <TextInput label="Ref. No." labelVariant="in-field" placeholder="Reference number..." />
           </div>
           <div className="lg:col-span-1">
             <DatePicker
-              label="Ref. Miti (bs)"
-              labelVariant="in-field"
-              date={refMitiDate}
-              onDateChange={(date, meta) => {
-                setRefMitiDate(date);
-                setRefAdDate(date);
-                if (meta?.nepaliDateString) setRefMitiString(meta.nepaliDateString);
-              }}
-              calendarType="nepali"
-              placeholder="Select Miti"
-            />
-          </div>
-          <div className="lg:col-span-1">
-            <DatePicker
-              label="Ref. Date (ad)"
+              label="Ref. Date"
               labelVariant="in-field"
               date={refAdDate}
-              onDateChange={(date) => {
+              onDateChange={(date, meta) => {
                 setRefAdDate(date);
                 setRefMitiDate(date);
+                if (meta?.nepaliDateString) {
+                  setRefMitiString(meta.nepaliDateString);
+                }
               }}
-              calendarType="gregorian"
               placeholder="Select Date"
             />
           </div>
