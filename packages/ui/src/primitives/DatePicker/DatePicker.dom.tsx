@@ -9,6 +9,7 @@ import { DatePickerProps } from './types';
 
 import 'react-day-picker/dist/style.css';
 import './DatePicker.css';
+import { UIConfigProvider, useUIConfig } from '../../providers/UIConfigProvider';
 
 import { GregorianCalendarEngine } from './GregorianCalendarEngine.dom';
 import { NepaliCalendarEngine } from './NepaliCalendarEngine.dom';
@@ -20,14 +21,19 @@ export function DatePicker({
   placeholder = 'Select Date',
   className,
   disabled,
-  calendarType = 'gregorian',
-  nepaliLanguage = 'english',
+  calendarType: propCalendarType,
+  nepaliLanguage: propNepaliLanguage,
   dayPickerProps,
   minDate,
   maxDate,
   label,
   labelVariant = 'default',
 }: DatePickerProps) {
+  const { datePicker: globalConfig } = useUIConfig();
+  
+  const calendarType = propCalendarType ?? globalConfig?.calendarType ?? 'gregorian';
+  const nepaliLanguage = propNepaliLanguage ?? globalConfig?.nepaliLanguage ?? 'english';
+
   const [isOpen, setIsOpen] = useState(false);
 
   // Format the display text in the trigger

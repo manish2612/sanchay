@@ -34,3 +34,4 @@ export * from './components/RadioGroup';
 export * from './components/AnimatedNumber';
 export * from './components/LeavePromptDialog';
 export * from './hooks/useFormLeaveGuard.dom';
+export * from './providers/UIConfigProvider';
