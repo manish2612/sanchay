@@ -12,6 +12,7 @@ import { RouterLinkAdapter } from './RouterLinkAdapter';
 import { GlobalMasterSheetProvider } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
 import { MasterFormSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheet.dom';
 import { LeavePromptProvider } from '@/providers/LeavePromptProvider';
+import { CompanyUIConfigProvider } from './CompanyUIConfigProvider';
 import { store } from '@/store';
 
 interface AppProviderProps {
@@ -31,27 +32,29 @@ export function AppProvider({ children }: AppProviderProps) {
 
   return (
     <Provider store={store}>
-      <ThemeProvider
-        initialBrand={initialBrand}
-        initialMode={initialMode}
-        initialDensity={initialDensity}
-      >
-        <ShortcutProvider>
-          <TooltipProvider>
-            <ToastProvider>
-              <GlobalMasterSheetProvider>
-                <LinkProvider value={RouterLinkAdapter}>
-                  <LeavePromptProvider>
-                    {children}
-                    <MasterFormSheet />
-                  </LeavePromptProvider>
-                  <ToastViewport />
-                </LinkProvider>
-              </GlobalMasterSheetProvider>
-            </ToastProvider>
-          </TooltipProvider>
-        </ShortcutProvider>
-      </ThemeProvider>
+      <CompanyUIConfigProvider>
+        <ThemeProvider
+          initialBrand={initialBrand}
+          initialMode={initialMode}
+          initialDensity={initialDensity}
+        >
+          <ShortcutProvider>
+            <TooltipProvider>
+              <ToastProvider>
+                <GlobalMasterSheetProvider>
+                  <LinkProvider value={RouterLinkAdapter}>
+                    <LeavePromptProvider>
+                      {children}
+                      <MasterFormSheet />
+                    </LeavePromptProvider>
+                    <ToastViewport />
+                  </LinkProvider>
+                </GlobalMasterSheetProvider>
+              </ToastProvider>
+            </TooltipProvider>
+          </ShortcutProvider>
+        </ThemeProvider>
+      </CompanyUIConfigProvider>
     </Provider>
   );
 }
