@@ -58,13 +58,28 @@ export function useCostCenterAllocationTable(
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     // Synchronously mutate ref for immediate intra-tick reads by onRowCommit
-    dataRef.current = dataRef.current.map((row, index) =>
-      index === rowIndex ? { ...row, [columnId]: value } : row
-    );
+    dataRef.current = dataRef.current.map((row, index) => {
+      if (index === rowIndex) {
+        const newRow = { ...row, [columnId]: value };
+        if (columnId === "costCategory" && value !== row.costCategory) {
+          newRow.costCenter = "";
+          newRow.costCenterId = "";
+        }
+        return newRow;
+      }
+      return row;
+    });
 
     setData((old) => {
       const newData = [...old];
-      newData[rowIndex] = { ...newData[rowIndex]!, [columnId]: value };
+      const updatedRow = { ...newData[rowIndex]!, [columnId]: value };
+      
+      if (columnId === "costCategory" && value !== old[rowIndex]?.costCategory) {
+        updatedRow.costCenter = "";
+        updatedRow.costCenterId = "";
+      }
+      
+      newData[rowIndex] = updatedRow;
       setTimeout(() => notifyChange(newData), 0);
       return newData;
     });

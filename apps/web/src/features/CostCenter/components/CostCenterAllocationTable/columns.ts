@@ -33,7 +33,13 @@ export const getColumns = (): ColumnDef<CostCenterAllocationRow>[] => [
     cell: AutoSuggestCell,
     meta: {
       layout: { fluid: true },
-      inputConfig: { placeholder: "Search Cost Centre...", optionsKey: "costCenters", idKey: "costCenterId" },
+      inputConfig: { 
+        placeholder: "Search Cost Centre...", 
+        optionsKey: "costCenters", 
+        idKey: "costCenterId",
+        disabled: (row: any) => !row.original.costCategory || row.original.costCategory.trim() === "",
+        optionsFilter: (opt: any, row: any) => opt.cost_category_name === row.costCategory
+      },
     },
   },
   {

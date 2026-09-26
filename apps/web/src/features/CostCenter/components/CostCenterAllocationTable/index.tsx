@@ -5,6 +5,7 @@ import { useCostCenterAllocationTable } from './useCostCenterAllocationTable';
 import { getColumns, type CostCenterAllocationRow } from './columns';
 import { getColumnStyles, rowVariants } from './styles';
 import { AllocationTableLayout } from '@/components/AllocationTableLayout';
+import { useGetCostCategoriesQuery, useGetCostCentersQuery } from '../../api';
 
 export interface CostCenterAllocationTableProps {
   initialAllocations?: CostCenterAllocationRow[];
@@ -17,6 +18,9 @@ export const CostCenterAllocationTable = ({
   onChange,
   targetAmount,
 }: CostCenterAllocationTableProps) => {
+  const { data: categories } = useGetCostCategoriesQuery();
+  const { data: centers } = useGetCostCentersQuery();
+
   const {
     data,
     updateData,
@@ -29,6 +33,24 @@ export const CostCenterAllocationTable = ({
   } = useCostCenterAllocationTable(initialAllocations, onChange, targetAmount);
 
   const columns = useMemo(() => getColumns(), []);
+
+  const costCategoryOptions = useMemo(() => {
+    return categories?.map((cat) => ({
+      id: cat.id,
+      label: cat.name,
+      value: cat.name
+    })) || [];
+  }, [categories]);
+
+  const costCenterOptions = useMemo(() => {
+    return centers?.map((cc) => ({
+      id: cc.id,
+      label: cc.name,
+      value: cc.name,
+      // Pass the category so we can auto-fill it later if desired
+      cost_category_name: cc.cost_category_name
+    })) || [];
+  }, [centers]);
 
   return (
     <AllocationTableLayout
@@ -62,8 +84,8 @@ export const CostCenterAllocationTable = ({
               removeRow,
             },
             options: {
-              costCategories: [],
-              costCenters: []
+              costCategories: costCategoryOptions,
+              costCenters: costCenterOptions
             }
           },
         }}
