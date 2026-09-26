@@ -3,6 +3,7 @@ import { RowData } from '@tanstack/react-table';
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
+    options?: Record<string, any[]>;
     actions?: {
       updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
       removeRow?: (rowIndex: number) => void;
@@ -36,6 +37,7 @@ declare module '@tanstack/react-table' {
       allowNegative?: boolean;
       placeholder?: string;
       disabled?: boolean | ((row: any) => boolean);
+      optionsKey?: string;
     };
   }
 }
