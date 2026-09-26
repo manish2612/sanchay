@@ -21,6 +21,6 @@ export const apiSlice = createApi({
    * Add new tags here as features are added — they are purely for TypeScript
    * autocompletion and do not affect runtime behaviour.
    */
-  tagTypes: ['Post', 'User', 'Auth'],
+  tagTypes: ['Post', 'User', 'Auth', 'Ledger'],
   endpoints: () => ({}),
 });
