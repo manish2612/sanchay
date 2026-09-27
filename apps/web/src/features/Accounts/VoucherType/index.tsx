@@ -45,9 +45,10 @@ export default function VouchersPage() {
   const mode = methods.watch(VOUCHER_FIELDS.MODE);
   const partyAccount = methods.watch(VOUCHER_FIELDS.PARTY_ACCOUNT) || "";
 
-  const voucherState = useVoucherDetailsForm(partyAccount);
   const footerState = useVoucherFooter();
   const prefs = useVoucherPreferences();
+  
+  const voucherState = useVoucherDetailsForm(partyAccount, prefs.applyMode);
 
   const isAccountInvoice = prefs.applyMode === "Account Invoice";
   const isAccountMode = prefs.applyMode === "Account Mode";

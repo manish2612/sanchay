@@ -65,6 +65,9 @@ type VoucherDetailsFormProps = {
   filteredPartyOptions: any[];
   isLoading: boolean;
   isError: boolean;
+  showPartyAc: boolean;
+  showPaymentMode: boolean;
+  showSalesAc: boolean;
 };
 
 export function VoucherDetailsForm({
@@ -74,6 +77,9 @@ export function VoucherDetailsForm({
   filteredPartyOptions,
   isLoading,
   isError,
+  showPartyAc,
+  showPaymentMode,
+  showSalesAc,
 }: VoucherDetailsFormProps) {
   const { control, setValue, watch } = useFormContext();
 
@@ -132,29 +138,31 @@ export function VoucherDetailsForm({
           </div>
 
           {/* Payment Mode */}
-          <div className="lg:col-span-1">
-            <Form.Field
-              control={control}
-              name={VOUCHER_FIELDS.PAYMENT_MODE}
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Control>
-                    <DropdownMenu
-                      label="Payment Mode"
-                      labelVariant="in-field"
-                      triggerLabel={field.value}
-                      items={[
-                        { id: 'Credit', label: 'Credit', onSelect: () => field.onChange('Credit') },
-                        { id: 'Cash', label: 'Cash', onSelect: () => field.onChange('Cash') },
-                        { id: 'Bank Transfer', label: 'Bank Transfer', onSelect: () => field.onChange('Bank Transfer') },
-                        { id: 'Cheque', label: 'Cheque', onSelect: () => field.onChange('Cheque') },
-                      ]}
-                    />
-                  </Form.Control>
-                </Form.Item>
-              )}
-            />
-          </div>
+          {showPaymentMode && (
+            <div className="lg:col-span-1">
+              <Form.Field
+                control={control}
+                name={VOUCHER_FIELDS.PAYMENT_MODE}
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Control>
+                      <DropdownMenu
+                        label="Payment Mode"
+                        labelVariant="in-field"
+                        triggerLabel={field.value}
+                        items={[
+                          { id: 'Credit', label: 'Credit', onSelect: () => field.onChange('Credit') },
+                          { id: 'Cash', label: 'Cash', onSelect: () => field.onChange('Cash') },
+                          { id: 'Bank Transfer', label: 'Bank Transfer', onSelect: () => field.onChange('Bank Transfer') },
+                          { id: 'Cheque', label: 'Cheque', onSelect: () => field.onChange('Cheque') },
+                        ]}
+                      />
+                    </Form.Control>
+                  </Form.Item>
+                )}
+              />
+            </div>
+          )}
 
           {/* Voucher Date */}
           <div className="lg:col-span-1">
@@ -183,63 +191,67 @@ export function VoucherDetailsForm({
           </div>
 
           {/* Party A/C */}
-          <div className="lg:col-span-2">
-            <Form.Field
-              control={control}
-              name={VOUCHER_FIELDS.PARTY_ACCOUNT}
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Control>
-                    <AutoSuggest
-                      inputValue={field.value}
-                      onInputChange={field.onChange}
-                      options={filteredPartyOptions}
-                    >
-                      <AutoSuggest.Input
-                        label="Party A/C"
-                        labelVariant="in-field"
-                        placeholder="Search party account..."
-                      />
-                      <AutoSuggest.Content>
-                        <AutoSuggest.List>
-                          <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
-                          {filteredPartyOptions.map((opt) => (
-                            <AutoSuggest.Item key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </AutoSuggest.Item>
-                          ))}
-                        </AutoSuggest.List>
-                      </AutoSuggest.Content>
-                    </AutoSuggest>
-                  </Form.Control>
-                </Form.Item>
-              )}
-            />
-          </div>
+          {showPartyAc && (
+            <div className="lg:col-span-2">
+              <Form.Field
+                control={control}
+                name={VOUCHER_FIELDS.PARTY_ACCOUNT}
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Control>
+                      <AutoSuggest
+                        inputValue={field.value}
+                        onInputChange={field.onChange}
+                        options={filteredPartyOptions}
+                      >
+                        <AutoSuggest.Input
+                          label="Party A/C"
+                          labelVariant="in-field"
+                          placeholder="Search party account..."
+                        />
+                        <AutoSuggest.Content>
+                          <AutoSuggest.List>
+                            <AutoSuggest.Empty>No results found.</AutoSuggest.Empty>
+                            {filteredPartyOptions.map((opt) => (
+                              <AutoSuggest.Item key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </AutoSuggest.Item>
+                            ))}
+                          </AutoSuggest.List>
+                        </AutoSuggest.Content>
+                      </AutoSuggest>
+                    </Form.Control>
+                  </Form.Item>
+                )}
+              />
+            </div>
+          )}
 
           {/* Sales A/C */}
-          <div className="lg:col-span-1">
-            <Form.Field
-              control={control}
-              name={VOUCHER_FIELDS.SALES_AC}
-              render={({ field }) => (
-                <Form.Item>
-                  <Form.Control>
-                    <DropdownMenu
-                      label="Sales A/C"
-                      labelVariant="in-field"
-                      triggerLabel={field.value}
-                      items={[
-                        { id: '13% Sales', label: '13% Sales', onSelect: () => field.onChange('13% Sales') },
-                        { id: '0% Sales', label: '0% Sales', onSelect: () => field.onChange('0% Sales') },
-                        { id: 'Exempt Sales', label: 'Exempt Sales', onSelect: () => field.onChange('Exempt Sales') },
-                      ]}
-                    />
-                  </Form.Control>
-                </Form.Item>
-              )}
-            />
-          </div>
+          {showSalesAc && (
+            <div className="lg:col-span-1">
+              <Form.Field
+                control={control}
+                name={VOUCHER_FIELDS.SALES_AC}
+                render={({ field }) => (
+                  <Form.Item>
+                    <Form.Control>
+                      <DropdownMenu
+                        label="Sales A/C"
+                        labelVariant="in-field"
+                        triggerLabel={field.value}
+                        items={[
+                          { id: '13% Sales', label: '13% Sales', onSelect: () => field.onChange('13% Sales') },
+                          { id: '0% Sales', label: '0% Sales', onSelect: () => field.onChange('0% Sales') },
+                          { id: 'Exempt Sales', label: 'Exempt Sales', onSelect: () => field.onChange('Exempt Sales') },
+                        ]}
+                      />
+                    </Form.Control>
+                  </Form.Item>
+                )}
+              />
+            </div>
+          )}
 
           {/* Ref No */}
           <div className="lg:col-span-1">

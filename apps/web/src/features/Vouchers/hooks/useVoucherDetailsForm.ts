@@ -7,13 +7,14 @@ const PARTY_ACCOUNT_OPTIONS = [
   { label: "Bank", value: "bank" },
 ];
 
-export function useVoucherDetailsForm(partyAccount: string = "") {
+export function useVoucherDetailsForm(partyAccount: string = "", applyMode: string = "Item Mode") {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const { data: voucherTypes, isLoading: isLoadingVoucherTypes, isError: isErrorVoucherTypes } = useGetVoucherTypesQuery();
   const navigate = useNavigate();
   
   const { voucherId, module: routeModule } = useParams({ strict: false });
+  const isAccountingMode = routeModule === "accounts";
 
   // 1. Identify the active category from the URL's voucherId
   const activeVoucher = useMemo(() => {
@@ -52,6 +53,10 @@ export function useVoucherDetailsForm(partyAccount: string = "") {
     opt.label.toLowerCase().includes(partyAccount.toLowerCase())
   );
 
+  const showPartyAc = !isAccountingMode || applyMode === "Account Invoice";
+  const showPaymentMode = !isAccountingMode || applyMode === "Account Invoice";
+  const showSalesAc = !isAccountingMode;
+
   return {
     isDrawerOpen, setIsDrawerOpen,
     voucherType, setVoucherType: handleVoucherTypeChange,
@@ -59,6 +64,9 @@ export function useVoucherDetailsForm(partyAccount: string = "") {
     filteredPartyOptions,
     isLoading: isLoadingVoucherTypes,
     isError: isErrorVoucherTypes,
+    showPartyAc,
+    showPaymentMode,
+    showSalesAc,
   };
 }
 
