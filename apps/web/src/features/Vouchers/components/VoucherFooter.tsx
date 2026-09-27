@@ -7,7 +7,7 @@ import { LedgerEntryTable } from "./LedgerEntryTable/LedgerEntryTable";
 import { VoucherSummaryPanel } from "./VoucherSummaryPanel";
 import { useFormContext } from "react-hook-form";
 import { VOUCHER_FIELDS } from "../constants/voucherFields";
-import { useVoucherPayloadGenerator } from "../hooks/useVoucherPayloadGenerator";
+import { useVoucherSubmit } from "../hooks/useVoucherSubmit";
 import { VoucherFormValues } from "../schema/voucherSchema";
 
 // ─── Main Component ─────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ export function VoucherFooter({
   hideLedgerEntryTable,
 }: VoucherFooterProps) {
   const { control, handleSubmit } = useFormContext<VoucherFormValues>();
-  const { generatePayload } = useVoucherPayloadGenerator();
+  const { onSubmit, isSubmitting } = useVoucherSubmit();
 
   return (
     <footer
@@ -79,6 +79,7 @@ export function VoucherFooter({
             className="gap-1.5"
             aria-label="Preview voucher"
             type="button"
+            disabled={isSubmitting}
           >
             <Icon name="Eye" size={13} />
             Preview
@@ -115,15 +116,17 @@ export function VoucherFooter({
             variant="primary"
             size="sm"
             type="button"
-            onClick={handleSubmit((data) => {
-              const apiPayload = generatePayload(data);
-              console.log("Final API Payload:", apiPayload);
-            })}
+            onClick={handleSubmit(onSubmit)}
             className="gap-1.5 px-4 ml-2"
             aria-label="Save voucher"
+            disabled={isSubmitting}
           >
-            <Icon name="Save" size={13} />
-            Save
+            {isSubmitting ? (
+              <Icon name="Loader" size={13} className="animate-spin" />
+            ) : (
+              <Icon name="Save" size={13} />
+            )}
+            {isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
       </div>
