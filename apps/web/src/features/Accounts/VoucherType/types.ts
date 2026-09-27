@@ -7,7 +7,7 @@ export interface VoucherType {
   apply_disc_bill: boolean;
   apply_disc_item: boolean;
   voucher_mode: string;
-  posting: string;
+  posting_affects: string;
   is_predefined: boolean;
   [key: string]: any; // Catch-all for remaining fields since we only need id/name for now
 }

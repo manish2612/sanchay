@@ -24,7 +24,24 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
   const location = useLocation();
   const pathname = location.pathname;
 
-  const { data: voucherTypes } = useGetVoucherTypesQuery();
+  const {
+    data: voucherTypes,
+    isError,
+    isLoading,
+    isSuccess,
+    status,
+    error,
+  } = useGetVoucherTypesQuery();
+
+  console.log(
+    '>>>>>>> useGetVoucherTypesQuery ',
+    voucherTypes,
+    isError,
+    isLoading,
+    isSuccess,
+    status,
+    error,
+  );
 
   // Compute dynamic navigation tree
   const navigationTree = useMemo(() => {
@@ -45,18 +62,22 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
           is_default: vt.is_set_as_default,
         };
 
-        if (vt.posting === 'A' || vt.posting === 'IA') {
+        if (vt.posting_affects === 'A' || vt.posting_affects === 'IA') {
           if (!accountsMenuMap.has(vt.category) || vt.is_set_as_default) {
             accountsMenuMap.set(vt.category, item);
           }
-        } else if (vt.posting === 'I') {
+        } else if (vt.posting_affects === 'I') {
           if (!inventoryMenuMap.has(vt.category) || vt.is_set_as_default) {
             inventoryMenuMap.set(vt.category, item);
           }
         }
       });
 
-      const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const slugify = (text: string) =>
+        text
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '');
 
       const buildChildren = (map: Map<string, any>, module: string) => {
         return Array.from(map.values()).map((vt) => ({
