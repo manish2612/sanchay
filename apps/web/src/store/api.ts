@@ -1,6 +1,8 @@
 import { createApiRegistry } from '@prime/api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 
+const baseURL = import.meta.env.VITE_API_URL || 'http://202.51.1.109:5814/api/v1/';
+
 /**
  * The singleton ApiRegistry for the web app.
  *
@@ -10,41 +12,45 @@ import { cookieTokenStorage } from '@/utils/tokenStorage';
 export const api = createApiRegistry<'MAIN'>({
   clients: {
     MAIN: {
-      baseURL: import.meta.env.VITE_API_URL || 'http://202.51.1.109:5814/api/v1/',
+      baseURL,
     },
   },
   defaultClient: 'MAIN',
   tokenStorage: cookieTokenStorage,
   
   // ==============================================================================
-  // REFRESH TOKEN LOGIC (Commented out for future implementation)
+  // REFRESH TOKEN LOGIC
   // ==============================================================================
-  // To enable silent token refreshes:
-  // 1. Uncomment this `onRefreshToken` method.
-  // 2. Ensure your backend returns the new auth token (and refresh token) in the response.
-  //
-  // onRefreshToken: async () => {
-  //   try {
-  //     // We assume the refresh token is stored securely (e.g. HttpOnly cookie or tokenStorage).
-  //     const response = await api.request({ 
-  //       url: '/auth/refresh', 
-  //       method: 'POST' 
-  //     });
-  //     
-  //     // Extract the new token from the response
-  //     const newToken = response.data.token; // adjust path to match your API response
-  //     
-  //     if (newToken) {
-  //       cookieTokenStorage.setToken(newToken);
-  //     } else {
-  //       throw new Error('No token returned from refresh endpoint');
-  //     }
-  //   } catch (error) {
-  //     // If refresh fails, clear token and let onUnauthorized take over
-  //     cookieTokenStorage.clearToken();
-  //     throw error;
-  //   }
-  // },
+  // Handles silent token refreshes via HttpOnly cookie
+  onRefreshToken: async () => {
+    try {
+      // Use native fetch to bypass the Axios interceptors and prevent a 401 deadlock
+      const response = await fetch(`${baseURL}auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        credentials: 'include', // Ensure the HttpOnly cookie is sent
+      });
+      
+      if (!response.ok) {
+        throw new Error('Refresh endpoint returned an error');
+      }
+      
+      const data = await response.json();
+      
+      // Extract the new token from the response
+      const newToken = data?.token;
+      
+      if (newToken) {
+        cookieTokenStorage.setToken(newToken);
+      } else {
+        throw new Error('No token returned from refresh endpoint');
+      }
+    } catch (error) {
+      // If refresh fails, clear token and let onUnauthorized take over
+      cookieTokenStorage.clearToken();
+      throw error;
+    }
+  },
   // ==============================================================================
 
   onUnauthorized: () => { 

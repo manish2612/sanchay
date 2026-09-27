@@ -9,6 +9,10 @@ import { GlobalCompanyRibbon } from '@/features/Navigation/components/GlobalComp
 import { APP_NAME } from '@prime/config';
 import { useLogoutMutation } from '@/features/Auth/api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
+import { useInitializeAuth } from '@/hooks/useInitializeAuth';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrentUser, logout as logoutAction } from '@/store/authSlice';
+import { apiSlice } from '@/store/apiSlice';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -18,13 +22,11 @@ export function AppLayout({ children }: AppLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const pathname = location.pathname;
+  const dispatch = useDispatch();
   
   const [logoutMutation] = useLogoutMutation();
-
-  // TODO: [AUTHENTICATION]
-  // Once authentication is implemented, you can check user session here.
-  // const { isAuthenticated, user } = useAuth();
-  // if (!isAuthenticated && pathname !== "/login") return <Redirect to="/login" />
+  const { isInitializing, isAuthenticated } = useInitializeAuth();
+  const user = useSelector(selectCurrentUser);
 
   // If we are on an auth or onboarding page, render the page content without the Sidebar wrapper
   const isAuthPage = 
@@ -32,12 +34,24 @@ export function AppLayout({ children }: AppLayoutProps) {
     pathname === '/signup' || 
     pathname === '/company/select';
 
+  // Wait for silent refresh to finish before deciding what to render
+  if (isInitializing) {
+    return (
+      <div className="h-dvh w-full flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   if (isAuthPage) {
     return <>{children}</>;
   }
 
-  // Temporary mock user until auth is integrated
-  const mockUser = { name: 'Admin User', email: 'admin@example.com' };
+  // Redirect to login if user manually navigates to a protected route without being authenticated
+  if (!isAuthenticated) {
+    navigate({ to: '/login' });
+    return null;
+  }
 
   const handleLogout = async () => {
     try {
@@ -47,8 +61,10 @@ export function AppLayout({ children }: AppLayoutProps) {
       // Ignore errors on logout (server might already consider the session expired)
       console.warn('Server logout failed, clearing local session anyway', e);
     } finally {
-      // Always clear local token and redirect
+      // Always clear local token, reset redux state and redirect
       cookieTokenStorage.clearToken();
+      dispatch(apiSlice.util.resetApiState()); // Completely clears RTK Query cache
+      dispatch(logoutAction());
       navigate({ to: '/login' });
     }
   };
@@ -62,7 +78,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {/* Global Navigation Sidebar */}
         <Sidebar
           appName={APP_NAME}
-          user={mockUser}
+          user={{ name: user?.full_name || '', email: user?.email || '' }}
           onLogout={handleLogout}
         />
 

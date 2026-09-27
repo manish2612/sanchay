@@ -22,9 +22,9 @@ export function LoginForm() {
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
+      email: localStorage.getItem('remembered_email') || '',
       password: '',
-      rememberMe: false,
+      rememberMe: localStorage.getItem('remembered_email') !== null,
     },
   });
 
@@ -37,6 +37,13 @@ export function LoginForm() {
         email: data.email,
         password: data.password,
       }).unwrap();
+
+      // Handle Remember Me (Browser autofill optimized)
+      if (data.rememberMe) {
+        localStorage.setItem('remembered_email', data.email);
+      } else {
+        localStorage.removeItem('remembered_email');
+      }
 
       // Store the token natively
       if (response.token) {
@@ -108,7 +115,7 @@ export function LoginForm() {
                   labelVariant="default"
                   placeholder="johndoe@company.com"
                   type="email"
-                  autoComplete="email"
+                  autoComplete="username"
                   className="h-12 px-4"
                   inputClassName="text-base ml-1"
                   leftSlot={<Icon name="Mail" size={20} className="text-muted-foreground/70" />}

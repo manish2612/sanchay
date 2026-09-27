@@ -13,11 +13,19 @@ interface AuthState {
   activeCompanyId: string | null;
 }
 
-const initialState: AuthState = {
-  user: null,
-  companies: [],
-  activeCompanyId: null,
+const loadState = (): AuthState => {
+  try {
+    const serialized = localStorage.getItem('auth_state');
+    if (serialized === null) {
+      return { user: null, companies: [], activeCompanyId: null };
+    }
+    return JSON.parse(serialized);
+  } catch (err) {
+    return { user: null, companies: [], activeCompanyId: null };
+  }
 };
+
+const initialState: AuthState = loadState();
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -29,17 +37,21 @@ export const authSlice = createSlice({
     ) => {
       state.user = action.payload.user;
       state.companies = action.payload.companies;
+      localStorage.setItem('auth_state', JSON.stringify(state));
     },
     setActiveCompany: (state, action: PayloadAction<string>) => {
       state.activeCompanyId = action.payload;
+      localStorage.setItem('auth_state', JSON.stringify(state));
     },
     addCompany: (state, action: PayloadAction<Company>) => {
       state.companies.push(action.payload);
+      localStorage.setItem('auth_state', JSON.stringify(state));
     },
     logout: (state) => {
       state.user = null;
       state.companies = [];
       state.activeCompanyId = null;
+      localStorage.removeItem('auth_state');
     },
   },
 });
