@@ -24,7 +24,8 @@ export default function VouchersPage() {
     resolver: zodResolver(voucherFormSchema),
     defaultValues: {
       voucherTypeId: voucherId || "",
-      voucherNo: "8384/003",
+      voucherDateAd: new Date(),
+      voucherNo: "",
       referenceNo: "",
       partyAccount: "",
       narration: "",
@@ -34,6 +35,12 @@ export default function VouchersPage() {
       ledgerEntries: [{ id: "row-1", name: "", amount: "", debitAmount: "", creditAmount: "", vatAmt: "", isPhantom: true }],
     },
   });
+
+  React.useEffect(() => {
+    if (voucherId && voucherId !== methods.getValues("voucherTypeId")) {
+      methods.setValue("voucherTypeId", voucherId, { shouldDirty: true });
+    }
+  }, [voucherId, methods]);
 
   const mode = methods.watch(VOUCHER_FIELDS.MODE);
   const partyAccount = methods.watch(VOUCHER_FIELDS.PARTY_ACCOUNT) || "";

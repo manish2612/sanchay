@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextInput, DatePicker, Icon, AutoSuggest, DropdownMenu, Button } from '@prime/ui';
+import { format } from 'date-fns';
+import { useGetNextVoucherNumberQuery } from '../api';
 import { type VoucherDetailsFormState } from '../hooks/useVoucherDetailsForm';
 
 // ─── Voucher Type Primary Dropdown ─────────────────────────────────────────
@@ -73,7 +75,23 @@ export function VoucherDetailsForm({
   isLoading,
   isError,
 }: VoucherDetailsFormProps) {
-  const { control, setValue } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
+
+  const voucherTypeId = watch(VOUCHER_FIELDS.VOUCHER_TYPE_ID);
+  const voucherDateAD = watch(VOUCHER_FIELDS.VOUCHER_DATE_AD);
+  
+  const formattedDate = voucherDateAD ? format(voucherDateAD, 'yyyy-MM-dd') : '';
+
+  const { data: nextVoucherData } = useGetNextVoucherNumberQuery(
+    { voucher_type_id: voucherTypeId, voucher_date: formattedDate },
+    { skip: !voucherTypeId || !formattedDate } // Skip API call until both type and date are available
+  );
+
+  useEffect(() => {
+    if (nextVoucherData?.next_voucher_number) {
+      setValue(VOUCHER_FIELDS.VOUCHER_NO, nextVoucherData.next_voucher_number, { shouldDirty: true });
+    }
+  }, [nextVoucherData?.next_voucher_number, setValue]);
 
   return (
     <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
@@ -101,9 +119,10 @@ export function VoucherDetailsForm({
                   <Form.Control>
                     <TextInput
                       {...field}
+                      disabled
                       label="Voucher No."
                       labelVariant="in-field"
-                      inputClassName="font-mono font-medium text-foreground"
+                      inputClassName="font-mono font-medium text-foreground disabled:opacity-70 disabled:bg-muted"
                       placeholder="Enter voucher no..."
                     />
                   </Form.Control>
