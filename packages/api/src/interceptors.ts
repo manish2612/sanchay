@@ -58,11 +58,15 @@ export const setupInterceptors = (
         _retry?: boolean;
       };
 
+      // Do not attempt refresh if the request was to the login or register endpoint
+      const isAuthPublicRequest = originalRequest?.url?.includes('/auth/login') || originalRequest?.url?.includes('/auth/register');
+
       // Only attempt refresh on a 401 that hasn't been retried yet.
       if (
         error.response?.status === 401 &&
         originalRequest &&
-        !originalRequest._retry
+        !originalRequest._retry &&
+        !isAuthPublicRequest
       ) {
         // No refresh callback provided — we cannot recover, trigger logout and fail.
         if (!onRefreshToken) {

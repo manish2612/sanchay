@@ -75,8 +75,14 @@ export function LoginForm() {
       }
     } catch (error: any) {
       const status = error?.status;
-      // Provide conversational error messages based on HTTP status codes
-      if (status === 401 || status === 403) {
+      const backendMessage = error?.data?.error || error?.data?.message;
+
+      if (backendMessage) {
+        // Render the exact error message sent by the backend (e.g. Rate Limit / 429)
+        setGlobalError(backendMessage);
+      } else if (status === 429) {
+        setGlobalError('Too many attempts. Please try again in a minute.');
+      } else if (status === 401 || status === 403) {
         setGlobalError('The email or password you entered is incorrect. Please try again.');
       } else if (status === 404) {
         setGlobalError("We couldn't find an account with that email. Please sign up first.");
