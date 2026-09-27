@@ -7,7 +7,8 @@ import { LedgerEntryTable } from "./LedgerEntryTable/LedgerEntryTable";
 import { VoucherSummaryPanel } from "./VoucherSummaryPanel";
 import { useFormContext } from "react-hook-form";
 import { VOUCHER_FIELDS } from "../constants/voucherFields";
-import { cleanPayload } from "../utils/cleanPayload";
+import { useVoucherPayloadGenerator } from "../hooks/useVoucherPayloadGenerator";
+import { VoucherFormValues } from "../schema/voucherSchema";
 
 // ─── Main Component ─────────────────────────────────────────────────────────
 
@@ -23,7 +24,8 @@ export function VoucherFooter({
   onExportPdf,
   hideLedgerEntryTable,
 }: VoucherFooterProps) {
-  const { control, handleSubmit } = useFormContext();
+  const { control, handleSubmit } = useFormContext<VoucherFormValues>();
+  const { generatePayload } = useVoucherPayloadGenerator();
 
   return (
     <footer
@@ -114,8 +116,8 @@ export function VoucherFooter({
             size="sm"
             type="button"
             onClick={handleSubmit((data) => {
-              const cleanedData = cleanPayload(data);
-              console.log("Submitted Form Data (Cleaned):", cleanedData);
+              const apiPayload = generatePayload(data);
+              console.log("Final API Payload:", apiPayload);
             })}
             className="gap-1.5 px-4 ml-2"
             aria-label="Save voucher"
