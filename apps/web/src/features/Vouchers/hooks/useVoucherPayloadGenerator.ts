@@ -1,5 +1,6 @@
 import { useGetVoucherTypesQuery } from "@/features/Accounts/VoucherType/api";
 import { VoucherFormValues } from "../schema/voucherSchema";
+import { formatLocalToUTCDate } from "@/utils/dateUtils";
 
 export function useVoucherPayloadGenerator() {
   const { data: voucherTypes } = useGetVoucherTypesQuery();
@@ -63,7 +64,7 @@ export function useVoucherPayloadGenerator() {
       payment_mode: data.paymentMode || "",
       posting_affects: activeVoucherType?.posting_affects || "",
       posting_mode: "", // Blank payload requirement
-      reference_date: data.refDateAd ? data.refDateAd.toISOString() : "",
+      reference_date: formatLocalToUTCDate(data.refDateAd),
       reference_miti: data.refDateBs || "",
       reference_number: data.referenceNo || "",
       sequence_index: "",
@@ -72,7 +73,7 @@ export function useVoucherPayloadGenerator() {
       tax_amount: 0,
       taxable_amount,
       total_base_amount, // Sum of all debit entries
-      voucher_date: data.voucherDateAd ? data.voucherDateAd.toISOString() : "",
+      voucher_date: formatLocalToUTCDate(data.voucherDateAd),
       voucher_mode: activeVoucherType?.voucher_mode || "",
       voucher_number: data.voucherNo || "",
       voucher_type_id: data.voucherTypeId || "",
