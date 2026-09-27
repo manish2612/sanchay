@@ -20,8 +20,14 @@ export function useVoucherPreferences() {
   const { module } = useParams({ strict: false });
   const isAccountingMode = module === "accounts";
 
-  // Force Apply Mode to "Account Mode" in accounting vouchers
-  const applyMode = isAccountingMode ? "Account Mode" : internalApplyMode;
+  // In accounting mode, Item Mode is not applicable. Default to Account Mode if Item Mode is selected.
+  // We now support both "Account Mode" and "Account Invoice".
+  let applyMode = internalApplyMode;
+  if (isAccountingMode && applyMode === "Item Mode") {
+    applyMode = "Account Mode";
+  }
+  
+  // Expose isAccountingMode to UI so it can conditionally render the SegmentedControl options
   const isApplyModeReadonly = isAccountingMode;
 
   return {

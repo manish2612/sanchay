@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Sheet,
   SheetTrigger,
@@ -11,19 +11,15 @@ import {
   Icon,
   DropdownMenu,
   Button,
-} from "@prime/ui";
-import { useVoucherPreferences } from "../hooks/useVoucherPreferences";
+} from '@prime/ui';
+import { useVoucherPreferences } from '../hooks/useVoucherPreferences';
 
 interface VoucherPreferencesSidebarProps {
   children: React.ReactNode;
   prefs: ReturnType<typeof useVoucherPreferences>;
 }
 
-export function VoucherPreferencesSidebar({
-  children,
-  prefs,
-}: VoucherPreferencesSidebarProps) {
-
+export function VoucherPreferencesSidebar({ children, prefs }: VoucherPreferencesSidebarProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
@@ -42,49 +38,32 @@ export function VoucherPreferencesSidebar({
         <div className="space-y-4">
           {/* Apply Tax */}
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-foreground">
-              Apply Tax
-            </label>
+            <label className="text-sm font-medium text-foreground">Apply Tax</label>
             <SegmentedControl.Root
               value={prefs.applyTax}
               onValueChange={(val: any) => prefs.setApplyTax(val)}
               size="sm"
             >
               <SegmentedControl.Item value="Item Level" label="Item Level" />
-              <SegmentedControl.Item
-                value="Invoice Level"
-                label="Invoice Level"
-              />
+              <SegmentedControl.Item value="Invoice Level" label="Invoice Level" />
               <SegmentedControl.Item value="No Tax" label="No Tax" />
             </SegmentedControl.Root>
           </div>
 
           {/* Apply Mode */}
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-foreground">
-              Apply Mode
-            </label>
-            <DropdownMenu
-              items={
-                prefs.isApplyModeReadonly
-                  ? [{ id: "Account Mode", label: "Account Mode", onSelect: () => {} }]
-                  : [
-                      { id: "Item Mode", label: "Item Mode", onSelect: () => prefs.setApplyMode("Item Mode") },
-                      { id: "Account Mode", label: "Account Mode", onSelect: () => prefs.setApplyMode("Account Mode") },
-                      { id: "Account Invoice", label: "Account Invoice", onSelect: () => prefs.setApplyMode("Account Invoice") },
-                    ]
-              }
-              align="start"
+            <label className="text-sm font-medium text-foreground">Apply Mode</label>
+            <SegmentedControl.Root
+              value={prefs.applyMode}
+              onValueChange={(val: any) => prefs.setApplyMode(val)}
+              size="sm"
             >
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full justify-between font-semibold text-sm h-9"
-              >
-                <span className="truncate">{prefs.applyMode}</span>
-                <Icon name="ChevronDown" size={14} className="opacity-70 ml-2 shrink-0" />
-              </Button>
-            </DropdownMenu>
+              {!prefs.isApplyModeReadonly && (
+                <SegmentedControl.Item value="Item Mode" label="Item Mode" />
+              )}
+              <SegmentedControl.Item value="Account Mode" label="Account Mode" />
+              <SegmentedControl.Item value="Account Invoice" label="Account Invoice" />
+            </SegmentedControl.Root>
           </div>
 
           <div className="h-px bg-border mt-0 mb-3 opacity-40" />
