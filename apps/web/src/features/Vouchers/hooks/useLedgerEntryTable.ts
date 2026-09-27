@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { type LedgerEntryRow } from "../components/LedgerEntryTable/columns";
+import { type LedgerEntryRow, ledgerColumns } from "../components/LedgerEntryTable/columns";
 import { VOUCHER_FIELDS } from "../constants/voucherFields";
 import { VoucherFormValues } from "../schema/voucherSchema";
 import { type Ledger } from "@/features/Accounts/Ledger/types";
@@ -88,16 +88,86 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
     }
   }
 
+  // ─── View Model Logic (Derived State & Configurations) ─────────────
+
+  const ledgerOptions = useMemo(() => {
+    return ledgers.map((ledger) => ({
+      id: ledger.id,
+      label: ledger.name,
+      value: ledger.name
+    }));
+  }, [ledgers]);
+
+  const activeColumns = useMemo(() => {
+    if (applyMode === "Account Mode") {
+      return ledgerColumns.filter(col => 
+        (col as any).accessorKey !== "amount" && (col as any).accessorKey !== "vatAmt"
+      );
+    }
+    return ledgerColumns.filter(col => 
+      (col as any).accessorKey !== "debitAmount" && (col as any).accessorKey !== "creditAmount"
+    );
+  }, [applyMode]);
+
+  const totalDebit = useMemo(() => {
+    return fields.reduce((sum, row) => sum + (parseFloat((row as any).debitAmount) || 0), 0).toFixed(2);
+  }, [fields]);
+
+  const totalCredit = useMemo(() => {
+    return fields.reduce((sum, row) => sum + (parseFloat((row as any).creditAmount) || 0), 0).toFixed(2);
+  }, [fields]);
+
+  const isRowEmpty = useCallback((row: any) => row.original.name.trim() === "", []);
+  const isPhantom = useCallback((row: any) => !!row.original.isPhantom, []);
+
+  const tableOptions: any = useMemo(() => ({
+    meta: {
+      actions: {
+        updateData,
+        onRowCommit,
+        openLineDetails: setActiveDetailsRowIndex,
+      },
+      state: {
+        rowErrors,
+        isRowEmpty,
+      },
+      options: {
+        ledgers: ledgerOptions,
+      },
+      phantomRowConfig: {
+        isPhantom,
+        actionText: "Add New Entry",
+      },
+    },
+  }), [updateData, onRowCommit, setActiveDetailsRowIndex, rowErrors, isRowEmpty, ledgerOptions, isPhantom]);
+
+  const handleDetailsClose = useCallback((open: boolean) => {
+    if (!open) setActiveDetailsRowIndex(null);
+  }, []);
+
+  const handleCostCenterClose = useCallback((open: boolean) => {
+    if (!open) setActiveCostCenterRowIndex(null);
+  }, []);
+
+  const handleCostCenterSave = useCallback((allocations: any) => {
+    if (activeCostCenterRowIndex !== null) {
+      updateData(activeCostCenterRowIndex, 'costCenterAllocations', allocations);
+    }
+  }, [activeCostCenterRowIndex, updateData]);
+
   return {
     data: fields as LedgerEntryRow[],
-    rowErrors,
-    updateData,
-    onRowCommit,
+    activeColumns,
+    totalDebit,
+    totalCredit,
+    tableOptions,
+    handleDetailsClose,
+    handleCostCenterClose,
+    handleCostCenterSave,
     activeDetailsRowIndex,
-    setActiveDetailsRowIndex,
     activeCostCenterRowIndex,
-    setActiveCostCenterRowIndex,
     activeCostCenterRow,
     activeCostCenterTargetAmount,
+    updateData, // Still returned just in case the view needs it explicitly
   };
 }

@@ -13,39 +13,19 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
 
   const { 
     data, 
-    rowErrors, 
-    updateData, 
-    onRowCommit,
+    activeColumns,
+    totalDebit,
+    totalCredit,
+    tableOptions,
+    handleDetailsClose,
+    handleCostCenterClose,
+    handleCostCenterSave,
     activeDetailsRowIndex,
-    setActiveDetailsRowIndex,
     activeCostCenterRowIndex,
-    setActiveCostCenterRowIndex,
     activeCostCenterRow,
     activeCostCenterTargetAmount,
+    updateData
   } = useLedgerEntryTable(applyMode, ledgers || []);
-
-  const ledgerOptions = React.useMemo(() => {
-    return ledgers?.map((ledger: any) => ({
-      id: ledger.id,
-      label: ledger.name,
-      value: ledger.name
-    })) || [];
-  }, [ledgers]);
-
-  // Filter columns based on applyMode
-  const activeColumns = React.useMemo(() => {
-    if (applyMode === "Account Mode") {
-      // Exclude standard 'amount' and 'vatAmt'
-      return ledgerColumns.filter(col => 
-        (col as any).accessorKey !== "amount" && (col as any).accessorKey !== "vatAmt"
-      );
-    } else {
-      // Exclude 'debitAmount' and 'creditAmount'
-      return ledgerColumns.filter(col => 
-        (col as any).accessorKey !== "debitAmount" && (col as any).accessorKey !== "creditAmount"
-      );
-    }
-  }, [applyMode]);
 
   return (
     <div className="flex-1 flex flex-col min-h-[140px] overflow-hidden relative">
@@ -54,26 +34,7 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
           data={data}
           columns={activeColumns}
           className="h-full flex-1 rounded-none border-x-0 border-t-0 border-b-0"
-          tableOptions={{
-            meta: {
-              actions: {
-                updateData,
-                onRowCommit,
-                openLineDetails: setActiveDetailsRowIndex,
-              },
-              state: {
-                rowErrors,
-                isRowEmpty: (row: any) => row.original.name.trim() === "",
-              },
-              options: {
-                ledgers: ledgerOptions,
-              },
-              phantomRowConfig: {
-                isPhantom: (row: any) => row.original.isPhantom,
-                actionText: "Add New Entry",
-              },
-            },
-          }}
+          tableOptions={tableOptions}
         >
           {/* Table Header */}
           <Table.Header className="bg-surface-variant sticky top-0 z-10 border-b border-border h-8">
@@ -81,18 +42,20 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
               <>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <Table.HeaderRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <Table.Head
-                        key={header.id}
-                        style={getColumnStyles(header.column.columnDef, header.getSize())}
-                        className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${(header.column.columnDef.meta as any)?.layout?.headerClassName || ""}`}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                      </Table.Head>
-                    ))}
+                    {headerGroup.headers.map((header) => {
+                      const metaLayout = (header.column.columnDef.meta as any)?.layout;
+                      const headerClassName = metaLayout?.headerClassName || "";
+                      
+                      return (
+                        <Table.Head
+                          key={header.id}
+                          style={getColumnStyles(header.column.columnDef, header.getSize())}
+                          className={`px-2 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis h-8 border-r border-border last:border-r-0 ${headerClassName}`}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                        </Table.Head>
+                      );
+                    })}
                   </Table.HeaderRow>
                 ))}
               </>
@@ -101,39 +64,73 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
 
           {/* Table Body */}
           <Table.Body className="bg-background">
-            {(row, isFocused) => (
-              <Table.Row
-                key={row.id}
-                data-state={row.getIsSelected() ? "selected" : undefined}
-                data-focused={isFocused}
-                className={rowVariants({ 
-                  isPhantom: !!row.original.isPhantom, 
-                  isFocused 
-                })}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <Table.Cell
-                    key={cell.id}
-                    style={getColumnStyles(cell.column.columnDef, cell.column.getSize())}
-                    className={`py-0 border-r border-border last:border-r-0 ${
-                      (cell.column.columnDef.meta as any)?.layout?.cellClassName || ""
-                    }`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Table.Cell>
-                ))}
-              </Table.Row>
-            )}
+            {(row: any, isFocused) => {
+              const isRowPhantom = !!row.original?.isPhantom;
+              
+              return (
+                <Table.Row
+                  key={row.id}
+                  data-state={row.getIsSelected() ? "selected" : undefined}
+                  data-focused={isFocused}
+                  className={rowVariants({ isPhantom: isRowPhantom, isFocused })}
+                >
+                  {row.getVisibleCells().map((cell: any) => {
+                    const metaLayout = (cell.column.columnDef.meta as any)?.layout;
+                    const cellClassName = metaLayout?.cellClassName || "";
+                    
+                    return (
+                      <Table.Cell
+                        key={cell.id}
+                        style={getColumnStyles(cell.column.columnDef, cell.column.getSize())}
+                        className={`py-0 border-r border-border last:border-r-0 ${cellClassName}`}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Cell>
+                    );
+                  })}
+                </Table.Row>
+              );
+            }}
           </Table.Body>
+
+          {/* Table Footer */}
+          {applyMode === "Account Mode" && (
+            <Table.Footer className="bg-surface-variant sticky bottom-0 z-10 border-t border-border shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
+              <Table.Row>
+                {activeColumns.map((col: any) => {
+                  const key = col.accessorKey;
+                  const size = col.size || 150;
+                  const isLabel = key === 'name';
+                  
+                  let content = null;
+                  if (key === 'debitAmount') {
+                    content = totalDebit;
+                  } else if (key === 'creditAmount') {
+                    content = totalCredit;
+                  } else if (isLabel) {
+                    content = <span className="text-[10px] text-muted-foreground uppercase mr-2 mt-0.5">Total</span>;
+                  }
+                  
+                  return (
+                    <Table.Cell 
+                      key={key} 
+                      style={getColumnStyles(col, size)} 
+                      className={`py-1.5 px-2 border-r border-border last:border-r-0 flex items-center justify-end ${isLabel ? '' : 'font-bold text-sm'}`}
+                    >
+                      {content}
+                    </Table.Cell>
+                  );
+                })}
+              </Table.Row>
+            </Table.Footer>
+          )}
         </Table.Root>
       </div>
 
       {activeDetailsRowIndex !== null && (
         <LineDetailsSheet
           open={activeDetailsRowIndex !== null}
-          onOpenChange={(open) => {
-            if (!open) setActiveDetailsRowIndex(null);
-          }}
+          onOpenChange={handleDetailsClose}
           rowIndex={activeDetailsRowIndex}
           row={data[activeDetailsRowIndex]}
           updateData={updateData}
@@ -143,17 +140,11 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
       {activeCostCenterRow && (
         <CostCenterAllocationSheet
           open={activeCostCenterRowIndex !== null}
-          onOpenChange={(open) => {
-            if (!open) setActiveCostCenterRowIndex(null);
-          }}
+          onOpenChange={handleCostCenterClose}
           targetAmount={activeCostCenterTargetAmount}
           ledgerName={activeCostCenterRow.name || 'Unknown Ledger'}
           initialAllocations={activeCostCenterRow.costCenterAllocations}
-          onSave={(allocations) => {
-            if (activeCostCenterRowIndex !== null) {
-              updateData(activeCostCenterRowIndex, 'costCenterAllocations', allocations);
-            }
-          }}
+          onSave={handleCostCenterSave}
         />
       )}
     </div>

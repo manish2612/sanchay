@@ -27,7 +27,7 @@ export function VoucherFooter({
 
   return (
     <footer
-      className={`bg-surface border-t border-border px-5 py-3 grid ${hideLedgerEntryTable ? 'grid-cols-[1fr_350px]' : 'grid-cols-[450px_1fr_350px]'} gap-5 items-stretch flex-shrink-0`}
+      className={`bg-surface border-t border-border px-5 py-3 grid ${hideLedgerEntryTable ? 'grid-cols-[1fr_auto]' : 'grid-cols-[450px_1fr_350px]'} gap-5 items-stretch flex-shrink-0`}
       aria-label="Voucher actions and totals"
     >
       {/* Left: Narration */}
@@ -66,7 +66,7 @@ export function VoucherFooter({
 
       {/* Right: Summary panel & Actions */}
       <div className="flex flex-col gap-3 justify-end h-full">
-        <VoucherSummaryPanel summary={summary} />
+        {!hideLedgerEntryTable && <VoucherSummaryPanel summary={summary} />}
 
         {/* Action Buttons Row */}
         <div className="flex items-center justify-end gap-1.5 flex-wrap">
