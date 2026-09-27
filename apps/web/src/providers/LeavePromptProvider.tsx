@@ -201,7 +201,7 @@ export function LeavePromptProvider({
   const routerBlocker = useBlocker({
     shouldBlockFn: () => anyDirty,
     withResolver: true,
-    enableBeforeUnload: true,
+    enableBeforeUnload: anyDirty,
   });
 
   const activeBlocker = manualBlocker.status === 'blocked' ? manualBlocker : (routerBlocker as any);

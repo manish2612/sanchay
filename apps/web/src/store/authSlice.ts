@@ -37,6 +37,7 @@ export const authSlice = createSlice({
     ) => {
       state.user = action.payload.user;
       state.companies = action.payload.companies;
+      state.activeCompanyId = null; // Prevent stale company IDs from bypassing the switch API
       localStorage.setItem('auth_state', JSON.stringify(state));
     },
     setActiveCompany: (state, action: PayloadAction<string>) => {

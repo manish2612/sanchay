@@ -6,8 +6,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { Button, Icon } from '@prime/ui';
 import { selectCompanies, setActiveCompany, selectActiveCompanyId } from '@/store/authSlice';
 import { useSwitchCompanyMutation } from '@/features/Auth/api';
-import { LoginHeaderGraphic } from '../Login/components/LoginHeaderGraphic';
-import { LoginGraphic } from '../Login/components/LoginGraphic';
 import { CompanyProfileGraphic } from '@/features/Company/CreateCompany/components/graphics/CompanyProfileGraphic';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 
@@ -22,11 +20,6 @@ export default function CompanySelectView() {
 
   const handleSelect = async (companyId: string) => {
     if (isLoading) return;
-
-    if (companyId === activeCompanyId) {
-      navigate({ to: '/dashboard' });
-      return;
-    }
 
     setError(null);
     try {

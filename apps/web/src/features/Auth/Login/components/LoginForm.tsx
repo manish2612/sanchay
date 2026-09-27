@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, TextInput, Button, Icon, UniversalLink, Switch } from '@prime/ui';
 import { loginSchema, type LoginValues } from '../schema';
-import { useLoginMutation } from '../../api';
+import { useLoginMutation, useSwitchCompanyMutation } from '../../api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 import { useNavigate } from '@tanstack/react-router';
 import { useDispatch } from 'react-redux';
@@ -16,6 +16,7 @@ export function LoginForm() {
   const [globalError, setGlobalError] = useState<string | null>(null);
 
   const [login, { isLoading }] = useLoginMutation();
+  const [switchCompany, { isLoading: isSwitching }] = useSwitchCompanyMutation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -48,6 +49,8 @@ export function LoginForm() {
       // Store the token natively
       if (response.token) {
         cookieTokenStorage.setToken(response.token);
+      } else {
+        cookieTokenStorage.clearToken();
       }
 
       // Update global auth state with user and companies
@@ -64,8 +67,18 @@ export function LoginForm() {
         if (companies.length === 0) {
           navigate({ to: '/company/new' });
         } else if (companies.length === 1) {
-          dispatch(setActiveCompany(companies[0].id));
-          navigate({ to: '/dashboard' });
+          try {
+            const companyId = companies[0].id;
+            const switchData = await switchCompany({ company_id: companyId }).unwrap();
+            if (switchData.token) {
+              cookieTokenStorage.setToken(switchData.token);
+            }
+            dispatch(setActiveCompany(companyId));
+            navigate({ to: '/dashboard' });
+          } catch (switchError) {
+            console.error('Auto-switch company failed:', switchError);
+            setGlobalError('Failed to automatically configure company session.');
+          }
         } else {
           navigate({ to: '/company/select' });
         }
