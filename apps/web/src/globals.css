@@ -58,4 +58,14 @@
             background: var(--colors-muted, rgba(255, 255, 255, 0.2));
         }
     }
+
+    /* Override browser default autofill background color */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-text-fill-color: inherit !important;
+        transition: background-color 9999s ease-in-out 0s, color 9999s ease-in-out 0s;
+        -webkit-transition-delay: 9999s;
+    }
 }
