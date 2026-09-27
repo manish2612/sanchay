@@ -12,6 +12,7 @@ Act as a Senior Frontend Architect specifying strictly in scalable and predictab
 
 ### 1. Networking & RTK Query
 - **Single Source of Truth**: Always use the central `@prime/api` instance configured in `apps/web/src/store/api.ts`.
+- **Endpoint URLs**: Do not prefix endpoint URLs with `/api/v1/` or any leading slash (e.g., use `url: 'accounting/vouchers/next-number'`, not `url: '/api/v1/accounting/vouchers/next-number'`). The base URL is already configured globally.
 - **Injection over Monoliths**: Never add endpoints directly to the central `apiSlice.ts`. Always use `apiSlice.injectEndpoints` within feature-specific files (e.g., `features/Auth/api.ts`).
 - **Strong Typing**: Always define typed `Request` and `Response` interfaces matching backend contracts or frontend Zod schemas.
 
