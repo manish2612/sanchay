@@ -59,7 +59,7 @@ export const mockLedgers: Ledger[] = [
         "id": "01a0ddd8-39cc-73e6-823a-6909dfa61032",
         "name": "13% Sales",
         "code": "",
-        "is_cost_entre_enabled": false,
+        "is_cost_entre_enabled": true,
         "is_bill_wise_enabled": false,
         "block_sales_on_credit_limit_exceed": false,
         "credit_period_days": 0,
