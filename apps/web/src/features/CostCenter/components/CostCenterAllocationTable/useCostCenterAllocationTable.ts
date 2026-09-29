@@ -85,13 +85,18 @@ export function useCostCenterAllocationTable(
     });
   }, [onChange]);
 
-  const onRowCommit = useCallback((rowIndex: number, columnId?: string) => {
+  const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
     let isValid = true;
     const rowErrors: any = {};
     
     // Always read from ref to get intra-tick fresh data
     let row = dataRef.current[rowIndex];
     if (!row) return "STAY";
+
+    // Merge the real-time DOM value to guarantee we have the absolute latest input
+    if (columnId && cellValue !== undefined) {
+      row = { ...row, [columnId]: cellValue } as any;
+    }
 
     // Validation
     if (!row.costCategory || row.costCategory.trim() === "") {

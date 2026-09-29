@@ -44,7 +44,7 @@ export function CostCenterAllocationSheet(props: CostCenterAllocationSheetProps)
   } = useCostCenterAllocationSheet(props);
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} modal={false}>
+    <Sheet open={open} onOpenChange={onOpenChange} modal={true}>
       <SheetContent side="right" className="w-[500px] sm:w-[600px] flex flex-col p-0">
         <div className="px-6 pt-6 pb-4 border-b border-border/50 flex-shrink-0">
           <SheetHeader>
