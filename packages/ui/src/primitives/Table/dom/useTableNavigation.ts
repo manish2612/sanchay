@@ -138,13 +138,16 @@ export function useTableNavigation<TData>({
         (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter');
 
       if (!isNavigatingClosedCombobox) {
+        const dialog = target.closest('[role="dialog"]');
+        const isChildDialog = dialog && rootRef.current && !dialog.contains(rootRef.current);
+
         if (
           target.tagName === 'SELECT' ||
           target.isContentEditable ||
           isCombobox ||
           target.closest('[role="listbox"]') ||
           target.closest('[role="menu"]') ||
-          target.closest('[role="dialog"]')
+          isChildDialog
         ) {
           return; // Surrender control to the child component
         }
@@ -300,17 +303,31 @@ export function useTableNavigation<TData>({
             const cellValue =
               target.tagName === 'INPUT' ? (target as HTMLInputElement).value : undefined;
 
+            // NEW: Get accurate row index from DOM, in case user natively tabbed here bypassing state
+            let activeRowIndex = focusedRowIndex;
+            const rowWrapper = target.closest('[data-index]');
+            if (rowWrapper) {
+              const domIndex = parseInt(rowWrapper.getAttribute('data-index') || "", 10);
+              if (!isNaN(domIndex)) {
+                activeRowIndex = domIndex;
+              }
+            }
+            if (activeRowIndex !== focusedRowIndex) {
+              setFocusedRowIndex(activeRowIndex);
+              setEditingRowIndex(activeRowIndex);
+            }
+
             // Delegate validation and routing to the consumer's business logic
-            const action = meta.onRowCommitFn(focusedRowIndex, columnId, cellValue);
+            const action = meta.onRowCommitFn(activeRowIndex, columnId, cellValue);
 
             if (action === TABLE_ROW_COMMIT_ACTIONS.ADVANCE) {
               // Consumer validated successfully and requested to advance to the next row
-              setSuccessRowIndex(focusedRowIndex);
+              setSuccessRowIndex(activeRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400); // Trigger success flash animation
 
               // Execute the advance asynchronously to allow React to flush state updates (e.g., adding a new row)
               setTimeout(() => {
-                const newIndex = focusedRowIndex + 1;
+                const newIndex = activeRowIndex + 1;
                 setFocusedRowIndex(newIndex);
                 setEditingRowIndex(newIndex);
 
@@ -332,7 +349,7 @@ export function useTableNavigation<TData>({
             } else if (action === TABLE_ROW_COMMIT_ACTIONS.EXIT) {
               // Consumer validated successfully and requested to end the edit session
               setEditingRowIndex(-1);
-              setSuccessRowIndex(focusedRowIndex);
+              setSuccessRowIndex(activeRowIndex);
               setTimeout(() => setSuccessRowIndex(null), 400);
               rootRef.current?.focus(); // Return global focus to the table grid for arrow navigation
             } else if (action === TABLE_ROW_COMMIT_ACTIONS.STAY) {
