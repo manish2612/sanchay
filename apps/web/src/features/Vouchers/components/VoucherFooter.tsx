@@ -27,6 +27,18 @@ export function VoucherFooter({
   const { control, handleSubmit } = useFormContext<VoucherFormValues>();
   const { onSubmit, isSubmitting, toastMessage, setToastMessage } = useVoucherSubmit();
 
+  const submitIntent = React.useRef<'new' | 'close'>('new');
+
+  const handleSaveAndNew = () => {
+    submitIntent.current = 'new';
+    handleSubmit((data) => onSubmit(data, submitIntent.current))();
+  };
+
+  const handleSaveAndClose = () => {
+    submitIntent.current = 'close';
+    handleSubmit((data) => onSubmit(data, submitIntent.current))();
+  };
+
   return (
     <>
       <footer
@@ -112,23 +124,23 @@ export function VoucherFooter({
             ]}
           />
 
-          {/* Primary Save Button */}
-          <Button
-            variant="primary"
-            size="sm"
-            type="button"
-            onClick={handleSubmit(onSubmit)}
-            className="gap-1.5 px-4 ml-2"
-            aria-label="Save voucher"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? (
-              <Icon name="Loader" size={13} className="animate-spin" />
-            ) : (
-              <Icon name="Save" size={13} />
-            )}
-            {isSubmitting ? "Saving..." : "Save"}
-          </Button>
+          {/* Primary Save SplitButton */}
+          <div className="ml-2">
+            <SplitButton
+              primaryLabel={isSubmitting ? "Saving..." : "Save & New"}
+              primaryIcon={isSubmitting ? "Loader" : "Save"}
+              primaryAction={handleSaveAndNew}
+              disabled={isSubmitting}
+              items={[
+                {
+                  id: "save-close",
+                  label: "Save & Close",
+                  icon: "Check",
+                  onSelect: handleSaveAndClose,
+                }
+              ]}
+            />
+          </div>
         </div>
       </div>
     </footer>
@@ -141,6 +153,7 @@ export function VoucherFooter({
     >
       <ToastTitle>{toastMessage?.title}</ToastTitle>
       <ToastDescription>{toastMessage?.desc}</ToastDescription>
+      {toastMessage?.action && toastMessage.action}
       <ToastClose />
     </ToastRoot>
     </>

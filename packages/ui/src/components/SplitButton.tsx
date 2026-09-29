@@ -22,6 +22,7 @@ export interface SplitButtonProps {
   variant?: 'primary' | 'outline' | 'ghost' | 'destructive';
   size?: 'sm' | 'default' | 'lg';
   className?: string;
+  disabled?: boolean;
 }
 
 export function SplitButton({
@@ -32,6 +33,7 @@ export function SplitButton({
   variant = 'outline',
   size = 'sm',
   className,
+  disabled,
 }: SplitButtonProps) {
   return (
     <div className={`inline-flex items-center -space-x-px ${className || ''}`}>
@@ -40,6 +42,7 @@ export function SplitButton({
         size={size}
         className="rounded-r-none focus:z-10 gap-1.5 shadow-sm"
         onClick={primaryAction}
+        disabled={disabled}
       >
         {primaryIcon && <Icon name={primaryIcon as any} size={13} />}
         {primaryLabel}
@@ -51,6 +54,7 @@ export function SplitButton({
           size={size}
           className="rounded-l-none focus:z-10 px-1.5 shadow-sm"
           aria-label="More options"
+          disabled={disabled}
         >
           <Icon name="ChevronDown" size={13} className="opacity-70" />
         </Button>

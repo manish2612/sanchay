@@ -90,7 +90,7 @@ export function VoucherDetailsForm({
   
   const formattedDate = voucherDateAD ? format(voucherDateAD, 'yyyy-MM-dd') : '';
 
-  const { data: nextVoucherData } = useGetNextVoucherNumberQuery(
+  const { data: nextVoucherData, isFetching } = useGetNextVoucherNumberQuery(
     { voucher_type_id: voucherTypeId, voucher_date: formattedDate },
     { skip: !voucherTypeId || !formattedDate } // Skip API call until both type and date are available
   );
@@ -139,7 +139,8 @@ export function VoucherDetailsForm({
                       label="Voucher No."
                       labelVariant="in-field"
                       inputClassName="font-mono font-medium text-foreground disabled:opacity-70 disabled:bg-muted"
-                      placeholder="Enter voucher no..."
+                      placeholder={isFetching ? "Generating..." : "Enter voucher no..."}
+                      rightSlot={isFetching ? <Icon name="Loader" className="animate-spin text-primary" size={16} /> : undefined}
                     />
                   </Form.Control>
                 </Form.Item>
