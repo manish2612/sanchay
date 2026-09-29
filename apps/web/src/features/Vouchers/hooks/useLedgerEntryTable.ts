@@ -67,9 +67,14 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
     return errorMap;
   }, [errors.ledgerEntries, isSubmitted, fields]);
 
-  const onRowCommit = useCallback((rowIndex: number, columnId?: string) => {
+  const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
     let row = fields[rowIndex];
     if (!row) return "STAY";
+
+    // Merge the real-time DOM value to avoid React's async rendering making `fields` stale on rapid Enter presses
+    if (columnId && cellValue !== undefined) {
+      row = { ...row, [columnId]: cellValue } as any;
+    }
 
     let isValid = row.name.trim() !== "";
     let amtValue = 0;
@@ -77,15 +82,16 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
     if (applyMode === "Account Mode") {
       const debitString = typeof row.debitAmount === 'string' ? row.debitAmount : String(row.debitAmount || "");
       const creditString = typeof row.creditAmount === 'string' ? row.creditAmount : String(row.creditAmount || "");
-      const debit = parseFloat(debitString.replace(/[^0-9.-]+/g, ""));
-      const credit = parseFloat(creditString.replace(/[^0-9.-]+/g, ""));
-      if (isNaN(debit) && isNaN(credit)) isValid = false;
-      amtValue = isNaN(debit) ? (isNaN(credit) ? 0 : credit) : debit;
+      const debit = parseFloat(debitString.replace(/[^0-9.-]+/g, "")) || 0;
+      const credit = parseFloat(creditString.replace(/[^0-9.-]+/g, "")) || 0;
+      
+      if (debit <= 0 && credit <= 0) isValid = false;
+      amtValue = debit > 0 ? debit : credit;
     } else {
       const amtString = typeof row.amount === 'string' ? row.amount : String(row.amount || "");
-      const amt = parseFloat(amtString.replace(/[^0-9.-]+/g, ""));
-      if (isNaN(amt) || amt <= 0) isValid = false;
-      amtValue = isNaN(amt) ? 0 : amt;
+      const amt = parseFloat(amtString.replace(/[^0-9.-]+/g, "")) || 0;
+      if (amt <= 0) isValid = false;
+      amtValue = amt;
     }
 
     if (!isValid) {
