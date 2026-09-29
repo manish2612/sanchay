@@ -161,3 +161,19 @@ newFields.push(newPhantomRow);      // 2. Locally append the new row
 
 replace(newFields);                 // 3. Fire a single atomic mutation
 ```
+
+## 9. Keyboard Navigation & Modal Architecture Rules
+
+When implementing custom editable tables (especially those utilizing `@prime/ui`'s `useTableNavigation` or rendering alongside Headless UI Dialogs/Sheets), strictly adhere to the following rules to prevent silent focus crashes and race conditions:
+
+**Rule 1: Prevent React Async Stale State on Rapid Commits**
+React's asynchronous state batching (`useState` or RHF `useFieldArray`) cannot keep up with a user rapidly typing an amount and instantly hitting `Enter`. If `onRowCommit` relies solely on the React state array, it will evaluate the *old* (empty) value, reject the commit, and break the user's flow.
+* **Fix**: Your table cells must pass the raw DOM string `(e.target.value)` up through the commit chain. `onRowCommit(rowIndex, columnId, cellValue)` must forcefully merge `cellValue` into the row payload *before* validating it, bypassing React's render delay entirely.
+
+**Rule 2: Dialog Escape Hatches & Friendly Fire**
+Table navigation scripts intentionally swallow the `Enter` and `Arrow` keys when the active cursor is inside a `[role="dialog"]` (e.g., a DatePicker cell popup) to prevent accidentally advancing the background table. 
+* **Fix**: If your *entire table* is rendered inside a Dialog (like a slide-out Sheet or Modal), the escape hatch will trigger on the table itself and mute all keyboard shortcuts. Ensure the table navigation script checks if the Dialog *wraps* the table (`dialog.contains(rootRef.current)`) versus being a portaled child popup. 
+
+**Rule 3: Non-Blocking vs Blocking Modals for Data Entry**
+If pressing `Enter` on a row spawns a data-entry Sheet/Modal *and* advances the background table to a new row, you must ensure the Sheet is fully blocking (`modal={true}`).
+* **Fix**: If you use `modal={false}` (non-blocking), the background table's programmatic focus jump (`focusNewRowInput`) will be interpreted by the Sheet as an "outside interaction" (clicking/focusing away), causing the Sheet to instantly auto-close before it even renders. Always use `modal={true}` to trap focus and force the user to complete the allocation before focus is cleanly returned to the background grid.
