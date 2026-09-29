@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button, Icon, Form, SplitButton } from "@prime/ui";
+import { Button, Icon, Form, SplitButton, ToastRoot, ToastTitle, ToastDescription, ToastClose } from "@prime/ui";
 import { type VoucherFooterState } from "../hooks/useVoucherFooter";
 import { LedgerEntryTable } from "./LedgerEntryTable/LedgerEntryTable";
 import { VoucherSummaryPanel } from "./VoucherSummaryPanel";
@@ -25,10 +25,11 @@ export function VoucherFooter({
   hideLedgerEntryTable,
 }: VoucherFooterProps) {
   const { control, handleSubmit } = useFormContext<VoucherFormValues>();
-  const { onSubmit, isSubmitting } = useVoucherSubmit();
+  const { onSubmit, isSubmitting, toastMessage, setToastMessage } = useVoucherSubmit();
 
   return (
-    <footer
+    <>
+      <footer
       className={`bg-surface border-t border-border px-5 py-3 grid ${hideLedgerEntryTable ? 'grid-cols-[1fr_auto]' : 'grid-cols-[450px_1fr_350px]'} gap-5 items-stretch flex-shrink-0`}
       aria-label="Voucher actions and totals"
     >
@@ -131,5 +132,17 @@ export function VoucherFooter({
         </div>
       </div>
     </footer>
+
+    {/* Form Submission Toast Notification */}
+    <ToastRoot
+      open={!!toastMessage}
+      onOpenChange={(open) => !open && setToastMessage(null)}
+      variant={toastMessage?.variant || 'default'}
+    >
+      <ToastTitle>{toastMessage?.title}</ToastTitle>
+      <ToastDescription>{toastMessage?.desc}</ToastDescription>
+      <ToastClose />
+    </ToastRoot>
+    </>
   );
 }

@@ -30,13 +30,13 @@ export function useVoucherPayloadGenerator() {
               return {
                 amount: debit > 0 ? allocAmount : -allocAmount,
                 cost_centre_id: alloc.costCenterId || "",
-                line_index: (allocIndex + 1).toString(),
+                line_index: (allocIndex + 1),
               };
             }),
           description: row.description || "",
           doc_amount: 0,
           ledger_id: row.ledgerId || "",
-          line_index: (index + 1).toString(),
+          line_index: (index + 1),
           manual_added_acc: false,
           tax_amount: 0, // Skipped for now
           tax_group_id: "", // Skipped for now
@@ -56,7 +56,7 @@ export function useVoucherPayloadGenerator() {
     // 4. Construct Root Payload
     return {
       category: activeVoucherType?.category || "",
-      currency_code: "", // Blank for now
+      currency_code: "INR", // Hardcoded per user request
       is_local_trans: false, // Skipped for now
       ledger_lines,
       miti_date: data.voucherDateBs || "",
@@ -67,9 +67,9 @@ export function useVoucherPayloadGenerator() {
       reference_date: formatLocalToUTCDate(data.refDateAd),
       reference_miti: data.refDateBs || "",
       reference_number: data.referenceNo || "",
-      sequence_index: "",
+      sequence_index: data.sequenceIndex || 0,
       subtotal_amount, // Calculated: total_base_amount - taxable_amount
-      suffix: activeVoucherType?.suffix || "",
+      suffix: data.suffix || "",
       tax_amount: 0,
       taxable_amount,
       total_base_amount, // Sum of all debit entries

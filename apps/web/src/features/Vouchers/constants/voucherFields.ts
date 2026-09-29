@@ -21,6 +21,10 @@ export const VOUCHER_FIELDS = {
 
   // Footer
   NARRATION: 'narration',
+
+  // API Metadata
+  SEQUENCE_INDEX: 'sequenceIndex',
+  SUFFIX: 'suffix',
 } as const;
 
 export type VoucherFieldPaths = typeof VOUCHER_FIELDS[keyof typeof VOUCHER_FIELDS];

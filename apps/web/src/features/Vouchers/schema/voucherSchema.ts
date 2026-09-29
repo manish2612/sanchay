@@ -59,6 +59,9 @@ export const voucherFormSchema = z.object({
   
   [VOUCHER_FIELDS.LEDGER_ENTRIES]: z.array(ledgerEntrySchema).optional(),
   [VOUCHER_FIELDS.ITEM_ENTRIES]: z.array(itemEntrySchema).optional(),
+  
+  [VOUCHER_FIELDS.SEQUENCE_INDEX]: z.number().optional(),
+  [VOUCHER_FIELDS.SUFFIX]: z.string().optional(),
 });
 
 export type VoucherFormValues = z.infer<typeof voucherFormSchema>;

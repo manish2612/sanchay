@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { TextInput, DatePicker, Icon, AutoSuggest, DropdownMenu, Button } from '@prime/ui';
 import { format } from 'date-fns';
+import { PAYMENT_MODES } from "../constants/paymentModes";
+
 import { useGetNextVoucherNumberQuery } from '../api';
 import { type VoucherDetailsFormState } from '../hooks/useVoucherDetailsForm';
 
@@ -94,10 +96,18 @@ export function VoucherDetailsForm({
   );
 
   useEffect(() => {
-    if (nextVoucherData?.next_voucher_number) {
-      setValue(VOUCHER_FIELDS.VOUCHER_NO, nextVoucherData.next_voucher_number, { shouldDirty: true });
+    if (nextVoucherData) {
+      if (nextVoucherData.next_voucher_number) {
+        setValue(VOUCHER_FIELDS.VOUCHER_NO, nextVoucherData.next_voucher_number, { shouldDirty: true });
+      }
+      if (nextVoucherData.sequence_index !== undefined) {
+        setValue(VOUCHER_FIELDS.SEQUENCE_INDEX, nextVoucherData.sequence_index, { shouldDirty: true });
+      }
+      if (nextVoucherData.suffix !== undefined) {
+        setValue(VOUCHER_FIELDS.SUFFIX, nextVoucherData.suffix, { shouldDirty: true });
+      }
     }
-  }, [nextVoucherData?.next_voucher_number, setValue]);
+  }, [nextVoucherData, setValue]);
 
   return (
     <div className="flex border-b border-border bg-surface relative overflow-hidden flex-shrink-0">
@@ -149,13 +159,12 @@ export function VoucherDetailsForm({
                       <DropdownMenu
                         label="Payment Mode"
                         labelVariant="in-field"
-                        triggerLabel={field.value}
-                        items={[
-                          { id: 'Credit', label: 'Credit', onSelect: () => field.onChange('Credit') },
-                          { id: 'Cash', label: 'Cash', onSelect: () => field.onChange('Cash') },
-                          { id: 'Bank Transfer', label: 'Bank Transfer', onSelect: () => field.onChange('Bank Transfer') },
-                          { id: 'Cheque', label: 'Cheque', onSelect: () => field.onChange('Cheque') },
-                        ]}
+                        triggerLabel={PAYMENT_MODES.find(m => m.id === field.value)?.label || 'Select Mode'}
+                        items={PAYMENT_MODES.map(mode => ({
+                          id: mode.id,
+                          label: mode.label,
+                          onSelect: () => field.onChange(mode.id)
+                        }))}
                       />
                     </Form.Control>
                   </Form.Item>
