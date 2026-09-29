@@ -61,6 +61,16 @@ export default function VouchersPage() {
   const footerState = useVoucherFooter();
   const prefs = useVoucherPreferences();
 
+  // Keep form 'mode' in sync with the active UI mode
+  React.useEffect(() => {
+    if (methods.getValues(VOUCHER_FIELDS.MODE) !== prefs.applyMode) {
+      methods.setValue(VOUCHER_FIELDS.MODE, prefs.applyMode, {
+        shouldDirty: true,
+        shouldValidate: true
+      });
+    }
+  }, [prefs.applyMode, methods]);
+
   const voucherState = useVoucherDetailsForm(partyAccount, prefs.applyMode);
 
   const isAccountInvoice = prefs.applyMode === 'Account Invoice';

@@ -38,6 +38,7 @@ export function SplitButton({
   return (
     <div className={`inline-flex items-center -space-x-px ${className || ''}`}>
       <Button
+        type="button"
         variant={variant}
         size={size}
         className="rounded-r-none focus:z-10 gap-1.5 shadow-sm"
@@ -50,6 +51,7 @@ export function SplitButton({
 
       <DropdownMenu items={items}>
         <Button
+          type="button"
           variant={variant}
           size={size}
           className="rounded-l-none focus:z-10 px-1.5 shadow-sm"

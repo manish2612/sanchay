@@ -24,8 +24,8 @@ export function useVoucherPayloadGenerator() {
           bill_discount_amount: 0,
           bill_discount_percentage: 0,
           cost_allocations: (row.costCenterAllocations || [])
-            .filter((alloc) => !alloc.isPhantom)
-            .map((alloc, allocIndex) => {
+            .filter((alloc: any) => !alloc.isPhantom)
+            .map((alloc: any, allocIndex: number) => {
               const allocAmount = parseFloat(alloc.amount || "0");
               return {
                 amount: debit > 0 ? allocAmount : -allocAmount,

@@ -102,11 +102,14 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
                   const size = col.size || 150;
                   const isLabel = key === 'name';
                   
-                  let content = null;
+                  let content: React.ReactNode = null;
+                  let isError = false;
                   if (key === 'debitAmount') {
                     content = totalDebit;
+                    isError = (tableOptions as any).meta?.state?.rowErrors?.[0]?.rootMismatch || false;
                   } else if (key === 'creditAmount') {
                     content = totalCredit;
+                    isError = (tableOptions as any).meta?.state?.rowErrors?.[0]?.rootMismatch || false;
                   } else if (isLabel) {
                     content = <span className="text-[10px] text-muted-foreground uppercase mr-2 mt-0.5">Total</span>;
                   }
@@ -115,7 +118,7 @@ export function LedgerEntryTable({ applyMode = "Item Mode" }: { applyMode?: stri
                     <Table.Cell 
                       key={key} 
                       style={getColumnStyles(col, size)} 
-                      className={`py-1.5 px-2 border-r border-border last:border-r-0 flex items-center justify-end ${isLabel ? '' : 'font-bold text-sm'}`}
+                      className={`py-1.5 px-2 border-r border-border last:border-r-0 flex items-center justify-end ${isLabel ? '' : 'font-bold text-sm'} ${isError ? 'text-danger ring-1 ring-inset ring-danger' : ''}`}
                     >
                       {content}
                     </Table.Cell>

@@ -116,18 +116,29 @@ export function VoucherDetailsForm({
           
           {/* Voucher Type */}
           <div className="lg:col-span-1">
-            <VoucherTypeSelector
-              value={voucherType}
-              onChange={setVoucherType}
-              options={voucherTypeOptions}
-              isLoading={isLoading}
-              isError={isError}
+            <Form.Field
+              control={control}
+              name={VOUCHER_FIELDS.VOUCHER_TYPE_ID}
+              render={() => (
+                <Form.Item>
+                  <Form.Control>
+                    <VoucherTypeSelector
+                      value={voucherType}
+                      onChange={setVoucherType}
+                      options={voucherTypeOptions}
+                      isLoading={isLoading}
+                      isError={isError}
+                    />
+                  </Form.Control>
+                  <Form.Message className="text-[10px]" />
+                </Form.Item>
+              )}
             />
           </div>
 
           {/* Voucher No */}
           <div className="lg:col-span-1">
-            <Form.Field
+              <Form.Field
               control={control}
               name={VOUCHER_FIELDS.VOUCHER_NO}
               render={({ field }) => (
@@ -143,6 +154,7 @@ export function VoucherDetailsForm({
                       rightSlot={isFetching ? <Icon name="Loader" className="animate-spin text-primary" size={16} /> : undefined}
                     />
                   </Form.Control>
+                  <Form.Message className="text-[10px]" />
                 </Form.Item>
               )}
             />
@@ -195,6 +207,7 @@ export function VoucherDetailsForm({
                       placeholder="Select Date"
                     />
                   </Form.Control>
+                  <Form.Message className="text-[10px]" />
                 </Form.Item>
               )}
             />
@@ -278,6 +291,7 @@ export function VoucherDetailsForm({
                       placeholder="Reference number..." 
                     />
                   </Form.Control>
+                  <Form.Message className="text-[10px]" />
                 </Form.Item>
               )}
             />
@@ -304,6 +318,7 @@ export function VoucherDetailsForm({
                       placeholder="Select Date"
                     />
                   </Form.Control>
+                  <Form.Message className="text-[10px]" />
                 </Form.Item>
               )}
             />

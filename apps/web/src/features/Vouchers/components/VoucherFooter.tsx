@@ -85,6 +85,17 @@ export function VoucherFooter({
 
         {/* Action Buttons Row */}
         <div className="flex items-center justify-end gap-1.5 flex-wrap">
+          {(() => {
+            const { formState: { errors } } = useFormContext<VoucherFormValues>();
+            const ledgerRootError = errors.ledgerEntries?.root?.message || (errors.ledgerEntries as any)?.message;
+            return ledgerRootError ? (
+              <div className="text-danger text-sm font-medium mr-4 flex items-center gap-1.5">
+                <Icon name="CircleAlert" size={14} />
+                {ledgerRootError as string}
+              </div>
+            ) : null;
+          })()}
+          
           <Button
             variant="outline"
             size="sm"

@@ -16,20 +16,56 @@ const generateEmptyRow = (id: string): LedgerEntryRow => ({
 });
 
 export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Ledger[] = []) {
-  const { control } = useFormContext<VoucherFormValues>();
+  const { control, formState: { errors, isSubmitted }, clearErrors } = useFormContext<VoucherFormValues>();
 
   const { fields, append, update } = useFieldArray({
     control,
     name: VOUCHER_FIELDS.LEDGER_ENTRIES,
   });
 
-  const [rowErrors, setRowErrors] = useState<Record<number, boolean>>({});
   const [activeDetailsRowIndex, setActiveDetailsRowIndex] = useState<number | null>(null);
   const [activeCostCenterRowIndex, setActiveCostCenterRowIndex] = useState<number | null>(null);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     update(rowIndex, { ...fields[rowIndex]!, [columnId]: value });
-  }, [update, fields]);
+    // Manually clear field-level errors to prevent RHF useFieldArray cache bugs
+    clearErrors(`${VOUCHER_FIELDS.LEDGER_ENTRIES}.${rowIndex}.${columnId}` as any);
+  }, [update, fields, clearErrors]);
+
+  // Derive row-level UI errors from Zod formState
+  const formRowErrors = useMemo(() => {
+    const errorMap: Record<number, Record<string, boolean>> = {};
+    
+    // 1. Highlight the phantom row if the user completely skipped entering data
+    const rootMessage = errors.ledgerEntries?.root?.message || (errors.ledgerEntries as any)?.message;
+    if (rootMessage === "At least one entry is required") {
+      errorMap[0] = { name: true, amount: true, debitAmount: true, creditAmount: true };
+    } else if (rootMessage && rootMessage.includes("must equal Total Credit")) {
+      // Flag a root mismatch so the table footer can light up red
+      errorMap[0] = errorMap[0] || {};
+      errorMap[0].rootMismatch = true;
+    }
+
+    // 2. Map field-level errors (if any actual rows are invalid)
+    if (errors.ledgerEntries && Array.isArray(errors.ledgerEntries)) {
+      errors.ledgerEntries.forEach((err, idx) => {
+        if (err) {
+          const row = fields[idx] as any;
+          // Suppress aggressive UI red borders on dirty phantom rows UNLESS the user tried to submit
+          if (row?.isPhantom && !isSubmitted && rootMessage !== "At least one entry is required") {
+             return;
+          }
+
+          errorMap[idx] = errorMap[idx] || {};
+          if (err.ledgerId || err.name) errorMap[idx].name = true; // maps to AutoSuggestCell
+          if (err.debitAmount) errorMap[idx].debitAmount = true;
+          if (err.creditAmount) errorMap[idx].creditAmount = true;
+          if (err.amount) errorMap[idx].amount = true;
+        }
+      });
+    }
+    return errorMap;
+  }, [errors.ledgerEntries, isSubmitted, fields]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string) => {
     let row = fields[rowIndex];
@@ -53,8 +89,7 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
     }
 
     if (!isValid) {
-      setRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
-      setTimeout(() => setRowErrors((prev) => ({ ...prev, [rowIndex]: false })), 800);
+      // Just visually alert locally for a rapid typing mistake
       return "STAY";
     }
 
@@ -128,7 +163,7 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
         openLineDetails: setActiveDetailsRowIndex,
       },
       state: {
-        rowErrors,
+        rowErrors: formRowErrors,
         isRowEmpty,
       },
       options: {
@@ -139,7 +174,7 @@ export function useLedgerEntryTable(applyMode: string = "Item Mode", ledgers: Le
         actionText: "Add New Entry",
       },
     },
-  }), [updateData, onRowCommit, setActiveDetailsRowIndex, rowErrors, isRowEmpty, ledgerOptions, isPhantom]);
+  }), [updateData, onRowCommit, setActiveDetailsRowIndex, formRowErrors, isRowEmpty, ledgerOptions, isPhantom]);
 
   const handleDetailsClose = useCallback((open: boolean) => {
     if (!open) setActiveDetailsRowIndex(null);

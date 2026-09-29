@@ -61,7 +61,7 @@ export function useVoucherSubmit() {
               creditAmount: '',
               vatAmt: '',
               isPhantom: true,
-            },
+            } as any,
           ],
         });
 
