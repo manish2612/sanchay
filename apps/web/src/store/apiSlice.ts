@@ -2,6 +2,26 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { createAxiosBaseQuery } from '@prime/api';
 import { api } from './api';
 
+const rawBaseQuery = createAxiosBaseQuery(api);
+
+const SKIP_COMPANY_ID_URLS = ['/auth', '/global'];
+
+const dynamicBaseQuery: typeof rawBaseQuery = async (args, apiContext, extraOptions) => {
+  const state = apiContext.getState() as any; 
+  const activeCompanyId = state?.auth?.activeCompanyId;
+
+  const skipInjection = SKIP_COMPANY_ID_URLS.some(url => args.url.includes(url));
+
+  if (activeCompanyId && !skipInjection) {
+    args.headers = {
+      'X-Company-ID': activeCompanyId,
+      ...args.headers, 
+    };
+  }
+
+  return rawBaseQuery(args, apiContext, extraOptions);
+};
+
 /**
  * Root RTK Query slice.
  *
@@ -15,7 +35,7 @@ import { api } from './api';
  */
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: createAxiosBaseQuery(api),
+  baseQuery: dynamicBaseQuery,
   /**
    * Global cache tag types. Each feature registers the tags it uses.
    * Add new tags here as features are added — they are purely for TypeScript
