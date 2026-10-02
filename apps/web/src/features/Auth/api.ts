@@ -106,19 +106,9 @@ export const authApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
-    /**
-     * POST /auth/refresh
-     * Refreshes the access token using the HttpOnly cookie.
-     */
-    refresh: build.mutation<LoginResponse, void>({
-      query: () => ({
-        url: '/auth/refresh',
-        method: 'POST',
-      }),
-    }),
   }),
   // overrideExisting prevents accidental duplicate endpoint collisions in dev
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useSignupMutation, useLogoutMutation, useSwitchCompanyMutation, useRefreshMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useLogoutMutation, useSwitchCompanyMutation } = authApi;

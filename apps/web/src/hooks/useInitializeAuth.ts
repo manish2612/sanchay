@@ -1,54 +1,75 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRefreshMutation } from '@/features/Auth/api';
-import { setCredentials, selectCurrentUser } from '@/store/authSlice';
+import { setCredentials, selectCurrentUser, logout } from '@/store/authSlice';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 import { useNavigate, useLocation } from '@tanstack/react-router';
 
+const baseURL = import.meta.env.VITE_API_URL || 'http://202.51.1.109:5814/api/v1/';
+
+/**
+ * Runs once on mount to validate the current session against the server.
+ *
+ * Always calls POST /auth/refresh via native fetch (same path as the Axios
+ * interceptor's onRefreshToken — avoids interceptor deadlocks and keeps a
+ * single, consistent refresh implementation). If the server's HttpOnly
+ * refresh_token cookie is still valid, we receive a fresh access token and
+ * re-hydrate Redux. If not, we clear all local state and redirect to /login.
+ *
+ * WHY we don't skip when `user` exists in Redux:
+ *   authSlice rehydrates `user` from localStorage on every page load.
+ *   That `user` object is display data only — it is NOT proof the session
+ *   is still active. We must always confirm with the server.
+ */
 export function useInitializeAuth() {
   const [isInitializing, setIsInitializing] = useState(true);
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
-  const [refresh] = useRefreshMutation();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const initialize = async () => {
-      // If we already have a user in Redux, no need to refresh (unless we want to force sync)
-      if (user) {
-        setIsInitializing(false);
-        return;
-      }
-
-      // Check if we have an access token. If not, the refresh token cookie might still be there.
-      // So we blindly attempt a silent refresh on initial load if we have no user in Redux.
       try {
-        const response = await refresh().unwrap();
-        
-        // Save the new access token
-        if (response.token) {
-          cookieTokenStorage.setToken(response.token);
+        // Use native fetch — identical to onRefreshToken in store/api.ts.
+        // This bypasses Axios interceptors, preventing any chance of a
+        // refresh-loop deadlock on startup.
+        const response = await fetch(`${baseURL}auth/refresh`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          credentials: 'include', // sends the HttpOnly refresh_token cookie
+        });
+
+        if (!response.ok) {
+          throw new Error('Refresh failed');
         }
 
-        // Restore Redux state
-        if (response.user) {
+        const data = await response.json();
+
+        // Store the fresh access token so Axios can attach it as Bearer header.
+        if (data?.token) {
+          cookieTokenStorage.setToken(data.token);
+        } else {
+          throw new Error('No access token in refresh response');
+        }
+
+        // Sync Redux (and localStorage via authSlice) with the latest server data.
+        if (data?.user) {
           dispatch(
             setCredentials({
-              user: response.user,
-              companies: response.companies || [],
+              user: data.user,
+              companies: data.companies || [],
             })
           );
         }
-      } catch (error) {
-        // Silent fail - the user just isn't logged in (no valid refresh cookie)
+      } catch {
+        // Session is invalid. Clear the stale access token AND the stale
+        // localStorage user so we don't trust it on the next page load.
         cookieTokenStorage.clearToken();
-        
-        // Only redirect to login if we are on a protected route
-        const isAuthPage = 
-          location.pathname === '/login' || 
-          location.pathname === '/signup';
-          
+        dispatch(logout());
+
+        const isAuthPage =
+          location.pathname === '/login' || location.pathname === '/signup';
+
         if (!isAuthPage) {
           navigate({ to: '/login' });
         }
@@ -58,7 +79,8 @@ export function useInitializeAuth() {
     };
 
     initialize();
-  }, [dispatch, refresh, user, navigate, location.pathname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intentionally empty — run exactly once on mount.
 
   return { isInitializing, isAuthenticated: !!user };
 }
