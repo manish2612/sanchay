@@ -4,8 +4,8 @@ import { MasterNameField, MasterAliasField, MasterParentField } from '@/componen
 import { useGodownForm } from './useGodownForm';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
-export function GodownForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
-  const { form, onSubmit } = useGodownForm(onSuccess || onCancel);
+export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
+  const { form, onSubmit } = useGodownForm(onSuccess || onCancel, onError);
   
   useLeavePromptSlot({
     id: 'godown-form',
@@ -17,9 +17,9 @@ export function GodownForm({ onCancel, onSuccess }: { onCancel: () => void, onSu
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control} />
-          <MasterAliasField control={form.control} />
-          <MasterParentField control={form.control} label="Parent Godown" />
+          <MasterNameField control={form.control as any} />
+          <MasterAliasField control={form.control as any} />
+          <MasterParentField control={form.control as any} label="Parent Godown" />
           
         </div>
         

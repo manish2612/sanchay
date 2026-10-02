@@ -4,20 +4,20 @@ import { MasterNameField, MasterAliasField, MasterParentField } from '@/componen
 import { TextInput } from '@prime/ui';
 import { useUnitOfMeasureForm } from './useUnitOfMeasureForm';
 
-export function UnitOfMeasureForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
-  const { form, onSubmit } = useUnitOfMeasureForm(onSuccess || onCancel);
+export function UnitOfMeasureForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
+  const { form, onSubmit } = useUnitOfMeasureForm(onSuccess || onCancel, onError);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control} />
+          <MasterNameField control={form.control as any} />
           
-          <MasterParentField control={form.control} label="Parent Unit" />
+          <MasterParentField control={form.control as any} label="Parent Unit" />
           
-      <Form.Field control={form.control} name="symbol" render={({ field }) => (
+      <Form.Field control={form.control as any} name="symbol" render={({ field }) => (
         <Form.Item><Form.Label>Symbol</Form.Label><Form.Control><TextInput placeholder="e.g. kg" {...field} value={field.value ?? ''} /></Form.Control></Form.Item>
       )} />
-      <Form.Field control={form.control} name="decimalPlaces" render={({ field }) => (
+      <Form.Field control={form.control as any} name="decimalPlaces" render={({ field }) => (
         <Form.Item><Form.Label>Decimal Places</Form.Label><Form.Control><TextInput type="number" min={0} max={5} {...field} onChange={e => field.onChange(parseInt(e.target.value) || 0)} value={field.value ?? 0} /></Form.Control></Form.Item>
       )} />
       

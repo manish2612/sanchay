@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { stockGroupSchema, StockGroupFormValues } from './schema';
 
-export function useStockGroupForm(onSuccess: () => void) {
+export function useStockGroupForm(onSuccess: () => void, onError?: (title: string, desc: string) => void) {
   const form = useForm<StockGroupFormValues>({
     resolver: zodResolver(stockGroupSchema),
     defaultValues: { name: '', alias: '', parentId: ''  }

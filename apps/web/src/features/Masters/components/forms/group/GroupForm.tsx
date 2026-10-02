@@ -3,15 +3,15 @@ import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { useGroupForm } from './useGroupForm';
 
-export function GroupForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
-  const { form, onSubmit } = useGroupForm(onSuccess || onCancel);
+export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
+  const { form, onSubmit } = useGroupForm(onSuccess || onCancel, onError);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control} />
-          <MasterAliasField control={form.control} />
-          <MasterParentField control={form.control} label="Parent Group" />
+          <MasterNameField control={form.control as any} />
+          <MasterAliasField control={form.control as any} />
+          <MasterParentField control={form.control as any} label="Parent Group" />
           
         </div>
         

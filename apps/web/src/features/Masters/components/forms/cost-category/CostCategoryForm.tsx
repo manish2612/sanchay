@@ -3,14 +3,14 @@ import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { useCostCategoryForm } from './useCostCategoryForm';
 
-export function CostCategoryForm({ onCancel, onSuccess }: { onCancel: () => void, onSuccess?: () => void }) {
-  const { form, onSubmit } = useCostCategoryForm(onSuccess || onCancel);
+export function CostCategoryForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
+  const { form, onSubmit } = useCostCategoryForm(onSuccess || onCancel, onError);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control} />
-          <MasterAliasField control={form.control} />
+          <MasterNameField control={form.control as any} />
+          <MasterAliasField control={form.control as any} />
           
           
         </div>

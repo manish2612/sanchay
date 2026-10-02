@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { costCategorySchema, CostCategoryFormValues } from './schema';
 
-export function useCostCategoryForm(onSuccess: () => void) {
+export function useCostCategoryForm(onSuccess: () => void, onError?: (title: string, desc: string) => void) {
   const form = useForm<CostCategoryFormValues>({
     resolver: zodResolver(costCategorySchema),
     defaultValues: { name: '', alias: '', parentId: ''  }

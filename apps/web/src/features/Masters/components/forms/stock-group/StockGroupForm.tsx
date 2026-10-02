@@ -11,11 +11,13 @@ import { useStockGroupForm } from './useStockGroupForm';
 export function StockGroupForm({
   onCancel,
   onSuccess,
+  onError,
 }: {
   onCancel: () => void;
   onSuccess?: () => void;
+  onError?: (title: string, desc: string) => void;
 }) {
-  const { form, onSubmit } = useStockGroupForm(onSuccess || onCancel);
+  const { form, onSubmit } = useStockGroupForm(onSuccess || onCancel, onError);
   return (
     <Form {...form}>
       <form
