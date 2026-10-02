@@ -1,12 +1,9 @@
 import React from 'react';
 import { Form, TextInput, AutoSuggest, Icon } from '@prime/ui';
-import { Control } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-interface BaseMasterFieldProps {
-  control: Control<any>;
-}
-
-export function MasterNameField({ control }: BaseMasterFieldProps) {
+export function MasterNameField() {
+  const { control } = useFormContext();
   return (
     <Form.Field
       control={control}
@@ -24,7 +21,8 @@ export function MasterNameField({ control }: BaseMasterFieldProps) {
   );
 }
 
-export function MasterAliasField({ control }: BaseMasterFieldProps) {
+export function MasterAliasField() {
+  const { control } = useFormContext();
   return (
     <Form.Field
       control={control}
@@ -44,12 +42,13 @@ export function MasterAliasField({ control }: BaseMasterFieldProps) {
   );
 }
 
-interface MasterParentFieldProps extends BaseMasterFieldProps {
+interface MasterParentFieldProps {
   label: string;
   placeholder?: string;
 }
 
-export function MasterParentField({ control, label, placeholder = 'Search parent...' }: MasterParentFieldProps) {
+export function MasterParentField({ label, placeholder = 'Search parent...' }: MasterParentFieldProps) {
+  const { control } = useFormContext();
   const dummyOptions = [
     { label: 'Primary', value: 'p1' },
     { label: 'Secondary', value: 'p2' },

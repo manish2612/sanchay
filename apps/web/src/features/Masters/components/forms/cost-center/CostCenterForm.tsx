@@ -11,9 +11,9 @@ export function CostCenterForm({ onCancel, onSuccess, onError }: { onCancel: () 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit as any)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control as any} />
-          <MasterAliasField control={form.control as any} />
-          <MasterParentField control={form.control as any} label="Parent Cost Category" />
+          <MasterNameField />
+          <MasterAliasField />
+          <MasterParentField label="Parent Cost Category" />
           <OpeningBalanceField control={form.control as any} />
           <LedgerAllocationTable form={form} />
         </div>

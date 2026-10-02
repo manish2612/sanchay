@@ -10,9 +10,9 @@ export function UnitOfMeasureForm({ onCancel, onSuccess, onError }: { onCancel: 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control as any} />
+          <MasterNameField />
           
-          <MasterParentField control={form.control as any} label="Parent Unit" />
+          <MasterParentField label="Parent Unit" />
           
       <Form.Field control={form.control as any} name="symbol" render={({ field }) => (
         <Form.Item><Form.Label>Symbol</Form.Label><Form.Control><TextInput placeholder="e.g. kg" {...field} value={field.value ?? ''} /></Form.Control></Form.Item>

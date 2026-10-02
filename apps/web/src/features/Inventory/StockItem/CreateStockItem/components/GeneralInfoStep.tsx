@@ -11,9 +11,9 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <MasterNameField control={form.control} />
+      <MasterNameField />
       
-      <MasterParentField control={form.control} label="Stock Group" placeholder="Select Stock Group..." />
+      <MasterParentField label="Stock Group" placeholder="Select Stock Group..." />
 
       <Form.Field
         control={form.control}

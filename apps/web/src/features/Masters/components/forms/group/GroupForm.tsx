@@ -9,9 +9,9 @@ export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => vo
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
-          <MasterNameField control={form.control as any} />
-          <MasterAliasField control={form.control as any} />
-          <MasterParentField control={form.control as any} label="Parent Group" />
+          <MasterNameField />
+          <MasterAliasField />
+          <MasterParentField label="Parent Group" />
           
         </div>
         
