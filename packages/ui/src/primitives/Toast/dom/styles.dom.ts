@@ -35,10 +35,10 @@ export const toastVariants = cva(
     variants: {
       variant: {
         default: 'border-border bg-card text-card-foreground',
-        info: 'border-blue-500/30 bg-blue-50/90 text-blue-900 dark:bg-blue-950/80 dark:text-blue-100 dark:border-blue-700/50',
-        success: 'border-emerald-500/30 bg-emerald-50/90 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-100 dark:border-emerald-700/50',
-        warning: 'border-amber-500/30 bg-amber-50/90 text-amber-900 dark:bg-amber-950/80 dark:text-amber-100 dark:border-amber-700/50',
-        destructive: 'border-red-500/30 bg-red-50/90 text-red-900 dark:bg-red-950/80 dark:text-red-100 dark:border-red-700/50',
+        info: 'border-blue-500/30 bg-blue-50 text-blue-900 dark:bg-blue-950 dark:text-blue-100 dark:border-blue-700/50',
+        success: 'border-emerald-500/30 bg-emerald-50 text-emerald-900 dark:bg-emerald-950 dark:text-emerald-100 dark:border-emerald-700/50',
+        warning: 'border-amber-500/30 bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100 dark:border-amber-700/50',
+        destructive: 'border-red-500/30 bg-red-50 text-red-900 dark:bg-red-950 dark:text-red-100 dark:border-red-700/50',
       },
       density: {
         compact: 'p-2.5 gap-2 text-xs',
