@@ -26,14 +26,11 @@ export const vouchersApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['Voucher'],
     }),
-    createVoucher: build.mutation<any, { payload: any; companyId: string | null }>({
-      query: ({ payload, companyId }) => ({
+    createVoucher: build.mutation<any, any>({
+      query: (payload) => ({
         url: 'accounting/vouchers',
         method: 'POST',
         body: payload,
-        headers: companyId ? {
-          'X-Company-ID': companyId,
-        } : undefined,
       }),
       invalidatesTags: ['Voucher', 'Ledger'], // Invalidate ledgers as balances might update
     }),

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectActiveCompanyId } from '@/store/authSlice';
 import { useCreateVoucherMutation } from '../api';
 import { useVoucherPayloadGenerator } from './useVoucherPayloadGenerator';
 import { VoucherFormValues } from '../schema/voucherSchema';
@@ -17,7 +15,6 @@ export type ToastMessageState = {
 
 export function useVoucherSubmit() {
   const [createVoucher, { isLoading }] = useCreateVoucherMutation();
-  const activeCompanyId = useSelector(selectActiveCompanyId);
   const { generatePayload } = useVoucherPayloadGenerator();
   const [toastMessage, setToastMessage] = useState<ToastMessageState>(null);
 
@@ -29,10 +26,7 @@ export function useVoucherSubmit() {
       const apiPayload = generatePayload(data);
       console.log('Final API Payload:', apiPayload);
 
-      const response = await createVoucher({
-        payload: apiPayload,
-        companyId: activeCompanyId,
-      }).unwrap();
+      const response = await createVoucher(apiPayload).unwrap();
 
       console.log('Voucher saved successfully:', response);
 
