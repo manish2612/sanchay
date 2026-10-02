@@ -44,20 +44,25 @@ export function MasterAliasField() {
 
 interface MasterParentFieldProps {
   label: string;
+  name?: string;
   placeholder?: string;
+  options?: { label: string; value: string }[];
+  isLoading?: boolean;
 }
 
-export function MasterParentField({ label, placeholder = 'Search parent...' }: MasterParentFieldProps) {
+export function MasterParentField({ 
+  label, 
+  name = "parentId", 
+  placeholder = 'Search parent...', 
+  options = [],
+  isLoading
+}: MasterParentFieldProps) {
   const { control } = useFormContext();
-  const dummyOptions = [
-    { label: 'Primary', value: 'p1' },
-    { label: 'Secondary', value: 'p2' },
-  ];
 
   return (
     <Form.Field
       control={control}
-      name="parentId"
+      name={name}
       render={({ field }) => (
         <Form.Item>
           <Form.Label>{label}</Form.Label>
@@ -65,16 +70,17 @@ export function MasterParentField({ label, placeholder = 'Search parent...' }: M
             <AutoSuggest
               value={field.value ?? ''}
               onChange={field.onChange}
-              options={dummyOptions}
+              options={options}
             >
               <AutoSuggest.Input 
-                placeholder={placeholder} 
+                placeholder={isLoading ? 'Loading...' : placeholder} 
                 leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
+                disabled={isLoading}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
-                  <AutoSuggest.Empty>No parents found.</AutoSuggest.Empty>
-                  {dummyOptions.map((opt) => (
+                  <AutoSuggest.Empty>{isLoading ? 'Loading...' : 'No options found.'}</AutoSuggest.Empty>
+                  {options.map((opt) => (
                     <AutoSuggest.Item key={opt.value} value={opt.value} keywords={[opt.label]}>
                       {opt.label}
                     </AutoSuggest.Item>

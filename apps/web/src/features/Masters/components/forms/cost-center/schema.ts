@@ -8,6 +8,7 @@ export const ledgerAllocationSchema = z.object({
 });
 
 export const costCenterSchema = baseMasterSchema.extend({
+  costCategoryId: z.string().min(1, 'Cost Category is required'),
   openingBalance: z.string().optional(), 
   openingBalanceType: z.enum(['Cr', 'Dr']).optional(),
   ledgerAllocations: z.array(ledgerAllocationSchema).optional()

@@ -8,6 +8,15 @@ export interface CreateCostCategoryRequest {
   name: string;
 }
 
+export interface CostCategory {
+  id: string;
+  name: string;
+  alias?: string;
+  code?: string;
+  display_order: number;
+  is_active: boolean;
+}
+
 export const costCategoriesApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     createCostCategory: build.mutation<any, CreateCostCategoryRequest>({
@@ -18,7 +27,14 @@ export const costCategoriesApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['CostCategory'],
     }),
+    getCostCategories: build.query<CostCategory[], void>({
+      query: () => ({
+        url: 'accounting/costcategories',
+        method: 'GET',
+      }),
+      providesTags: ['CostCategory'],
+    }),
   }),
 });
 
-export const { useCreateCostCategoryMutation } = costCategoriesApi;
+export const { useCreateCostCategoryMutation, useGetCostCategoriesQuery } = costCategoriesApi;
