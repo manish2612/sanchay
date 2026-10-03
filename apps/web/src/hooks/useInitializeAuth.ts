@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCredentials, selectCurrentUser, logout } from '@/store/authSlice';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://202.51.1.109:5814/api/v1/';
+const baseURL = import.meta.env.VITE_API_URL || '/api/v1/';
 
 /**
  * Runs once on mount to validate the current session against the server.

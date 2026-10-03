@@ -1,7 +1,7 @@
 import { createApiRegistry } from '@prime/api';
 import { cookieTokenStorage } from '@/utils/tokenStorage';
 
-const baseURL = import.meta.env.VITE_API_URL || 'https://test.morya-infotech.com/api/v1/';
+const baseURL = import.meta.env.VITE_API_URL || '/api/v1/';
 
 /**
  * The singleton ApiRegistry for the web app.
