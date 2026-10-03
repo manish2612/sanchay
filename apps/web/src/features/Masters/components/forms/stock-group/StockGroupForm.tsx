@@ -7,6 +7,7 @@ import {
 } from '@/components/shared-fields/MasterFields';
 import { TextInput } from '@prime/ui';
 import { useStockGroupForm } from './useStockGroupForm';
+import { useGetStockGroupsQuery } from '@/features/Masters/api/stockGroupsApi';
 
 export function StockGroupForm({
   onCancel,
@@ -17,7 +18,15 @@ export function StockGroupForm({
   onSuccess?: () => void;
   onError?: (title: string, desc: string) => void;
 }) {
-  const { form, onSubmit } = useStockGroupForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting } = useStockGroupForm(onSuccess || onCancel, onError);
+  
+  const { data: stockGroups = [], isLoading: isLoadingGroups } = useGetStockGroupsQuery();
+  
+  const groupOptions = [...stockGroups].map(g => ({
+    label: g.name,
+    value: g.id
+  }));
+
   return (
     <Form {...form}>
       <form
@@ -27,7 +36,11 @@ export function StockGroupForm({
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
           <MasterNameField />
           <MasterAliasField />
-          <MasterParentField label="Parent Group" />
+          <MasterParentField 
+            label="Parent Group" 
+            options={groupOptions}
+            isLoading={isLoadingGroups}
+          />
 
           <Form.Field
             control={form.control as any}
@@ -70,7 +83,7 @@ export function StockGroupForm({
             name="exportPurchase"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>Export Purchase</Form.Label>
+                <Form.Label>Import Purchase</Form.Label>
                 <Form.Control>
                   <TextInput {...field} value={field.value ?? ''} />
                 </Form.Control>
@@ -80,10 +93,12 @@ export function StockGroupForm({
         </div>
 
         <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onCancel}>
+          <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit">Create Stock Group</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create Stock Group'}
+          </Button>
         </SheetFooter>
       </form>
     </Form>
