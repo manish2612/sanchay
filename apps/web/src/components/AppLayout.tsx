@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useLocation, useNavigate } from '@tanstack/react-router';
+import { Navigate, useLocation, useNavigate } from '@tanstack/react-router';
 import { Sidebar } from '@/features/Navigation/components/Sidebar';
 import { SidebarProvider } from '@/features/Navigation/components/Sidebar/useSidebar';
 import { MobileHeader } from '@/features/Navigation/components/MobileHeader';
@@ -47,10 +47,13 @@ export function AppLayout({ children }: AppLayoutProps) {
     return <>{children}</>;
   }
 
-  // Redirect to login if user manually navigates to a protected route without being authenticated
+  // Unauthenticated guard: initialization is done and session is invalid.
+  // useInitializeAuth clears Redux state on failure; this declarative <Navigate>
+  // is the single, authoritative redirect. Using the <Navigate> component (not
+  // the imperative navigate()) is essential — it commits the redirect after the
+  // render phase and is safe to return from render.
   if (!isAuthenticated) {
-    navigate({ to: '/login' });
-    return null;
+    return <Navigate to="/login" />;
   }
 
   const handleLogout = async () => {
