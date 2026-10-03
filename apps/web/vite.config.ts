@@ -10,6 +10,44 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://test.morya-infotech.com',
+        changeOrigin: true,
+        secure: true,
+        configure: (proxy) => {
+          // Rewrite Set-Cookie headers on every proxied response so the browser
+          // correctly stores and resends the HttpOnly refresh_token on localhost.
+          //
+          // cookieDomainRewrite alone is insufficient — the backend sets:
+          //   Domain=test.morya-infotech.com  → browser rejects (wrong domain)
+          //   Secure                          → blocks on http://localhost
+          //   SameSite=Strict                 → may block on proxy responses
+          //
+          // This hook strips/rewrites each attribute individually:
+          proxy.on('proxyRes', (_proxyRes, _req, res) => {
+            const setCookieHeader = _proxyRes.headers['set-cookie'];
+            if (!setCookieHeader) return;
+
+            const rewritten = setCookieHeader.map((cookie) =>
+              cookie
+                // Remove Domain — browser will scope cookie to localhost automatically
+                .replace(/;\s*domain=[^;]+/gi, '')
+                // Remove Secure — http://localhost doesn't guarantee HTTPS carve-out
+                .replace(/;\s*secure(?=;|$)/gi, '')
+                // Downgrade SameSite to Lax — Strict can block cross-context storage,
+                // None requires Secure (which we just removed)
+                .replace(/;\s*samesite=(strict|none)/gi, '; SameSite=Lax')
+            );
+
+            // Replace the header on the outgoing response to the browser
+            res.setHeader('set-cookie', rewritten);
+          });
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@master-forms': path.resolve(__dirname, './src/features/Masters/components/forms'),
