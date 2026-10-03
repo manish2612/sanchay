@@ -2,10 +2,11 @@ import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { useGodownForm } from './useGodownForm';
+import { useGetGodownsQuery } from '@/features/Masters/api/godownsApi';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
-  const { form, onSubmit } = useGodownForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting } = useGodownForm(onSuccess || onCancel, onError);
   
   useLeavePromptSlot({
     id: 'godown-form',
@@ -13,19 +14,31 @@ export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => v
     priority: 10,
   });
 
+  const { data: godowns = [], isLoading: isLoadingGodowns } = useGetGodownsQuery();
+  
+  const godownOptions = [...godowns].map(g => ({
+    label: g.name,
+    value: g.id
+  }));
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
           <MasterNameField />
           <MasterAliasField />
-          <MasterParentField label="Parent Godown" />
-          
+          <MasterParentField 
+            label="Parent Godown" 
+            options={godownOptions}
+            isLoading={isLoadingGodowns}
+          />
         </div>
         
         <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onCancel}>Cancel</Button>
-          <Button type="submit">Create Godown</Button>
+          <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>Cancel</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create Godown'}
+          </Button>
         </SheetFooter>
       </form>
     </Form>
