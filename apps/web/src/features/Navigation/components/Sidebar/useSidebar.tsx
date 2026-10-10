@@ -33,16 +33,6 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     error,
   } = useGetVoucherTypesQuery();
 
-  console.log(
-    '>>>>>>> useGetVoucherTypesQuery ',
-    voucherTypes,
-    isError,
-    isLoading,
-    isSuccess,
-    status,
-    error,
-  );
-
   // Compute dynamic navigation tree
   const navigationTree = useMemo(() => {
     // Deep clone the static tree to avoid mutating the original reference
