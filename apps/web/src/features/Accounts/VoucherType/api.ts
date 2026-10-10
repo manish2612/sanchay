@@ -1,5 +1,10 @@
 import { apiSlice } from '@/store/apiSlice';
-import type { GetVoucherTypesRequest, GetVoucherTypesResponse } from './types';
+import type { 
+  GetVoucherTypesRequest, 
+  GetVoucherTypesResponse,
+  CreateVoucherTypeRequest,
+  CreateVoucherTypeResponse
+} from './types';
 
 export const voucherTypeApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -10,7 +15,15 @@ export const voucherTypeApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['VoucherType'],
     }),
+    createVoucherType: build.mutation<CreateVoucherTypeResponse, CreateVoucherTypeRequest>({
+      query: (body) => ({
+        url: 'accounting/vouchertypes',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['VoucherType'],
+    }),
   }),
 });
 
-export const { useGetVoucherTypesQuery } = voucherTypeApi;
+export const { useGetVoucherTypesQuery, useCreateVoucherTypeMutation } = voucherTypeApi;
