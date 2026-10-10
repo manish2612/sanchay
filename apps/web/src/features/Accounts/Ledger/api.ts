@@ -1,5 +1,10 @@
 import { apiSlice } from '@/store/apiSlice';
-import type { GetLedgersRequest, GetLedgersResponse } from './types';
+import type { 
+  GetLedgersRequest, 
+  GetLedgersResponse,
+  GetStockGroupsRequest,
+  GetStockGroupsResponse
+} from './types';
 
 export const ledgerApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
@@ -10,7 +15,13 @@ export const ledgerApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['Ledger'],
     }),
+    getStockGroups: build.query<GetStockGroupsResponse, GetStockGroupsRequest>({
+      query: () => ({
+        url: 'inventory/stockgroups',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetLedgersQuery } = ledgerApi;
+export const { useGetLedgersQuery, useGetStockGroupsQuery } = ledgerApi;

@@ -1,21 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Form, TextInput, AutoSuggest, DropdownMenu, Icon } from '@prime/ui';
 import { UseFormReturn } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
-import { LEDGER_FORM_FIELDS, REGISTRATION_TYPES, PARENT_OPTIONS } from '../constants';
+import { LEDGER_FORM_FIELDS, REGISTRATION_TYPES } from '../constants';
+import { useParentOptions } from './useParentOptions';
 
 interface GeneralInfoStepProps {
   form: UseFormReturn<LedgerFormValues>;
 }
 
 export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
-  const [parentQuery, setParentQuery] = useState(form.getValues(LEDGER_FORM_FIELDS.PARENT) || '');
-
-  const filteredParent = PARENT_OPTIONS.filter((u) =>
-    u.label.toLowerCase().includes(parentQuery.toLowerCase()),
-  );
+  const { parentQuery, setParentQuery, filteredParent, isStockGroupsLoading } = useParentOptions(form);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -92,7 +89,8 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
               <AutoSuggest.Input
                 label="Parent *"
                 labelVariant="in-field"
-                placeholder="Search group..."
+                placeholder={isStockGroupsLoading ? "Loading groups..." : "Search group..."}
+                disabled={isStockGroupsLoading}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
@@ -103,7 +101,7 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
                       value={opt.value}
                       onSelect={() => {
                         field.onChange(opt.value);
-                        setParentQuery(opt.value);
+                        setParentQuery(opt.label);
                       }}
                     >
                       {opt.label}

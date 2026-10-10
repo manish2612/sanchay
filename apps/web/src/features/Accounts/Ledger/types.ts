@@ -39,3 +39,18 @@ export interface Ledger {
 
 export type GetLedgersResponse = Ledger[];
 export type GetLedgersRequest = void;
+
+export interface StockGroup {
+  id: string;
+  company_id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  created_by: string;
+  is_active: boolean;
+  name: string;
+  is_taxable: boolean;
+}
+
+export type GetStockGroupsResponse = StockGroup[];
+export type GetStockGroupsRequest = void;
