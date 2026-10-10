@@ -26,8 +26,11 @@ When this skill is triggered, your goal is to analyze the user's current git wor
    ### Group 1: [Commit Message/Type]
    **Reasoning**: Brief explanation of why these files belong together.
    **Files**:
-   - `path/to/file1.ts`
-   - `path/to/file2.tsx`
+   ```text
+   path/to/
+   ├── file1.ts
+   └── file2.tsx
+   ```
 
 4. **Provide Executable Commands**:
    Provide a single block of bash script that the user can run (or that you can run for them) to apply these separated commits. 
