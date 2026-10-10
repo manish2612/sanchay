@@ -16,24 +16,28 @@ export const useVoucherNumberingTable = (form: any) => {
     if (fields.length === 0 && !hasAppendedInitial.current) {
       hasAppendedInitial.current = true;
       append({
-        type: '',
-        fromDate: '',
-        reset: '',
+        numbering_type: '',
+        effective_from: '',
+        reset_on: '',
         prefix: '',
-        startingNo: 1,
+        starting_number: 1,
         suffix: '',
-        prefillWidth: undefined,
+        prefill_padding: undefined,
         isPhantom: true,
       });
     }
   }, [fields.length, append]);
 
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
-    const row = fields[rowIndex];
-    if (row) {
-      update(rowIndex, { ...row, [columnId]: value });
-    }
-  }, [fields, update]);
+    // Instead of using the stale fields array, we directly use form.setValue
+    // This instantly updates the underlying RHF state and triggers re-validation,
+    // avoiding race conditions when users type fast.
+    form.setValue(`${VOUCHER_TYPE_FIELDS.VOUCHER_NUMBERING}.${rowIndex}.${columnId}`, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  }, [form]);
 
   const removeRow = useCallback((rowIndex: number) => {
     // Prevent removing if it's the only row and it's a phantom row
@@ -44,7 +48,8 @@ export const useVoucherNumberingTable = (form: any) => {
   }, [fields, remove]);
 
   const onRowCommit = useCallback((rowIndex: number, columnId?: string, cellValue?: string) => {
-    let row = fields[rowIndex];
+    // Fetch the absolute latest row data straight from RHF to bypass any React state render delays
+    let row = form.getValues(`${VOUCHER_TYPE_FIELDS.VOUCHER_NUMBERING}.${rowIndex}`);
     if (!row) return "EXIT";
 
     if (columnId && cellValue !== undefined) {
@@ -53,10 +58,10 @@ export const useVoucherNumberingTable = (form: any) => {
     }
 
     const isValid = 
-      row.type?.trim() !== "" && 
-      row.fromDate != null && row.fromDate !== "" && 
-      row.reset?.trim() !== "" && 
-      Number(row.startingNo) >= 1;
+      row.numbering_type?.trim() !== "" && 
+      row.effective_from != null && row.effective_from !== "" && 
+      row.reset_on?.trim() !== "" && 
+      Number(row.starting_number) >= 1;
 
     if (!isValid) {
       setRowErrors((prev: any) => ({ ...prev, [rowIndex]: true }));
@@ -70,17 +75,19 @@ export const useVoucherNumberingTable = (form: any) => {
       const committedRow = { ...row, isPhantom: false };
       
       const newPhantomRow = {
-        type: '',
-        fromDate: '',
-        reset: '',
+        numbering_type: '',
+        effective_from: '',
+        reset_on: '',
         prefix: '',
-        startingNo: 1,
+        starting_number: 1,
         suffix: '',
-        prefillWidth: undefined,
+        prefill_padding: undefined,
         isPhantom: true,
       };
 
-      const newFields = [...fields];
+      // We read the absolute latest array state from RHF before pushing the phantom row
+      const currentFields = form.getValues(VOUCHER_TYPE_FIELDS.VOUCHER_NUMBERING) || [];
+      const newFields = [...currentFields];
       newFields[rowIndex] = committedRow;
       newFields.push(newPhantomRow);
 
@@ -88,7 +95,7 @@ export const useVoucherNumberingTable = (form: any) => {
       return "ADVANCE";
     }
     return "EXIT";
-  }, [fields, replace, updateData]);
+  }, [form, replace, updateData]);
 
   return {
     fields,
