@@ -2,6 +2,7 @@ import { authRegistry } from '../domains/auth/registry';
 import { globalRegistry } from '../domains/global/registry';
 import { coreRegistry } from '../domains/core/registry';
 import { accountingRegistry } from '../domains/accounting/registry';
+import { inventoryRegistry } from '../domains/inventory/registry';
 
 const STORAGE_KEY = 'erp_mock_settings';
 
@@ -11,6 +12,7 @@ export const defaultRegistry = {
   global: globalRegistry,
   core: coreRegistry,
   accounting: accountingRegistry,
+  inventory: inventoryRegistry,
 };
 
 // TypeScript automatically infers the massive global registry type
