@@ -4,7 +4,6 @@ import { Table } from '@prime/ui';
 import { flexRender } from '@tanstack/react-table';
 import { useVoucherNumberingTable } from './useVoucherNumberingTable';
 import { columns } from './columns';
-import { VoucherTypeFormValues } from './types';
 
 export const VoucherNumberingTable = ({ form }: { form: any }) => {
   const { fields, updateData, removeRow, onRowCommit, rowErrors } = useVoucherNumberingTable(form);
@@ -29,7 +28,7 @@ export const VoucherNumberingTable = ({ form }: { form: any }) => {
                 rowErrors: mergedErrors,
                 isRowEmpty: (row: any) => {
                   const data = row.original;
-                  return !data.type && !data.fromDate && !data.reset && !data.prefix && !data.suffix && !data.prefillWidth && data.startingNo === 1;
+                  return !data.numbering_type && !data.effective_from && !data.reset_on && !data.prefix && !data.suffix && !data.prefill_padding && data.starting_number === 1;
                 },
               },
               phantomRowConfig: {

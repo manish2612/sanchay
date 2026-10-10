@@ -103,9 +103,11 @@ export const PARENT_OPTIONS = [
 ];
 
 export const DEFAULT_VIEWING_MODE_OPTIONS = [
-  { label: 'Accounting Invoice', value: 'accounting' },
-  { label: 'Item Invoice', value: 'item' },
-  { label: 'As Voucher', value: 'voucher' },
+  { label: 'Item Mode', value: 'IM' },
+  { label: 'Item Mode (Accounts Only)', value: 'IMAO' },
+  { label: 'Accounting Invoice', value: 'AMAO' },
+  { label: 'Item Mode (Inventory Only)', value: 'IMIO' },
+  { label: 'Accounts Mode', value: 'AM' },
 ];
 
 export const APPLY_TAX_OPTIONS = [
@@ -115,15 +117,13 @@ export const APPLY_TAX_OPTIONS = [
 ];
 
 export const NUMBERING_TYPE_OPTIONS = [
-  { label: 'Automatic', value: 'automatic' },
-  { label: 'Manual', value: 'manual' },
-  { label: 'None', value: 'none' },
+  { label: 'Automatic', value: 'AUTO' },
+  { label: 'Manual', value: 'MANUAL' },
 ];
 
 export const RESET_OPTIONS = [
-  { label: 'Daily', value: 'daily' },
-  { label: 'Weekly', value: 'weekly' },
-  { label: 'Monthly', value: 'monthly' },
-  { label: 'Yearly', value: 'yearly' },
-  { label: 'Never', value: 'never' },
+  { label: 'Daily', value: 'DAILY' },
+  { label: 'Monthly', value: 'MONTHLY' },
+  { label: 'Yearly', value: 'YEARLY' },
+  { label: 'Never', value: 'NEVER' },
 ];

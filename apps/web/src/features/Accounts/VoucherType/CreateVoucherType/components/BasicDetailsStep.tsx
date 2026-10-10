@@ -1,16 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Form, TextInput, AutoSuggest, DropdownMenu, Switch, Icon } from '@prime/ui';
 import { UseFormReturn, useWatch } from 'react-hook-form';
 import { VoucherTypeFormValues } from '../schema';
-import {
-  VOUCHER_TYPE_FIELDS,
-  PARENT_OPTIONS,
-  DEFAULT_VIEWING_MODE_OPTIONS,
-  APPLY_TAX_OPTIONS,
-} from '../constants';
+import { VOUCHER_TYPE_FIELDS, DEFAULT_VIEWING_MODE_OPTIONS, APPLY_TAX_OPTIONS } from '../constants';
 import { SwitchCard } from '../../../../../components/TableCells/SwitchCard';
+import { useGetVoucherTypesQuery } from '../../api';
 
 interface BasicDetailsStepProps {
   form: UseFormReturn<VoucherTypeFormValues>;
@@ -19,14 +15,34 @@ interface BasicDetailsStepProps {
 export const BasicDetailsStep = ({ form }: BasicDetailsStepProps) => {
   const [parentQuery, setParentQuery] = useState(form.getValues(VOUCHER_TYPE_FIELDS.PARENT) || '');
 
-  const filteredParents = PARENT_OPTIONS.filter((u) =>
-    u.label.toLowerCase().includes(parentQuery.toLowerCase()),
-  );
+  const { data: voucherTypes = [], isLoading } = useGetVoucherTypesQuery();
 
   const parentValue = useWatch({
     control: form.control,
     name: VOUCHER_TYPE_FIELDS.PARENT,
   });
+
+  const currentParentLabel = useMemo(() => {
+    return voucherTypes.find((vt) => vt.id === parentValue)?.name || '';
+  }, [voucherTypes, parentValue]);
+
+  React.useEffect(() => {
+    const parentId = form.getValues(VOUCHER_TYPE_FIELDS.PARENT);
+    if (parentId && voucherTypes.length > 0) {
+      const parentLabel = voucherTypes.find((vt) => vt.id === parentId)?.name;
+      // If the query is currently exactly the ID (which happens on mount before data loads)
+      // replace it with the label.
+      if (parentLabel && parentQuery === parentId) {
+        setParentQuery(parentLabel);
+      }
+    }
+  }, [voucherTypes, form, parentQuery]);
+
+  const filteredParents = useMemo(() => {
+    return voucherTypes
+      .map((vt) => ({ label: vt.name, value: vt.id }))
+      .filter((u) => u.label.toLowerCase().includes(parentQuery.toLowerCase()));
+  }, [voucherTypes, parentQuery]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -59,24 +75,29 @@ export const BasicDetailsStep = ({ form }: BasicDetailsStepProps) => {
                 inputValue={parentQuery}
                 onInputChange={(v) => {
                   setParentQuery(v);
-                  field.onChange(v);
+                  if (v !== currentParentLabel) {
+                    field.onChange('');
+                  }
                 }}
                 options={filteredParents}
               >
                 <AutoSuggest.Input
                   label="Parent *"
                   labelVariant="in-field"
-                  placeholder="Search parent..."
+                  placeholder={isLoading ? 'Loading parents...' : 'Search parent...'}
+                  disabled={isLoading}
                 />
                 <AutoSuggest.Content>
                   <AutoSuggest.List>
-                    <AutoSuggest.Empty>No parent found.</AutoSuggest.Empty>
+                    <AutoSuggest.Empty>
+                      {isLoading ? 'Loading...' : 'No parent found.'}
+                    </AutoSuggest.Empty>
                     {filteredParents.map((opt) => (
                       <AutoSuggest.Item
                         key={opt.value}
                         value={opt.label}
                         onSelect={() => {
-                          field.onChange(opt.label);
+                          field.onChange(opt.value);
                           setParentQuery(opt.label);
                         }}
                       >
@@ -141,14 +162,14 @@ export const BasicDetailsStep = ({ form }: BasicDetailsStepProps) => {
           )}
         />
 
-        <SwitchCard 
-          name={VOUCHER_TYPE_FIELDS.SET_AS_DEFAULT} 
-          label="Set As Default" 
-          className="p-3 h-10" 
+        <SwitchCard
+          name={VOUCHER_TYPE_FIELDS.SET_AS_DEFAULT}
+          label="Set As Default"
+          className="p-3 h-10"
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:col-span-2">
-        {parentValue?.toLowerCase() === 'sales' && (
+        {currentParentLabel.toLowerCase() === 'sales' && (
           <Form.Field
             control={form.control}
             name={VOUCHER_TYPE_FIELDS.APPLY_TAX}

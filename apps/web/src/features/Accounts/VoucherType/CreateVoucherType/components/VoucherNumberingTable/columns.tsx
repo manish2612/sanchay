@@ -10,17 +10,17 @@ import { NUMBERING_TYPE_OPTIONS, RESET_OPTIONS } from '../../constants';
 const numberingColumnHelper = createColumnHelper<any>();
 
 export const columns: ColumnDef<any, any>[] = [
-  numberingColumnHelper.accessor('type', {
+  numberingColumnHelper.accessor('numbering_type', {
     header: 'Type',
     cell: (props) => <SelectCell {...props} options={NUMBERING_TYPE_OPTIONS} />,
     size: 150,
   }),
-  numberingColumnHelper.accessor('fromDate', {
+  numberingColumnHelper.accessor('effective_from', {
     header: 'From Date',
     cell: DateCell,
     size: 150,
   }),
-  numberingColumnHelper.accessor('reset', {
+  numberingColumnHelper.accessor('reset_on', {
     header: 'Reset',
     cell: (props) => <SelectCell {...props} options={RESET_OPTIONS} />,
     size: 150,
@@ -29,21 +29,45 @@ export const columns: ColumnDef<any, any>[] = [
     header: 'Prefix',
     cell: TextCell,
     size: 120,
+    meta: {
+      inputConfig: {
+        maxLength: 20,
+      },
+    },
   }),
-  numberingColumnHelper.accessor('startingNo', {
+  numberingColumnHelper.accessor('starting_number', {
     header: 'Starting No',
     cell: NumericCell,
     size: 100,
+    meta: {
+      inputConfig: {
+        allowNegative: false,
+        min: 1,
+      },
+    },
   }),
   numberingColumnHelper.accessor('suffix', {
     header: 'Suffix',
     cell: TextCell,
     size: 120,
+    meta: {
+      inputConfig: {
+        maxLength: 20,
+      },
+    },
   }),
-  numberingColumnHelper.accessor('prefillWidth', {
+  numberingColumnHelper.accessor('prefill_padding', {
     header: 'Prefill Width',
     cell: NumericCell,
     size: 100,
+    meta: {
+      inputConfig: {
+        allowEmpty: true,
+        allowNegative: false,
+        max: 10,
+        min: 1,
+      },
+    },
   }),
   numberingColumnHelper.display({
     id: 'actions',

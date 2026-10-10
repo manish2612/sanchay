@@ -2,13 +2,16 @@ import { z } from 'zod';
 import { VOUCHER_TYPE_FIELDS } from './constants';
 
 const numberingRowSchema = z.object({
-  type: z.string().min(1, 'Required'),
-  fromDate: z.union([z.string().min(1, 'Required'), z.date()]),
-  reset: z.string().min(1, 'Required'),
-  prefix: z.string().optional(),
-  startingNo: z.coerce.number().min(1, 'Must be at least 1'),
-  suffix: z.string().optional(),
-  prefillWidth: z.coerce.number().min(1, 'Must be at least 1').optional(),
+  numbering_type: z.string().min(1, 'Type is required'),
+  effective_from: z.union([z.string().min(1, 'Effective from date is required'), z.date()]),
+  reset_on: z.string().min(1, 'Reset frequency is required'),
+  prefix: z.string().max(20, 'Prefix cannot exceed 20 characters').optional(),
+  starting_number: z.coerce.number().min(1, 'Starting number must be at least 1'),
+  suffix: z.string().max(20, 'Suffix cannot exceed 20 characters').optional(),
+  prefill_padding: z.preprocess(
+    (val) => (val === "" ? undefined : val), 
+    z.coerce.number().min(1, 'Prefill width must be at least 1').max(10, 'Width cannot exceed 10').optional()
+  ),
 });
 
 export const voucherTypeSchema = z.object({
@@ -30,13 +33,13 @@ export const voucherTypeSchema = z.object({
         
         // For phantom rows, only validate them if the user has started typing
         const isPristine = 
-          !row.type && 
-          !row.fromDate && 
-          !row.reset && 
+          !row.numbering_type && 
+          !row.effective_from && 
+          !row.reset_on && 
           !row.prefix && 
           !row.suffix && 
-          (row.startingNo === 1 || !row.startingNo) && 
-          !row.prefillWidth;
+          (row.starting_number === 1 || !row.starting_number) && 
+          !row.prefill_padding;
           
         return !isPristine; // Drop it if it's pristine, keep it for validation if it's dirty
       });
