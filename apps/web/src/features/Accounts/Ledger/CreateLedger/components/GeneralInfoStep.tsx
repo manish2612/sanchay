@@ -4,17 +4,17 @@ import React, { useState } from 'react';
 import { Form, TextInput, AutoSuggest, DropdownMenu, Icon } from '@prime/ui';
 import { UseFormReturn } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
-import { LEDGER_FORM_FIELDS, REGISTRATION_TYPES, UNDER_OPTIONS } from '../constants';
+import { LEDGER_FORM_FIELDS, REGISTRATION_TYPES, PARENT_OPTIONS } from '../constants';
 
 interface GeneralInfoStepProps {
   form: UseFormReturn<LedgerFormValues>;
 }
 
 export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
-  const [underQuery, setUnderQuery] = useState(form.getValues(LEDGER_FORM_FIELDS.UNDER) || '');
+  const [parentQuery, setParentQuery] = useState(form.getValues(LEDGER_FORM_FIELDS.PARENT) || '');
 
-  const filteredUnder = UNDER_OPTIONS.filter((u) =>
-    u.label.toLowerCase().includes(underQuery.toLowerCase()),
+  const filteredParent = PARENT_OPTIONS.filter((u) =>
+    u.label.toLowerCase().includes(parentQuery.toLowerCase()),
   );
 
   return (
@@ -78,32 +78,32 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
 
       <Form.Field
         control={form.control}
-        name={LEDGER_FORM_FIELDS.UNDER}
+        name={LEDGER_FORM_FIELDS.PARENT}
         render={({ field }: any) => (
           <Form.Item>
             <AutoSuggest
-              inputValue={underQuery}
+              inputValue={parentQuery}
               onInputChange={(v) => {
-                setUnderQuery(v);
+                setParentQuery(v);
                 field.onChange(v);
               }}
-              options={filteredUnder}
+              options={filteredParent}
             >
               <AutoSuggest.Input
-                label="Under *"
+                label="Parent *"
                 labelVariant="in-field"
                 placeholder="Search group..."
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
                   <AutoSuggest.Empty>No group found.</AutoSuggest.Empty>
-                  {filteredUnder.map((opt) => (
+                  {filteredParent.map((opt) => (
                     <AutoSuggest.Item
                       key={opt.value}
                       value={opt.value}
                       onSelect={() => {
                         field.onChange(opt.value);
-                        setUnderQuery(opt.value);
+                        setParentQuery(opt.value);
                       }}
                     >
                       {opt.label}

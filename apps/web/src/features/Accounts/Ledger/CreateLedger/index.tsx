@@ -59,7 +59,7 @@ const CreateLedgerPage = () => {
     defaultValues: {
       [LEDGER_FORM_FIELDS.NAME]: '',
       [LEDGER_FORM_FIELDS.ALIAS]: '',
-      [LEDGER_FORM_FIELDS.UNDER]: '',
+      [LEDGER_FORM_FIELDS.PARENT]: '',
       [LEDGER_FORM_FIELDS.ACCOUNT_CODE]: '',
       [LEDGER_FORM_FIELDS.REGISTRATION_TYPE]: '',
       [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: '',

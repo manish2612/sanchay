@@ -2,7 +2,7 @@ export const LEDGER_FORM_FIELDS = {
   // Step 1: General Info
   NAME: "name",
   ALIAS: "alias",
-  UNDER: "under",
+  PARENT: "parent",
   ACCOUNT_CODE: "accountCode",
   REGISTRATION_TYPE: "registrationType",
   REGISTRATION_NUMBER: "registrationNumber",
@@ -38,7 +38,7 @@ export const LEDGER_WIZARD_STEPS = [
     fields: [
       LEDGER_FORM_FIELDS.NAME,
       LEDGER_FORM_FIELDS.ALIAS,
-      LEDGER_FORM_FIELDS.UNDER,
+      LEDGER_FORM_FIELDS.PARENT,
       LEDGER_FORM_FIELDS.ACCOUNT_CODE,
       LEDGER_FORM_FIELDS.REGISTRATION_TYPE,
       LEDGER_FORM_FIELDS.REGISTRATION_NUMBER,
@@ -83,7 +83,7 @@ export const LEDGER_WIZARD_STEPS = [
   },
 ];
 
-export const UNDER_OPTIONS = [
+export const PARENT_OPTIONS = [
   { label: "Sundry Debtors", value: "sundry_debtors" },
   { label: "Sundry Creditors", value: "sundry_creditors" },
   { label: "Bank Accounts", value: "bank_accounts" },
