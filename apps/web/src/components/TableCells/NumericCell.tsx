@@ -3,7 +3,7 @@ import { TextInput } from "@prime/ui";
 
 export const NumericCell = ({ getValue, row, column, table }: any) => {
   const { inputConfig } = column.columnDef.meta || {};
-  const { allowNegative = false, max, type, disabled: disabledConfig } = inputConfig || {};
+  const { allowNegative = false, max, min, type, disabled: disabledConfig, allowEmpty = false } = inputConfig || {};
   const isDisabled = typeof disabledConfig === 'function' ? disabledConfig(row) : disabledConfig;
 
   const meta = table.options.meta || {} as any;
@@ -16,19 +16,24 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const regex = allowNegative ? /[^0-9.-]/ : /[^0-9.]/;
 
   const formatValue = (val: string) => {
-    if (!val || val.trim() === "") return "0.00";
+    if (!val || val.trim() === "") return allowEmpty ? "" : "0.00";
     const numeric = parseFloat(val.replace(regex, ""));
-    if (isNaN(numeric)) return "0.00";
+    if (isNaN(numeric)) return allowEmpty ? "" : "0.00";
     return numeric.toFixed(2);
   };
 
   const [value, setValue] = useState(() => {
-    return initialValue === "" ? "0.00" : initialValue;
+    if (allowEmpty && (initialValue === undefined || initialValue === "")) return "";
+    return initialValue === "" || initialValue === undefined ? "0.00" : initialValue;
   });
 
   useEffect(() => {
-    setValue(initialValue === "" ? "0.00" : initialValue);
-  }, [initialValue]);
+    if (allowEmpty && (initialValue === undefined || initialValue === "")) {
+      setValue("");
+    } else {
+      setValue(initialValue === "" || initialValue === undefined ? "0.00" : initialValue);
+    }
+  }, [initialValue, allowEmpty]);
 
   const onBlur = () => {
     const formatted = formatValue(value);
@@ -37,7 +42,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   };
 
   return (
-    <TextInput type={type || "text"} max={max} disabled={isDisabled}
+    <TextInput type={type || "text"} max={max} min={min} disabled={isDisabled}
       value={value}
       onKeyDown={(e) => {
         // Block all invalid printable characters to prevent selection loss

@@ -40,6 +40,11 @@ declare module '@tanstack/react-table' {
       optionsKey?: string;
       idKey?: string;
       optionsFilter?: (opt: any, row: any) => boolean;
+      maxLength?: number;
+      min?: number;
+      max?: number;
+      allowEmpty?: boolean;
+      type?: string;
     };
   }
 }

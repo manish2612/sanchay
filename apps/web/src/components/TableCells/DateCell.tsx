@@ -4,7 +4,8 @@ import { DatePicker } from "@prime/ui";
 export const DateCell = ({ getValue, row, column, table }: any) => {
   const meta = table.options.meta || {} as any;
   const updateData = meta?.actions?.updateData;
-  const error = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
+  const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
+  const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
 
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);

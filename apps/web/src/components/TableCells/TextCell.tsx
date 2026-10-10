@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { TextInput } from "@prime/ui";
 
 export const TextCell = ({ getValue, row, column, table }: any) => {
+  const { inputConfig } = column.columnDef.meta || {};
+  const { maxLength } = inputConfig || {};
   const meta = table.options.meta || {} as any;
-  const error = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
+  const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
+  const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
   const updateData = meta?.actions?.updateData;
 
   const initialValue = getValue() as string;
@@ -19,6 +22,7 @@ export const TextCell = ({ getValue, row, column, table }: any) => {
 
   return (
     <TextInput
+      maxLength={maxLength}
       variant={error ? "error" : "default"}
       value={value}
       onChange={(e) => {
