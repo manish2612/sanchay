@@ -8,6 +8,13 @@ export interface CreateStockUnitRequest {
   uqc_code: string;
 }
 
+export interface StockUnit {
+  decimal_places: number;
+  name: string;
+  symbol: string;
+  uqc_code: string;
+}
+
 export const stockUnitsApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
     createStockUnit: build.mutation<any, CreateStockUnitRequest>({
@@ -18,7 +25,15 @@ export const stockUnitsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['StockUnit'],
     }),
+    getStockUnits: build.query<StockUnit[], void>({
+      query: () => ({
+        url: 'inventory/stockunits',
+        method: 'GET',
+      }),
+      providesTags: ['StockUnit'],
+    }),
   }),
 });
 
-export const { useCreateStockUnitMutation } = stockUnitsApi;
+export const { useCreateStockUnitMutation, useGetStockUnitsQuery } = stockUnitsApi;
+

@@ -24,7 +24,7 @@ export const godownAllocationSchema = z.object({
 
 export const stockItemSchema = baseMasterSchema.extend({
   categoryId: z.string().min(1, 'Category is required'),
-  unit: z.coerce.number().min(0, 'Unit is required'),
+  unit: z.string().min(1, 'Unit is required'),
   hsnSac: z.string().min(1, 'HSN/SAC is required'),
   
   enableMultiUnit: z.boolean(),
