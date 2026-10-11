@@ -17,6 +17,7 @@ When this skill is triggered, your goal is to analyze the user's current git wor
 2. **Group the Changes**:
    - Identify files that belong together (e.g., UI component + its styles, a feature + its tests, backend route + frontend API call).
    - Segregate distinct features, bug fixes, or refactors into their own groups.
+   - **Segregate Common/Shared Code from Features**: NEVER merge common or shared components, primitives, or hooks (e.g., `apps/web/src/components/`, `packages/ui/`, shared utilities) with feature-specific code (`apps/web/src/features/`), even if both were updated to solve the same underlying issue or feature. Always commit common/shared primitives and feature-specific implementations in separate commits.
    - Give each group a concise, descriptive title (e.g., `Feature: Add Godown Allocation Table`, `Fix: Leave Prompt Modal z-index`).
 
 3. **Output the Plan**:
