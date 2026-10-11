@@ -38,16 +38,18 @@ export const useCreateLedger = () => {
       credit_limit_amount: parseFloat(data[LEDGER_FORM_FIELDS.CREDIT_LIMIT] || "0"),
       credit_period_days: parseInt(data[LEDGER_FORM_FIELDS.CREDIT_PERIOD] || "0", 10),
       is_bill_wise_enabled: data[LEDGER_FORM_FIELDS.IS_BILL_BY_BILL] || false,
-      is_cost_centre_enabled: false, // Default
+      is_cost_centre_enabled: data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED] || false,
       name: data[LEDGER_FORM_FIELDS.NAME],
       opening_balance: parseFloat(data[LEDGER_FORM_FIELDS.OPENING_BALANCE] || "0"),
       opening_balance_type: data[LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE] || "",
-      opening_balances: (data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || []).map(alloc => ({
-        amount: parseFloat(String(alloc.amount) || "0"),
-        cost_centre_id: alloc.costCenter,
-        financial_year_id: "", 
-        ledger_id: ""
-      })),
+      opening_balances: data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]
+        ? (data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || []).map(alloc => ({
+            amount: parseFloat(String(alloc.amount) || "0"),
+            cost_centre_id: alloc.costCenterId || "",
+            financial_year_id: "", 
+            ledger_id: ""
+          }))
+        : [],
       tax_rates: [], // Default
       tax_type_id: null, // Default
     };

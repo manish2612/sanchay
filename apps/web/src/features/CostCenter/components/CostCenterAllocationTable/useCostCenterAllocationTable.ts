@@ -3,7 +3,9 @@ import { type CostCenterAllocationRow } from "./columns";
 
 const generateEmptyRow = (id: string): CostCenterAllocationRow => ({
   id,
+  costCategoryId: "",
   costCategory: "",
+  costCenterId: "",
   costCenter: "",
   amount: "",
   isPhantom: true,

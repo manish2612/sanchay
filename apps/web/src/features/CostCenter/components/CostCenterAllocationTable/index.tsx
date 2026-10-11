@@ -35,22 +35,29 @@ export const CostCenterAllocationTable = ({
   const columns = useMemo(() => getColumns(), []);
 
   const costCategoryOptions = useMemo(() => {
-    return categories?.map((cat) => ({
-      id: cat.id,
-      label: cat.name,
-      value: cat.name
-    })) || [];
+    return (
+      categories?.map((cat) => ({
+        id: cat.id,
+        label: cat.name,
+        value: cat.name,
+      })) || []
+    );
   }, [categories]);
 
   const costCenterOptions = useMemo(() => {
-    return centers?.map((cc) => ({
-      id: cc.id,
-      label: cc.name,
-      value: cc.name,
-      // Pass the category so we can auto-fill it later if desired
-      cost_category_name: cc.cost_category_name
-    })) || [];
+    return (
+      centers?.map((cc) => ({
+        id: cc.id,
+        label: cc.name,
+        value: cc.name,
+        // Pass the category so we can auto-fill it later if desired
+        cost_category_name: cc.cost_category_name,
+      })) || []
+    );
   }, [centers]);
+
+  console.log('>>>>> costCategoryOptions ', costCategoryOptions);
+  console.log('>>>>> costCenterOptions ', costCenterOptions);
 
   return (
     <AllocationTableLayout
@@ -69,10 +76,12 @@ export const CostCenterAllocationTable = ({
           meta: {
             state: {
               rowErrors,
-              isRowEmpty: (row: any) => 
-                !row.original.costCenter && 
-                !row.original.costCategory && 
-                (!row.original.amount || row.original.amount === "0.00" || row.original.amount === "0"),
+              isRowEmpty: (row: any) =>
+                !row.original.costCenter &&
+                !row.original.costCategory &&
+                (!row.original.amount ||
+                  row.original.amount === '0.00' ||
+                  row.original.amount === '0'),
             },
             phantomRowConfig: {
               isPhantom: (row: any) => (row.original as any).isPhantom,
@@ -85,8 +94,8 @@ export const CostCenterAllocationTable = ({
             },
             options: {
               costCategories: costCategoryOptions,
-              costCenters: costCenterOptions
-            }
+              costCenters: costCenterOptions,
+            },
           },
         }}
       >
@@ -117,9 +126,9 @@ export const CostCenterAllocationTable = ({
               key={row.id}
               data-state={row.getIsSelected() ? 'selected' : undefined}
               data-focused={isFocused}
-              className={rowVariants({ 
-                isPhantom: !!(row.original as any).isPhantom, 
-                isFocused 
+              className={rowVariants({
+                isPhantom: !!(row.original as any).isPhantom,
+                isFocused,
               })}
             >
               {row.getVisibleCells().map((cell: any) => (

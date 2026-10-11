@@ -4,7 +4,9 @@ import { baseAddressSchema, baseContactSchema } from '@/utils/shared-schemas';
 
 const costCenterAllocationSchema = z.object({
   id: z.string(),
+  costCategoryId: z.string().optional(),
   costCategory: z.string(),
+  costCenterId: z.string().optional(),
   costCenter: z.string(),
   amount: z.string(),
   isPhantom: z.boolean().optional(),
@@ -26,15 +28,17 @@ export const ledgerFormSchema = z.object({
   [LEDGER_FORM_FIELDS.BLOCK_SALES_BILL_ON_CREDIT_LIMIT_EXCEEDED]: z.boolean(),
   [LEDGER_FORM_FIELDS.OPENING_BALANCE]: z.string().optional(),
   [LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE]: z.enum(["Dr", "Cr"]),
+  [LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]: z.boolean(),
   [LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS]: z.array(costCenterAllocationSchema).optional(),
 })
 .merge(baseAddressSchema)
 .merge(baseContactSchema)
 .superRefine((data, ctx) => {
+  const isCostCenterEnabled = data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED];
   const openingBalanceStr = data[LEDGER_FORM_FIELDS.OPENING_BALANCE] || "0";
   const targetAmount = parseFloat(openingBalanceStr.replace(/[^0-9.-]+/g, "")) || 0;
   
-  if (targetAmount > 0) {
+  if (isCostCenterEnabled && targetAmount > 0) {
     const allocations = data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || [];
     const allocatedAmount = allocations.reduce((sum, row) => {
       if (row.isPhantom) return sum;
