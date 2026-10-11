@@ -12,7 +12,7 @@ interface GeneralInfoStepProps {
 }
 
 export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
-  const { parentQuery, setParentQuery, filteredParent, isStockGroupsLoading } = useParentOptions(form);
+  const { parentQuery, setParentQuery, filteredParent, isGroupsLoading } = useParentOptions(form);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -87,10 +87,10 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
               options={filteredParent}
             >
               <AutoSuggest.Input
-                label="Parent *"
+                label="Parent"
                 labelVariant="in-field"
-                placeholder={isStockGroupsLoading ? "Loading groups..." : "Search group..."}
-                disabled={isStockGroupsLoading}
+                placeholder={isGroupsLoading ? "Loading groups..." : "Search group..."}
+                disabled={isGroupsLoading}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>

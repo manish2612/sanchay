@@ -3,7 +3,9 @@ import type {
   GetLedgersRequest, 
   GetLedgersResponse,
   GetStockGroupsRequest,
-  GetStockGroupsResponse
+  GetStockGroupsResponse,
+  CreateLedgerRequest,
+  CreateLedgerResponse
 } from './types';
 
 export const ledgerApi = apiSlice.injectEndpoints({
@@ -21,7 +23,19 @@ export const ledgerApi = apiSlice.injectEndpoints({
         method: 'GET',
       }),
     }),
+    createLedger: build.mutation<CreateLedgerResponse, CreateLedgerRequest>({
+      query: (body) => ({
+        url: 'accounting/ledgers',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Ledger'],
+    }),
   }),
 });
 
-export const { useGetLedgersQuery, useGetStockGroupsQuery } = ledgerApi;
+export const { 
+  useGetLedgersQuery, 
+  useGetStockGroupsQuery,
+  useCreateLedgerMutation 
+} = ledgerApi;

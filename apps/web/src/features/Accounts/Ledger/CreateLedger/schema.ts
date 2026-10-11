@@ -14,7 +14,7 @@ export const ledgerFormSchema = z.object({
   // Step 1
   [LEDGER_FORM_FIELDS.NAME]: z.string().min(1, "Name is required"),
   [LEDGER_FORM_FIELDS.ALIAS]: z.string().optional(),
-  [LEDGER_FORM_FIELDS.PARENT]: z.string().min(1, "Parent group is required"),
+  [LEDGER_FORM_FIELDS.PARENT]: z.string().optional(),
   [LEDGER_FORM_FIELDS.ACCOUNT_CODE]: z.string().optional(),
   [LEDGER_FORM_FIELDS.REGISTRATION_TYPE]: z.string().min(1, "Registration type is required"),
   [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().optional(),

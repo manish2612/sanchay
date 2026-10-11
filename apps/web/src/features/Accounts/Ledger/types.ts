@@ -54,3 +54,60 @@ export interface StockGroup {
 
 export type GetStockGroupsResponse = StockGroup[];
 export type GetStockGroupsRequest = void;
+
+export interface CreateLedgerRequest {
+  account_group_id: string;
+  address: {
+    address: string;
+    city: string;
+    country_id: string;
+    postal_code: string;
+    state_id: string;
+  };
+  alias: string;
+  block_sales_on_credit_limit_exceed: boolean;
+  code: string;
+  contact: {
+    cin_number: string;
+    contact_person: string;
+    description: string;
+    email: string;
+    mobile_number: string;
+    registration_type: string;
+    tax_identifier: string;
+    telephone_number: string;
+    whatsapp_number: string;
+  };
+  credit_limit_amount: number;
+  credit_period_days: number;
+  is_bill_wise_enabled: boolean;
+  is_cost_centre_enabled: boolean;
+  name: string;
+  opening_balance: number;
+  opening_balance_type: string;
+  opening_balances: {
+    amount: number;
+    cost_centre_id: string;
+    financial_year_id: string;
+    ledger_id: string;
+  }[];
+  tax_rates: any[];
+  tax_type_id: string | null;
+}
+
+export interface CreateLedgerResponse {
+  block_sales_on_credit_limit_exceed: boolean;
+  code: string;
+  credit_limit_amount: number;
+  credit_period_days: number;
+  grand_parent_id: string;
+  id: string;
+  is_bill_wise_enabled: boolean;
+  is_cost_centre_enabled: boolean;
+  is_party_ledger: boolean;
+  is_predefined: boolean;
+  name: string;
+  opening_balance: number;
+  parent_id: string;
+  tax_rates: any[];
+}

@@ -18,6 +18,9 @@ import { BillingCreditGraphic } from './components/graphics/BillingCreditGraphic
 import { ContactGraphic } from './components/graphics/ContactGraphic';
 import { ContactLocationGraphic } from '@/features/Company/CreateCompany/components/graphics/ContactLocationGraphic';
 
+import { useCreateLedger } from './hooks/useCreateLedger';
+import { CreateLedgerSuccess } from './components/CreateLedgerSuccess';
+
 const WizardContent = ({ form }: { form: any }) => {
   const { currentStep } = useFormWizardContext();
 
@@ -51,7 +54,7 @@ const FormWizardHeaderWithContext = ({
 };
 
 const CreateLedgerPage = () => {
-  const navigate = useNavigate();
+  const { onSubmit, isSubmitting, isSuccess, navigate } = useCreateLedger();
 
   const form = useForm<LedgerFormValues>({
     mode: 'onChange',
@@ -81,12 +84,6 @@ const CreateLedgerPage = () => {
     },
   });
 
-  const onSubmit = (data: LedgerFormValues) => {
-    console.log('Submitted ledger data:', data);
-    alert('Ledger created successfully! Check console for details.');
-    navigate({ to: '/accounts/masters/ledger' });
-  };
-
   const getHeaderIcon = (step: number) => {
     switch (step) {
       case 1:
@@ -102,6 +99,10 @@ const CreateLedgerPage = () => {
     }
   };
 
+  if (isSuccess) {
+    return <CreateLedgerSuccess />;
+  }
+
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden relative">
       <FormWizard form={form} initialStep={1} steps={LEDGER_WIZARD_STEPS} onSubmit={onSubmit}>
@@ -112,7 +113,10 @@ const CreateLedgerPage = () => {
 
           <WizardContent form={form} />
 
-          <FormWizard.Footer onCancel={() => navigate({ to: '/accounts/masters/ledger' })} />
+          <FormWizard.Footer 
+            onCancel={() => navigate({ to: '/accounts/masters/ledger' as any })} 
+            isSubmitting={isSubmitting} 
+          />
         </FormWizard.Container>
       </FormWizard>
     </div>
