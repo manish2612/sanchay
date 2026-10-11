@@ -1,5 +1,5 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
-import { TextCell } from '@/components/TableCells/TextCell';
+import { SelectCell } from '@/components/TableCells/SelectCell';
 import { NumericCell } from '@/components/TableCells/NumericCell';
 import { ActionCell } from '@/components/TableCells/ActionCell';
 
@@ -8,8 +8,8 @@ const multiUnitColumnHelper = createColumnHelper<any>();
 export const columns: ColumnDef<any, any>[] = [
   multiUnitColumnHelper.accessor('unit', {
     header: 'Unit',
-    cell: TextCell,
-    size: 150,
+    cell: SelectCell,
+    size: 200,
   }),
   multiUnitColumnHelper.accessor('quantity', {
     header: 'Quantity',

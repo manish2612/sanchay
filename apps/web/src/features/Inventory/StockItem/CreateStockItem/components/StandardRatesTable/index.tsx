@@ -1,13 +1,20 @@
 import React from 'react';
-import { Form, Switch, Table } from '@prime/ui';
+import { Form, Switch, Table, Icon } from '@prime/ui';
 import { flexRender } from '@tanstack/react-table';
 import { STOCK_ITEM_FORM_FIELDS } from '../../constants';
 import { useStandardRatesTable } from './useStandardRatesTable';
 import { columns } from './columns';
 
 export const StandardRatesTable = ({ form }: { form: any }) => {
-  const { enableStandardRates, fields, updateData, removeRow, onRowCommit } =
-    useStandardRatesTable(form);
+  const {
+    enableStandardRates,
+    fields,
+    rowErrors,
+    errorSummary,
+    updateData,
+    removeRow,
+    onRowCommit,
+  } = useStandardRatesTable(form);
 
   return (
     <div className="space-y-4">
@@ -36,8 +43,9 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
             tableOptions={{
               meta: {
                 state: {
-                  rowErrors: {},
-                  isRowEmpty: (row: any) => !row.original.mrp && !row.original.fromDate,
+                  rowErrors,
+                  isRowEmpty: (row: any) =>
+                    !row?.original?.mrp && !row?.original?.netRate && !row?.original?.rate,
                 },
                 phantomRowConfig: {
                   isPhantom: (row: any) => (row.original as any).isPhantom,
@@ -48,6 +56,7 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
                   onRowCommit,
                   removeRow,
                 },
+                removeRow,
               },
             }}
           >
@@ -71,35 +80,52 @@ export const StandardRatesTable = ({ form }: { form: any }) => {
               )}
             </Table.Header>
             <Table.Body className="bg-background">
-              {(row, isFocused) => (
-                <Table.Row
-                  key={row.id}
-                  data-state={row.getIsSelected() ? 'selected' : undefined}
-                  data-focused={isFocused}
-                  className={`transition-colors border-b border-border last:border-b-0 border-l-3 border-l-transparent group ${
-                    (row.original as any).isPhantom
-                      ? 'bg-primary/5'
-                      : isFocused
-                        ? 'bg-primary/[0.06] border-l-primary'
-                        : 'hover:bg-surface-variant/40'
-                  }`}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <Table.Cell
-                      key={cell.id}
-                      style={{
-                        width: cell.column.getSize(),
-                        flex: `${cell.column.getSize()} 0 auto`,
-                      }}
-                      className="px-2 py-1 border-r border-border last:border-r-0"
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Cell>
-                  ))}
-                </Table.Row>
-              )}
+              {(row, isFocused) => {
+                const isPhantom = Boolean((row.original as any).isPhantom);
+                const hasRowError =
+                  !isPhantom &&
+                  Boolean(rowErrors[row.index] && Object.keys(rowErrors[row.index]).length > 0);
+
+                return (
+                  <Table.Row
+                    key={row.id}
+                    data-state={row.getIsSelected() ? 'selected' : undefined}
+                    data-focused={isFocused}
+                    data-error={hasRowError ? 'true' : undefined}
+                    className={`transition-colors border-b border-border last:border-b-0 border-l-3 group ${
+                      hasRowError
+                        ? 'border-l-danger bg-danger/[0.04]'
+                        : isPhantom
+                          ? 'border-l-transparent bg-primary/5'
+                          : isFocused
+                            ? 'bg-primary/[0.06] border-l-primary'
+                            : 'border-l-transparent hover:bg-surface-variant/40'
+                    }`}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <Table.Cell
+                        key={cell.id}
+                        style={{
+                          width: cell.column.getSize(),
+                          flex: `${cell.column.getSize()} 0 auto`,
+                        }}
+                        className="px-2 py-1 border-r border-border last:border-r-0"
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Cell>
+                    ))}
+                  </Table.Row>
+                );
+              }}
             </Table.Body>
           </Table.Root>
+
+          {errorSummary && (
+            <div className="flex items-center gap-2 p-2.5 px-3 text-xs text-danger bg-danger/10 border-t border-danger/20">
+              <Icon name="CircleAlert" size={14} className="shrink-0" />
+              <span>{errorSummary}</span>
+            </div>
+          )}
         </div>
       )}
     </div>

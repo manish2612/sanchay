@@ -72,7 +72,23 @@ const CreateStockItemPage = () => {
   });
 
   const onSubmit = (data: StockItemFormValues) => {
-    console.log('Submitted stock item data:', data);
+    const payload = {
+      ...data,
+      multiUnits: data.enableMultiUnit
+        ? data.multiUnits?.filter((r) => !r.isPhantom && Boolean(r.unit))
+        : [],
+      standardRates: data.enableStandardRates
+        ? data.standardRates?.filter(
+            (r) =>
+              !r.isPhantom &&
+              (Number(r.rate) > 0 || Number(r.mrp) > 0 || Number(r.netRate) > 0)
+          )
+        : [],
+      godownAllocations: data.enableGodownAllocation
+        ? data.godownAllocations?.filter((r) => !r.isPhantom && Boolean(r.godown))
+        : [],
+    };
+    console.log('Submitted stock item data:', payload);
     alert('Stock Item created successfully! Check console for details.');
   };
 
