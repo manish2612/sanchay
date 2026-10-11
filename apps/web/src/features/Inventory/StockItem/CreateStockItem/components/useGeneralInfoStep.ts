@@ -1,15 +1,9 @@
 import { useMemo } from 'react';
 import { useGetStockGroupsQuery } from '@/features/Masters/api/stockGroupsApi';
 import { useGetStockCategoriesQuery } from '@/features/Masters/api/stockCategoriesApi';
-import { useGetStockUnitsQuery, type StockUnit } from '@/features/Masters/api/stockUnitsApi';
+import { useStockUnitOptions, type StockUnitOption } from '@/features/Masters/hooks/useStockUnitOptions';
 
-export interface UnitOption {
-  label: string;
-  value: string;
-  symbol: string;
-  name: string;
-  decimal_places: number;
-}
+export type UnitOption = StockUnitOption;
 
 export interface GeneralInfoOption {
   label: string;
@@ -19,7 +13,7 @@ export interface GeneralInfoOption {
 export function useGeneralInfoStep() {
   const { data: stockGroups = [], isLoading: isLoadingStockGroups } = useGetStockGroupsQuery();
   const { data: stockCategories = [], isLoading: isLoadingCategories } = useGetStockCategoriesQuery();
-  const { data: stockUnits = [], isLoading: isLoadingUnits } = useGetStockUnitsQuery();
+  const { options: unitOptions, isLoading: isLoadingUnits } = useStockUnitOptions();
 
   const stockGroupOptions = useMemo<GeneralInfoOption[]>(() => {
     return stockGroups.map((group) => ({
@@ -34,16 +28,6 @@ export function useGeneralInfoStep() {
       value: category.id,
     }));
   }, [stockCategories]);
-
-  const unitOptions = useMemo<UnitOption[]>(() => {
-    return stockUnits.map((unit: StockUnit) => ({
-      label: unit.name ? `${unit.name} (${unit.symbol})` : unit.symbol,
-      value: unit.symbol,
-      symbol: unit.symbol,
-      name: unit.name,
-      decimal_places: unit.decimal_places,
-    }));
-  }, [stockUnits]);
 
   return {
     stockGroupOptions,

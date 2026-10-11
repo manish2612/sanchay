@@ -2,53 +2,43 @@ import { useCallback } from 'react';
 import type { Ledger } from '@/features/Accounts/Ledger/types';
 
 export const TAXATION_SUBCATEGORIES = {
-  LOCAL_SALES: '',//SA
-  EXPORT_SALES: '',
-  LOCAL_PURCHASE: '',//PA
-  EXPORT_PURCHASE: '',
+  LOCAL_SALES: 'SA',
+  EXPORT_SALES: 'SA',
+  LOCAL_PURCHASE: 'PA',
+  EXPORT_PURCHASE: 'PA',
 } as const;
 
 export function useTaxationStep() {
   /**
    * Filter predicate for Local / Interstate Sales ledgers.
-   * Prioritizes matching sub_category if present, with extensibility for custom rules.
    */
   const localSalesFilter = useCallback((ledger: Ledger) => {
-    if (ledger.sub_category) {
-      return ledger.sub_category.toLowerCase() === TAXATION_SUBCATEGORIES.LOCAL_SALES;
-    }
-    // Extensible fallback: can match tax classifications or name if sub_category is not yet provided
-    return true;
+    const isSales = ledger.sub_category?.toLowerCase() === TAXATION_SUBCATEGORIES.LOCAL_SALES.toLowerCase();
+    return isSales;
   }, []);
 
   /**
    * Filter predicate for Export Sales ledgers.
    */
   const exportSalesFilter = useCallback((ledger: Ledger) => {
-    if (ledger.sub_category) {
-      return ledger.sub_category.toLowerCase() === TAXATION_SUBCATEGORIES.EXPORT_SALES;
-    }
-    return true;
+    const isSales = ledger.sub_category?.toLowerCase() === TAXATION_SUBCATEGORIES.EXPORT_SALES.toLowerCase();
+    return isSales;
   }, []);
 
   /**
    * Filter predicate for Local / Interstate Purchase ledgers.
    */
   const localPurchaseFilter = useCallback((ledger: Ledger) => {
-    if (ledger.sub_category) {
-      return ledger.sub_category.toLowerCase() === TAXATION_SUBCATEGORIES.LOCAL_PURCHASE;
-    }
-    return true;
+    const isPurchase = ledger.sub_category?.toLowerCase() === TAXATION_SUBCATEGORIES.LOCAL_PURCHASE.toLowerCase();
+    return isPurchase;
   }, []);
 
   /**
    * Filter predicate for Export / Import Purchase ledgers.
    */
   const exportPurchaseFilter = useCallback((ledger: Ledger) => {
-    if (ledger.sub_category) {
-      return ledger.sub_category.toLowerCase() === TAXATION_SUBCATEGORIES.EXPORT_PURCHASE;
-    }
-    return true;
+    const isPurchase = ledger.sub_category?.toLowerCase() === TAXATION_SUBCATEGORIES.EXPORT_PURCHASE.toLowerCase();
+    return isPurchase ;
   }, []);
 
   return {
