@@ -66,6 +66,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "sales",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -104,6 +105,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "export_sales",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -142,6 +144,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "sales",
         "tax_rates": []
     },
     {
@@ -155,6 +158,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "export_sales",
         "tax_rates": []
     },
     {
@@ -168,6 +172,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "purchase",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -206,6 +211,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "export_purchase",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -244,6 +250,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "purchase",
         "tax_rates": []
     },
     {
@@ -257,6 +264,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "export_purchase",
         "tax_rates": []
     },
     {

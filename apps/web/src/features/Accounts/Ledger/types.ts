@@ -35,6 +35,7 @@ export interface Ledger {
   opening_balance: string;
   is_predefined: boolean;
   tax_rates: TaxRate[];
+  sub_category?: string;
 }
 
 export type GetLedgersResponse = Ledger[];

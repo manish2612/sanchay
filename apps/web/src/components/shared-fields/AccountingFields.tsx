@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, TextInput, SegmentedControl, AutoSuggest, Icon } from '@prime/ui';
-import { Control, useWatch } from 'react-hook-form';
+import { Control, useWatch, useFormContext } from 'react-hook-form';
+import { useLedgerOptions, LedgerFilterFn } from '@/features/Accounts/Ledger/hooks/useLedgerOptions';
 
 interface OpeningBalanceFieldProps {
   control: Control<any>;
@@ -52,22 +53,81 @@ export function OpeningBalanceField({ control, label = 'Opening Balance', placeh
 }
 
 export interface TaxClassificationFieldProps {
-  control: Control<any>;
+  control?: Control<any>;
   name: string;
   label: string;
   placeholder?: string;
+  /**
+   * Filter ledgers by sub_category (e.g. 'sales', 'purchase', etc.)
+   */
+  subCategory?: string;
+  /**
+   * Custom filter predicate function: (ledger: Ledger) => boolean
+   */
+  filter?: LedgerFilterFn;
+  /**
+   * Pre-computed options override if provided by caller
+   */
+  options?: { label: string; value: string }[];
+  /**
+   * Loading state override
+   */
+  isLoading?: boolean;
 }
 
-export function TaxClassificationField({ control, name, label, placeholder = 'Enter classification...' }: TaxClassificationFieldProps) {
+export function TaxClassificationField({
+  control,
+  name,
+  label,
+  placeholder = 'Select classification...',
+  subCategory,
+  filter,
+  options: externalOptions,
+  isLoading: externalIsLoading,
+}: TaxClassificationFieldProps) {
+  const formContext = useFormContext();
+  const effectiveControl = control || formContext?.control;
+
+  const { options: ledgerOptions, isLoading: isLedgersLoading } = useLedgerOptions({
+    subCategory,
+    filter,
+    options: externalOptions,
+  });
+
+  const finalOptions = externalOptions || ledgerOptions;
+  const isLoading = externalIsLoading ?? isLedgersLoading;
+
   return (
     <Form.Field
-      control={control}
+      control={effectiveControl}
       name={name}
       render={({ field }) => (
         <Form.Item>
           <Form.Label>{label}</Form.Label>
           <Form.Control>
-            <TextInput placeholder={placeholder} {...field} value={field.value ?? ''} />
+            <AutoSuggest
+              value={field.value ?? ''}
+              onChange={field.onChange}
+              options={finalOptions}
+            >
+              <AutoSuggest.Input
+                placeholder={isLoading ? 'Loading classifications...' : placeholder}
+                leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
+                disabled={isLoading}
+              />
+              <AutoSuggest.Content>
+                <AutoSuggest.List>
+                  <AutoSuggest.Empty>
+                    {isLoading ? 'Loading classifications...' : 'No classification found.'}
+                  </AutoSuggest.Empty>
+                  {finalOptions.map((opt) => (
+                    <AutoSuggest.Item key={opt.value} value={opt.value} keywords={[opt.label]}>
+                      {opt.label}
+                    </AutoSuggest.Item>
+                  ))}
+                </AutoSuggest.List>
+              </AutoSuggest.Content>
+            </AutoSuggest>
           </Form.Control>
           <Form.Message />
         </Form.Item>
