@@ -12,17 +12,28 @@ declare module '@tanstack/react-table' {
     successRowIndex?: number | null;
     updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
     removeRow?: (rowIndex: number) => void;
-    state?: TableState;
+    state?: Partial<TableState> & {
+      rowErrors?: Record<number, any>;
+      isRowEmpty?: (row: any) => boolean;
+      [key: string]: any;
+    };
+    actions?: {
+      updateData?: (rowIndex: number, columnId: string, value: unknown) => void;
+      onRowCommit?: (rowIndex: number, columnId?: string, cellValue?: string) => TableRowCommitAction;
+      removeRow?: (rowIndex: number) => void;
+      [key: string]: any;
+    };
+    options?: Record<string, any>;
     features?: unknown[];
     onRowCommit?: (rowIndex: number, columnId?: string, cellValue?: string) => TableRowCommitAction;
-    rowErrors?: Record<number, boolean>;
+    rowErrors?: Record<number, any>;
     phantomRowConfig?: {
       isPhantom: (row: Row<TData>) => boolean;
       actionText?: string;
       actionIcon?: React.ReactNode;
       renderRestState?: (row: Row<TData>) => React.ReactNode;
     };
-    isRowEmpty?: (row: Row<TData>) => boolean;
+    isRowEmpty?: (row: any) => boolean;
     enableColumnFilter?: boolean;
   }
 }
