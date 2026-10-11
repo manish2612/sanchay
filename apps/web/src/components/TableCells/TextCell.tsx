@@ -7,6 +7,7 @@ export const TextCell = ({ getValue, row, column, table }: any) => {
   const meta = table.options.meta || {} as any;
   const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
+  const errorMessage = typeof error === 'string' ? error : error?.message;
   const updateData = meta?.actions?.updateData;
 
   const initialValue = getValue() as string;
@@ -25,6 +26,7 @@ export const TextCell = ({ getValue, row, column, table }: any) => {
       maxLength={maxLength}
       variant={error ? "error" : "default"}
       value={value}
+      title={errorMessage || undefined}
       onChange={(e) => {
         setValue(e.target.value);
         updateData?.(row.index, column.id, e.target.value);

@@ -6,6 +6,7 @@ export const DateCell = ({ getValue, row, column, table }: any) => {
   const updateData = meta?.actions?.updateData;
   const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
+  const errorMessage = typeof error === 'string' ? error : error?.message;
 
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -15,18 +16,20 @@ export const DateCell = ({ getValue, row, column, table }: any) => {
   }, [initialValue]);
 
   return (
-    <DatePicker 
-      date={value} 
-      onDateChange={(date) => {
-        setValue(date);
-        updateData?.(row.index, column.id, date);
-      }} 
-      labelVariant="hidden"
-      calendarType="nepali"
-      nepaliLanguage="english"
-      className={`h-8 w-full my-auto bg-transparent border-0 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 transition-all px-2 py-0 ${
-        error ? "ring-2 ring-danger ring-offset-0" : ""
-      }`}
-    />
+    <div title={errorMessage || undefined} className="w-full flex items-center">
+      <DatePicker 
+        date={value} 
+        onDateChange={(date) => {
+          setValue(date);
+          updateData?.(row.index, column.id, date);
+        }} 
+        labelVariant="hidden"
+        calendarType="nepali"
+        nepaliLanguage="english"
+        className={`h-8 w-full my-auto bg-transparent border-0 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 transition-all px-2 py-0 ${
+          error ? "ring-2 ring-danger ring-offset-0" : ""
+        }`}
+      />
+    </div>
   );
 };

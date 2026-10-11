@@ -17,6 +17,7 @@ export const SelectCell = ({ getValue, row, column, table, options }: any) => {
   const updateData = meta?.actions?.updateData;
   const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
+  const errorMessage = typeof error === 'string' ? error : error?.message;
 
   const externalValue = getValue() as string;
 
@@ -32,7 +33,13 @@ export const SelectCell = ({ getValue, row, column, table, options }: any) => {
     setLocalValue(externalValue);
   }, [externalValue]);
 
-  const selectedOpt = (options as SelectCellOption[]).find(
+  const resolvedOptions: SelectCellOption[] =
+    options ||
+    meta?.options?.[column.id] ||
+    column.columnDef?.meta?.options ||
+    [];
+
+  const selectedOpt = resolvedOptions.find(
     (o) => o.value === localValue
   );
 
@@ -49,6 +56,7 @@ export const SelectCell = ({ getValue, row, column, table, options }: any) => {
       }}
     >
       <DropdownTrigger
+        title={errorMessage || undefined}
         className={`h-8 w-full px-2 rounded-md bg-transparent border-0 outline-none text-sm text-left flex justify-between items-center group data-[state=open]:bg-primary/5 hover:bg-surface-variant/50 transition-all ${
           error
             ? "ring-2 ring-danger ring-offset-0"
@@ -65,7 +73,7 @@ export const SelectCell = ({ getValue, row, column, table, options }: any) => {
         />
       </DropdownTrigger>
       <DropdownContent align="start" className="min-w-[120px]">
-        {(options as SelectCellOption[]).map((opt) => (
+        {resolvedOptions.map((opt) => (
           <DropdownItem
             key={opt.value}
             onSelect={() => {

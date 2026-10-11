@@ -9,6 +9,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   const meta = table.options.meta || {} as any;
   const rowError = meta?.state?.rowErrors?.[row.index] || meta?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
+  const errorMessage = typeof error === 'string' ? error : error?.message;
   const updateData = meta?.actions?.updateData;
   const onRowCommit = meta?.actions?.onRowCommit;
 
@@ -44,6 +45,7 @@ export const NumericCell = ({ getValue, row, column, table }: any) => {
   return (
     <TextInput type={type || "text"} max={max} min={min} disabled={isDisabled}
       value={value}
+      title={errorMessage || undefined}
       onKeyDown={(e) => {
         // Block all invalid printable characters to prevent selection loss
         // We use a non-global regex here because RegExp.test() with /g is stateful!
