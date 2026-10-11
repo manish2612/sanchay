@@ -2,7 +2,7 @@ import { http, HttpResponse, delay } from 'msw';
 import { isMockEnabled } from '../../store/mockConfig';
 import type { GetStockGroupsRequest, GetStockGroupsResponse } from '@/features/Accounts/Ledger/types';
 
-export const getStockGroups = http.get<never, GetStockGroupsRequest, GetStockGroupsResponse>(
+export const getStockGroups = http.get<never, never, GetStockGroupsResponse>(
   '*/inventory/stockgroups',
   async () => {
     if (!isMockEnabled('inventory', 'getStockGroups')) return;
