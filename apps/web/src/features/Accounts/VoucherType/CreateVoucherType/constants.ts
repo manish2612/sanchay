@@ -110,10 +110,10 @@ export const DEFAULT_VIEWING_MODE_OPTIONS = [
   { label: 'Accounts Mode', value: 'AM' },
 ];
 
+
 export const APPLY_TAX_OPTIONS = [
-  { label: 'Not Applicable', value: 'not_applicable' },
-  { label: 'Tax on Item Rate', value: 'item_rate' },
-  { label: 'Tax on Value', value: 'value' },
+  { label: 'Bill Level', value: 'B' },
+  { label: 'Item Level', value: 'I' },
 ];
 
 export const NUMBERING_TYPE_OPTIONS = [
