@@ -65,5 +65,16 @@ export const selectCompanies = (state: { auth: AuthState }) => state.auth.compan
 export const selectActiveCompanyId = (state: { auth: AuthState }) => state.auth.activeCompanyId;
 export const selectActiveCompany = (state: { auth: AuthState }) =>
   state.auth.companies.find((c) => c.id === state.auth.activeCompanyId) || null;
+export const selectActiveFinancialYearId = (state: { auth: AuthState }): string => {
+  const company = selectActiveCompany(state);
+  if (!company) return '';
+  if ('company_fiscal_years' in company && Array.isArray(company.company_fiscal_years) && company.company_fiscal_years.length > 0) {
+    return company.company_fiscal_years[0]?.financial_year_id || '';
+  }
+  if ('fiscal_years' in company && Array.isArray(company.fiscal_years) && company.fiscal_years.length > 0) {
+    return company.fiscal_years[0]?.financial_year_id || '';
+  }
+  return '';
+};
 
 export default authSlice.reducer;
