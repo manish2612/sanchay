@@ -13,10 +13,12 @@ export const LedgerAllocationTable = ({ form }: { form: any }) => {
   const { data: ledgers, isLoading: isLedgersLoading } = useGetLedgersQuery();
   
   const ledgerOptions = useMemo(() => {
-    return ledgers?.map((ledger: any) => ({
-      label: ledger.name,
-      value: ledger.name
-    })) || [];
+    return ledgers
+      ?.filter((ledger: any) => Boolean(ledger.is_cost_centre_enabled || ledger.is_cost_entre_enabled))
+      .map((ledger: any) => ({
+        label: ledger.name,
+        value: ledger.id,
+      })) || [];
   }, [ledgers]);
 
   const {

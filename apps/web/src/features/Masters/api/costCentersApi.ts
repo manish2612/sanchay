@@ -1,11 +1,19 @@
 import { apiSlice } from '@/store/apiSlice';
 
+export interface CostCenterOpeningBalance {
+  amount: number;
+  cost_centre_id: string;
+  financial_year_id: string;
+  ledger_id: string;
+}
+
 export interface CreateCostCenterRequest {
   alias: string;
   code: string;
   cost_category_id: string;
   name: string;
-  parent_id: string | null;
+  opening_balances: CostCenterOpeningBalance[];
+  parent_id: string;
 }
 
 export const costCentersApi = apiSlice.injectEndpoints({
