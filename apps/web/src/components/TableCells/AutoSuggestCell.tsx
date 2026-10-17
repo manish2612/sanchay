@@ -26,24 +26,33 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const updateData = meta?.updateData || actions?.updateData;
   const onRowCommit = meta?.onRowCommit || actions?.onRowCommit;
 
-  const initialValue = getValue() as string;
-  const [value, setValue] = useState(initialValue);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
-  const onBlur = () => {
-    updateData?.(row.index, column.id, value);
-  };
-
   const targetKey = inputConfig?.optionsKey || column.id;
   let dynamicOptions = meta?.options?.[targetKey] || [];
 
   if (inputConfig?.optionsFilter) {
     dynamicOptions = dynamicOptions.filter((opt: any) => inputConfig.optionsFilter(opt, row.original));
   }
+
+  const initialValue = getValue() as string;
+  const initialMatchedOption = dynamicOptions.find((opt: any) => opt.value === initialValue);
+  const [value, setValue] = useState(initialMatchedOption ? initialMatchedOption.label : initialValue);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const opt = dynamicOptions.find((o: any) => o.value === initialValue);
+    setValue(opt ? opt.label : initialValue);
+  }, [initialValue, dynamicOptions]);
+
+  const onBlur = () => {
+    const matchedOption = dynamicOptions.find(
+      (opt: any) => opt.value === value || opt.label === value
+    );
+    if (!inputConfig?.idKey && matchedOption) {
+      updateData?.(row.index, column.id, matchedOption.value);
+    } else {
+      updateData?.(row.index, column.id, value);
+    }
+  };
 
   const filteredOptions = dynamicOptions.filter((item: any) =>
     item.label.toLowerCase().includes((value || "").toLowerCase())
@@ -55,13 +64,16 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
         inputValue={value}
         onInputChange={(val) => {
           setValue(val);
-          updateData?.(row.index, column.id, val);
+
+          const matchedOption = dynamicOptions.find(
+            (opt: any) => opt.value === val || opt.label === val
+          );
 
           if (inputConfig?.idKey) {
-            const matchedOption = dynamicOptions.find(
-              (opt: any) => opt.value === val || opt.label === val
-            );
+            updateData?.(row.index, column.id, val);
             updateData?.(row.index, inputConfig.idKey, matchedOption?.id || "");
+          } else {
+            updateData?.(row.index, column.id, matchedOption ? matchedOption.value : val);
           }
         }}
         options={filteredOptions}
