@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, TextInput, Switch, AnimatedNumber } from '@prime/ui';
+import { Form, TextInput, AnimatedNumber } from '@prime/ui';
+import { SwitchCard } from '@/components/TableCells/SwitchCard';
 import { STOCK_ITEM_FORM_FIELDS } from '../constants';
 import { GodownAllocationTable } from './GodownAllocationTable';
 
@@ -12,20 +13,26 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="flex items-center space-x-3 pb-2 border-b border-border/40">
-        <Form.Field
-          control={form.control as any}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-border/40">
+        <SwitchCard
+          control={form.control}
           name={STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION}
-          render={({ field }) => (
-            <Form.Item className="flex flex-row items-center space-x-3 space-y-0">
-              <Form.Control>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
-              </Form.Control>
-              <Form.Label className="font-normal text-sm">
-                Enable Godown Allocation (Testing)
-              </Form.Label>
-            </Form.Item>
-          )}
+          label="Enable Godown Allocation"
+        />
+        <SwitchCard
+          control={form.control}
+          name={STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES}
+          label="Maintain Batches"
+        />
+        <SwitchCard
+          control={form.control}
+          name={STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE}
+          label="Track Manufacturing Date"
+        />
+        <SwitchCard
+          control={form.control}
+          name={STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE}
+          label="Track Expiry Date"
         />
       </div>
 

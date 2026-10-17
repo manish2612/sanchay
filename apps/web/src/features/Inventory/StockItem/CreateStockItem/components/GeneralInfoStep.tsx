@@ -70,11 +70,9 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
           const selectedUnit = unitOptions.find((u) => u.value === field.value);
           const triggerLabel = selectedUnit
             ? selectedUnit.label
-            : field.value
-              ? field.value
-              : isLoadingUnits
-                ? 'Loading units...'
-                : 'Select Base Unit...';
+            : isLoadingUnits
+              ? 'Loading units...'
+              : 'Select Base Unit...';
 
           return (
             <Form.Item>
@@ -116,6 +114,30 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
             <Form.Label>HSN/SAC</Form.Label>
             <Form.Control>
               <TextInput placeholder="Enter HSN/SAC..." {...field} />
+            </Form.Control>
+            <Form.Message />
+          </Form.Item>
+        )}
+      />
+
+      <Form.Field
+        control={form.control}
+        name={STOCK_ITEM_FORM_FIELDS.PART_NUMBER}
+        render={({ field }) => (
+          <Form.Item>
+            <Form.Label>Part Number</Form.Label>
+            <Form.Control>
+              <TextInput
+                placeholder="Enter Part Number..."
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                {...field}
+                onChange={(e) => {
+                  const val = e.target.value.replace(/\D/g, '');
+                  field.onChange(val);
+                }}
+              />
             </Form.Control>
             <Form.Message />
           </Form.Item>
