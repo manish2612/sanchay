@@ -1,11 +1,12 @@
 import React from 'react';
-import { Table } from '@prime/ui';
+import { Table, Icon } from '@prime/ui';
 import { useGodownAllocationTable } from './useGodownAllocationTable';
 import { getColumns } from './columns';
 import { useMemo, useCallback } from 'react';
 import { flexRender } from '@tanstack/react-table';
 import { AllocationTableLayout } from '@/components/AllocationTableLayout';
 import { useGlobalMasterSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
+import { STOCK_ITEM_FORM_FIELDS } from '../../constants';
 
 export const GodownAllocationTable = ({ form }: { form: any }) => {
   const { openMasterSheet } = useGlobalMasterSheet();
@@ -19,34 +20,39 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
     openingQuantity,
     totalAllocatedQuantity,
     localRowErrors,
+    rowErrors,
+    errorSummary,
+    godownOptions,
   } = useGodownAllocationTable(form);
 
+  const hasMfgDate = Boolean(form.watch(STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE));
+  const hasExpiryDate = Boolean(form.watch(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE));
+
   const onCreateGodown = useCallback(() => openMasterSheet('godown'), [openMasterSheet]);
-  const columns = useMemo(() => getColumns(openingQuantity, onCreateGodown), [openingQuantity, onCreateGodown]);
-  const isFullyAllocated = totalAllocatedQuantity === openingQuantity;
+  const columns = useMemo(
+    () => getColumns(openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate),
+    [openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate]
+  );
+  const isFullyAllocated = openingQuantity > 0 && totalAllocatedQuantity === openingQuantity;
   const isOverAllocated = totalAllocatedQuantity > openingQuantity;
 
   // Synthesize real-time row errors for the 'quantity' column if overallocated, and merge local validation errors
-  const rowErrors = useMemo(() => {
-    let errs = { ...localRowErrors }; // Start with local visual errors
-
-    const rfhErrors = form.formState.errors?.godownAllocations || [];
-    if (Array.isArray(rfhErrors)) {
-      rfhErrors.forEach((err, idx) => {
-        if (err) errs[idx] = true;
-      });
-    }
+  const mergedRowErrors = useMemo(() => {
+    let errs: Record<number, any> = { ...localRowErrors };
+    Object.entries(rowErrors).forEach(([idx, colErrs]) => {
+      errs[Number(idx)] = { ...(errs[Number(idx)] || {}), ...colErrs };
+    });
 
     if (isOverAllocated) {
       fields.forEach((_: any, idx: number) => {
-        errs[idx] = true;
+        errs[idx] = { ...(errs[idx] || {}), quantity: 'Overallocated limit' };
       });
     }
     return errs;
-  }, [form.formState.errors?.godownAllocations, isOverAllocated, fields, localRowErrors]);
+  }, [rowErrors, localRowErrors, isOverAllocated, fields]);
 
-  // If Godown feature is off, or if opening quantity is 0, don't show the table
-  if (!enableGodownAllocation || openingQuantity <= 0) return null;
+  // If Godown feature is off, don't show the table
+  if (!enableGodownAllocation) return null;
 
   return (
     <div className="mt-6 h-full">
@@ -66,8 +72,11 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
           className="h-full flex-1 rounded-none border-x-0 border-t-0 "
           tableOptions={{
             meta: {
+              options: {
+                godowns: godownOptions,
+              },
               state: {
-                rowErrors,
+                rowErrors: mergedRowErrors,
                 isRowEmpty: (row: any) => !row.original.godown,
               },
               phantomRowConfig: {
@@ -104,35 +113,61 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
             )}
           </Table.Header>
           <Table.Body className="bg-background">
-            {(row: any, isFocused: boolean) => (
-              <Table.Row
-                key={row.id}
-                data-state={row.getIsSelected() ? 'selected' : undefined}
-                data-focused={isFocused}
-                className={`transition-colors border-b border-border last:border-b-0 border-l-3 border-l-transparent group ${
-                  (row.original as any).isPhantom
-                    ? 'bg-primary/5'
-                    : isFocused
-                      ? 'bg-primary/[0.06] border-l-primary'
-                      : 'hover:bg-surface-variant/40'
-                }`}
-              >
-                {row.getVisibleCells().map((cell: any) => (
-                  <Table.Cell
-                    key={cell.id}
-                    style={{
-                      width: cell.column.getSize(),
-                      flex: `${cell.column.getSize()} 0 auto`,
-                    }}
-                    className="px-2 py-1 border-r border-border last:border-r-0"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </Table.Cell>
-                ))}
-              </Table.Row>
-            )}
+            {(row: any, isFocused: boolean) => {
+              const hasRowError = Boolean(
+                mergedRowErrors[row.index] &&
+                  (typeof mergedRowErrors[row.index] === 'boolean'
+                    ? mergedRowErrors[row.index]
+                    : Object.keys(mergedRowErrors[row.index]).length > 0)
+              );
+
+              return (
+                <Table.Row
+                  key={row.id}
+                  data-state={row.getIsSelected() ? 'selected' : undefined}
+                  data-focused={isFocused}
+                  data-error={hasRowError ? 'true' : undefined}
+                  className={`transition-colors border-b border-border last:border-b-0 border-l-3 group ${
+                    hasRowError
+                      ? 'border-l-danger bg-danger/[0.04]'
+                      : (row.original as any).isPhantom
+                        ? 'border-l-transparent bg-primary/5'
+                        : isFocused
+                          ? 'bg-primary/[0.06] border-l-primary'
+                          : 'border-l-transparent hover:bg-surface-variant/40'
+                  }`}
+                >
+                  {row.getVisibleCells().map((cell: any) => (
+                    <Table.Cell
+                      key={cell.id}
+                      style={{
+                        width: cell.column.getSize(),
+                        flex: `${cell.column.getSize()} 0 auto`,
+                      }}
+                      className="px-2 py-1 border-r border-border last:border-r-0"
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </Table.Cell>
+                  ))}
+                </Table.Row>
+              );
+            }}
           </Table.Body>
         </Table.Root>
+
+        {openingQuantity <= 0 && (
+          <div className="flex items-center gap-2 p-3 text-xs text-muted-foreground bg-muted/20 border-t border-border">
+            <Icon name="Info" size={14} className="shrink-0 text-muted-foreground" />
+            <span>Enter opening quantity above to allocate godowns.</span>
+          </div>
+        )}
+
+        {errorSummary && (
+          <div className="flex items-center gap-2 p-2.5 px-3 text-xs text-danger bg-danger/10 border-t border-danger/20">
+            <Icon name="CircleAlert" size={14} className="shrink-0" />
+            <span>{errorSummary}</span>
+          </div>
+        )}
       </AllocationTableLayout>
     </div>
   );
