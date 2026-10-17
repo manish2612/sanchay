@@ -2,6 +2,21 @@ import React from 'react';
 import { Form, TextInput, SegmentedControl, AutoSuggest, Icon } from '@prime/ui';
 import { Control, useWatch, useFormContext } from 'react-hook-form';
 import { useLedgerOptions, LedgerFilterFn } from '@/features/Accounts/Ledger/hooks/useLedgerOptions';
+import {
+  TAXATION_SUBCATEGORIES,
+  TAX_CLASSIFICATION_FIELD_NAMES,
+  useTaxClassification,
+  TaxationSubcategories,
+  TaxClassificationFieldNames,
+} from './useTaxClassification';
+
+export {
+  TAXATION_SUBCATEGORIES,
+  TAX_CLASSIFICATION_FIELD_NAMES,
+  useTaxClassification,
+  type TaxationSubcategories,
+  type TaxClassificationFieldNames,
+};
 
 interface OpeningBalanceFieldProps {
   control: Control<any>;
@@ -134,4 +149,134 @@ export function TaxClassificationField({
       )}
     />
   );
+}
+
+export interface BaseTaxFieldProps {
+  control?: Control<any>;
+  name?: string;
+  label?: string;
+  placeholder?: string;
+  filter?: LedgerFilterFn;
+  options?: { label: string; value: string }[];
+  isLoading?: boolean;
+}
+
+export function LocalSalesTaxField({
+  control,
+  name = TAX_CLASSIFICATION_FIELD_NAMES.LOCAL_SALES,
+  label = 'Local / Interstate Sales',
+  placeholder = 'Select classification...',
+  filter: customFilter,
+  ...props
+}: BaseTaxFieldProps) {
+  const { localSalesFilter } = useTaxClassification();
+  return (
+    <TaxClassificationField
+      control={control}
+      name={name}
+      label={label}
+      placeholder={placeholder}
+      subCategory={TAXATION_SUBCATEGORIES.LOCAL_SALES}
+      filter={customFilter || localSalesFilter}
+      {...props}
+    />
+  );
+}
+
+export function ExportSalesTaxField({
+  control,
+  name = TAX_CLASSIFICATION_FIELD_NAMES.EXPORT_SALES,
+  label = 'Export Sales',
+  placeholder = 'Select classification...',
+  filter: customFilter,
+  ...props
+}: BaseTaxFieldProps) {
+  const { exportSalesFilter } = useTaxClassification();
+  return (
+    <TaxClassificationField
+      control={control}
+      name={name}
+      label={label}
+      placeholder={placeholder}
+      subCategory={TAXATION_SUBCATEGORIES.EXPORT_SALES}
+      filter={customFilter || exportSalesFilter}
+      {...props}
+    />
+  );
+}
+
+export function LocalPurchaseTaxField({
+  control,
+  name = TAX_CLASSIFICATION_FIELD_NAMES.LOCAL_PURCHASE,
+  label = 'Local / Interstate Purchase',
+  placeholder = 'Select classification...',
+  filter: customFilter,
+  ...props
+}: BaseTaxFieldProps) {
+  const { localPurchaseFilter } = useTaxClassification();
+  return (
+    <TaxClassificationField
+      control={control}
+      name={name}
+      label={label}
+      placeholder={placeholder}
+      subCategory={TAXATION_SUBCATEGORIES.LOCAL_PURCHASE}
+      filter={customFilter || localPurchaseFilter}
+      {...props}
+    />
+  );
+}
+
+export function ExportPurchaseTaxField({
+  control,
+  name = TAX_CLASSIFICATION_FIELD_NAMES.EXPORT_PURCHASE,
+  label = 'Export Purchase',
+  placeholder = 'Select classification...',
+  filter: customFilter,
+  ...props
+}: BaseTaxFieldProps) {
+  const { exportPurchaseFilter } = useTaxClassification();
+  return (
+    <TaxClassificationField
+      control={control}
+      name={name}
+      label={label}
+      placeholder={placeholder}
+      subCategory={TAXATION_SUBCATEGORIES.EXPORT_PURCHASE}
+      filter={customFilter || exportPurchaseFilter}
+      {...props}
+    />
+  );
+}
+
+export interface TaxClassificationFieldsProps {
+  control?: Control<any>;
+  className?: string;
+  fieldNames?: {
+    localSales?: string;
+    exportSales?: string;
+    localPurchase?: string;
+    exportPurchase?: string;
+  };
+}
+
+export function TaxClassificationFields({
+  control,
+  className,
+  fieldNames,
+}: TaxClassificationFieldsProps) {
+  const content = (
+    <>
+      <LocalSalesTaxField control={control} name={fieldNames?.localSales} />
+      <ExportSalesTaxField control={control} name={fieldNames?.exportSales} />
+      <LocalPurchaseTaxField control={control} name={fieldNames?.localPurchase} />
+      <ExportPurchaseTaxField control={control} name={fieldNames?.exportPurchase} />
+    </>
+  );
+
+  if (className) {
+    return <div className={className}>{content}</div>;
+  }
+
+  return content;
 }

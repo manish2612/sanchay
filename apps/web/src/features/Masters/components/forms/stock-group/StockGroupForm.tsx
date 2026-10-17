@@ -5,7 +5,12 @@ import {
   MasterAliasField,
   MasterParentField,
 } from '@/components/shared-fields/MasterFields';
-import { TextInput } from '@prime/ui';
+import {
+  LocalSalesTaxField,
+  ExportSalesTaxField,
+  LocalPurchaseTaxField,
+  ExportPurchaseTaxField,
+} from '@/components/shared-fields/AccountingFields';
 import { useStockGroupForm } from './useStockGroupForm';
 import { useGetStockGroupsQuery } from '@/features/Masters/api/stockGroupsApi';
 
@@ -42,54 +47,10 @@ export function StockGroupForm({
             isLoading={isLoadingGroups}
           />
 
-          <Form.Field
-            control={form.control as any}
-            name="localInterstateSales"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Local/Interstate Sales</Form.Label>
-                <Form.Control>
-                  <TextInput {...field} value={field.value ?? ''} />
-                </Form.Control>
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control as any}
-            name="exportSales"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Export Sales</Form.Label>
-                <Form.Control>
-                  <TextInput {...field} value={field.value ?? ''} />
-                </Form.Control>
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control as any}
-            name="localInterstatePurchase"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Local/Interstate Purchase</Form.Label>
-                <Form.Control>
-                  <TextInput {...field} value={field.value ?? ''} />
-                </Form.Control>
-              </Form.Item>
-            )}
-          />
-          <Form.Field
-            control={form.control as any}
-            name="exportPurchase"
-            render={({ field }) => (
-              <Form.Item>
-                <Form.Label>Import Purchase</Form.Label>
-                <Form.Control>
-                  <TextInput {...field} value={field.value ?? ''} />
-                </Form.Control>
-              </Form.Item>
-            )}
-          />
+          <LocalSalesTaxField control={form.control as any} />
+          <ExportSalesTaxField control={form.control as any} />
+          <LocalPurchaseTaxField control={form.control as any} />
+          <ExportPurchaseTaxField control={form.control as any} />
         </div>
 
         <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2">
