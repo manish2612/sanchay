@@ -14,6 +14,21 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "CH",
+        "tax_rates": []
+    },
+    {
+        "id": "01a0ddd8-39ca-7a07-a2f8-9a914e9606cc",
+        "name": "HDFC Bank",
+        "code": "",
+        "is_cost_entre_enabled": false,
+        "is_bill_wise_enabled": false,
+        "block_sales_on_credit_limit_exceed": false,
+        "credit_period_days": 0,
+        "credit_limit_amount": "0",
+        "opening_balance": "0",
+        "is_predefined": true,
+        "sub_category": "BK",
         "tax_rates": []
     },
     {
@@ -66,7 +81,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "sales",
+        "sub_category": "SA",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -105,7 +120,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "export_sales",
+        "sub_category": "SA",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -144,7 +159,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "sales",
+        "sub_category": "SA",
         "tax_rates": []
     },
     {
@@ -158,7 +173,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "export_sales",
+        "sub_category": "SA",
         "tax_rates": []
     },
     {
@@ -172,7 +187,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "purchase",
+        "sub_category": "PA",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -211,7 +226,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "export_purchase",
+        "sub_category": "PA",
         "tax_rates": [
             {
                 "effective_from": "2026-09-26T00:00:00Z",
@@ -250,7 +265,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "purchase",
+        "sub_category": "PA",
         "tax_rates": []
     },
     {
@@ -264,7 +279,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
-        "sub_category": "export_purchase",
+        "sub_category": "PA",
         "tax_rates": []
     },
     {
@@ -278,6 +293,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "II",
         "tax_rates": []
     },
     {
@@ -291,6 +307,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "DI",
         "tax_rates": []
     }
 ];

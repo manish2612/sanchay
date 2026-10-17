@@ -127,3 +127,14 @@ export const RESET_OPTIONS = [
   { label: 'Yearly', value: 'YEARLY' },
   { label: 'Never', value: 'NEVER' },
 ];
+
+export const LEDGER_SUB_CATEGORIES = {
+  CASH: 'CH',
+  BANK: 'BK',
+  SALES: 'SA',
+  PURCHASE: 'PA',
+  INDIRECT_INCOME: 'II',
+  INDIRECT_EXPENSE: 'IE',
+  DIRECT_INCOME: 'DI',
+  DIRECT_EXPENSE: 'DE',
+} as const;

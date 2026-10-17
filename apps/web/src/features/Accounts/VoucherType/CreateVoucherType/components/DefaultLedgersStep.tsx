@@ -1,84 +1,155 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Form, AutoSuggest } from '@prime/ui';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, Control, useWatch, Path } from 'react-hook-form';
 import { VoucherTypeFormValues } from '../schema';
 import { VOUCHER_TYPE_FIELDS } from '../constants';
+import { useDefaultLedgersStep } from '../hooks/useDefaultLedgersStep';
 
-interface DefaultLedgersStepProps {
-  form: UseFormReturn<VoucherTypeFormValues>;
+interface DefaultLedgerFieldProps {
+  control: Control<VoucherTypeFormValues>;
+  name: Path<VoucherTypeFormValues>;
+  label: string;
+  options: { label: string; value: string }[];
+  isLoading?: boolean;
 }
 
-// Dummy options for ledgers
-const DUMMY_LEDGERS = [
-  { label: 'Cash', value: 'cash' },
-  { label: 'Bank', value: 'bank' },
-  { label: 'Sales A/C', value: 'sales_ac' },
-  { label: 'Purchase A/C', value: 'purchase_ac' },
-  { label: 'Discount A/C', value: 'discount_ac' },
-  { label: 'Rounding Off', value: 'rounding_off' },
-];
+const DefaultLedgerField = ({
+  control,
+  name,
+  label,
+  options,
+  isLoading = false,
+}: DefaultLedgerFieldProps) => {
+  const currentValue = useWatch({ control, name }) as string | undefined;
 
-export const DefaultLedgersStep = ({ form }: DefaultLedgersStepProps) => {
-  const [queries, setQueries] = useState<Record<string, string>>({});
+  const selectedOption = useMemo(
+    () => options.find((opt) => opt.value === currentValue),
+    [options, currentValue]
+  );
 
-  const getFilteredOptions = (query = '') =>
-    DUMMY_LEDGERS.filter((l) => l.label.toLowerCase().includes(query.toLowerCase()));
+  const [query, setQuery] = useState(selectedOption?.label || '');
 
-  const renderAutoSuggest = (name: any, label: string) => {
-    const q = queries[name] || form.getValues(name) || '';
-    const filtered = getFilteredOptions(q);
+  useEffect(() => {
+    if (selectedOption) {
+      setQuery(selectedOption.label);
+    } else if (!currentValue) {
+      setQuery('');
+    }
+  }, [selectedOption, currentValue]);
 
-    return (
-      <Form.Field
-        key={name}
-        control={form.control}
-        name={name}
-        render={({ field }) => (
-          <Form.Item>
-            <AutoSuggest
-              inputValue={q}
-              onInputChange={(v) => {
-                setQueries((prev) => ({ ...prev, [name]: v }));
-                field.onChange(v);
-              }}
-              options={filtered}
-            >
-              <AutoSuggest.Input label={label} labelVariant="in-field" placeholder={`Select ${label}...`} />
-              <AutoSuggest.Content>
-                <AutoSuggest.List>
-                  <AutoSuggest.Empty>No ledger found.</AutoSuggest.Empty>
-                  {filtered.map((opt) => (
-                    <AutoSuggest.Item
-                      key={opt.value}
-                      value={opt.label}
-                      onSelect={() => {
-                        field.onChange(opt.label);
-                        setQueries((prev) => ({ ...prev, [name]: opt.label }));
-                      }}
-                    >
-                      {opt.label}
-                    </AutoSuggest.Item>
-                  ))}
-                </AutoSuggest.List>
-              </AutoSuggest.Content>
-            </AutoSuggest>
-            <Form.Message />
-          </Form.Item>
-        )}
-      />
+  const filteredOptions = useMemo(() => {
+    if (!query) return options;
+    return options.filter((opt) =>
+      opt.label.toLowerCase().includes(query.toLowerCase())
     );
-  };
+  }, [options, query]);
+
+  return (
+    <Form.Field
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <Form.Item>
+          <AutoSuggest
+            inputValue={query}
+            onInputChange={(v) => {
+              setQuery(v);
+              if (selectedOption && v !== selectedOption.label) {
+                field.onChange('');
+              }
+            }}
+            options={filteredOptions}
+          >
+            <AutoSuggest.Input
+              label={label}
+              labelVariant="in-field"
+              placeholder={isLoading ? `Loading ${label.toLowerCase()}...` : `Select ${label}...`}
+              disabled={isLoading}
+            />
+            <AutoSuggest.Content>
+              <AutoSuggest.List>
+                <AutoSuggest.Empty>
+                  {isLoading ? 'Loading ledgers...' : 'No ledger found.'}
+                </AutoSuggest.Empty>
+                {filteredOptions.map((opt) => (
+                  <AutoSuggest.Item
+                    key={opt.value}
+                    value={opt.label}
+                    onSelect={() => {
+                      field.onChange(opt.value);
+                      setQuery(opt.label);
+                    }}
+                  >
+                    {opt.label}
+                  </AutoSuggest.Item>
+                ))}
+              </AutoSuggest.List>
+            </AutoSuggest.Content>
+          </AutoSuggest>
+          <Form.Message />
+        </Form.Item>
+      )}
+    />
+  );
+};
+
+export const DefaultLedgersStep = ({ form }: { form: UseFormReturn<VoucherTypeFormValues> }) => {
+  const {
+    isLoading,
+    cashOptions,
+    bankOptions,
+    salesPurchaseOptions,
+    exportImportOptions,
+    discountOptions,
+    roundingOffOptions,
+  } = useDefaultLedgersStep();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.CASH_LEDGER, 'Cash Ledger')}
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.BANK_LEDGER, 'Bank Ledger')}
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.SALES_PURCHASE_LEDGER, 'Sales/Purchase Ledger')}
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.EXPORT_IMPORT_LEDGER, 'Export/Import Ledger')}
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.DISCOUNT_LEDGER, 'Discount Ledger')}
-      {renderAutoSuggest(VOUCHER_TYPE_FIELDS.ROUNDING_OFF_LEDGER, 'Rounding Off Ledger')}
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.CASH_LEDGER}
+        label="Cash Ledger"
+        options={cashOptions}
+        isLoading={isLoading}
+      />
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.BANK_LEDGER}
+        label="Bank Ledger"
+        options={bankOptions}
+        isLoading={isLoading}
+      />
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.SALES_PURCHASE_LEDGER}
+        label="Sales/Purchase Ledger"
+        options={salesPurchaseOptions}
+        isLoading={isLoading}
+      />
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.EXPORT_IMPORT_LEDGER}
+        label="Export/Import Ledger"
+        options={exportImportOptions}
+        isLoading={isLoading}
+      />
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.DISCOUNT_LEDGER}
+        label="Discount Ledger"
+        options={discountOptions}
+        isLoading={isLoading}
+      />
+      <DefaultLedgerField
+        control={form.control}
+        name={VOUCHER_TYPE_FIELDS.ROUNDING_OFF_LEDGER}
+        label="Rounding Off Ledger"
+        options={roundingOffOptions}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
