@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectActiveFinancialYearId } from '@/store/authSlice';
 import { useCreateLedgerMutation } from '../../api';
 import { LedgerFormValues } from '../schema';
 import { CreateLedgerRequest } from '../../types';
@@ -8,6 +10,7 @@ import { useNavigate } from '@tanstack/react-router';
 export const useCreateLedger = () => {
   const [createLedger, { isLoading }] = useCreateLedgerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
+  const financialYearId = useSelector(selectActiveFinancialYearId);
   const navigate = useNavigate();
 
   const onSubmit = async (data: LedgerFormValues) => {
@@ -46,7 +49,7 @@ export const useCreateLedger = () => {
         ? (data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || []).map(alloc => ({
             amount: parseFloat(String(alloc.amount) || "0"),
             cost_centre_id: alloc.costCenterId || "",
-            financial_year_id: "", 
+            financial_year_id: financialYearId, 
             ledger_id: ""
           }))
         : [],
