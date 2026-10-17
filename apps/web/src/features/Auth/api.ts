@@ -1,9 +1,11 @@
 import { apiSlice } from '@/store/apiSlice';
-import { Company, LoginCompany } from '@/types/models/Company';
+import { Company, LoginCompany, LoginCompanyFiscalYear } from '@/types/models/Company';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+export type { LoginCompany, LoginCompanyFiscalYear };
 
 export interface LoginRequest {
   company_id: string;
