@@ -50,7 +50,9 @@ export const MultiUnitTable = ({ form }: { form: any }) => {
                 },
                 state: {
                   rowErrors,
-                  isRowEmpty: (row: any) => !row?.original?.unit,
+                  isRowEmpty: (row: any) =>
+                    !row?.original?.unit &&
+                    (!row?.original?.quantity || Number(row?.original?.quantity) === 0),
                 },
                 phantomRowConfig: {
                   isPhantom: (row: any) => (row.original as any).isPhantom,
@@ -87,9 +89,9 @@ export const MultiUnitTable = ({ form }: { form: any }) => {
             <Table.Body className="bg-background">
               {(row, isFocused) => {
                 const isPhantom = Boolean((row.original as any).isPhantom);
-                const hasRowError =
-                  !isPhantom &&
-                  Boolean(rowErrors[row.index] && Object.keys(rowErrors[row.index]).length > 0);
+                const hasRowError = Boolean(
+                  rowErrors[row.index] && Object.keys(rowErrors[row.index]).length > 0
+                );
 
                 return (
                   <Table.Row

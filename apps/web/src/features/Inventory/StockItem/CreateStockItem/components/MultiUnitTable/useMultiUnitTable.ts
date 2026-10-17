@@ -13,11 +13,13 @@ export const useMultiUnitTable = (form: any) => {
   });
 
   const [clearedRowErrors, setClearedRowErrors] = useState<Record<number, Record<string, boolean>>>({});
+  const [commitErrors, setCommitErrors] = useState<Record<number, Record<string, string>>>({});
 
-  // Reset locally cleared errors when fresh validation is triggered on submit
+  // Reset locally cleared and commit errors when fresh validation is triggered on submit
   const submitCount = form.formState.submitCount;
   useEffect(() => {
     setClearedRowErrors({});
+    setCommitErrors({});
   }, [submitCount]);
 
   // Extract RHF errors
@@ -36,8 +38,10 @@ export const useMultiUnitTable = (form: any) => {
     if (Array.isArray(formErrors)) {
       formErrors.forEach((rowErr: any, idx: number) => {
         if (!rowErr) return;
-        // Never report errors on phantom rows
-        if ((fields[idx] as any)?.isPhantom) return;
+        // Never report errors on untouched phantom rows
+        const isUntouchedPhantom =
+          (fields[idx] as any)?.isPhantom && !(fields[idx] as any)?.unit;
+        if (isUntouchedPhantom) return;
 
         const rowCols: Record<string, string> = {};
         Object.keys(rowErr).forEach((colId) => {
@@ -57,8 +61,19 @@ export const useMultiUnitTable = (form: any) => {
       });
     }
 
+    // Merge pre-commit validation errors
+    Object.entries(commitErrors).forEach(([idxStr, cols]) => {
+      const idx = Number(idxStr);
+      if (Object.keys(cols).length > 0) {
+        errorMap[idx] = {
+          ...(errorMap[idx] || {}),
+          ...cols,
+        };
+      }
+    });
+
     return errorMap;
-  }, [formErrors, fields, clearedRowErrors]);
+  }, [formErrors, fields, clearedRowErrors, commitErrors]);
 
   const errorSummary = useMemo(() => {
     const firstRowIndex = Object.keys(rowErrors)[0];
@@ -90,6 +105,21 @@ export const useMultiUnitTable = (form: any) => {
         form.getValues(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}`) || fields[rowIndex];
       if (row) {
         update(rowIndex, { ...row, [columnId]: value });
+
+        // Immediately clear commit error for this specific column
+        setCommitErrors((prev) => {
+          if (!prev[rowIndex]?.[columnId]) return prev;
+          const next = { ...prev };
+          const rowCols = { ...next[rowIndex] };
+          delete rowCols[columnId];
+          if (Object.keys(rowCols).length === 0) {
+            delete next[rowIndex];
+          } else {
+            next[rowIndex] = rowCols;
+          }
+          return next;
+        });
+
         setClearedRowErrors((prev) => ({
           ...prev,
           [rowIndex]: {
@@ -97,6 +127,7 @@ export const useMultiUnitTable = (form: any) => {
             [columnId]: true,
           },
         }));
+
         form.clearErrors(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}.${columnId}`);
         form.clearErrors(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}`);
         form.clearErrors(STOCK_ITEM_FORM_FIELDS.MULTI_UNITS);
@@ -107,6 +138,11 @@ export const useMultiUnitTable = (form: any) => {
 
   const removeRow = useCallback(
     (rowIndex: number) => {
+      setCommitErrors((prev) => {
+        const next = { ...prev };
+        delete next[rowIndex];
+        return next;
+      });
       setClearedRowErrors((prev) => {
         const next = { ...prev };
         delete next[rowIndex];
@@ -139,24 +175,112 @@ export const useMultiUnitTable = (form: any) => {
         row = { ...row, [columnId]: cellValue };
       }
 
+      const hasUnit = Boolean(row.unit && String(row.unit).trim() !== '');
+      const rawQty = row.quantity;
+      const parsedQty = typeof rawQty === 'string' ? parseFloat(rawQty) : Number(rawQty);
+      const hasValidQty = !isNaN(parsedQty) && parsedQty > 0;
+
       if ((row as any).isPhantom) {
-        // Pre-commit validation: unit is required
-        if (!row.unit || String(row.unit).trim() === '') {
+        // If completely empty phantom row, ignore commit and stay quietly
+        if (!hasUnit && (!rawQty || parsedQty === 0)) {
           return 'STAY';
         }
 
-        const committedRow = { ...row, isPhantom: false };
+        // Validate unit
+        if (!hasUnit) {
+          setCommitErrors((prev) => ({
+            ...prev,
+            [rowIndex]: {
+              ...(prev[rowIndex] || {}),
+              unit: 'Unit is required',
+            },
+          }));
+          form.setError(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}.unit`, {
+            type: 'manual',
+            message: 'Unit is required',
+          });
+          return 'STAY';
+        }
+
+        // Validate quantity (must be non-zero and positive)
+        if (!hasValidQty) {
+          setCommitErrors((prev) => ({
+            ...prev,
+            [rowIndex]: {
+              ...(prev[rowIndex] || {}),
+              quantity: 'Quantity must be greater than 0',
+            },
+          }));
+          form.setError(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}.quantity`, {
+            type: 'manual',
+            message: 'Quantity must be greater than 0',
+          });
+          return 'STAY';
+        }
+
+        // Both unit and quantity are valid -> Commit row and advance
+        const committedRow = {
+          ...row,
+          unit: String(row.unit).trim(),
+          quantity: parsedQty,
+          isPhantom: false,
+        };
+
         const currentRows = form.getValues(STOCK_ITEM_FORM_FIELDS.MULTI_UNITS) || [...fields];
         const newFields = [...currentRows];
         newFields[rowIndex] = committedRow;
         newFields.push({ unit: '', quantity: 0, isPhantom: true });
 
+        setCommitErrors((prev) => {
+          const next = { ...prev };
+          delete next[rowIndex];
+          return next;
+        });
+
         // Atomic replace to avoid RHF state-batching race conditions
         replace(newFields);
+        form.clearErrors(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}`);
         form.clearErrors(STOCK_ITEM_FORM_FIELDS.MULTI_UNITS);
         return 'ADVANCE';
       }
 
+      // Existing committed row edit validation
+      if (!hasUnit) {
+        setCommitErrors((prev) => ({
+          ...prev,
+          [rowIndex]: {
+            ...(prev[rowIndex] || {}),
+            unit: 'Unit is required',
+          },
+        }));
+        form.setError(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}.unit`, {
+          type: 'manual',
+          message: 'Unit is required',
+        });
+        return 'STAY';
+      }
+
+      if (!hasValidQty) {
+        setCommitErrors((prev) => ({
+          ...prev,
+          [rowIndex]: {
+            ...(prev[rowIndex] || {}),
+            quantity: 'Quantity must be greater than 0',
+          },
+        }));
+        form.setError(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}.quantity`, {
+          type: 'manual',
+          message: 'Quantity must be greater than 0',
+        });
+        return 'STAY';
+      }
+
+      setCommitErrors((prev) => {
+        const next = { ...prev };
+        delete next[rowIndex];
+        return next;
+      });
+      form.clearErrors(`${STOCK_ITEM_FORM_FIELDS.MULTI_UNITS}.${rowIndex}`);
       return 'EXIT';
     },
     [fields, form, replace]

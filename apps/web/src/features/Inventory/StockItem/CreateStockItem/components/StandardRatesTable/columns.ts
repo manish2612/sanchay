@@ -9,22 +9,27 @@ export const columns: ColumnDef<any, any>[] = [
   standardRatesColumnHelper.accessor('fromDate', {
     header: 'From Date',
     cell: DateCell,
-    size: 200,
+    size: 140,
+  }),
+  standardRatesColumnHelper.accessor('toDate', {
+    header: 'To Date',
+    cell: DateCell,
+    size: 140,
   }),
   standardRatesColumnHelper.accessor('mrp', {
     header: 'MRP',
     cell: NumericCell,
-    size: 150,
+    size: 120,
   }),
   standardRatesColumnHelper.accessor('netRate', {
     header: 'Net Rate',
     cell: NumericCell,
-    size: 150,
+    size: 120,
   }),
-  standardRatesColumnHelper.accessor('rate', {
-    header: 'Rate',
+  standardRatesColumnHelper.accessor('minSellingRate', {
+    header: 'Min Selling Rate',
     cell: NumericCell,
-    size: 150,
+    size: 140,
   }),
   standardRatesColumnHelper.display({
     id: 'actions',

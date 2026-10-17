@@ -75,7 +75,7 @@ export const useStandardRatesTable = (form: any) => {
   // Manage initial phantom row and cleanup on switch toggle
   useEffect(() => {
     if (enableStandardRates && fields.length === 0) {
-      append({ fromDate: new Date(), mrp: 0, netRate: 0, rate: 0, isPhantom: true });
+      append({ fromDate: new Date(), toDate: null, mrp: 0, netRate: 0, minSellingRate: 0, isPhantom: true });
     } else if (!enableStandardRates && fields.length > 0) {
       replace([]);
       form.clearErrors(STOCK_ITEM_FORM_FIELDS.STANDARD_RATES);
@@ -141,9 +141,9 @@ export const useStandardRatesTable = (form: any) => {
         // Pre-commit validation: at least one rate or price must be entered
         const mrp = Number(row.mrp) || 0;
         const netRate = Number(row.netRate) || 0;
-        const rate = Number(row.rate) || 0;
+        const minSellingRate = Number(row.minSellingRate) || 0;
 
-        if (mrp === 0 && netRate === 0 && rate === 0) {
+        if (mrp === 0 && netRate === 0 && minSellingRate === 0) {
           return 'STAY';
         }
 
@@ -151,7 +151,7 @@ export const useStandardRatesTable = (form: any) => {
         const currentRows = form.getValues(STOCK_ITEM_FORM_FIELDS.STANDARD_RATES) || [...fields];
         const newFields = [...currentRows];
         newFields[rowIndex] = committedRow;
-        newFields.push({ fromDate: new Date(), mrp: 0, netRate: 0, rate: 0, isPhantom: true });
+        newFields.push({ fromDate: new Date(), toDate: null, mrp: 0, netRate: 0, minSellingRate: 0, isPhantom: true });
 
         // Atomic replace to avoid RHF state-batching race conditions
         replace(newFields);
