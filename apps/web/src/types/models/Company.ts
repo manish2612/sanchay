@@ -1,4 +1,11 @@
 export interface CompanyFiscalYear {
+  financial_year_id?: string;
+  from_date: string;
+  to_date: string;
+}
+
+export interface LoginCompanyFiscalYear extends CompanyFiscalYear {
+  financial_year_id: string;
   from_date: string;
   to_date: string;
 }
@@ -6,14 +13,15 @@ export interface CompanyFiscalYear {
 export interface LoginCompany {
   id: string;
   name: string;
-  iso3?: string;
+  mailing_name: string;
   decimal_places: number;
   registration_type: string;
   tax_identifier: string;
   cin_number: string;
   country_id: string;
   state_id: string;
-  company_fiscal_years: CompanyFiscalYear[];
+  company_fiscal_years: LoginCompanyFiscalYear[];
+  iso3?: string;
 }
 
 export interface DetailedCompany {
