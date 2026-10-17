@@ -45,6 +45,7 @@ declare module '@tanstack/react-table' {
       max?: number;
       allowEmpty?: boolean;
       type?: string;
+      onCreate?: (value?: string) => void;
     };
   }
 }

@@ -11,10 +11,10 @@ export const baseMasterSchema = z.object({
   name: z.string()
     .min(1, 'Name is required')
     .max(100, 'Name must be 100 characters or less')
-    .regex(/^[a-zA-Z0-9\s]+$/, 'Name must be alphanumeric'),
+    .regex(/^[a-zA-Z0-9\s&_,'#%+./()-]+$/, "Name contains invalid characters (allowed: &, -, ., /, (), _, ', ,, #, %, +)"),
   alias: z.string()
     .max(50, 'Alias must be 50 characters or less')
-    .regex(/^[a-zA-Z0-9\s]*$/, 'Alias must be alphanumeric')
+    .regex(/^[a-zA-Z0-9\s-]*$/, 'Alias must be alphanumeric')
     .optional(),
   parentId: z.string().optional(),
 });
