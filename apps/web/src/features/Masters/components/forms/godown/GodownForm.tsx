@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { useGodownForm } from './useGodownForm';
-import { useGetGodownsQuery } from '@/features/Masters/api/godownsApi';
+import { useGodownOptions } from '@/features/Masters/hooks/useGodownOptions';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
@@ -14,12 +14,7 @@ export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => v
     priority: 10,
   });
 
-  const { data: godowns = [], isLoading: isLoadingGodowns } = useGetGodownsQuery();
-  
-  const godownOptions = [...godowns].map(g => ({
-    label: g.name,
-    value: g.id
-  }));
+  const { options: godownOptions, isLoading: isLoadingGodowns } = useGodownOptions();
 
   return (
     <Form {...form}>

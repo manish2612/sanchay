@@ -9,10 +9,12 @@ export interface CreateStockUnitRequest {
 }
 
 export interface StockUnit {
+  id: string;
   decimal_places: number;
   name: string;
   symbol: string;
   uqc_code: string;
+  is_active?: boolean;
 }
 
 export const stockUnitsApi = apiSlice.injectEndpoints({

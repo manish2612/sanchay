@@ -17,6 +17,7 @@ export interface UseStockUnitOptionsParams {
 }
 
 export interface StockUnitOption {
+  id: string;
   label: string;
   value: string;
   symbol: string;
@@ -36,8 +37,9 @@ export function useStockUnitOptions(params?: UseStockUnitOptionsParams) {
     }
 
     return result.map((unit) => ({
+      id: unit.id,
       label: unit.name ? `${unit.name} (${unit.symbol})` : unit.symbol,
-      value: unit.symbol,
+      value: unit.id,
       symbol: unit.symbol,
       name: unit.name,
       decimal_places: unit.decimal_places,
