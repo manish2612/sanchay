@@ -96,6 +96,14 @@ export interface TaxClassificationFieldProps {
    * Loading state override
    */
   isLoading?: boolean;
+  /**
+   * Whether to display (Optional) indicator in the label
+   */
+  optional?: boolean;
+  /**
+   * Whether the input value can be cleared
+   */
+  clearable?: boolean;
 }
 
 export function TaxClassificationField({
@@ -107,6 +115,8 @@ export function TaxClassificationField({
   filter,
   options: externalOptions,
   isLoading: externalIsLoading,
+  optional = true,
+  clearable = true,
 }: TaxClassificationFieldProps) {
   const formContext = useFormContext();
   const effectiveControl = control || formContext?.control;
@@ -126,7 +136,12 @@ export function TaxClassificationField({
       name={name}
       render={({ field }) => (
         <Form.Item>
-          <Form.Label>{label}</Form.Label>
+          <Form.Label>
+            {label}
+            {optional && (
+              <span className="text-[11px] font-normal text-muted-foreground ml-1">(Optional)</span>
+            )}
+          </Form.Label>
           <Form.Control>
             <AutoSuggest
               value={field.value ?? ''}
@@ -137,6 +152,7 @@ export function TaxClassificationField({
                 placeholder={isLoading ? 'Loading classifications...' : placeholder}
                 leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
                 disabled={isLoading}
+                clearable={clearable}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
@@ -167,6 +183,8 @@ export interface BaseTaxFieldProps {
   filter?: LedgerFilterFn;
   options?: { label: string; value: string }[];
   isLoading?: boolean;
+  optional?: boolean;
+  clearable?: boolean;
 }
 
 export function LocalSalesTaxField({
@@ -175,6 +193,8 @@ export function LocalSalesTaxField({
   label = 'Local / Interstate Sales',
   placeholder = 'Select classification...',
   filter: customFilter,
+  optional = true,
+  clearable = true,
   ...props
 }: BaseTaxFieldProps) {
   const { localSalesFilter } = useTaxClassification();
@@ -186,6 +206,8 @@ export function LocalSalesTaxField({
       placeholder={placeholder}
       subCategory={TAXATION_SUBCATEGORIES.LOCAL_SALES}
       filter={customFilter || localSalesFilter}
+      optional={optional}
+      clearable={clearable}
       {...props}
     />
   );
@@ -197,6 +219,8 @@ export function ExportSalesTaxField({
   label = 'Export Sales',
   placeholder = 'Select classification...',
   filter: customFilter,
+  optional = true,
+  clearable = true,
   ...props
 }: BaseTaxFieldProps) {
   const { exportSalesFilter } = useTaxClassification();
@@ -208,6 +232,8 @@ export function ExportSalesTaxField({
       placeholder={placeholder}
       subCategory={TAXATION_SUBCATEGORIES.EXPORT_SALES}
       filter={customFilter || exportSalesFilter}
+      optional={optional}
+      clearable={clearable}
       {...props}
     />
   );
@@ -219,6 +245,8 @@ export function LocalPurchaseTaxField({
   label = 'Local / Interstate Purchase',
   placeholder = 'Select classification...',
   filter: customFilter,
+  optional = true,
+  clearable = true,
   ...props
 }: BaseTaxFieldProps) {
   const { localPurchaseFilter } = useTaxClassification();
@@ -230,6 +258,8 @@ export function LocalPurchaseTaxField({
       placeholder={placeholder}
       subCategory={TAXATION_SUBCATEGORIES.LOCAL_PURCHASE}
       filter={customFilter || localPurchaseFilter}
+      optional={optional}
+      clearable={clearable}
       {...props}
     />
   );
@@ -241,6 +271,8 @@ export function ExportPurchaseTaxField({
   label = 'Export Purchase',
   placeholder = 'Select classification...',
   filter: customFilter,
+  optional = true,
+  clearable = true,
   ...props
 }: BaseTaxFieldProps) {
   const { exportPurchaseFilter } = useTaxClassification();
@@ -252,6 +284,8 @@ export function ExportPurchaseTaxField({
       placeholder={placeholder}
       subCategory={TAXATION_SUBCATEGORIES.EXPORT_PURCHASE}
       filter={customFilter || exportPurchaseFilter}
+      optional={optional}
+      clearable={clearable}
       {...props}
     />
   );
