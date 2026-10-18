@@ -26,6 +26,7 @@ export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => vo
             label="Parent Group" 
             options={groupOptions}
             isLoading={isLoadingGroups}
+            required
           />
         </div>
         

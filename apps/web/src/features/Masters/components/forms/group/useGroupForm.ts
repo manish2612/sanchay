@@ -17,7 +17,7 @@ export function useGroupForm(onSuccess: () => void, onError?: (title: string, de
         alias: data.alias || '',
         code: '',
         name: data.name,
-        parent_id: data.parentId || null,
+        parent_id: data.parentId,
       }).unwrap();
       onSuccess();
     } catch (err: any) {

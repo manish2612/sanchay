@@ -48,6 +48,7 @@ interface MasterParentFieldProps {
   placeholder?: string;
   options?: { label: string; value: string }[];
   isLoading?: boolean;
+  required?: boolean;
 }
 
 export function MasterParentField({ 
@@ -55,7 +56,8 @@ export function MasterParentField({
   name = "parentId", 
   placeholder = 'Search parent...', 
   options = [],
-  isLoading
+  isLoading,
+  required,
 }: MasterParentFieldProps) {
   const { control } = useFormContext();
 
@@ -63,9 +65,12 @@ export function MasterParentField({
     <Form.Field
       control={control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
         <Form.Item>
-          <Form.Label>{label}</Form.Label>
+          <Form.Label>
+            {label}
+            {required && <span className="text-danger ml-0.5">*</span>}
+          </Form.Label>
           <Form.Control>
             <AutoSuggest
               value={field.value ?? ''}
@@ -76,6 +81,7 @@ export function MasterParentField({
                 placeholder={isLoading ? 'Loading...' : placeholder} 
                 leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
                 disabled={isLoading}
+                error={!!fieldState.error}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
