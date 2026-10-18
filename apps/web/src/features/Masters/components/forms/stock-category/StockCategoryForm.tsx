@@ -24,6 +24,7 @@ export function StockCategoryForm({ onCancel, onSuccess, onError }: { onCancel: 
             label="Parent Category" 
             options={categoryOptions}
             isLoading={isLoadingCategories}
+            required
           />
         </div>
         

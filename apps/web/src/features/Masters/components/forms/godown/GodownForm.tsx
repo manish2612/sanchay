@@ -26,6 +26,7 @@ export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => v
             label="Parent Godown" 
             options={godownOptions}
             isLoading={isLoadingGodowns}
+            required
           />
         </div>
         

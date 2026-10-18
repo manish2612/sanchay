@@ -45,6 +45,7 @@ export function StockGroupForm({
             label="Parent Group" 
             options={groupOptions}
             isLoading={isLoadingGroups}
+            required
           />
 
           <LocalSalesTaxField control={form.control as any} />
