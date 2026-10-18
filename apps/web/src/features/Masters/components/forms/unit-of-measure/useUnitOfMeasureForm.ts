@@ -38,8 +38,8 @@ export function useUnitOfMeasureForm(onSuccess: () => void, onError?: (title: st
         code: '',
         decimal_places: data.decimalPlaces || 0,
         name: data.name,
-        symbol: data.symbol || '',
-        uqc_code: data.uqcCode,
+        symbol: data.symbol,
+        uqc_code: data.uqcCode || '',
       }).unwrap();
       onSuccess();
     } catch (err: any) {

@@ -30,7 +30,9 @@ export function UnitOfMeasureForm({
             name="symbol"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>Symbol</Form.Label>
+                <Form.Label>
+                  Symbol <span className="text-danger">*</span>
+                </Form.Label>
                 <Form.Control>
                   <TextInput placeholder="e.g. kg" {...field} value={field.value ?? ''} />
                 </Form.Control>
@@ -43,7 +45,9 @@ export function UnitOfMeasureForm({
             name="uqcCode"
             render={({ field }) => (
               <Form.Item>
-                <Form.Label>Unique Quantity Code</Form.Label>
+                <Form.Label>
+                  Unique Quantity Code <span className="text-[11px] font-normal text-muted-foreground ml-1">(Optional)</span>
+                </Form.Label>
                 <Form.Control>
                   <TextInput
                     placeholder="e.g. KGS"

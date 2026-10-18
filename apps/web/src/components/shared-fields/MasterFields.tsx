@@ -10,7 +10,9 @@ export function MasterNameField() {
       name="name"
       render={({ field }) => (
         <Form.Item>
-          <Form.Label>Name</Form.Label>
+          <Form.Label>
+            Name <span className="text-danger">*</span>
+          </Form.Label>
           <Form.Control>
             <TextInput placeholder="Enter name" {...field} />
           </Form.Control>
@@ -30,7 +32,8 @@ export function MasterAliasField() {
       render={({ field }) => (
         <Form.Item>
           <Form.Label>
-            Alias <span className="text-[11px] font-normal text-muted-foreground ml-1">(Optional)</span>
+            Alias{' '}
+            <span className="text-[11px] font-normal text-muted-foreground ml-1">(Optional)</span>
           </Form.Label>
           <Form.Control>
             <TextInput placeholder="Enter alias" {...field} value={field.value ?? ''} />
@@ -51,10 +54,10 @@ interface MasterParentFieldProps {
   required?: boolean;
 }
 
-export function MasterParentField({ 
-  label, 
-  name = "parentId", 
-  placeholder = 'Search parent...', 
+export function MasterParentField({
+  label,
+  name = 'parentId',
+  placeholder = 'Search parent...',
   options = [],
   isLoading,
   required,
@@ -72,20 +75,18 @@ export function MasterParentField({
             {required && <span className="text-danger ml-0.5">*</span>}
           </Form.Label>
           <Form.Control>
-            <AutoSuggest
-              value={field.value ?? ''}
-              onChange={field.onChange}
-              options={options}
-            >
-              <AutoSuggest.Input 
-                placeholder={isLoading ? 'Loading...' : placeholder} 
+            <AutoSuggest value={field.value ?? ''} onChange={field.onChange} options={options}>
+              <AutoSuggest.Input
+                placeholder={isLoading ? 'Loading...' : placeholder}
                 leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
                 disabled={isLoading}
                 error={!!fieldState.error}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
-                  <AutoSuggest.Empty>{isLoading ? 'Loading...' : 'No options found.'}</AutoSuggest.Empty>
+                  <AutoSuggest.Empty>
+                    {isLoading ? 'Loading...' : 'No options found.'}
+                  </AutoSuggest.Empty>
                   {options.map((opt) => (
                     <AutoSuggest.Item key={opt.value} value={opt.value} keywords={[opt.label]}>
                       {opt.label}
