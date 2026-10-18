@@ -2,12 +2,13 @@ import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { OpeningBalanceField } from '@/components/shared-fields/AccountingFields';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useCostCenterForm } from './useCostCenterForm';
 import { LedgerAllocationTable } from './components/LedgerAllocationTable';
 import { useGetCostCategoriesQuery } from '@/features/Masters/api/costCategoriesApi';
 
 export function CostCenterForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
-  const { form, onSubmit, isSubmitting } = useCostCenterForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useCostCenterForm(onSuccess || onCancel, onError);
   
   const { data: categories = [], isLoading: isLoadingCategories } = useGetCostCategoriesQuery();
   
@@ -22,6 +23,7 @@ export function CostCenterForm({ onCancel, onSuccess, onError }: { onCancel: () 
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit as any)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
           <MasterParentField 

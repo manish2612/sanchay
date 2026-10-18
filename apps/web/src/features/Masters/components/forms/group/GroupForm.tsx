@@ -1,11 +1,12 @@
 import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useGroupForm } from './useGroupForm';
 import { useGetGroupsQuery } from '@/features/Masters/api/groupsApi';
 
 export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
-  const { form, onSubmit, isSubmitting } = useGroupForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useGroupForm(onSuccess || onCancel, onError);
   
   const { data: groups = [], isLoading: isLoadingGroups } = useGetGroupsQuery();
   
@@ -20,6 +21,7 @@ export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => vo
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
           <MasterParentField 

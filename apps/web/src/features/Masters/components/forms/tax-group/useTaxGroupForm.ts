@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taxGroupSchema } from './schema';
@@ -5,12 +6,14 @@ import type { TaxGroupFormValues } from './types';
 import { useCreateTaxGroupMutation } from '@/features/Masters/api/taxGroupsApi';
 import type { CreateTaxGroupRequest } from '@/features/Masters/types/taxGroup';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
+import { getErrorMessage } from '@/utils/errorUtils';
 
 export function useTaxGroupForm(
   onSuccess: () => void,
   onError?: (title: string, desc: string) => void,
 ) {
   const [createTaxGroup, { isLoading }] = useCreateTaxGroupMutation();
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm<TaxGroupFormValues>({
     resolver: zodResolver(taxGroupSchema) as any,
@@ -29,8 +32,19 @@ export function useTaxGroupForm(
     priority: 10,
   });
 
+  // Auto-clear submission error when user edits any field
+  useEffect(() => {
+    const subscription = form.watch(() => {
+      if (submitError) {
+        setSubmitError(null);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, submitError]);
+
   const onSubmit = async (data: TaxGroupFormValues) => {
     try {
+      setSubmitError(null);
       const activeComponents = (data.components || [])
         .filter((c) => !c.isPhantom && c.component_name && c.component_name.trim() !== '')
         .map((c) => ({
@@ -58,11 +72,17 @@ export function useTaxGroupForm(
       onSuccess();
     } catch (err: any) {
       console.error('Failed to save tax group:', err);
-      const errMsg =
-        err?.data?.message || err?.message || 'Failed to create Tax Group. Please try again.';
+      const errMsg = getErrorMessage(err, 'Failed to create Tax Group. Please try again.');
+      setSubmitError(errMsg);
       onError?.('Error', errMsg);
     }
   };
 
-  return { form, onSubmit, isSubmitting: isLoading };
+  return {
+    form,
+    onSubmit,
+    isSubmitting: isLoading,
+    submitError,
+    clearSubmitError: () => setSubmitError(null),
+  };
 }

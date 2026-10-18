@@ -49,9 +49,15 @@ export function MasterFormSheet() {
   const [toastMessage, setToastMessage] = useState<{ title: string; desc: string; variant?: 'success' | 'destructive' | 'default' } | null>(null);
 
   const handleClose = () => {
+    const slotId =
+      activeMaster === 'cost-centre'
+        ? 'cost-center-form'
+        : activeMaster
+          ? `${activeMaster}-form`
+          : undefined;
     triggerPrompt(() => {
       closeMasterSheet();
-    }, activeMaster ? `${activeMaster}-form` : undefined);
+    }, slotId);
   };
 
   const handleSuccess = (title: string, desc: string) => {
@@ -172,6 +178,10 @@ export function MasterFormSheet() {
                 : 'w-full sm:w-[88vw] md:w-[420px] lg:w-[450px] sm:max-w-[420px] md:max-w-[450px]'
           }`} 
           aria-describedby={undefined}
+          onPointerDownOutside={(e) => {
+            // Prevent accidental backdrop clicks or outside interactions from closing the sheet
+            e.preventDefault();
+          }}
         >
           <SheetHeader className="p-4 border-b border-border/30">
             <SheetTitle>{activeMaster ? titles[activeMaster] : 'Create Master'}</SheetTitle>

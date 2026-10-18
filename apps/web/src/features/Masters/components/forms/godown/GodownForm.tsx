@@ -1,25 +1,20 @@
 import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useGodownForm } from './useGodownForm';
 import { useGodownOptions } from '@/features/Masters/hooks/useGodownOptions';
-import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 export function GodownForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
-  const { form, onSubmit, isSubmitting } = useGodownForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useGodownForm(onSuccess || onCancel, onError);
   
-  useLeavePromptSlot({
-    id: 'godown-form',
-    isDirty: form.formState.isDirty && !form.formState.isSubmitSuccessful,
-    priority: 10,
-  });
-
   const { options: godownOptions, isLoading: isLoadingGodowns } = useGodownOptions();
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full overflow-hidden flex-1">
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
           <MasterParentField 

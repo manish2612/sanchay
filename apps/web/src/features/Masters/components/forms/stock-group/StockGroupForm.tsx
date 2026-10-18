@@ -11,6 +11,7 @@ import {
   LocalPurchaseTaxField,
   ExportPurchaseTaxField,
 } from '@/components/shared-fields/AccountingFields';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useStockGroupForm } from './useStockGroupForm';
 import { useGetStockGroupsQuery } from '@/features/Masters/api/stockGroupsApi';
 
@@ -23,7 +24,7 @@ export function StockGroupForm({
   onSuccess?: () => void;
   onError?: (title: string, desc: string) => void;
 }) {
-  const { form, onSubmit, isSubmitting } = useStockGroupForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useStockGroupForm(onSuccess || onCancel, onError);
   
   const { data: stockGroups = [], isLoading: isLoadingGroups } = useGetStockGroupsQuery();
   
@@ -39,6 +40,7 @@ export function StockGroupForm({
         className="flex flex-col h-full overflow-hidden flex-1"
       >
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
           <MasterParentField 

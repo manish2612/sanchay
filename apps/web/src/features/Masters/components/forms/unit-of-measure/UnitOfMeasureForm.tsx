@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField } from '@/components/shared-fields/MasterFields';
 import { TextInput } from '@prime/ui';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useUnitOfMeasureForm } from './useUnitOfMeasureForm';
 
 export function UnitOfMeasureForm({
@@ -13,7 +14,7 @@ export function UnitOfMeasureForm({
   onSuccess?: () => void;
   onError?: (title: string, desc: string) => void;
 }) {
-  const { form, onSubmit, isSubmitting } = useUnitOfMeasureForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useUnitOfMeasureForm(onSuccess || onCancel, onError);
   return (
     <Form {...form}>
       <form
@@ -21,6 +22,7 @@ export function UnitOfMeasureForm({
         className="flex flex-col h-full overflow-hidden flex-1"
       >
         <div className="flex-1 overflow-y-auto py-4 px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
 
           <Form.Field

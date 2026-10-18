@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
 import { Form, Button, SheetFooter, TextInput, DropdownMenu } from '@prime/ui';
 import { MasterNameField } from '@/components/shared-fields/MasterFields';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useTaxGroupForm } from './useTaxGroupForm';
 import { TaxComponentsTable } from './components/TaxComponentsTable';
 import { useGetTaxTypesQuery } from '@/features/Masters/api/taxGroupsApi';
 import type { TaxGroupFormProps } from './types';
 
 export function TaxGroupForm({ onCancel, onSuccess, onError }: TaxGroupFormProps) {
-  const { form, onSubmit, isSubmitting } = useTaxGroupForm(onSuccess || onCancel, onError);
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useTaxGroupForm(onSuccess || onCancel, onError);
   const { data: taxTypes = [], isLoading: isLoadingTaxTypes } = useGetTaxTypesQuery();
 
   const taxTypeOptions = useMemo(() => {
@@ -30,6 +31,7 @@ export function TaxGroupForm({ onCancel, onSuccess, onError }: TaxGroupFormProps
         className="flex flex-col h-full overflow-hidden flex-1"
       >
         <div className="flex-1 overflow-y-auto py-4 px-4 sm:px-6 space-y-4">
+          <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Field 1: Code (Optional) */}
             <Form.Field
