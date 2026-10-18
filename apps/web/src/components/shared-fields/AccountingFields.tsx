@@ -19,35 +19,43 @@ export {
 };
 
 interface OpeningBalanceFieldProps {
-  control: Control<any>;
+  control?: Control<any>;
   label?: string;
   placeholder?: string;
 }
 
 export function OpeningBalanceField({ control, label = 'Opening Balance', placeholder = '0.00' }: OpeningBalanceFieldProps) {
-  // Watch the value to know if we should default the segmented control or if it is already set
-  
+  const formContext = useFormContext();
+  const effectiveControl = control || formContext?.control;
+
   return (
     <div className="flex gap-4 items-start">
       <div className="flex-1">
         <Form.Field
-          control={control}
+          control={effectiveControl}
           name="openingBalance"
           render={({ field }) => (
             <Form.Item>
               <Form.Label>{label}</Form.Label>
               <Form.Control>
-                <TextInput type="number" placeholder={placeholder} {...field} value={field.value ?? ''} />
+                <TextInput
+                  type="number"
+                  min={0}
+                  step="any"
+                  placeholder={placeholder}
+                  {...field}
+                  value={field.value ?? ''}
+                />
               </Form.Control>
               <Form.Message />
             </Form.Item>
           )}
         />
       </div>
-      
+
       <div className="w-32">
         <Form.Field
-          control={control}
+          control={effectiveControl}
           name="openingBalanceType"
           render={({ field }) => (
             <Form.Item>

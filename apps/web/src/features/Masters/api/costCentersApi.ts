@@ -13,7 +13,7 @@ export interface CreateCostCenterRequest {
   cost_category_id: string;
   name: string;
   opening_balances: CostCenterOpeningBalance[];
-  parent_id: string;
+  parent_id?: string | null;
 }
 
 export const costCentersApi = apiSlice.injectEndpoints({

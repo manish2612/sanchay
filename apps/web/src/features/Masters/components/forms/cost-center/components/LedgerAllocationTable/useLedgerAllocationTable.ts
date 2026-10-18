@@ -55,7 +55,17 @@ export const useLedgerAllocationTable = (form: any) => {
   const updateData = useCallback((rowIndex: number, columnId: string, value: unknown) => {
     const row = form.getValues(`ledgerAllocations.${rowIndex}`);
     if (row) {
-      update(rowIndex, { ...row, [columnId]: value });
+      const updatedRow = { ...row, [columnId]: value };
+
+      const amtStr = typeof updatedRow.amount === 'string' ? updatedRow.amount : String(updatedRow.amount || '');
+      const amt = parseFloat(amtStr.replace(/[^0-9.-]+/g, '')) || 0;
+      const isComplete = Boolean(updatedRow.ledger && String(updatedRow.ledger).trim() !== '') && amt > 0;
+
+      if (row.isPhantom && isComplete) {
+        updatedRow.isPhantom = false;
+      }
+
+      update(rowIndex, updatedRow);
       form.clearErrors(`ledgerAllocations.${rowIndex}`);
     }
   }, [form, update]);
