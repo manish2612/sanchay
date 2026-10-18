@@ -22,6 +22,7 @@ const StockGroupForm = React.lazy(() => import('@master-forms/stock-group/StockG
 const StockCategoryForm = React.lazy(() => import('@master-forms/stock-category/StockCategoryForm').then(m => ({ default: m.StockCategoryForm })));
 const UnitOfMeasureForm = React.lazy(() => import('@master-forms/unit-of-measure/UnitOfMeasureForm').then(m => ({ default: m.UnitOfMeasureForm })));
 const GodownForm = React.lazy(() => import('@master-forms/godown/GodownForm').then(m => ({ default: m.GodownForm })));
+const TaxGroupForm = React.lazy(() => import('@master-forms/tax-group/TaxGroupForm').then(m => ({ default: m.TaxGroupForm })));
 
 function FormSkeleton() {
   return (
@@ -131,6 +132,14 @@ export function MasterFormSheet() {
             onError={handleError}
           />
         );
+      case 'tax-group':
+        return (
+          <TaxGroupForm
+            onCancel={handleClose}
+            onSuccess={() => handleSuccess('Tax Group Created', 'Successfully created new Tax Group')}
+            onError={handleError}
+          />
+        );
       default:
         return null;
     }
@@ -141,6 +150,7 @@ export function MasterFormSheet() {
     'cost-category': 'Create Cost Category',
     'cost-center': 'Create Cost Center',
     'cost-centre': 'Create Cost Centre',
+    'tax-group': 'Create Tax Group',
     'stock-group': 'Create Stock Group',
     'stock-category': 'Create Stock Category',
     'unit-of-measure': 'Create Unit of Measure',
@@ -148,24 +158,28 @@ export function MasterFormSheet() {
   };
 
   const isWide = activeMaster === 'cost-center' || activeMaster === 'cost-centre';
+  const isExtraWide = activeMaster === 'tax-group';
 
   return (
     <>
       <Sheet open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-        <SheetPortal>
-          <SheetOverlay />
-          <SheetContent 
-            className={`flex flex-col p-0 overflow-hidden ${isWide ? 'sm:max-w-2xl sm:w-[600px]' : ''}`} 
-            aria-describedby={undefined}
-          >
-            <SheetHeader className="p-4 border-b border-border/30">
-              <SheetTitle>{activeMaster ? titles[activeMaster] : 'Create Master'}</SheetTitle>
-            </SheetHeader>
-            <Suspense fallback={<FormSkeleton />}>
-              {renderForm()}
-            </Suspense>
-          </SheetContent>
-        </SheetPortal>
+        <SheetContent 
+          className={`flex flex-col p-0 overflow-hidden ${
+            isExtraWide
+              ? 'w-full sm:w-[96vw] md:w-[92vw] lg:w-[86vw] xl:w-[78vw] 2xl:w-[68vw] sm:max-w-none md:max-w-[780px] lg:max-w-[920px] xl:max-w-[1040px] 2xl:max-w-[1160px]'
+              : isWide
+                ? 'w-full sm:w-[92vw] md:w-[80vw] lg:w-[65vw] xl:w-[50vw] sm:max-w-[560px] md:max-w-[640px] lg:max-w-[700px] xl:max-w-[740px]'
+                : 'w-full sm:w-[88vw] md:w-[420px] lg:w-[450px] sm:max-w-[420px] md:max-w-[450px]'
+          }`} 
+          aria-describedby={undefined}
+        >
+          <SheetHeader className="p-4 border-b border-border/30">
+            <SheetTitle>{activeMaster ? titles[activeMaster] : 'Create Master'}</SheetTitle>
+          </SheetHeader>
+          <Suspense fallback={<FormSkeleton />}>
+            {renderForm()}
+          </Suspense>
+        </SheetContent>
       </Sheet>
 
       <ToastRoot

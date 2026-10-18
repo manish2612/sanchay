@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type MasterType = 'group' | 'cost-category' | 'cost-center' | 'cost-centre' | 'stock-group' | 'stock-category' | 'unit-of-measure' | 'godown';
+type MasterType = 'group' | 'cost-category' | 'cost-center' | 'cost-centre' | 'tax-group' | 'stock-group' | 'stock-category' | 'unit-of-measure' | 'godown' | 'ledger';
 
 interface MasterFormSheetContextType {
   isOpen: boolean;
