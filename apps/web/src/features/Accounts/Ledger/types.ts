@@ -58,27 +58,27 @@ export type GetStockGroupsResponse = StockGroup[];
 export type GetStockGroupsRequest = void;
 
 export interface CreateLedgerRequest {
-  account_group_id: string;
+  account_group_id: string | null;
   address: {
-    address: string;
+    address: string | null;
     city: string;
-    country_id: string;
-    postal_code: string;
-    state_id: string;
+    country_id: string | null;
+    postal_code: string | null;
+    state_id: string | null;
   };
   alias: string;
   block_sales_on_credit_limit_exceed: boolean;
   code: string;
   contact: {
     cin_number: string;
-    contact_person: string;
+    contact_person: string | null;
     description: string;
-    email: string;
-    mobile_number: string;
-    registration_type: string;
-    tax_identifier: string;
-    telephone_number: string;
-    whatsapp_number: string;
+    email: string | null;
+    mobile_number: string | null;
+    registration_type: string | null;
+    tax_identifier: string | null;
+    telephone_number: string | null;
+    whatsapp_number: string | null;
   };
   credit_limit_amount: number;
   credit_period_days: number;
