@@ -1,17 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { UseFormReturn } from 'react-hook-form';
 import { selectActiveFinancialYearId } from '@/store/authSlice';
 import { useCreateLedgerMutation } from '../../api';
 import { LedgerFormValues } from '../schema';
 import { CreateLedgerRequest } from '../../types';
 import { LEDGER_FORM_FIELDS } from '../constants';
 import { useNavigate } from '@tanstack/react-router';
+import { getErrorMessage } from '@/utils/errorUtils';
 
-export const useCreateLedger = () => {
+export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
   const [createLedger, { isLoading }] = useCreateLedgerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const financialYearId = useSelector(selectActiveFinancialYearId);
   const navigate = useNavigate();
+
+  // Auto-clear submission error when user edits any field
+  useEffect(() => {
+    if (!form) return;
+    const subscription = form.watch(() => {
+      if (submitError) {
+        setSubmitError(null);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form, submitError]);
 
   const onSubmit = async (data: LedgerFormValues) => {
     // Transform flat RHF data to nested API Payload
@@ -58,14 +72,26 @@ export const useCreateLedger = () => {
     };
 
     try {
+      setSubmitError(null);
       await createLedger(payload).unwrap();
       setIsSuccess(true);
     } catch (error) {
       console.error("Failed to create ledger", error);
+      const errMsg = getErrorMessage(error, "Failed to create ledger. Please try again.");
+      setSubmitError(errMsg);
     }
   };
 
   const resetSuccess = () => setIsSuccess(false);
+  const clearSubmitError = () => setSubmitError(null);
 
-  return { onSubmit, isSubmitting: isLoading, isSuccess, resetSuccess, navigate };
+  return {
+    onSubmit,
+    isSubmitting: isLoading,
+    isSuccess,
+    resetSuccess,
+    navigate,
+    submitError,
+    clearSubmitError,
+  };
 };

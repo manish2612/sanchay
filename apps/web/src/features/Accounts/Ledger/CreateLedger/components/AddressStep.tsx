@@ -18,16 +18,27 @@ interface AddressStepProps {
 export const AddressStep = ({ form }: AddressStepProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <CountrySelectField control={form.control} name={LEDGER_FORM_FIELDS.COUNTRY} getValues={form.getValues} />
-      <StateSelectField control={form.control} name={LEDGER_FORM_FIELDS.STATE} getValues={form.getValues} />
+      <CountrySelectField
+        control={form.control}
+        name={LEDGER_FORM_FIELDS.COUNTRY}
+        getValues={form.getValues}
+        required={false}
+      />
+      <StateSelectField
+        control={form.control}
+        name={LEDGER_FORM_FIELDS.STATE}
+        getValues={form.getValues}
+        required={false}
+      />
       
       <AddressTextareaField 
         control={form.control} 
         name={LEDGER_FORM_FIELDS.ADDRESS} 
         className="col-span-1 md:col-span-2" 
+        required={false}
       />
       
-      <PincodeInputField control={form.control} name={LEDGER_FORM_FIELDS.PINCODE} />
+      <PincodeInputField control={form.control} name={LEDGER_FORM_FIELDS.PINCODE} required={false} />
     </div>
   );
 };

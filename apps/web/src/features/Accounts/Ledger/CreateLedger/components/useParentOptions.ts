@@ -36,5 +36,6 @@ export const useParentOptions = (form: UseFormReturn<LedgerFormValues>) => {
     setParentQuery,
     filteredParent,
     isGroupsLoading,
+    parentOptions,
   };
 };

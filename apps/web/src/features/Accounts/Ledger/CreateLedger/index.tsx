@@ -20,13 +20,23 @@ import { ContactLocationGraphic } from '@/features/Company/CreateCompany/compone
 
 import { useCreateLedger } from './hooks/useCreateLedger';
 import { CreateLedgerSuccess } from './components/CreateLedgerSuccess';
+import { FormSubmissionError } from '@/components/FormSubmissionError';
 
-const WizardContent = ({ form }: { form: any }) => {
+const WizardContent = ({
+  form,
+  submitError,
+  clearSubmitError,
+}: {
+  form: any;
+  submitError?: string | null;
+  clearSubmitError?: () => void;
+}) => {
   const { currentStep } = useFormWizardContext();
 
   return (
     <FormWizard.Content>
       <div className="space-y-6 max-w-2xl mx-auto mt-4">
+        <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
         {currentStep === 1 && <GeneralInfoStep form={form} />}
         {currentStep === 2 && <BillingCreditStep form={form} />}
         {currentStep === 3 && <AddressStep form={form} />}
@@ -54,8 +64,6 @@ const FormWizardHeaderWithContext = ({
 };
 
 const CreateLedgerPage = () => {
-  const { onSubmit, isSubmitting, isSuccess, navigate } = useCreateLedger();
-
   const form = useForm<LedgerFormValues>({
     mode: 'onChange',
     resolver: zodResolver(ledgerFormSchema),
@@ -85,6 +93,9 @@ const CreateLedgerPage = () => {
     },
   });
 
+  const { onSubmit, isSubmitting, isSuccess, navigate, submitError, clearSubmitError } =
+    useCreateLedger(form);
+
   const getHeaderIcon = (step: number) => {
     switch (step) {
       case 1:
@@ -112,11 +123,15 @@ const CreateLedgerPage = () => {
         <FormWizard.Container>
           <FormWizardHeaderWithContext getHeaderIcon={getHeaderIcon} />
 
-          <WizardContent form={form} />
+          <WizardContent
+            form={form}
+            submitError={submitError}
+            clearSubmitError={clearSubmitError}
+          />
 
-          <FormWizard.Footer 
-            onCancel={() => navigate({ to: '/accounts/masters/ledger' as any })} 
-            isSubmitting={isSubmitting} 
+          <FormWizard.Footer
+            onCancel={() => navigate({ to: '/accounts/masters/ledger' as any })}
+            isSubmitting={isSubmitting}
           />
         </FormWizard.Container>
       </FormWizard>

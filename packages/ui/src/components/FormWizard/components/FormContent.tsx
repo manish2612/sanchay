@@ -25,7 +25,7 @@ export const FormContent = ({ children, className = '' }: FormContentProps) => {
       // before we attempt to query and focus them.
       const frameId = requestAnimationFrame(() => {
         const firstInput = containerRef.current?.querySelector<HTMLElement>(
-          'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
+          '[autofocus]:not([disabled]), input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled]), button[aria-haspopup]:not([disabled]), button[role="combobox"]:not([disabled])',
         );
         if (firstInput) {
           // Native .focus() highlights the field without triggering popovers/dropdown open states

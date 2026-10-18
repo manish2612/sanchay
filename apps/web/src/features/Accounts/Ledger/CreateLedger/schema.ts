@@ -16,10 +16,10 @@ export const ledgerFormSchema = z.object({
   // Step 1
   [LEDGER_FORM_FIELDS.NAME]: z.string().min(1, "Name is required"),
   [LEDGER_FORM_FIELDS.ALIAS]: z.string().optional(),
-  [LEDGER_FORM_FIELDS.PARENT]: z.string().optional(),
+  [LEDGER_FORM_FIELDS.PARENT]: z.string().min(1, "Parent is required"),
   [LEDGER_FORM_FIELDS.ACCOUNT_CODE]: z.string().optional(),
   [LEDGER_FORM_FIELDS.REGISTRATION_TYPE]: z.string().min(1, "Registration type is required"),
-  [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().optional(),
+  [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().min(1, "Registration number is required"),
 
   // Step 2
   [LEDGER_FORM_FIELDS.IS_BILL_BY_BILL]: z.boolean(),
@@ -31,8 +31,20 @@ export const ledgerFormSchema = z.object({
   [LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]: z.boolean(),
   [LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS]: z.array(costCenterAllocationSchema).optional(),
 })
-.merge(baseAddressSchema)
-.merge(baseContactSchema)
+.merge(
+  baseAddressSchema.extend({
+    country: z.string().optional(),
+    state: z.string().optional(),
+    address: z.string().optional(),
+    pincode: z.string().optional(),
+  })
+)
+.merge(
+  baseContactSchema.extend({
+    contactPerson: z.string().optional(),
+    mobileNumber: z.string().optional(),
+  })
+)
 .superRefine((data, ctx) => {
   const isCostCenterEnabled = data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED];
   const openingBalanceStr = data[LEDGER_FORM_FIELDS.OPENING_BALANCE] || "0";

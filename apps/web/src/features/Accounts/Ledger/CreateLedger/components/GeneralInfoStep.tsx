@@ -12,7 +12,13 @@ interface GeneralInfoStepProps {
 }
 
 export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
-  const { parentQuery, setParentQuery, filteredParent, isGroupsLoading } = useParentOptions(form);
+  const { parentQuery, setParentQuery, filteredParent, isGroupsLoading, parentOptions } = useParentOptions(form);
+
+  const currentParentId = form.watch(LEDGER_FORM_FIELDS.PARENT);
+  const currentParentLabel = React.useMemo(() => {
+    const selected = parentOptions?.find((opt) => opt.value === currentParentId);
+    return selected ? selected.label : '';
+  }, [parentOptions, currentParentId]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,21 +82,24 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
       <Form.Field
         control={form.control}
         name={LEDGER_FORM_FIELDS.PARENT}
-        render={({ field }: any) => (
+        render={({ field, fieldState }) => (
           <Form.Item>
             <AutoSuggest
               inputValue={parentQuery}
               onInputChange={(v) => {
                 setParentQuery(v);
-                field.onChange(v);
+                if (v !== currentParentLabel) {
+                  field.onChange('');
+                }
               }}
               options={filteredParent}
             >
               <AutoSuggest.Input
-                label="Parent"
+                label="Parent *"
                 labelVariant="in-field"
                 placeholder={isGroupsLoading ? "Loading groups..." : "Search group..."}
                 disabled={isGroupsLoading}
+                error={!!fieldState.error}
               />
               <AutoSuggest.Content>
                 <AutoSuggest.List>
@@ -102,6 +111,7 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
                       onSelect={() => {
                         field.onChange(opt.value);
                         setParentQuery(opt.label);
+                        form.clearErrors(LEDGER_FORM_FIELDS.PARENT);
                       }}
                     >
                       {opt.label}
@@ -146,7 +156,7 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
               <Form.Control>
                 <TextInput
                   {...field}
-                  label="Registration No"
+                  label="Registration No *"
                   labelVariant="in-field"
                   placeholder="e.g. REG-12345"
                   leftSlot={<Icon name="Hash" size={16} className="text-muted-foreground" />}
