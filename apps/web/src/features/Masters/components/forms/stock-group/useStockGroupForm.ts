@@ -3,12 +3,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { stockGroupSchema, StockGroupFormValues } from './schema';
 import { useCreateStockGroupMutation } from '@/features/Masters/api/stockGroupsApi';
 
-export function useStockGroupForm(onSuccess: () => void, onError?: (title: string, desc: string) => void) {
+export function useStockGroupForm(
+  onSuccess: () => void,
+  onError?: (title: string, desc: string) => void,
+) {
   const [createStockGroup, { isLoading }] = useCreateStockGroupMutation();
 
   const form = useForm<StockGroupFormValues>({
     resolver: zodResolver(stockGroupSchema),
-    defaultValues: { name: '', alias: '', parentId: '', localInterstateSales: '', exportSales: '', localInterstatePurchase: '', exportPurchase: '' }
+    defaultValues: {
+      name: '',
+      alias: '',
+      parentId: '',
+      localInterstateSales: '',
+      exportSales: '',
+      localInterstatePurchase: '',
+      exportPurchase: '',
+    },
   });
 
   const onSubmit = async (data: StockGroupFormValues) => {
@@ -16,11 +27,11 @@ export function useStockGroupForm(onSuccess: () => void, onError?: (title: strin
       await createStockGroup({
         alias: data.alias || '',
         code: '',
-        export_sales_ledger_id: data.exportSales || '',
-        import_purchase_ledger_id: data.exportPurchase || '',
+        export_sales_ledger_id: data.exportSales || null,
+        import_purchase_ledger_id: data.exportPurchase || null,
         is_taxable: true,
-        local_purchase_ledger_id: data.localInterstatePurchase || '',
-        local_sales_ledger_id: data.localInterstateSales || '',
+        local_purchase_ledger_id: data.localInterstatePurchase || null,
+        local_sales_ledger_id: data.localInterstateSales || null,
         name: data.name,
         parent_id: data.parentId || null,
       }).unwrap();

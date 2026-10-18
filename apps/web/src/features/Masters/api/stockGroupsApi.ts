@@ -3,11 +3,11 @@ import { apiSlice } from '@/store/apiSlice';
 export interface CreateStockGroupRequest {
   alias: string;
   code: string;
-  export_sales_ledger_id: string;
-  import_purchase_ledger_id: string;
+  export_sales_ledger_id: string | null;
+  import_purchase_ledger_id: string | null;
   is_taxable: boolean;
-  local_purchase_ledger_id: string;
-  local_sales_ledger_id: string;
+  local_purchase_ledger_id: string | null;
+  local_sales_ledger_id: string | null;
   name: string;
   parent_id: string | null;
 }
