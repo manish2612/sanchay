@@ -8,7 +8,7 @@ import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
 export function useTaxGroupForm(
   onSuccess: () => void,
-  onError?: (title: string, desc: string) => void
+  onError?: (title: string, desc: string) => void,
 ) {
   const [createTaxGroup, { isLoading }] = useCreateTaxGroupMutation();
 
@@ -40,12 +40,14 @@ export function useTaxGroupForm(
           output_ledger_id: c.output_ledger_id || '',
           rate: typeof c.rate === 'number' ? c.rate : parseFloat(String(c.rate) || '0'),
           scope: c.scope,
-          tax_group_id: '',
         }));
 
       const payload: CreateTaxGroupRequest = {
         code: data.code || '',
-        combined_rate: typeof data.combined_rate === 'number' ? data.combined_rate : parseFloat(String(data.combined_rate) || '0'),
+        combined_rate:
+          typeof data.combined_rate === 'number'
+            ? data.combined_rate
+            : parseFloat(String(data.combined_rate) || '0'),
         components: activeComponents,
         is_predefined: false,
         name: data.name,
@@ -56,7 +58,8 @@ export function useTaxGroupForm(
       onSuccess();
     } catch (err: any) {
       console.error('Failed to save tax group:', err);
-      const errMsg = err?.data?.message || err?.message || 'Failed to create Tax Group. Please try again.';
+      const errMsg =
+        err?.data?.message || err?.message || 'Failed to create Tax Group. Please try again.';
       onError?.('Error', errMsg);
     }
   };
