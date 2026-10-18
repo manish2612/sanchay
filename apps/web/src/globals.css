@@ -52,6 +52,13 @@
         background-clip: padding-box;
     }
 
+    /* Ensure Radix ScrollArea viewports never display ghost native scrollbars */
+    [data-radix-scroll-area-viewport]::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+
     /* Dark mode adjustments if needed, though CSS vars usually handle this */
     @media (prefers-color-scheme: dark) {
         ::-webkit-scrollbar-track:hover, *::-webkit-scrollbar-track:hover {
