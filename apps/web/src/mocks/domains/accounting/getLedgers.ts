@@ -45,7 +45,7 @@ export const mockLedgers: Ledger[] = [
         "tax_rates": []
     },
     {
-        "id": "01a0ddd8-39cb-7a08-89e8-b57695a3a33b",
+        "id": "01a129c4-e522-7ac9-bf1c-b2d836751989",
         "name": "Input VAT @ 13%",
         "code": "",
         "is_cost_entre_enabled": false,
@@ -55,10 +55,11 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "D&T",
         "tax_rates": []
     },
     {
-        "id": "01a0ddd8-39cc-73e5-aac7-d555cd2c32b3",
+        "id": "01a129c4-e523-73b8-af61-bc1a7169ec1b",
         "name": "Output VAT @ 13%",
         "code": "",
         "is_cost_entre_enabled": false,
@@ -68,6 +69,7 @@ export const mockLedgers: Ledger[] = [
         "credit_limit_amount": "0",
         "opening_balance": "0",
         "is_predefined": true,
+        "sub_category": "D&T",
         "tax_rates": []
     },
     {

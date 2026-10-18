@@ -4,4 +4,7 @@ export const accountingRegistry = {
   getCostCenters: false,
   getCostCategories: false,
   getNextVoucherNumber: false,
+  getTaxGroups: false,
+  createTaxGroup: false,
+  getTaxTypes: false,
 };
