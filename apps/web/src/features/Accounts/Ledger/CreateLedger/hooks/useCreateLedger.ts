@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/utils/errorUtils';
 export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
   const [createLedger, { isLoading }] = useCreateLedgerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [createdItemName, setCreatedItemName] = useState<string>('');
   const [submitError, setSubmitError] = useState<string | null>(null);
   const financialYearId = useSelector(selectActiveFinancialYearId);
   const navigate = useNavigate();
@@ -74,7 +75,8 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
 
     try {
       setSubmitError(null);
-      await createLedger(payload).unwrap();
+      const res = await createLedger(payload).unwrap();
+      setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
       setIsSuccess(true);
     } catch (error) {
       console.error('Failed to create ledger', error);
@@ -83,13 +85,18 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
     }
   };
 
-  const resetSuccess = () => setIsSuccess(false);
+  const resetSuccess = () => {
+    setIsSuccess(false);
+    setCreatedItemName('');
+    form?.reset();
+  };
   const clearSubmitError = () => setSubmitError(null);
 
   return {
     onSubmit,
     isSubmitting: isLoading,
     isSuccess,
+    createdItemName,
     resetSuccess,
     navigate,
     submitError,

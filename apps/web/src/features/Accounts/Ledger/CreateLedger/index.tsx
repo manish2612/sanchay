@@ -93,8 +93,16 @@ const CreateLedgerPage = () => {
     },
   });
 
-  const { onSubmit, isSubmitting, isSuccess, navigate, submitError, clearSubmitError } =
-    useCreateLedger(form);
+  const {
+    onSubmit,
+    isSubmitting,
+    isSuccess,
+    createdItemName,
+    resetSuccess,
+    navigate,
+    submitError,
+    clearSubmitError,
+  } = useCreateLedger(form);
 
   const getHeaderIcon = (step: number) => {
     switch (step) {
@@ -112,7 +120,12 @@ const CreateLedgerPage = () => {
   };
 
   if (isSuccess) {
-    return <CreateLedgerSuccess />;
+    return (
+      <CreateLedgerSuccess
+        itemName={createdItemName}
+        onCreateAnother={resetSuccess}
+      />
+    );
   }
 
   return (
