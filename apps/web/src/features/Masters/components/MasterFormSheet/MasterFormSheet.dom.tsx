@@ -89,9 +89,16 @@ export function MasterFormSheet() {
       case 'cost-category':
         return (
           <CostCategoryForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
             onSuccess={() =>
-              handleSuccess('Cost Category Created', 'Successfully created new Cost Category')
+              handleSuccess(
+                mode === 'edit' ? 'Cost Category Updated' : 'Cost Category Created',
+                mode === 'edit'
+                  ? 'Successfully updated Cost Category'
+                  : 'Successfully created new Cost Category'
+              )
             }
             onError={handleError}
           />
