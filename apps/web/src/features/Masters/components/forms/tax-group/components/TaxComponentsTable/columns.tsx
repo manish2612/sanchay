@@ -37,6 +37,9 @@ export const getColumns = (onCreateLedger?: () => void): ColumnDef<TaxComponentR
       inputConfig: {
         type: 'number',
         allowNegative: false,
+        min: 1,
+        max: 100,
+        step: 'any',
       },
     },
   }),

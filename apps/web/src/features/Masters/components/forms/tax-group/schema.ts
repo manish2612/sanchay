@@ -46,10 +46,10 @@ export const taxComponentRowSchema = z
     }
 
     const rateNum = typeof data.rate === 'number' ? data.rate : parseFloat(String(data.rate || '0'));
-    if (isNaN(rateNum) || rateNum <= 0) {
+    if (isNaN(rateNum) || rateNum < 1 || rateNum > 100) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Rate is required and must be greater than 0',
+        message: 'Rate must be between 1 and 100',
         path: ['rate'],
       });
     }
