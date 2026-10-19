@@ -6,6 +6,12 @@ import { getNextVoucherNumberHandler } from './getNextVoucherNumber';
 import { getTaxTypesHandler } from './getTaxTypes';
 import { getTaxGroupsHandler } from './getTaxGroups';
 import { createTaxGroupHandler } from './createTaxGroup';
+import {
+  getGroupsHandler,
+  getGroupByIdHandler,
+  updateGroupHandler,
+  deleteGroupHandler,
+} from './getGroups';
 
 export const accountingHandlers = [
   getLedgersHandler, 
@@ -16,5 +22,9 @@ export const accountingHandlers = [
   getTaxTypesHandler,
   getTaxGroupsHandler,
   createTaxGroupHandler,
+  getGroupsHandler,
+  getGroupByIdHandler,
+  updateGroupHandler,
+  deleteGroupHandler,
 ];
 

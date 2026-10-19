@@ -2,18 +2,73 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { groupSchema, GroupFormValues } from './schema';
-import { useCreateGroupMutation } from '@/features/Masters/api/groupsApi';
+import {
+  useCreateGroupMutation,
+  useUpdateGroupMutation,
+  useGetGroupsQuery,
+  useGetGroupByIdQuery,
+  Group,
+} from '@/features/Masters/api/groupsApi';
 import { getErrorMessage } from '@/utils/errorUtils';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
-export function useGroupForm(onSuccess: () => void, onError?: (title: string, desc: string) => void) {
-  const [createGroup, { isLoading }] = useCreateGroupMutation();
+export function useGroupForm(
+  onSuccess: () => void,
+  onError?: (title: string, desc: string) => void,
+  mode: 'create' | 'edit' = 'create',
+  initialData?: Group
+) {
+  const [createGroup, { isLoading: isCreating }] = useCreateGroupMutation();
+  const [updateGroup, { isLoading: isUpdating }] = useUpdateGroupMutation();
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Available groups for parent lookup
+  const { data: groups = [] } = useGetGroupsQuery();
+
+  // Fetch full details (returns parent_name) when in edit mode
+  const { data: groupDetail, isLoading: isLoadingDetail } = useGetGroupByIdQuery(
+    initialData?.id || '',
+    { skip: mode !== 'edit' || !initialData?.id }
+  );
 
   const form = useForm<GroupFormValues>({
     resolver: zodResolver(groupSchema),
-    defaultValues: { name: '', alias: '', parentId: ''  }
+    defaultValues: {
+      name: initialData?.name || '',
+      alias: initialData?.alias || '',
+      parentId: '',
+    },
   });
+
+  // Re-populate or reset form when initialData, groupDetail, or mode changes
+  useEffect(() => {
+    if (mode === 'edit') {
+      if (groupDetail) {
+        // Resolve parent_id from parent_name returned by GET /accounting/groups/{id}
+        const matchedParent = groupDetail.parent_name
+          ? groups.find((g) => g.name === groupDetail.parent_name)
+          : undefined;
+
+        form.reset({
+          name: groupDetail.name || '',
+          alias: groupDetail.alias || '',
+          parentId: matchedParent ? matchedParent.id : '',
+        });
+      } else if (initialData) {
+        form.reset({
+          name: initialData.name || '',
+          alias: initialData.alias || '',
+          parentId: '',
+        });
+      }
+    } else {
+      form.reset({
+        name: '',
+        alias: '',
+        parentId: '',
+      });
+    }
+  }, [mode, initialData, groupDetail, groups, form]);
 
   useLeavePromptSlot({
     id: 'group-form',
@@ -34,16 +89,27 @@ export function useGroupForm(onSuccess: () => void, onError?: (title: string, de
   const onSubmit = async (data: GroupFormValues) => {
     try {
       setSubmitError(null);
-      await createGroup({
-        alias: data.alias || '',
-        code: '',
-        name: data.name,
-        parent_id: data.parentId,
-      }).unwrap();
+      if (mode === 'edit' && initialData?.id) {
+        await updateGroup({
+          id: initialData.id,
+          name: data.name,
+          alias: data.alias || '',
+          parent_id: data.parentId || null,
+          code: groupDetail?.code || '',
+        }).unwrap();
+      } else {
+        await createGroup({
+          alias: data.alias || '',
+          code: '',
+          name: data.name,
+          parent_id: data.parentId,
+        }).unwrap();
+      }
       onSuccess();
     } catch (err: any) {
       console.error('Failed to save group:', err);
-      const errMsg = getErrorMessage(err, 'Failed to create Group. Please try again.');
+      const actionText = mode === 'edit' ? 'update' : 'create';
+      const errMsg = getErrorMessage(err, `Failed to ${actionText} Group. Please try again.`);
       setSubmitError(errMsg);
       onError?.('Error', errMsg);
     }
@@ -52,8 +118,10 @@ export function useGroupForm(onSuccess: () => void, onError?: (title: string, de
   return {
     form,
     onSubmit,
-    isSubmitting: isLoading,
+    isSubmitting: isCreating || isUpdating,
+    isLoadingDetail,
     submitError,
     clearSubmitError: () => setSubmitError(null),
+    isEditMode: mode === 'edit',
   };
 }

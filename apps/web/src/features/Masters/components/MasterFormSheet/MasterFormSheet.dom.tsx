@@ -44,7 +44,7 @@ function FormSkeleton() {
 }
 
 export function MasterFormSheet() {
-  const { isOpen, closeMasterSheet, activeMaster } = useGlobalMasterSheet();
+  const { isOpen, closeMasterSheet, activeMaster, mode, initialData } = useGlobalMasterSheet();
   const triggerPrompt = useLeavePromptTrigger();
   const [toastMessage, setToastMessage] = useState<{ title: string; desc: string; variant?: 'success' | 'destructive' | 'default' } | null>(null);
 
@@ -74,8 +74,15 @@ export function MasterFormSheet() {
       case 'group':
         return (
           <GroupForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
-            onSuccess={() => handleSuccess('Group Created', 'Successfully created new Group')}
+            onSuccess={() =>
+              handleSuccess(
+                mode === 'edit' ? 'Group Updated' : 'Group Created',
+                mode === 'edit' ? 'Successfully updated Group' : 'Successfully created new Group'
+              )
+            }
             onError={handleError}
           />
         );
@@ -184,7 +191,13 @@ export function MasterFormSheet() {
           }}
         >
           <SheetHeader className="p-4 border-b border-border/30">
-            <SheetTitle>{activeMaster ? titles[activeMaster] : 'Create Master'}</SheetTitle>
+            <SheetTitle>
+              {activeMaster
+                ? mode === 'edit'
+                  ? (titles[activeMaster] || '').replace('Create', 'Edit')
+                  : titles[activeMaster]
+                : 'Master'}
+            </SheetTitle>
           </SheetHeader>
           <Suspense fallback={<FormSkeleton />}>
             {renderForm()}

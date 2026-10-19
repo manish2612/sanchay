@@ -7,4 +7,5 @@ export const accountingRegistry = {
   getTaxGroups: false,
   createTaxGroup: false,
   getTaxTypes: false,
+  getGroups: false,
 };

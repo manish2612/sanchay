@@ -3,18 +3,41 @@ import { Form, Button, SheetFooter } from '@prime/ui';
 import { MasterNameField, MasterAliasField, MasterParentField } from '@/components/shared-fields/MasterFields';
 import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useGroupForm } from './useGroupForm';
-import { useGetGroupsQuery } from '@/features/Masters/api/groupsApi';
+import { useGetGroupsQuery, Group } from '@/features/Masters/api/groupsApi';
 
-export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => void, onSuccess?: () => void; onError?: (title: string, desc: string) => void }) {
-  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useGroupForm(onSuccess || onCancel, onError);
-  
+export interface GroupFormProps {
+  onCancel: () => void;
+  onSuccess?: () => void;
+  onError?: (title: string, desc: string) => void;
+  mode?: 'create' | 'edit';
+  initialData?: Group;
+}
+
+export function GroupForm({
+  onCancel,
+  onSuccess,
+  onError,
+  mode = 'create',
+  initialData,
+}: GroupFormProps) {
+  const {
+    form,
+    onSubmit,
+    isSubmitting,
+    isLoadingDetail,
+    submitError,
+    clearSubmitError,
+    isEditMode,
+  } = useGroupForm(onSuccess || onCancel, onError, mode, initialData);
+
   const { data: groups = [], isLoading: isLoadingGroups } = useGetGroupsQuery();
-  
+
   const groupOptions = [...groups]
+    .filter((g) => !initialData?.id || g.id !== initialData.id)
     .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
-    .map(g => ({
+    .map((g) => ({
       label: g.name,
-      value: g.id
+      value: g.id,
     }));
 
   return (
@@ -24,18 +47,26 @@ export function GroupForm({ onCancel, onSuccess, onError }: { onCancel: () => vo
           <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
-          <MasterParentField 
-            label="Parent Group" 
+          <MasterParentField
+            label="Parent Group"
             options={groupOptions}
-            isLoading={isLoadingGroups}
+            isLoading={isLoadingGroups || isLoadingDetail}
             required
           />
         </div>
-        
+
         <SheetFooter className="mt-auto border-t border-border/30 p-4 bg-surface sticky bottom-0 flex justify-end gap-2">
-          <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>Cancel</Button>
+          <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>
+            Cancel
+          </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating...' : 'Create Group'}
+            {isSubmitting
+              ? isEditMode
+                ? 'Updating...'
+                : 'Creating...'
+              : isEditMode
+                ? 'Update Group'
+                : 'Create Group'}
           </Button>
         </SheetFooter>
       </form>

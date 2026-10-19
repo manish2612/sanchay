@@ -1,11 +1,25 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type MasterType = 'group' | 'cost-category' | 'cost-center' | 'cost-centre' | 'tax-group' | 'stock-group' | 'stock-category' | 'unit-of-measure' | 'godown' | 'ledger';
+export type MasterType =
+  | 'group'
+  | 'cost-category'
+  | 'cost-center'
+  | 'cost-centre'
+  | 'tax-group'
+  | 'stock-group'
+  | 'stock-category'
+  | 'unit-of-measure'
+  | 'godown'
+  | 'ledger';
 
-interface MasterFormSheetContextType {
+export type MasterSheetMode = 'create' | 'edit';
+
+export interface MasterFormSheetContextType {
   isOpen: boolean;
   activeMaster: MasterType | null;
-  openMasterSheet: (masterType: MasterType) => void;
+  mode: MasterSheetMode;
+  initialData?: any;
+  openMasterSheet: (masterType: MasterType, mode?: MasterSheetMode, initialData?: any) => void;
   closeMasterSheet: () => void;
 }
 
@@ -14,18 +28,37 @@ const MasterFormSheetContext = createContext<MasterFormSheetContextType | undefi
 export function GlobalMasterSheetProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeMaster, setActiveMaster] = useState<MasterType | null>(null);
+  const [mode, setMode] = useState<MasterSheetMode>('create');
+  const [initialData, setInitialData] = useState<any>(undefined);
 
-  const openMasterSheet = (masterType: MasterType) => {
+  const openMasterSheet = (
+    masterType: MasterType,
+    sheetMode: MasterSheetMode = 'create',
+    data?: any
+  ) => {
     setActiveMaster(masterType);
+    setMode(sheetMode);
+    setInitialData(data);
     setIsOpen(true);
   };
 
   const closeMasterSheet = () => {
     setIsOpen(false);
+    setInitialData(undefined);
+    setMode('create');
   };
 
   return (
-    <MasterFormSheetContext.Provider value={{ isOpen, activeMaster, openMasterSheet, closeMasterSheet }}>
+    <MasterFormSheetContext.Provider
+      value={{
+        isOpen,
+        activeMaster,
+        mode,
+        initialData,
+        openMasterSheet,
+        closeMasterSheet,
+      }}
+    >
       {children}
     </MasterFormSheetContext.Provider>
   );
