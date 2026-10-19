@@ -1,7 +1,13 @@
 import { getLedgersHandler } from './getLedgers';
 import { getVoucherTypesHandler } from './getVoucherTypes';
 import { getCostCentersHandler } from './getCostCenters';
-import { getCostCategoriesHandler } from './getCostCategories';
+import {
+  getCostCategoriesHandler,
+  getCostCategoryByIdHandler,
+  createCostCategoryHandler,
+  updateCostCategoryHandler,
+  deleteCostCategoryHandler,
+} from './getCostCategories';
 import { getNextVoucherNumberHandler } from './getNextVoucherNumber';
 import { getTaxTypesHandler } from './getTaxTypes';
 import { getTaxGroupsHandler } from './getTaxGroups';
@@ -18,6 +24,10 @@ export const accountingHandlers = [
   getVoucherTypesHandler,
   getCostCentersHandler,
   getCostCategoriesHandler,
+  getCostCategoryByIdHandler,
+  createCostCategoryHandler,
+  updateCostCategoryHandler,
+  deleteCostCategoryHandler,
   getNextVoucherNumberHandler,
   getTaxTypesHandler,
   getTaxGroupsHandler,
@@ -27,4 +37,3 @@ export const accountingHandlers = [
   updateGroupHandler,
   deleteGroupHandler,
 ];
-
