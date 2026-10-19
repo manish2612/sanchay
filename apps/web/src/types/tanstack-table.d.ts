@@ -43,6 +43,8 @@ declare module '@tanstack/react-table' {
       maxLength?: number;
       min?: number;
       max?: number;
+      step?: number | string;
+      isInteger?: boolean;
       allowEmpty?: boolean;
       type?: string;
       onCreate?: (value?: string) => void;
