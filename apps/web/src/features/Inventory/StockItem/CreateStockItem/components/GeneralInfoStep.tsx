@@ -44,6 +44,7 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
                   placeholder={isLoadingCategories ? 'Loading categories...' : 'Select Stock Category...'} 
                   leftSlot={<Icon name="Search" size={16} className="text-muted-foreground" />}
                   disabled={isLoadingCategories}
+                  clearable
                 />
                 <AutoSuggest.Content>
                   <AutoSuggest.List>
