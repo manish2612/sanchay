@@ -26,14 +26,8 @@ export function useAutoSuggest<T extends boolean = false>({
 >) {
   const [open, setOpen] = React.useState(false);
 
-  const [internalValue, setInternalValue] = React.useState<string | string[]>(multiple ? [] : '');
-  const [internalInputValue, setInternalInputValue] = React.useState(inputValue || '');
-
   const isControlledValue = value !== undefined;
   const isControlledInput = inputValue !== undefined;
-
-  const currentValue = isControlledValue ? value : internalValue;
-  const currentInputValue = isControlledInput ? inputValue : internalInputValue;
 
   // Helper to flatten grouped options
   const flatOptions = React.useMemo(() => {
@@ -44,6 +38,38 @@ export function useAutoSuggest<T extends boolean = false>({
       return [...acc, curr];
     }, []);
   }, [options]);
+
+  const [internalValue, setInternalValue] = React.useState<string | string[]>(multiple ? [] : '');
+  const [internalInputValue, setInternalInputValue] = React.useState(() => {
+    if (inputValue !== undefined) return inputValue;
+    if (!multiple && value) {
+      const match = flatOptions.find((o) => o.value === value);
+      if (match) return match.label;
+      if (creatable) return String(value);
+    }
+    return '';
+  });
+
+  const currentValue = isControlledValue ? value : internalValue;
+  const currentInputValue = isControlledInput ? inputValue : internalInputValue;
+
+  // Sync internal input value with selected option's label when value is controlled or options load
+  React.useEffect(() => {
+    if (!isControlledInput && !multiple) {
+      if (open) return; // Do not overwrite user's input while searching/typing with dropdown open
+
+      if (currentValue) {
+        const selectedOption = flatOptions.find((opt) => opt.value === currentValue);
+        if (selectedOption) {
+          setInternalInputValue(selectedOption.label);
+        } else if (creatable) {
+          setInternalInputValue(String(currentValue));
+        }
+      } else {
+        setInternalInputValue('');
+      }
+    }
+  }, [isControlledInput, multiple, currentValue, flatOptions, creatable, open]);
 
   const exactMatchSelected = React.useMemo(() => {
     if (multiple) return false;
