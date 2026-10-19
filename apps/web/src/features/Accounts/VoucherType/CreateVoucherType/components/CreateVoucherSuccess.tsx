@@ -1,29 +1,62 @@
 import React from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { Button } from '@prime/ui';
-import { CheckCircle2 } from 'lucide-react';
+import { Button, Icon } from '@prime/ui';
 
-export const CreateVoucherSuccess = () => {
+export interface CreateVoucherSuccessProps {
+  itemName?: string;
+  onCreateAnother?: () => void;
+  onBackToMasters?: () => void;
+}
+
+export const CreateVoucherSuccess = ({
+  itemName,
+  onCreateAnother,
+  onBackToMasters,
+}: CreateVoucherSuccessProps) => {
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    if (onBackToMasters) {
+      onBackToMasters();
+    } else {
+      navigate({ to: '/accounts/masters' as any });
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-6 text-center animate-in fade-in zoom-in duration-500">
-      <div className="bg-primary/10 p-6 rounded-full">
-        <CheckCircle2 size={64} className="text-primary" />
-      </div>
-      <div className="space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">Voucher Type Created!</h2>
-        <p className="text-muted-foreground max-w-sm">
-          The new voucher type has been successfully configured and is ready to use.
+    <div className="flex flex-col h-full bg-background items-center justify-center p-6 animate-in fade-in duration-300">
+      <div className="max-w-md w-full bg-surface p-8 rounded-2xl border border-border shadow-sm flex flex-col items-center text-center">
+        <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
+          <Icon name="CircleCheck" size={32} />
+        </div>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Voucher Type Created</h2>
+        <p className="text-muted-foreground mb-6">
+          {itemName ? (
+            <>
+              <span className="font-semibold text-foreground">{itemName}</span> has been successfully created and added to your voucher types.
+            </>
+          ) : (
+            'The new voucher type has been successfully configured and is ready to use.'
+          )}
         </p>
-      </div>
-      <div className="flex gap-4 pt-4">
-        <Button variant="outline" onClick={() => navigate({ to: '/accounts/masters' as any })}>
-          Go to Masters
-        </Button>
-        <Button onClick={() => window.location.reload()}>
-          Create Another
-        </Button>
+        <div className="flex flex-col gap-3 w-full">
+          <Button
+            type="button"
+            variant="primary"
+            onClick={onCreateAnother || (() => window.location.reload())}
+            className="w-full"
+          >
+            Create Another Voucher Type
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleBack}
+            className="w-full"
+          >
+            Back to Masters
+          </Button>
+        </div>
       </div>
     </div>
   );

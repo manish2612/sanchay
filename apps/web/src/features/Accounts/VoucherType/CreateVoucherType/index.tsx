@@ -18,12 +18,18 @@ export const CreateVoucherType = () => {
     LeavePromptDialog,
     onSubmit,
     isSuccess,
+    createdItemName,
     error,
     reset,
   } = useCreateVoucherForm();
 
   if (isSuccess) {
-    return <CreateVoucherSuccess />;
+    return (
+      <CreateVoucherSuccess
+        itemName={createdItemName}
+        onCreateAnother={reset}
+      />
+    );
   }
 
   return (

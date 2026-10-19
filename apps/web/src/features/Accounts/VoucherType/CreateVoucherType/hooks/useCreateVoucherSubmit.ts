@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useCreateVoucherTypeMutation } from '../../api';
 import { VOUCHER_TYPE_FIELDS } from '../constants';
 import type { VoucherTypeFormValues } from '../schema';
 
 export const useCreateVoucherSubmit = () => {
   const [createVoucherType, mutationState] = useCreateVoucherTypeMutation();
+  const [createdItemName, setCreatedItemName] = useState<string>('');
 
   const onSubmit = async (data: VoucherTypeFormValues) => {
     try {
@@ -55,11 +57,18 @@ export const useCreateVoucherSubmit = () => {
         print_format: ""
       };
 
+      const submittedName = data[VOUCHER_TYPE_FIELDS.NAME] || '';
       await (createVoucherType(payload as any) as any).unwrap();
+      setCreatedItemName(submittedName);
     } catch (err) {
       console.error('Failed to create voucher type', err);
     }
   };
 
-  return { onSubmit, ...mutationState };
+  const reset = () => {
+    setCreatedItemName('');
+    mutationState.reset();
+  };
+
+  return { onSubmit, createdItemName, ...mutationState, reset };
 };

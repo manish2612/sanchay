@@ -49,7 +49,12 @@ export const useCreateVoucherForm = () => {
     disabled: form.formState.isSubmitSuccessful,
   });
 
-  const { onSubmit, isSuccess, error, reset } = useCreateVoucherSubmit();
+  const { onSubmit, isSuccess, error, reset, createdItemName } = useCreateVoucherSubmit();
+
+  const handleCreateAnother = () => {
+    form.reset();
+    reset();
+  };
 
   // Clear error automatically when user starts making changes again
   useEffect(() => {
@@ -67,7 +72,8 @@ export const useCreateVoucherForm = () => {
     LeavePromptDialog,
     onSubmit,
     isSuccess,
+    createdItemName,
     error,
-    reset,
+    reset: handleCreateAnother,
   };
 };
