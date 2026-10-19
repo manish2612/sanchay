@@ -132,7 +132,7 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
           render={({ field }) => (
             <Form.Item>
               <DropdownMenu
-                label="Registration Type *"
+                label="Registration Type"
                 labelVariant="in-field"
                 triggerLabel={
                   REGISTRATION_TYPES.find((t) => t.value === field.value)?.label || 'Select type...'
@@ -156,7 +156,7 @@ export const GeneralInfoStep = ({ form }: GeneralInfoStepProps) => {
               <Form.Control>
                 <TextInput
                   {...field}
-                  label="Registration No *"
+                  label="Registration No"
                   labelVariant="in-field"
                   placeholder="e.g. REG-12345"
                   leftSlot={<Icon name="Hash" size={16} className="text-muted-foreground" />}

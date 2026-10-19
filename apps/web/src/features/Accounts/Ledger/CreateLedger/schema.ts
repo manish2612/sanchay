@@ -18,8 +18,8 @@ export const ledgerFormSchema = z.object({
   [LEDGER_FORM_FIELDS.ALIAS]: z.string().optional(),
   [LEDGER_FORM_FIELDS.PARENT]: z.string().min(1, "Parent is required"),
   [LEDGER_FORM_FIELDS.ACCOUNT_CODE]: z.string().optional(),
-  [LEDGER_FORM_FIELDS.REGISTRATION_TYPE]: z.string().min(1, "Registration type is required"),
-  [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().min(1, "Registration number is required"),
+  [LEDGER_FORM_FIELDS.REGISTRATION_TYPE]: z.string().optional(),
+  [LEDGER_FORM_FIELDS.REGISTRATION_NUMBER]: z.string().optional(),
 
   // Step 2
   [LEDGER_FORM_FIELDS.IS_BILL_BY_BILL]: z.boolean(),
