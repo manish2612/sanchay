@@ -25,6 +25,7 @@ export const GeneralInfoStep = ({ form }: { form: any }) => {
         placeholder="Select Stock Group..."
         options={stockGroupOptions}
         isLoading={isLoadingStockGroups}
+        required={true}
       />
 
       <Form.Field

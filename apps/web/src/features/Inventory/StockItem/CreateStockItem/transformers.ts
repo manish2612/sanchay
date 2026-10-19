@@ -21,7 +21,7 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
     description: '',
     global_purchase_ledger_id: data.exportPurchase || '',
     global_sales_ledger_id: data.exportSales || '',
-    hsn_sac_code: data.hsnSac || '',
+    hsn_sac_code: data.hsnSac?.trim() ? data.hsnSac.trim() : null,
     is_branch_enabled: false,
     is_godown_enabled: Boolean(data.enableGodownAllocation),
     item_code: '',

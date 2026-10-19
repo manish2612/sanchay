@@ -40,7 +40,7 @@ export interface CreateStockItemPayload {
   description: string;
   global_purchase_ledger_id: string;
   global_sales_ledger_id: string;
-  hsn_sac_code: string;
+  hsn_sac_code: string | null;
   is_branch_enabled: boolean;
   is_godown_enabled: boolean;
   item_code: string;

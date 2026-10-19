@@ -102,9 +102,10 @@ export const godownAllocationSchema = z
 
 export const stockItemSchema = baseMasterSchema
   .extend({
+    parentId: z.string().min(1, 'Stock group is required'),
     categoryId: z.string().min(1, 'Category is required'),
     unit: z.string().min(1, 'Unit is required'),
-    hsnSac: z.string().min(1, 'HSN/SAC is required'),
+    hsnSac: z.string().optional(),
     partNumber: z.string().regex(/^\d*$/, 'Part Number must contain only numbers').optional(),
 
     maintainBatches: z.boolean().default(false),
