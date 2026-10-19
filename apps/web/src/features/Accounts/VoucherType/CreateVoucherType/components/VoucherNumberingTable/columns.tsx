@@ -41,6 +41,7 @@ export const columns: ColumnDef<any, any>[] = [
     size: 100,
     meta: {
       inputConfig: {
+        isInteger: true,
         allowNegative: false,
         min: 1,
       },
@@ -62,6 +63,7 @@ export const columns: ColumnDef<any, any>[] = [
     size: 100,
     meta: {
       inputConfig: {
+        isInteger: true,
         allowEmpty: true,
         allowNegative: false,
         max: 10,

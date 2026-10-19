@@ -6,11 +6,11 @@ const numberingRowSchema = z.object({
   effective_from: z.union([z.string().min(1, 'Effective from date is required'), z.date()]),
   reset_on: z.string().min(1, 'Reset frequency is required'),
   prefix: z.string().max(20, 'Prefix cannot exceed 20 characters').optional(),
-  starting_number: z.coerce.number().min(1, 'Starting number must be at least 1'),
+  starting_number: z.coerce.number().int('Starting number must be an integer').min(1, 'Starting number must be at least 1'),
   suffix: z.string().max(20, 'Suffix cannot exceed 20 characters').optional(),
   prefill_padding: z.preprocess(
     (val) => (val === "" ? undefined : val), 
-    z.coerce.number().min(1, 'Prefill width must be at least 1').max(10, 'Width cannot exceed 10').optional()
+    z.coerce.number().int('Prefill width must be an integer').min(1, 'Prefill width must be at least 1').max(10, 'Width cannot exceed 10').optional()
   ),
 });
 
