@@ -124,9 +124,16 @@ export function MasterFormSheet() {
       case 'stock-group':
         return (
           <StockGroupForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
             onSuccess={() =>
-              handleSuccess('Stock Group Created', 'Successfully created new Stock Group')
+              handleSuccess(
+                mode === 'edit' ? 'Stock Group Updated' : 'Stock Group Created',
+                mode === 'edit'
+                  ? 'Successfully updated Stock Group'
+                  : 'Successfully created new Stock Group'
+              )
             }
             onError={handleError}
           />
@@ -134,9 +141,16 @@ export function MasterFormSheet() {
       case 'stock-category':
         return (
           <StockCategoryForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
             onSuccess={() =>
-              handleSuccess('Stock Category Created', 'Successfully created new Stock Category')
+              handleSuccess(
+                mode === 'edit' ? 'Stock Category Updated' : 'Stock Category Created',
+                mode === 'edit'
+                  ? 'Successfully updated Stock Category'
+                  : 'Successfully created new Stock Category'
+              )
             }
             onError={handleError}
           />
@@ -144,9 +158,16 @@ export function MasterFormSheet() {
       case 'unit-of-measure':
         return (
           <UnitOfMeasureForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
             onSuccess={() =>
-              handleSuccess('Unit of Measure Created', 'Successfully created new Unit of Measure')
+              handleSuccess(
+                mode === 'edit' ? 'Unit of Measure Updated' : 'Unit of Measure Created',
+                mode === 'edit'
+                  ? 'Successfully updated Unit of Measure'
+                  : 'Successfully created new Unit of Measure'
+              )
             }
             onError={handleError}
           />
@@ -154,8 +175,17 @@ export function MasterFormSheet() {
       case 'godown':
         return (
           <GodownForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
-            onSuccess={() => handleSuccess('Godown Created', 'Successfully created new Godown')}
+            onSuccess={() =>
+              handleSuccess(
+                mode === 'edit' ? 'Godown Updated' : 'Godown Created',
+                mode === 'edit'
+                  ? 'Successfully updated Godown'
+                  : 'Successfully created new Godown'
+              )
+            }
             onError={handleError}
           />
         );
