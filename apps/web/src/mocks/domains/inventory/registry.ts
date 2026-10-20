@@ -4,4 +4,5 @@ export const inventoryRegistry = {
   getStockUnits: false,
   getGodowns: false,
   createStockItem: false,
+  getStockItems: false,
 };

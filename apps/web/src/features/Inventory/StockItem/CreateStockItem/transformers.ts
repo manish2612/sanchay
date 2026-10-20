@@ -35,7 +35,7 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
           .map((r) => ({
             amount: (Number(r.quantity) || 0) * (Number(r.rate) || 0),
             batch_number: r.batchNumber?.trim() || '',
-            branch_id: '',
+            branch_id: null,
             expiry_date:
               data.trackExpiryDate && r.expiryDate ? new Date(r.expiryDate).toISOString() : null,
             godown_id: r.godownId || null,

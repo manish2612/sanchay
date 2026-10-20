@@ -77,3 +77,35 @@ export interface StockItemResponse {
   updated_at?: string;
   [key: string]: any;
 }
+
+export interface StockItemListItem {
+  id: string;
+  name: string;
+  is_active?: boolean;
+  item_code?: string;
+  part_number?: string;
+  hsn_sac_code?: string;
+  description?: string;
+  remarks?: string;
+  base_unit_id?: string | null;
+  stock_group_id?: string | null;
+  stock_category_id?: string | null;
+  maintain_batches?: boolean;
+  track_mfg_date?: boolean;
+  track_expiry_date?: boolean;
+  opening_quantity?: string | number;
+  opening_rate?: string | number;
+  opening_value?: string | number;
+  [key: string]: any;
+}
+
+export interface StockItemDecoratedItem extends StockItemListItem {
+  stock_group_name: string;
+  stock_category_name: string;
+  unit_name: string;
+}
+
+export interface DeleteStockItemResponse {
+  message?: string;
+}
+
