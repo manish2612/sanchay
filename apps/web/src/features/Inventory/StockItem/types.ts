@@ -1,5 +1,5 @@
 export interface AlternateUnitPayload {
-  alternate_unit_id: string;
+  alternate_unit_id: string | null;
   conversion_factor: number;
   denominator_factor: number;
 }
@@ -16,9 +16,9 @@ export interface PriceRulePayload {
 export interface OpeningBalancePayload {
   amount: number;
   batch_number: string;
-  branch_id: string;
+  branch_id: string | null;
   expiry_date: string | null;
-  godown_id: string;
+  godown_id: string | null;
   mfg_date: string | null;
   quantity: number;
   rate: number;
@@ -36,16 +36,16 @@ export interface TaxRatePayload {
 export interface CreateStockItemPayload {
   alias: string;
   alternate_units: AlternateUnitPayload[];
-  base_unit_id: string;
+  base_unit_id: string | null;
   description: string;
-  global_purchase_ledger_id: string;
-  global_sales_ledger_id: string;
+  global_purchase_ledger_id: string | null;
+  global_sales_ledger_id: string | null;
   hsn_sac_code: string | null;
   is_branch_enabled: boolean;
   is_godown_enabled: boolean;
   item_code: string;
-  local_purchase_ledger_id: string;
-  local_sales_ledger_id: string;
+  local_purchase_ledger_id: string | null;
+  local_sales_ledger_id: string | null;
   maintain_batches: boolean;
   name: string;
   opening_balances: OpeningBalancePayload[];
@@ -55,8 +55,8 @@ export interface CreateStockItemPayload {
   part_number: string;
   price_rules: PriceRulePayload[];
   remarks: string;
-  stock_category_id: string;
-  stock_group_id: string;
+  stock_category_id: string | null;
+  stock_group_id: string | null;
   tax_rates: TaxRatePayload[];
   track_expiry_date: boolean;
   track_mfg_date: boolean;
@@ -77,4 +77,3 @@ export interface StockItemResponse {
   updated_at?: string;
   [key: string]: any;
 }
-

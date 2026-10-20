@@ -12,21 +12,21 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
       ? (data.multiUnits || [])
           .filter((r) => !r.isPhantom && Boolean(r.unit) && Number(r.quantity) > 0)
           .map((r) => ({
-            alternate_unit_id: r.unit || '',
+            alternate_unit_id: r.unit || null,
             conversion_factor: Number(r.quantity) || 0,
             denominator_factor: 1,
           }))
       : [],
-    base_unit_id: data.unit || '',
+    base_unit_id: data.unit || null,
     description: '',
-    global_purchase_ledger_id: data.exportPurchase || '',
-    global_sales_ledger_id: data.exportSales || '',
+    global_purchase_ledger_id: data.exportPurchase || null,
+    global_sales_ledger_id: data.exportSales || null,
     hsn_sac_code: data.hsnSac?.trim() ? data.hsnSac.trim() : null,
     is_branch_enabled: false,
     is_godown_enabled: Boolean(data.enableGodownAllocation),
     item_code: '',
-    local_purchase_ledger_id: data.localInterstatePurchase || '',
-    local_sales_ledger_id: data.localInterstateSales || '',
+    local_purchase_ledger_id: data.localInterstatePurchase || null,
+    local_sales_ledger_id: data.localInterstateSales || null,
     maintain_batches: Boolean(data.maintainBatches),
     name: data.name?.trim() || '',
     opening_balances: data.enableGodownAllocation
@@ -36,8 +36,9 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
             amount: (Number(r.quantity) || 0) * (Number(r.rate) || 0),
             batch_number: r.batchNumber?.trim() || '',
             branch_id: '',
-            expiry_date: data.trackExpiryDate && r.expiryDate ? new Date(r.expiryDate).toISOString() : null,
-            godown_id: r.godownId || '',
+            expiry_date:
+              data.trackExpiryDate && r.expiryDate ? new Date(r.expiryDate).toISOString() : null,
+            godown_id: r.godownId || null,
             mfg_date: data.trackMfgDate && r.mfgDate ? new Date(r.mfgDate).toISOString() : null,
             quantity: Number(r.quantity) || 0,
             rate: Number(r.rate) || 0,
@@ -65,10 +66,12 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
           .filter(
             (r) =>
               !r.isPhantom &&
-              (Number(r.minSellingRate) > 0 || Number(r.mrp) > 0 || Number(r.netRate) > 0)
+              (Number(r.minSellingRate) > 0 || Number(r.mrp) > 0 || Number(r.netRate) > 0),
           )
           .map((r) => ({
-            effective_from: r.fromDate ? new Date(r.fromDate).toISOString() : new Date().toISOString(),
+            effective_from: r.fromDate
+              ? new Date(r.fromDate).toISOString()
+              : new Date().toISOString(),
             effective_to: r.toDate ? new Date(r.toDate).toISOString() : null,
             min_selling_rate: Number(r.minSellingRate) || 0,
             mrp: Number(r.mrp) || 0,
@@ -77,8 +80,8 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
           }))
       : [],
     remarks: '',
-    stock_category_id: data.categoryId || '',
-    stock_group_id: data.parentId || '',
+    stock_category_id: data.categoryId || null,
+    stock_group_id: data.parentId || null,
     tax_rates: [],
     track_expiry_date: Boolean(data.trackExpiryDate),
     track_mfg_date: Boolean(data.trackMfgDate),
