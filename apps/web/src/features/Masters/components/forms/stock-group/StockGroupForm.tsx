@@ -13,25 +13,42 @@ import {
 } from '@/components/shared-fields/AccountingFields';
 import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useStockGroupForm } from './useStockGroupForm';
-import { useGetStockGroupsQuery } from '@/features/Masters/api/stockGroupsApi';
+import { useGetStockGroupsQuery, StockGroupItem } from '@/features/Masters/api/stockGroupsApi';
+
+export interface StockGroupFormProps {
+  onCancel: () => void;
+  onSuccess?: () => void;
+  onError?: (title: string, desc: string) => void;
+  mode?: 'create' | 'edit';
+  initialData?: StockGroupItem;
+}
 
 export function StockGroupForm({
   onCancel,
   onSuccess,
   onError,
-}: {
-  onCancel: () => void;
-  onSuccess?: () => void;
-  onError?: (title: string, desc: string) => void;
-}) {
-  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useStockGroupForm(onSuccess || onCancel, onError);
-  
+  mode = 'create',
+  initialData,
+}: StockGroupFormProps) {
+  const {
+    form,
+    onSubmit,
+    isSubmitting,
+    isLoadingDetail,
+    submitError,
+    clearSubmitError,
+    isEditMode,
+  } = useStockGroupForm(onSuccess || onCancel, onError, mode, initialData);
+
   const { data: stockGroups = [], isLoading: isLoadingGroups } = useGetStockGroupsQuery();
-  
-  const groupOptions = [...stockGroups].map(g => ({
-    label: g.name,
-    value: g.id
-  }));
+
+  // Exclude current group from parent options to prevent cyclical hierarchy loops
+  const groupOptions = [...stockGroups]
+    .filter((g) => !initialData?.id || g.id !== initialData.id)
+    .map((g) => ({
+      label: g.name,
+      value: g.id,
+    }));
 
   return (
     <Form {...form}>
@@ -43,10 +60,10 @@ export function StockGroupForm({
           <FormSubmissionError error={submitError} onDismiss={clearSubmitError} />
           <MasterNameField />
           <MasterAliasField />
-          <MasterParentField 
-            label="Parent Group" 
+          <MasterParentField
+            label="Parent Group"
             options={groupOptions}
-            isLoading={isLoadingGroups}
+            isLoading={isLoadingGroups || isLoadingDetail}
             required
           />
 
@@ -60,8 +77,14 @@ export function StockGroupForm({
           <Button variant="outline" type="button" onClick={onCancel} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating...' : 'Create Stock Group'}
+          <Button type="submit" disabled={isSubmitting || isLoadingDetail}>
+            {isSubmitting
+              ? isEditMode
+                ? 'Updating...'
+                : 'Creating...'
+              : isEditMode
+                ? 'Update Stock Group'
+                : 'Create Stock Group'}
           </Button>
         </SheetFooter>
       </form>
