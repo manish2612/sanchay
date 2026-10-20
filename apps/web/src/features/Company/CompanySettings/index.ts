@@ -2,6 +2,7 @@ export * from './types';
 export * from './constants';
 export * from './api/companySettingsApi';
 export * from './hooks/useCompanySettingsDrawer';
+export * from './hooks/useCompanySettings';
 export * from './components/CompanySettingsSheet';
 export * from './components/CompanySettingsForm';
 export * from './components/ToggleRow';
