@@ -18,6 +18,7 @@ export interface Group {
   display_order: number;
   trial_balance_order?: number;
   is_predefined?: boolean;
+  parent_name?: string | null;
   primary_group_name?: string | null;
 }
 

@@ -50,21 +50,21 @@ export const groupColumns: ColumnDef<Group>[] = [
     },
   },
   {
-    accessorKey: 'primary_group_name',
-    header: 'Primary Group',
+    accessorKey: 'parent_name',
+    header: 'Parent Name',
     size: 180,
     cell: ({ row }) => {
       const group = row.original;
-      const primaryGroup = group.primary_group_name;
+      const parentName = group.parent_name;
 
-      if (primaryGroup && primaryGroup !== group.name) {
+      if (parentName && parentName !== group.name) {
         return (
           <div
             className="flex items-center gap-1.5 text-xs text-foreground font-normal min-w-0"
-            title={`Subgroup of ${primaryGroup}`}
+            title={`Subgroup of ${parentName}`}
           >
             <span className="text-muted-foreground font-mono text-sm leading-none shrink-0">↳</span>
-            <span className="truncate">{primaryGroup}</span>
+            <span className="truncate">{parentName}</span>
           </div>
         );
       }

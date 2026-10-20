@@ -63,8 +63,8 @@ export function useGroupList() {
       list = list.filter((g) => {
         const nameMatch = g.name.toLowerCase().includes(query);
         const aliasMatch = g.alias ? g.alias.toLowerCase().includes(query) : false;
-        const primaryGroupMatch = g.primary_group_name
-          ? g.primary_group_name.toLowerCase().includes(query)
+        const parentMatch = g.parent_name
+          ? g.parent_name.toLowerCase().includes(query)
           : false;
         const categoryMatch = g.category ? g.category.toLowerCase().includes(query) : false;
         const subCategoryMatch = g.sub_category ? g.sub_category.toLowerCase().includes(query) : false;
@@ -75,7 +75,7 @@ export function useGroupList() {
         return (
           nameMatch ||
           aliasMatch ||
-          primaryGroupMatch ||
+          parentMatch ||
           categoryMatch ||
           subCategoryMatch ||
           classificationMatch

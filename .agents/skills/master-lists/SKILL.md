@@ -97,7 +97,7 @@ flowchart TD
 
 | Master ID | Name | Parent Column | Primary Columns | Form Mode | RTK Tag |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `group` | Account Group | No (`primary_group_name` column; `parent_name` loaded via `GET /:id` for Edit) | Name, Alias, Primary Group, Classification, Category, Type, Status, Actions | `sheet` | `'Group'` |
+| `group` | Account Group | No (`parent_name` column; `parent_name` also loaded via `GET /:id` for Edit) | Name, Alias, Parent Name, Classification, Category, Type, Status, Actions | `sheet` | `'Group'` |
 | `cost-category` | Cost Category | No | Name, Alias, Allocate Revenue, Allocate Non-Revenue, Actions | `sheet` | `'CostCategory'` |
 | `cost-centre` | Cost Centre | **Yes** (`parent_id`) | Name, Cost Category, Parent Centre, Actions | `sheet` | `'CostCentre'` |
 | `tax-group` | Tax Group | No | Name, Components Count, Rates Summary, Actions | `sheet` | `'TaxGroup'` |
