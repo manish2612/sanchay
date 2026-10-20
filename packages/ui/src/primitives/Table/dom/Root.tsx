@@ -12,7 +12,7 @@ interface TableRootProps<TData> extends React.HTMLAttributes<HTMLDivElement> {
   columns: ColumnDef<TData>[];
   onRowClick?: (row: Row<TData>) => void;
   tableOptions?: Partial<TableOptions<TData>>;
-  rowHeight?: number; // Configurable density
+  rowHeight?: number | ((index: number) => number); // Configurable density or dynamic height function
 }
 
 export function TableRoot<TData>({

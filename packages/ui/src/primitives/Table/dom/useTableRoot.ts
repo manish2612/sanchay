@@ -15,7 +15,7 @@ export interface UseTableRootOptions<TData> {
   columns: ColumnDef<TData>[];
   onRowClick?: (row: Row<TData>) => void;
   tableOptions?: Partial<TableOptions<TData>>;
-  rowHeight?: number;
+  rowHeight?: number | ((index: number) => number);
 }
 
 export function useTableRoot<TData>({
@@ -108,7 +108,7 @@ export function useTableRoot<TData>({
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => scrollRef.current,
-    estimateSize: () => rowHeight,
+    estimateSize: typeof rowHeight === 'function' ? rowHeight : () => rowHeight,
     overscan: 20,
   });
 
