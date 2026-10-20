@@ -1,12 +1,13 @@
-import { getStockGroups } from './getStockGroups';
-import { getStockCategories } from './getStockCategories';
-import { getStockUnits } from './getStockUnits';
+import { stockGroupHandlers } from './getStockGroups';
+import { stockCategoryHandlers } from './getStockCategories';
+import { stockUnitHandlers } from './getStockUnits';
+import { godownHandlers } from './getGodowns';
 import { createStockItem } from './createStockItem';
 
 export const inventoryHandlers = [
-  getStockGroups,
-  getStockCategories,
-  getStockUnits,
+  ...stockGroupHandlers,
+  ...stockCategoryHandlers,
+  ...stockUnitHandlers,
+  ...godownHandlers,
   createStockItem,
 ];
-
