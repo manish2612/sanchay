@@ -1,20 +1,28 @@
 import React from 'react';
-import { Form, Button, SheetFooter } from '@prime/ui';
+import { Form, Button, SheetFooter, TextInput } from '@prime/ui';
 import { MasterNameField } from '@/components/shared-fields/MasterFields';
-import { TextInput } from '@prime/ui';
 import { FormSubmissionError } from '@/components/FormSubmissionError';
 import { useUnitOfMeasureForm } from './useUnitOfMeasureForm';
+import type { StockUnit } from '@/features/Masters/api/stockUnitsApi';
+
+export interface UnitOfMeasureFormProps {
+  onCancel: () => void;
+  onSuccess?: () => void;
+  onError?: (title: string, desc: string) => void;
+  mode?: 'create' | 'edit';
+  initialData?: StockUnit;
+}
 
 export function UnitOfMeasureForm({
   onCancel,
   onSuccess,
   onError,
-}: {
-  onCancel: () => void;
-  onSuccess?: () => void;
-  onError?: (title: string, desc: string) => void;
-}) {
-  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useUnitOfMeasureForm(onSuccess || onCancel, onError);
+  mode = 'create',
+  initialData,
+}: UnitOfMeasureFormProps) {
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError, isEditMode } =
+    useUnitOfMeasureForm(onSuccess || onCancel, onError, mode, initialData);
+
   return (
     <Form {...form}>
       <form
@@ -34,23 +42,27 @@ export function UnitOfMeasureForm({
                   Symbol <span className="text-danger">*</span>
                 </Form.Label>
                 <Form.Control>
-                  <TextInput placeholder="e.g. kg" {...field} value={field.value ?? ''} />
+                  <TextInput placeholder="e.g. kg, Pcs, Mtr" {...field} value={field.value ?? ''} />
                 </Form.Control>
                 <Form.Message />
               </Form.Item>
             )}
           />
+
           <Form.Field
             control={form.control as any}
             name="uqcCode"
             render={({ field }) => (
               <Form.Item>
                 <Form.Label>
-                  Unique Quantity Code <span className="text-[11px] font-normal text-muted-foreground ml-1">(Optional)</span>
+                  Unique Quantity Code (UQC){' '}
+                  <span className="text-[11px] font-normal text-muted-foreground ml-1">
+                    (Optional)
+                  </span>
                 </Form.Label>
                 <Form.Control>
                   <TextInput
-                    placeholder="e.g. KGS"
+                    placeholder="e.g. KGS, PCS, MTR"
                     maxLength={3}
                     {...field}
                     value={field.value ?? ''}
@@ -61,6 +73,7 @@ export function UnitOfMeasureForm({
               </Form.Item>
             )}
           />
+
           <Form.Field
             control={form.control as any}
             name="decimalPlaces"
@@ -88,7 +101,13 @@ export function UnitOfMeasureForm({
             Cancel
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Creating...' : 'Create Unit of Measure'}
+            {isSubmitting
+              ? isEditMode
+                ? 'Updating...'
+                : 'Creating...'
+              : isEditMode
+                ? 'Update Unit of Measure'
+                : 'Create Unit of Measure'}
           </Button>
         </SheetFooter>
       </form>

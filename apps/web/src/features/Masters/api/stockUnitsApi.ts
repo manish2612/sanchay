@@ -6,6 +6,7 @@ export interface CreateStockUnitRequest {
   name: string;
   symbol: string;
   uqc_code: string;
+  is_predefined?: boolean;
 }
 
 export interface StockUnit {
@@ -15,11 +16,12 @@ export interface StockUnit {
   symbol: string;
   uqc_code: string;
   is_active?: boolean;
+  is_predefined?: boolean;
 }
 
 export const stockUnitsApi = apiSlice.injectEndpoints({
   endpoints: (build) => ({
-    createStockUnit: build.mutation<any, CreateStockUnitRequest>({
+    createStockUnit: build.mutation<StockUnit, CreateStockUnitRequest>({
       query: (body) => ({
         url: 'inventory/stockunits',
         method: 'POST',
@@ -34,8 +36,36 @@ export const stockUnitsApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['StockUnit'],
     }),
+    getStockUnitById: build.query<StockUnit, string>({
+      query: (id) => ({
+        url: `inventory/stockunits/${id}`,
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, id) => [{ type: 'StockUnit', id }],
+    }),
+    updateStockUnit: build.mutation<StockUnit, { id: string; data: Partial<CreateStockUnitRequest> }>({
+      query: ({ id, data }) => ({
+        url: `inventory/stockunits/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['StockUnit'],
+    }),
+    deleteStockUnit: build.mutation<{ message?: string } | void, string>({
+      query: (id) => ({
+        url: `inventory/stockunits/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['StockUnit'],
+    }),
   }),
 });
 
-export const { useCreateStockUnitMutation, useGetStockUnitsQuery } = stockUnitsApi;
+export const {
+  useCreateStockUnitMutation,
+  useGetStockUnitsQuery,
+  useGetStockUnitByIdQuery,
+  useUpdateStockUnitMutation,
+  useDeleteStockUnitMutation,
+} = stockUnitsApi;
 
