@@ -87,3 +87,85 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
     track_mfg_date: Boolean(data.trackMfgDate),
   };
 };
+
+/**
+ * Transforms backend stock item detail response into React Hook Form values
+ * for editing an existing stock item.
+ */
+export const transformStockItemResponseToForm = (item: any): StockItemFormValues => {
+  const openingBalances = item.opening_balances || item.batch_balances || item.item_balances || [];
+  const hasGodownAllocations = openingBalances.some((b: any) => Boolean(b.godown_id));
+  const enableGodownAllocation =
+    item.is_godown_enabled !== undefined ? Boolean(item.is_godown_enabled) : hasGodownAllocations;
+
+  const godownAllocations = openingBalances
+    .filter((b: any) => Boolean(b.godown_id))
+    .map((b: any) => ({
+      godown: b.godown_id || '',
+      godownId: b.godown_id || '',
+      batchNumber: b.batch_number ? String(b.batch_number) : '',
+      mfgDate: b.mfg_date ? new Date(b.mfg_date) : null,
+      expiryDate: b.expiry_date ? new Date(b.expiry_date) : null,
+      quantity: Number(b.quantity ?? b.current_qty ?? 0),
+      rate: Number(b.rate ?? b.unit_rate ?? 0),
+      isPhantom: false,
+    }));
+
+  const alternateUnits = item.alternate_units || [];
+  const enableMultiUnit = alternateUnits.length > 0;
+  const multiUnits = alternateUnits.map((u: any) => ({
+    unit: u.alternate_unit_id || '',
+    quantity: Number(u.conversion_factor || 1),
+    isPhantom: false,
+  }));
+
+  const priceRules = item.price_rules || [];
+  const enableStandardRates = priceRules.length > 0;
+  const standardRates = priceRules.map((r: any) => ({
+    fromDate: r.effective_from ? new Date(r.effective_from) : null,
+    toDate: r.effective_to ? new Date(r.effective_to) : null,
+    minSellingRate: Number(r.min_selling_rate || 0),
+    mrp: Number(r.mrp || 0),
+    netRate: Number(r.net_rate || 0),
+    isPhantom: false,
+  }));
+
+  const openingQty = Number(item.opening_quantity || 0);
+  const openingRate = Number(item.opening_rate || 0);
+  const openingAmount = Number(item.opening_value ?? item.opening_amount ?? (openingQty * openingRate));
+
+  return {
+    name: item.name || '',
+    alias: item.alias || '',
+    parentId: item.stock_group_id || '',
+    categoryId: item.stock_category_id || '',
+    unit: item.base_unit_id || '',
+    hsnSac: item.hsn_sac_code || '',
+    partNumber: item.part_number ? String(item.part_number) : '',
+
+    maintainBatches: Boolean(item.maintain_batches),
+    isBranchEnabled: Boolean(item.is_branch_enabled),
+
+    localInterstateSales: item.local_sales_ledger_id || null,
+    exportSales: item.global_sales_ledger_id || null,
+    localInterstatePurchase: item.local_purchase_ledger_id || null,
+    exportPurchase: item.global_purchase_ledger_id || null,
+
+    enableMultiUnit,
+    multiUnits,
+
+    enableStandardRates,
+    standardRates,
+
+    trackMfgDate: Boolean(item.track_mfg_date),
+    trackExpiryDate: Boolean(item.track_expiry_date),
+
+    openingQuantity: openingQty,
+    openingRate: openingRate,
+    openingAmount: openingAmount,
+
+    enableGodownAllocation,
+    godownAllocations,
+  };
+};
+

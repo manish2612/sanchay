@@ -102,6 +102,40 @@ export const createStockItemHandler = http.post<never, CreateStockItemPayload, S
   }
 );
 
+export const updateStockItemHandler = http.put(
+  '*/inventory/stockitems/:id',
+  async ({ params, request }) => {
+    if (!isMockEnabled('inventory', 'getStockItems')) return;
+    await delay(300);
+    const { id } = params;
+    const body = (await request.json()) as any;
+    const index = mockStockItems.findIndex((i) => i.id === id);
+    if (index !== -1) {
+      mockStockItems[index] = {
+        ...mockStockItems[index],
+        name: body.name ?? mockStockItems[index].name,
+        base_unit_id: body.base_unit_id !== undefined ? body.base_unit_id : mockStockItems[index].base_unit_id,
+        stock_group_id: body.stock_group_id !== undefined ? body.stock_group_id : mockStockItems[index].stock_group_id,
+        stock_category_id: body.stock_category_id !== undefined ? body.stock_category_id : mockStockItems[index].stock_category_id,
+        hsn_sac_code: body.hsn_sac_code !== undefined ? body.hsn_sac_code : mockStockItems[index].hsn_sac_code,
+        part_number: body.part_number !== undefined ? body.part_number : mockStockItems[index].part_number,
+        maintain_batches: body.maintain_batches !== undefined ? body.maintain_batches : mockStockItems[index].maintain_batches,
+        track_mfg_date: body.track_mfg_date !== undefined ? body.track_mfg_date : mockStockItems[index].track_mfg_date,
+        track_expiry_date: body.track_expiry_date !== undefined ? body.track_expiry_date : mockStockItems[index].track_expiry_date,
+        opening_quantity: body.opening_quantity !== undefined ? body.opening_quantity : mockStockItems[index].opening_quantity,
+        opening_rate: body.opening_rate !== undefined ? body.opening_rate : mockStockItems[index].opening_rate,
+        opening_value: body.opening_value !== undefined ? body.opening_value : mockStockItems[index].opening_value,
+        local_purchase_ledger_id: body.local_purchase_ledger_id,
+        local_sales_ledger_id: body.local_sales_ledger_id,
+        global_purchase_ledger_id: body.global_purchase_ledger_id,
+        global_sales_ledger_id: body.global_sales_ledger_id,
+      };
+      return HttpResponse.json(mockStockItems[index]);
+    }
+    return new HttpResponse(null, { status: 404 });
+  }
+);
+
 export const deleteStockItemHandler = http.delete(
   '*/inventory/stockitems/:id',
   async ({ params }) => {
@@ -121,5 +155,6 @@ export const stockItemHandlers = [
   getStockItemsHandler,
   getStockItemByIdHandler,
   createStockItemHandler,
+  updateStockItemHandler,
   deleteStockItemHandler,
 ];

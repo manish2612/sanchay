@@ -4,6 +4,7 @@ import { Icon, Button, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui
 import type { StockItemDecoratedItem } from '@/features/Inventory/StockItem/types';
 
 export interface StockItemTableMeta {
+  onEditClick: (item: StockItemDecoratedItem) => void;
   onDeleteClick: (item: StockItemDecoratedItem) => void;
 }
 
@@ -73,23 +74,24 @@ export const stockItemColumns: ColumnDef<StockItemDecoratedItem>[] = [
 
       return (
         <div className="flex items-center justify-end gap-1 w-full pr-1">
-          {/* Edit Action - Temporarily Disabled */}
+          {/* Edit Action - Active */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="inline-block">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 text-muted-foreground opacity-30 cursor-not-allowed pointer-events-none"
-                  disabled
-                  aria-label="Edit stock item disabled"
-                >
-                  <Icon name="Pencil" size={14} />
-                </Button>
-              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                aria-label={`Edit ${item.name}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  meta?.onEditClick(item);
+                }}
+              >
+                <Icon name="Pencil" size={14} />
+              </Button>
             </TooltipTrigger>
-            <TooltipContent side="left">Edit is temporarily disabled</TooltipContent>
+            <TooltipContent side="left">Edit Stock Item</TooltipContent>
           </Tooltip>
 
           {/* Delete Action - Active */}

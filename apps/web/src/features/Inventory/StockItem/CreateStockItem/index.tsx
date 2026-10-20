@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
 import { FormWizard, Icon, Button, useFormWizardContext } from '@prime/ui';
 
 import { stockItemSchema, type StockItemFormValues } from './schema';
 import { STOCK_ITEM_FORM_FIELDS, STOCK_ITEM_WIZARD_STEPS } from './constants';
-import { transformStockItemPayload } from './transformers';
-import { useCreateStockItemMutation } from '../api';
+import { transformStockItemPayload, transformStockItemResponseToForm } from './transformers';
+import {
+  useCreateStockItemMutation,
+  useGetStockItemByIdQuery,
+  useUpdateStockItemMutation,
+} from '../api';
 import { useCompanySettings } from '@/features/Company/CompanySettings';
 
 import { GeneralInfoStep } from './components/GeneralInfoStep';
@@ -15,7 +20,12 @@ import { AdvancedDetailsStep } from './components/AdvancedDetailsStep';
 import { OpeningBalanceStep } from './components/OpeningBalanceStep';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 
-const WizardContent = ({ form }: { form: any }) => {
+export interface StockItemFormPageProps {
+  id?: string;
+  mode?: 'create' | 'edit';
+}
+
+const WizardContent = ({ form, isEditMode }: { form: any; isEditMode?: boolean }) => {
   const { currentStep } = useFormWizardContext();
 
   return (
@@ -24,7 +34,7 @@ const WizardContent = ({ form }: { form: any }) => {
         {currentStep === 1 && <GeneralInfoStep form={form} />}
         {currentStep === 2 && <TaxationStep form={form} />}
         {currentStep === 3 && <AdvancedDetailsStep form={form} />}
-        {currentStep === 4 && <OpeningBalanceStep form={form} />}
+        {currentStep === 4 && <OpeningBalanceStep form={form} isEditMode={isEditMode} />}
       </div>
     </FormWizard.Content>
   );
@@ -32,23 +42,44 @@ const WizardContent = ({ form }: { form: any }) => {
 
 const FormWizardHeaderWithContext = ({
   getHeaderIcon,
+  isEditMode,
+  itemName,
 }: {
   getHeaderIcon: (step: number) => React.ReactNode;
+  isEditMode?: boolean;
+  itemName?: string;
 }) => {
   const { currentStep } = useFormWizardContext();
   const stepConfig = STOCK_ITEM_WIZARD_STEPS.find((s) => s.id === currentStep);
 
+  const title = isEditMode
+    ? `${stepConfig?.title || 'Edit Stock Item'}${itemName ? ` — ${itemName}` : ''}`
+    : stepConfig?.title || 'Create Stock Item';
+
   return (
     <FormWizard.Header
       graphic={getHeaderIcon(currentStep)}
-      title={stepConfig?.title || 'Create Stock Item'}
+      title={title}
       subtitle={stepConfig?.description}
     />
   );
 };
 
-const CreateStockItemPage = () => {
-  const [createStockItem, { isLoading }] = useCreateStockItemMutation();
+const CreateStockItemPage = ({ id, mode }: StockItemFormPageProps = {}) => {
+  const navigate = useNavigate();
+  const isEditMode = mode === 'edit' || Boolean(id);
+
+  // Queries & Mutations
+  const {
+    data: itemData,
+    isLoading: isLoadingItem,
+    isError: isItemError,
+  } = useGetStockItemByIdQuery(id!, { skip: !id || !isEditMode });
+
+  const [createStockItem, { isLoading: isCreating }] = useCreateStockItemMutation();
+  const [updateStockItem, { isLoading: isUpdating }] = useUpdateStockItemMutation();
+  const isSubmitting = isCreating || isUpdating;
+
   const [serverError, setServerError] = useState<string | null>(null);
   const [createdItem, setCreatedItem] = useState<{ id?: string; name: string } | null>(null);
 
@@ -84,8 +115,17 @@ const CreateStockItemPage = () => {
     },
   });
 
-  // Keep form values in sync with company settings
+  // Hydrate form in Edit mode when item data is loaded
   useEffect(() => {
+    if (itemData && isEditMode) {
+      const formValues = transformStockItemResponseToForm(itemData);
+      form.reset(formValues);
+    }
+  }, [itemData, isEditMode, form]);
+
+  // Keep form values in sync with company settings (Create mode only)
+  useEffect(() => {
+    if (isEditMode) return;
     if (enable_godowns !== undefined) {
       form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION, Boolean(enable_godowns));
     }
@@ -96,17 +136,24 @@ const CreateStockItemPage = () => {
         form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE, false);
       }
     }
-  }, [enable_godowns, enable_batches, form]);
+  }, [enable_godowns, enable_batches, form, isEditMode]);
 
   const onSubmit = async (data: StockItemFormValues) => {
     setServerError(null);
     try {
       const payload = transformStockItemPayload(data);
-      const result = await createStockItem(payload).unwrap();
-      setCreatedItem({ id: result?.id, name: data.name });
+      if (isEditMode && id) {
+        await updateStockItem({ id, data: payload }).unwrap();
+        setCreatedItem({ id, name: data.name });
+      } else {
+        const result = await createStockItem(payload).unwrap();
+        setCreatedItem({ id: result?.id, name: data.name });
+      }
     } catch (err: any) {
       const status = err?.status || err?.originalStatus;
-      let message = 'Failed to create stock item. Please check your inputs and try again.';
+      let message = isEditMode
+        ? 'Failed to update stock item. Please check your inputs and try again.'
+        : 'Failed to create stock item. Please check your inputs and try again.';
       if (status === 409) {
         message = 'A stock item with this name, code, or part number already exists.';
       } else if (status === 400 && err?.data?.message) {
@@ -143,6 +190,40 @@ const CreateStockItemPage = () => {
     }
   };
 
+  if (isEditMode && isLoadingItem) {
+    return (
+      <div className="flex flex-col h-full bg-background items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+          <Icon name="RefreshCw" size={32} className="animate-spin text-primary" />
+          <p className="text-sm font-medium">Loading stock item details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isEditMode && (isItemError || (!isLoadingItem && !itemData))) {
+    return (
+      <div className="flex flex-col h-full bg-background items-center justify-center p-6">
+        <div className="max-w-md w-full bg-surface p-8 rounded-2xl border border-border text-center shadow-sm">
+          <div className="w-16 h-16 bg-danger/10 text-danger rounded-full flex items-center justify-center mb-6 mx-auto">
+            <Icon name="CircleAlert" size={32} />
+          </div>
+          <h2 className="text-xl font-bold text-foreground mb-2">Stock Item Not Found</h2>
+          <p className="text-xs text-muted-foreground mb-6">
+            The requested stock item could not be retrieved or has been removed.
+          </p>
+          <Button
+            variant="primary"
+            onClick={() => navigate({ to: '/inventory/masters/stock-item' })}
+            className="w-full"
+          >
+            Back to Stock Items
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (createdItem) {
     return (
       <div className="flex flex-col h-full bg-background items-center justify-center p-6">
@@ -150,30 +231,35 @@ const CreateStockItemPage = () => {
           <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
             <Icon name="CircleCheck" size={32} />
           </div>
-          <h2 className="text-2xl font-bold text-foreground mb-2">Stock Item Created</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-2">
+            {isEditMode ? 'Stock Item Updated' : 'Stock Item Created'}
+          </h2>
           <p className="text-muted-foreground mb-6">
-            <span className="font-semibold text-foreground">{createdItem.name}</span> has been successfully created and added to your inventory.
+            <span className="font-semibold text-foreground">{createdItem.name}</span> has been
+            successfully {isEditMode ? 'updated' : 'created and added to your inventory'}.
           </p>
           <div className="flex flex-col gap-3 w-full">
+            {!isEditMode && (
+              <Button
+                type="button"
+                variant="primary"
+                onClick={() => {
+                  form.reset();
+                  setCreatedItem(null);
+                  setServerError(null);
+                }}
+                className="w-full"
+              >
+                Create Another Stock Item
+              </Button>
+            )}
             <Button
               type="button"
-              variant="primary"
-              onClick={() => {
-                form.reset();
-                setCreatedItem(null);
-                setServerError(null);
-              }}
+              variant={isEditMode ? 'primary' : 'outline'}
+              onClick={() => navigate({ to: '/inventory/masters/stock-item' })}
               className="w-full"
             >
-              Create Another Stock Item
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => window.history.back()}
-              className="w-full"
-            >
-              Back to Inventory
+              Back to Stock Items
             </Button>
           </div>
         </div>
@@ -181,13 +267,28 @@ const CreateStockItemPage = () => {
     );
   }
 
+  const stepNavTitle = isEditMode
+    ? `Edit Stock Item: ${itemData?.name || ''}`
+    : 'Create New Stock Item';
+  const submitLabel = isSubmitting
+    ? isEditMode
+      ? 'Saving...'
+      : 'Creating...'
+    : isEditMode
+      ? 'Update Stock Item'
+      : 'Create Stock Item';
+
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden relative">
       <FormWizard form={form} initialStep={1} steps={STOCK_ITEM_WIZARD_STEPS} onSubmit={onSubmit}>
-        <FormWizard.StepNav title="Create New Stock Item" />
+        <FormWizard.StepNav title={stepNavTitle} />
 
         <FormWizard.Container>
-          <FormWizardHeaderWithContext getHeaderIcon={getHeaderIcon} />
+          <FormWizardHeaderWithContext
+            getHeaderIcon={getHeaderIcon}
+            isEditMode={isEditMode}
+            itemName={itemData?.name}
+          />
 
           {serverError && (
             <div className="mx-6 mt-4 p-4 rounded-md bg-danger/10 border border-danger/20 text-danger text-sm flex items-center gap-3">
@@ -196,12 +297,12 @@ const CreateStockItemPage = () => {
             </div>
           )}
 
-          <WizardContent form={form} />
+          <WizardContent form={form} isEditMode={isEditMode} />
 
           <FormWizard.Footer
-            onCancel={() => window.history.back()}
-            isSubmitting={isLoading}
-            submitLabel={isLoading ? 'Creating...' : 'Create Stock Item'}
+            onCancel={() => navigate({ to: '/inventory/masters/stock-item' })}
+            isSubmitting={isSubmitting}
+            submitLabel={submitLabel}
           />
         </FormWizard.Container>
       </FormWizard>
@@ -210,4 +311,5 @@ const CreateStockItemPage = () => {
 };
 
 export default CreateStockItemPage;
+
 

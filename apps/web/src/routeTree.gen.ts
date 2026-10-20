@@ -34,6 +34,7 @@ import { Route as InventoryMastersStockGroupIndexRouteImport } from './routes/in
 import { Route as InventoryMastersStockItemIndexRouteImport } from './routes/inventory/masters/stock-item/index'
 import { Route as InventoryMastersUnitOfMeasureIndexRouteImport } from './routes/inventory/masters/unit-of-measure/index'
 import { Route as InventoryMastersStockItemNewIndexRouteImport } from './routes/inventory/masters/stock-item/new/index'
+import { Route as InventoryMastersStockItemIdEditIndexRouteImport } from './routes/inventory/masters/stock-item/$id/edit/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -174,6 +175,12 @@ const InventoryMastersStockItemNewIndexRoute =
     path: '/inventory/masters/stock-item/new/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InventoryMastersStockItemIdEditIndexRoute =
+  InventoryMastersStockItemIdEditIndexRouteImport.update({
+    id: '/inventory/masters/stock-item/$id/edit/',
+    path: '/inventory/masters/stock-item/$id/edit/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure/': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
+  '/inventory/masters/stock-item/$id/edit/': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -228,6 +236,7 @@ export interface FileRoutesByTo {
   '/inventory/masters/stock-item': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new': typeof InventoryMastersStockItemNewIndexRoute
+  '/inventory/masters/stock-item/$id/edit': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -256,6 +265,7 @@ export interface FileRoutesById {
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure/': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
+  '/inventory/masters/stock-item/$id/edit/': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -285,6 +295,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item/'
     | '/inventory/masters/unit-of-measure/'
     | '/inventory/masters/stock-item/new/'
+    | '/inventory/masters/stock-item/$id/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -312,6 +323,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item'
     | '/inventory/masters/unit-of-measure'
     | '/inventory/masters/stock-item/new'
+    | '/inventory/masters/stock-item/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -339,6 +351,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item/'
     | '/inventory/masters/unit-of-measure/'
     | '/inventory/masters/stock-item/new/'
+    | '/inventory/masters/stock-item/$id/edit/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -367,6 +380,7 @@ export interface RootRouteChildren {
   InventoryMastersStockItemIndexRoute: typeof InventoryMastersStockItemIndexRoute
   InventoryMastersUnitOfMeasureIndexRoute: typeof InventoryMastersUnitOfMeasureIndexRoute
   InventoryMastersStockItemNewIndexRoute: typeof InventoryMastersStockItemNewIndexRoute
+  InventoryMastersStockItemIdEditIndexRoute: typeof InventoryMastersStockItemIdEditIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -546,6 +560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryMastersStockItemNewIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory/masters/stock-item/$id/edit/': {
+      id: '/inventory/masters/stock-item/$id/edit/'
+      path: '/inventory/masters/stock-item/$id/edit'
+      fullPath: '/inventory/masters/stock-item/$id/edit/'
+      preLoaderRoute: typeof InventoryMastersStockItemIdEditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -579,6 +600,8 @@ const rootRouteChildren: RootRouteChildren = {
     InventoryMastersUnitOfMeasureIndexRoute,
   InventoryMastersStockItemNewIndexRoute:
     InventoryMastersStockItemNewIndexRoute,
+  InventoryMastersStockItemIdEditIndexRoute:
+    InventoryMastersStockItemIdEditIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

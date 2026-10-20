@@ -131,6 +131,17 @@ export function useStockItemList() {
     navigate({ to: '/inventory/masters/stock-item/new' });
   }, [navigate]);
 
+  // Navigation: Navigate to the full page edit wizard
+  const handleEdit = useCallback(
+    (item: StockItemDecoratedItem) => {
+      navigate({
+        to: '/inventory/masters/stock-item/$id/edit',
+        params: { id: item.id },
+      });
+    },
+    [navigate]
+  );
+
   // Search clear helper
   const handleClearSearch = useCallback(() => {
     setSearchQuery('');
@@ -188,6 +199,7 @@ export function useStockItemList() {
     setSearchQuery,
     handleClearSearch,
     handleAddNew,
+    handleEdit,
     // Delete state & handlers
     deleteDialogState,
     isDeleting,

@@ -5,11 +5,18 @@ import { STOCK_ITEM_FORM_FIELDS } from '../constants';
 import { GodownAllocationTable } from './GodownAllocationTable';
 import { useCompanySettings } from '@/features/Company/CompanySettings';
 
-export const OpeningBalanceStep = ({ form }: { form: any }) => {
+export const OpeningBalanceStep = ({
+  form,
+  isEditMode = false,
+}: {
+  form: any;
+  isEditMode?: boolean;
+}) => {
   const { enable_godowns, enable_batches } = useCompanySettings();
 
-  // Synchronize company settings into form data
+  // Synchronize company settings into form data (only for new item creation)
   useEffect(() => {
+    if (isEditMode) return;
     if (enable_godowns !== undefined) {
       form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION, Boolean(enable_godowns));
     }
@@ -20,7 +27,7 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
         form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE, false);
       }
     }
-  }, [enable_godowns, enable_batches, form]);
+  }, [enable_godowns, enable_batches, form, isEditMode]);
 
   const enableGodownAllocation = form.watch(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION);
   const openingQuantity = Number(form.watch(STOCK_ITEM_FORM_FIELDS.OPENING_QUANTITY)) || 0;
