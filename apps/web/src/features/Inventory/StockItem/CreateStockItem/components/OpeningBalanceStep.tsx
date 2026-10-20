@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, TextInput, AnimatedNumber } from '@prime/ui';
 import { SwitchCard } from '@/components/TableCells/SwitchCard';
 import { STOCK_ITEM_FORM_FIELDS } from '../constants';
 import { GodownAllocationTable } from './GodownAllocationTable';
+import { useCompanySettings } from '@/features/Company/CompanySettings';
 
 export const OpeningBalanceStep = ({ form }: { form: any }) => {
+  const { enable_godowns, enable_batches } = useCompanySettings();
+
+  // Synchronize company settings into form data
+  useEffect(() => {
+    if (enable_godowns !== undefined) {
+      form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION, Boolean(enable_godowns));
+    }
+    if (enable_batches !== undefined) {
+      form.setValue(STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES, Boolean(enable_batches));
+      if (!enable_batches) {
+        form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE, false);
+        form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE, false);
+      }
+    }
+  }, [enable_godowns, enable_batches, form]);
+
   const enableGodownAllocation = form.watch(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION);
   const openingQuantity = Number(form.watch(STOCK_ITEM_FORM_FIELDS.OPENING_QUANTITY)) || 0;
 
@@ -13,28 +30,20 @@ export const OpeningBalanceStep = ({ form }: { form: any }) => {
 
   return (
     <div className="flex flex-col space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-border/40">
-        <SwitchCard
-          control={form.control}
-          name={STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION}
-          label="Enable Godown Allocation"
-        />
-        <SwitchCard
-          control={form.control}
-          name={STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES}
-          label="Maintain Batches"
-        />
-        <SwitchCard
-          control={form.control}
-          name={STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE}
-          label="Track Manufacturing Date"
-        />
-        <SwitchCard
-          control={form.control}
-          name={STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE}
-          label="Track Expiry Date"
-        />
-      </div>
+      {enable_batches && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-border/40">
+          <SwitchCard
+            control={form.control}
+            name={STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE}
+            label="Track Manufacturing Date"
+          />
+          <SwitchCard
+            control={form.control}
+            name={STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE}
+            label="Track Expiry Date"
+          />
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Form.Field

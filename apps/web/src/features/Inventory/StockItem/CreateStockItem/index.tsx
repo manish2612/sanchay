@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormWizard, Icon, Button, useFormWizardContext } from '@prime/ui';
@@ -7,6 +7,7 @@ import { stockItemSchema, type StockItemFormValues } from './schema';
 import { STOCK_ITEM_FORM_FIELDS, STOCK_ITEM_WIZARD_STEPS } from './constants';
 import { transformStockItemPayload } from './transformers';
 import { useCreateStockItemMutation } from '../api';
+import { useCompanySettings } from '@/features/Company/CompanySettings';
 
 import { GeneralInfoStep } from './components/GeneralInfoStep';
 import { TaxationStep } from './components/TaxationStep';
@@ -51,6 +52,8 @@ const CreateStockItemPage = () => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [createdItem, setCreatedItem] = useState<{ id?: string; name: string } | null>(null);
 
+  const { enable_godowns, enable_batches } = useCompanySettings();
+
   const form = useForm<StockItemFormValues>({
     mode: 'onChange',
     resolver: zodResolver(stockItemSchema as any),
@@ -61,7 +64,7 @@ const CreateStockItemPage = () => {
       [STOCK_ITEM_FORM_FIELDS.UNIT]: '',
       [STOCK_ITEM_FORM_FIELDS.HSN_SAC]: '',
       [STOCK_ITEM_FORM_FIELDS.PART_NUMBER]: '',
-      [STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES]: false,
+      [STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES]: Boolean(enable_batches),
       [STOCK_ITEM_FORM_FIELDS.IS_BRANCH_ENABLED]: false,
       [STOCK_ITEM_FORM_FIELDS.LOCAL_SALES_TAX]: '',
       [STOCK_ITEM_FORM_FIELDS.EXPORT_SALES_TAX]: '',
@@ -71,7 +74,7 @@ const CreateStockItemPage = () => {
       [STOCK_ITEM_FORM_FIELDS.MULTI_UNITS]: [],
       [STOCK_ITEM_FORM_FIELDS.ENABLE_STANDARD_RATES]: false,
       [STOCK_ITEM_FORM_FIELDS.STANDARD_RATES]: [],
-      [STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION]: false,
+      [STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION]: Boolean(enable_godowns),
       [STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE]: false,
       [STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE]: false,
       [STOCK_ITEM_FORM_FIELDS.OPENING_QUANTITY]: 0,
@@ -80,6 +83,20 @@ const CreateStockItemPage = () => {
       [STOCK_ITEM_FORM_FIELDS.GODOWN_ALLOCATIONS]: [],
     },
   });
+
+  // Keep form values in sync with company settings
+  useEffect(() => {
+    if (enable_godowns !== undefined) {
+      form.setValue(STOCK_ITEM_FORM_FIELDS.ENABLE_GODOWN_ALLOCATION, Boolean(enable_godowns));
+    }
+    if (enable_batches !== undefined) {
+      form.setValue(STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES, Boolean(enable_batches));
+      if (!enable_batches) {
+        form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE, false);
+        form.setValue(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE, false);
+      }
+    }
+  }, [enable_godowns, enable_batches, form]);
 
   const onSubmit = async (data: StockItemFormValues) => {
     setServerError(null);

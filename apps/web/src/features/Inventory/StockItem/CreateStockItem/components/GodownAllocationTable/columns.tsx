@@ -12,7 +12,8 @@ export const getColumns = (
   maxQty: number,
   onCreateGodown?: () => void,
   hasMfgDate: boolean = false,
-  hasExpiryDate: boolean = false
+  hasExpiryDate: boolean = false,
+  hasBatches: boolean = true
 ): ColumnDef<any, any>[] => {
   const cols: ColumnDef<any, any>[] = [
     columnHelper.accessor('godown', {
@@ -28,17 +29,22 @@ export const getColumns = (
         },
       },
     }),
-    columnHelper.accessor('batchNumber', {
-      header: 'Batch Number',
-      cell: TextCell,
-      size: 130,
-      meta: {
-        inputConfig: {
-          placeholder: 'Batch #',
-        },
-      },
-    }),
   ];
+
+  if (hasBatches) {
+    cols.push(
+      columnHelper.accessor('batchNumber', {
+        header: 'Batch Number',
+        cell: TextCell,
+        size: 130,
+        meta: {
+          inputConfig: {
+            placeholder: 'Batch #',
+          },
+        },
+      })
+    );
+  }
 
   if (hasMfgDate) {
     cols.push(

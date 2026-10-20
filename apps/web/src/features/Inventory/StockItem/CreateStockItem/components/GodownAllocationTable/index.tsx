@@ -27,11 +27,12 @@ export const GodownAllocationTable = ({ form }: { form: any }) => {
 
   const hasMfgDate = Boolean(form.watch(STOCK_ITEM_FORM_FIELDS.TRACK_MFG_DATE));
   const hasExpiryDate = Boolean(form.watch(STOCK_ITEM_FORM_FIELDS.TRACK_EXPIRY_DATE));
+  const hasBatches = Boolean(form.watch(STOCK_ITEM_FORM_FIELDS.MAINTAIN_BATCHES));
 
   const onCreateGodown = useCallback(() => openMasterSheet('godown'), [openMasterSheet]);
   const columns = useMemo(
-    () => getColumns(openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate),
-    [openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate]
+    () => getColumns(openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate, hasBatches),
+    [openingQuantity, onCreateGodown, hasMfgDate, hasExpiryDate, hasBatches]
   );
   const isFullyAllocated = openingQuantity > 0 && totalAllocatedQuantity === openingQuantity;
   const isOverAllocated = totalAllocatedQuantity > openingQuantity;
