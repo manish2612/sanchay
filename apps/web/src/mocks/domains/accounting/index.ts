@@ -1,6 +1,12 @@
 import { getLedgersHandler } from './getLedgers';
 import { getVoucherTypesHandler } from './getVoucherTypes';
-import { getCostCentersHandler } from './getCostCenters';
+import {
+  getCostCentersHandler,
+  getCostCenterByIdHandler,
+  createCostCenterHandler,
+  updateCostCenterHandler,
+  deleteCostCenterHandler,
+} from './getCostCenters';
 import {
   getCostCategoriesHandler,
   getCostCategoryByIdHandler,
@@ -23,6 +29,10 @@ export const accountingHandlers = [
   getLedgersHandler, 
   getVoucherTypesHandler,
   getCostCentersHandler,
+  getCostCenterByIdHandler,
+  createCostCenterHandler,
+  updateCostCenterHandler,
+  deleteCostCenterHandler,
   getCostCategoriesHandler,
   getCostCategoryByIdHandler,
   createCostCategoryHandler,

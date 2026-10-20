@@ -107,9 +107,16 @@ export function MasterFormSheet() {
       case 'cost-centre':
         return (
           <CostCenterForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
             onSuccess={() =>
-              handleSuccess('Cost Center Created', 'Successfully created new Cost Center')
+              handleSuccess(
+                mode === 'edit' ? 'Cost Centre Updated' : 'Cost Centre Created',
+                mode === 'edit'
+                  ? 'Successfully updated Cost Centre'
+                  : 'Successfully created new Cost Centre'
+              )
             }
             onError={handleError}
           />
