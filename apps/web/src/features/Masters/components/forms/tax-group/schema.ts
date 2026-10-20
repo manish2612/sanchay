@@ -4,12 +4,16 @@ import type { TaxComponentRow, TaxGroupFormValues } from './types';
 export const taxComponentRowSchema = z
   .object({
     component_name: z.string().optional(),
-    scope: z.enum(['INTRA_STATE', 'INTER_STATE', 'ALL'], {
-      message: 'Scope is required',
-    }).optional(),
-    compute_method: z.enum(['PCT_BASE', 'PCT_TAX', 'FIXED_QTY'], {
-      message: 'Compute Method is required',
-    }).optional(),
+    scope: z
+      .enum(['INTRA_STATE', 'INTER_STATE', 'ALL'], {
+        message: 'Scope is required',
+      })
+      .optional(),
+    compute_method: z
+      .enum(['PCT_BASE', 'PCT_TAX', 'FIXED_QTY'], {
+        message: 'Compute Method is required',
+      })
+      .optional(),
     rate: z.union([z.number(), z.string()]).optional(),
     input_ledger_id: z.string().optional(),
     output_ledger_id: z.string().optional(),
@@ -45,7 +49,8 @@ export const taxComponentRowSchema = z
       });
     }
 
-    const rateNum = typeof data.rate === 'number' ? data.rate : parseFloat(String(data.rate || '0'));
+    const rateNum =
+      typeof data.rate === 'number' ? data.rate : parseFloat(String(data.rate || '0'));
     if (isNaN(rateNum) || rateNum < 1 || rateNum > 100) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -74,11 +79,12 @@ export const taxComponentRowSchema = z
 export const taxGroupSchema = z
   .object({
     code: z.string().optional(),
-    name: z.string()
-      .min(1, 'Name is required')
-      .max(100, 'Name must be 100 characters or less'),
+    name: z.string().min(1, 'Name is required').max(100, 'Name must be 100 characters or less'),
     tax_type_id: z.string().min(1, 'Tax Type is required'),
-    combined_rate: z.coerce.number().min(0.0001, 'Combined Rate is required and must be greater than 0'),
+    combined_rate: z.coerce
+      .number()
+      .min(0.0001, 'Combined Rate is required and must be greater than 0')
+      .max(100, 'Cannot exceed 100'),
     components: z.array(taxComponentRowSchema).optional(),
   })
   .refine(
@@ -90,7 +96,7 @@ export const taxGroupSchema = z
     {
       message: 'At least one tax component is required',
       path: ['components'],
-    }
+    },
   );
 
 export type { TaxComponentRow, TaxGroupFormValues };

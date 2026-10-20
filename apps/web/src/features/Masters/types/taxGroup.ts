@@ -36,9 +36,10 @@ export interface TaxGroupResponse {
   is_active: boolean;
   name: string;
   code: string;
-  combined_rate: string;
+  combined_rate: string | number;
   is_predefined: boolean;
   tax_type_name: string;
+  tax_type_id?: string;
   components: TaxGroupComponentResponse[];
 }
 
@@ -69,3 +70,23 @@ export interface CreateTaxGroupRequest {
 }
 
 export type CreateTaxGroupResponse = TaxGroupResponse;
+
+// ==========================================
+// Tax Group Update & Delete
+// ==========================================
+
+export interface UpdateTaxGroupRequest {
+  id: string;
+  code?: string;
+  combined_rate: number;
+  components: CreateTaxGroupComponentRequest[];
+  is_predefined?: boolean;
+  name: string;
+  tax_type_id: string;
+}
+
+export type UpdateTaxGroupResponse = TaxGroupResponse;
+
+export interface DeleteTaxGroupResponse {
+  message?: string;
+}

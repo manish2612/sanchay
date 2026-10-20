@@ -2,17 +2,25 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taxGroupSchema } from './schema';
-import type { TaxGroupFormValues } from './types';
-import { useCreateTaxGroupMutation } from '@/features/Masters/api/taxGroupsApi';
-import type { CreateTaxGroupRequest } from '@/features/Masters/types/taxGroup';
+import type { TaxGroupFormValues, TaxComponentRow } from './types';
+import {
+  useCreateTaxGroupMutation,
+  useUpdateTaxGroupMutation,
+  useGetTaxTypesQuery,
+} from '@/features/Masters/api/taxGroupsApi';
+import type { CreateTaxGroupRequest, TaxGroupResponse } from '@/features/Masters/types/taxGroup';
 import { useLeavePromptSlot } from '@/providers/LeavePromptProvider';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 export function useTaxGroupForm(
   onSuccess: () => void,
   onError?: (title: string, desc: string) => void,
+  mode: 'create' | 'edit' = 'create',
+  initialData?: TaxGroupResponse | null,
 ) {
-  const [createTaxGroup, { isLoading }] = useCreateTaxGroupMutation();
+  const [createTaxGroup, { isLoading: isCreating }] = useCreateTaxGroupMutation();
+  const [updateTaxGroup, { isLoading: isUpdating }] = useUpdateTaxGroupMutation();
+  const { data: taxTypes = [] } = useGetTaxTypesQuery();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const form = useForm<TaxGroupFormValues>({
@@ -25,6 +33,43 @@ export function useTaxGroupForm(
       components: [],
     },
   });
+
+  const { reset } = form;
+
+  // Re-populate form when initialData or mode changes
+  useEffect(() => {
+    if (mode === 'edit' && initialData) {
+      const matchedTaxType = taxTypes.find(
+        (t) => t.id === initialData.tax_type_id || t.name === initialData.tax_type_name
+      );
+
+      const mappedComponents: TaxComponentRow[] = (initialData.components || []).map((c: any) => ({
+        component_name: c.taxgroup_component_name || c.component_name || '',
+        scope: c.taxgroup_component_scope || c.scope || 'ALL',
+        compute_method: c.taxgroup_component_compute_method || c.compute_method || 'PCT_BASE',
+        rate: c.taxgroup_component_rate !== undefined ? c.taxgroup_component_rate : c.rate,
+        input_ledger_id: c.input_ledger_id || '',
+        output_ledger_id: c.output_ledger_id || '',
+        isPhantom: false,
+      }));
+
+      reset({
+        name: initialData.name || '',
+        code: initialData.code || '',
+        tax_type_id: matchedTaxType?.id || initialData.tax_type_id || '',
+        combined_rate: initialData.combined_rate !== undefined ? initialData.combined_rate : '',
+        components: mappedComponents,
+      });
+    } else if (mode === 'create') {
+      reset({
+        name: '',
+        code: '',
+        tax_type_id: '',
+        combined_rate: '' as any,
+        components: [],
+      });
+    }
+  }, [mode, initialData?.id, initialData, taxTypes, reset]);
 
   useLeavePromptSlot({
     id: 'tax-group-form',
@@ -68,11 +113,24 @@ export function useTaxGroupForm(
         tax_type_id: data.tax_type_id,
       };
 
-      await createTaxGroup(payload).unwrap();
+      if (mode === 'edit' && initialData?.id) {
+        await updateTaxGroup({
+          id: initialData.id,
+          ...payload,
+        }).unwrap();
+      } else {
+        await createTaxGroup(payload).unwrap();
+      }
+
       onSuccess();
     } catch (err: any) {
       console.error('Failed to save tax group:', err);
-      const errMsg = getErrorMessage(err, 'Failed to create Tax Group. Please try again.');
+      const errMsg = getErrorMessage(
+        err,
+        mode === 'edit'
+          ? 'Failed to update Tax Group. Please try again.'
+          : 'Failed to create Tax Group. Please try again.'
+      );
       setSubmitError(errMsg);
       onError?.('Error', errMsg);
     }
@@ -81,7 +139,7 @@ export function useTaxGroupForm(
   return {
     form,
     onSubmit,
-    isSubmitting: isLoading,
+    isSubmitting: isCreating || isUpdating,
     submitError,
     clearSubmitError: () => setSubmitError(null),
   };

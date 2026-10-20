@@ -1,3 +1,5 @@
+import type { TaxGroupResponse } from '@/features/Masters/types/taxGroup';
+
 export type TaxComponentScope = 'INTRA_STATE' | 'INTER_STATE' | 'ALL';
 
 export type TaxComponentComputeMethod = 'PCT_BASE' | 'PCT_TAX' | 'FIXED_QTY';
@@ -21,6 +23,8 @@ export interface TaxGroupFormValues {
 }
 
 export interface TaxGroupFormProps {
+  mode?: 'create' | 'edit';
+  initialData?: TaxGroupResponse | null;
   onCancel: () => void;
   onSuccess?: () => void;
   onError?: (title: string, desc: string) => void;

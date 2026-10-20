@@ -162,8 +162,17 @@ export function MasterFormSheet() {
       case 'tax-group':
         return (
           <TaxGroupForm
+            mode={mode}
+            initialData={initialData}
             onCancel={handleClose}
-            onSuccess={() => handleSuccess('Tax Group Created', 'Successfully created new Tax Group')}
+            onSuccess={() =>
+              handleSuccess(
+                mode === 'edit' ? 'Tax Group Updated' : 'Tax Group Created',
+                mode === 'edit'
+                  ? 'Successfully updated Tax Group'
+                  : 'Successfully created new Tax Group'
+              )
+            }
             onError={handleError}
           />
         );

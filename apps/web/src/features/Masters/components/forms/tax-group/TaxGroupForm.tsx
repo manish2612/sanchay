@@ -7,8 +7,13 @@ import { TaxComponentsTable } from './components/TaxComponentsTable';
 import { useGetTaxTypesQuery } from '@/features/Masters/api/taxGroupsApi';
 import type { TaxGroupFormProps } from './types';
 
-export function TaxGroupForm({ onCancel, onSuccess, onError }: TaxGroupFormProps) {
-  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useTaxGroupForm(onSuccess || onCancel, onError);
+export function TaxGroupForm({ mode = 'create', initialData, onCancel, onSuccess, onError }: TaxGroupFormProps) {
+  const { form, onSubmit, isSubmitting, submitError, clearSubmitError } = useTaxGroupForm(
+    onSuccess || onCancel,
+    onError,
+    mode,
+    initialData
+  );
   const { data: taxTypes = [], isLoading: isLoadingTaxTypes } = useGetTaxTypesQuery();
 
   const taxTypeOptions = useMemo(() => {
@@ -124,7 +129,13 @@ export function TaxGroupForm({ onCancel, onSuccess, onError }: TaxGroupFormProps
             Cancel
           </Button>
           <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-            {isSubmitting ? 'Creating...' : 'Create Tax Group'}
+            {isSubmitting
+              ? mode === 'edit'
+                ? 'Updating...'
+                : 'Creating...'
+              : mode === 'edit'
+                ? 'Update Tax Group'
+                : 'Create Tax Group'}
           </Button>
         </SheetFooter>
       </form>

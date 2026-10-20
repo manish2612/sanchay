@@ -26,6 +26,7 @@ import { Route as AccountsMastersCostCentreIndexRouteImport } from './routes/acc
 import { Route as AccountsMastersGroupIndexRouteImport } from './routes/accounts/masters/group/index'
 import { Route as AccountsMastersLedgerIndexRouteImport } from './routes/accounts/masters/ledger/index'
 import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/masters/ledger/new'
+import { Route as AccountsMastersTaxGroupIndexRouteImport } from './routes/accounts/masters/tax-group/index'
 import { Route as AccountsMastersVoucherTypeNewRouteImport } from './routes/accounts/masters/voucher-type/new'
 import { Route as InventoryMastersStockItemNewIndexRouteImport } from './routes/inventory/masters/stock-item/new/index'
 
@@ -120,6 +121,12 @@ const AccountsMastersLedgerNewRoute =
     path: '/accounts/masters/ledger/new',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AccountsMastersTaxGroupIndexRoute =
+  AccountsMastersTaxGroupIndexRouteImport.update({
+    id: '/accounts/masters/tax-group/',
+    path: '/accounts/masters/tax-group/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AccountsMastersVoucherTypeNewRoute =
   AccountsMastersVoucherTypeNewRouteImport.update({
     id: '/accounts/masters/voucher-type/new',
@@ -152,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/accounts/masters/cost-centre/': typeof AccountsMastersCostCentreIndexRoute
   '/accounts/masters/group/': typeof AccountsMastersGroupIndexRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
+  '/accounts/masters/tax-group/': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesByTo {
@@ -173,6 +181,7 @@ export interface FileRoutesByTo {
   '/accounts/masters/cost-centre': typeof AccountsMastersCostCentreIndexRoute
   '/accounts/masters/group': typeof AccountsMastersGroupIndexRoute
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
+  '/accounts/masters/tax-group': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/stock-item/new': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRoutesById {
@@ -195,6 +204,7 @@ export interface FileRoutesById {
   '/accounts/masters/cost-centre/': typeof AccountsMastersCostCentreIndexRoute
   '/accounts/masters/group/': typeof AccountsMastersGroupIndexRoute
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
+  '/accounts/masters/tax-group/': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
 }
 export interface FileRouteTypes {
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/cost-centre/'
     | '/accounts/masters/group/'
     | '/accounts/masters/ledger/'
+    | '/accounts/masters/tax-group/'
     | '/inventory/masters/stock-item/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -239,6 +250,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/cost-centre'
     | '/accounts/masters/group'
     | '/accounts/masters/ledger'
+    | '/accounts/masters/tax-group'
     | '/inventory/masters/stock-item/new'
   id:
     | '__root__'
@@ -260,6 +272,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/cost-centre/'
     | '/accounts/masters/group/'
     | '/accounts/masters/ledger/'
+    | '/accounts/masters/tax-group/'
     | '/inventory/masters/stock-item/new/'
   fileRoutesById: FileRoutesById
 }
@@ -282,6 +295,7 @@ export interface RootRouteChildren {
   AccountsMastersCostCentreIndexRoute: typeof AccountsMastersCostCentreIndexRoute
   AccountsMastersGroupIndexRoute: typeof AccountsMastersGroupIndexRoute
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
+  AccountsMastersTaxGroupIndexRoute: typeof AccountsMastersTaxGroupIndexRoute
   InventoryMastersStockItemNewIndexRoute: typeof InventoryMastersStockItemNewIndexRoute
 }
 
@@ -406,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountsMastersLedgerNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts/masters/tax-group/': {
+      id: '/accounts/masters/tax-group/'
+      path: '/accounts/masters/tax-group'
+      fullPath: '/accounts/masters/tax-group/'
+      preLoaderRoute: typeof AccountsMastersTaxGroupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accounts/masters/voucher-type/new': {
       id: '/accounts/masters/voucher-type/new'
       path: '/accounts/masters/voucher-type/new'
@@ -443,6 +464,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsMastersCostCentreIndexRoute: AccountsMastersCostCentreIndexRoute,
   AccountsMastersGroupIndexRoute: AccountsMastersGroupIndexRoute,
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,
+  AccountsMastersTaxGroupIndexRoute: AccountsMastersTaxGroupIndexRoute,
   InventoryMastersStockItemNewIndexRoute:
     InventoryMastersStockItemNewIndexRoute,
 }
