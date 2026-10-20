@@ -37,7 +37,7 @@ export interface TaxGroupResponse {
   name: string;
   code: string;
   combined_rate: string | number;
-  is_predefined: boolean;
+  is_predefined?: boolean;
   tax_type_name: string;
   tax_type_id?: string;
   components: TaxGroupComponentResponse[];

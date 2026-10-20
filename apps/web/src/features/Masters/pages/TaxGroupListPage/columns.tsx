@@ -2,7 +2,12 @@ import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Icon, Button, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 import type { TaxGroupResponse } from '@/features/Masters/types/taxGroup';
-import { activeDotClasses, inactiveDotClasses } from '@/features/Masters/components/common';
+import {
+  activeDotClasses,
+  inactiveDotClasses,
+  predefinedBadgeClasses,
+  customBadgeClasses,
+} from '@/features/Masters/components/common';
 
 export interface TaxGroupTableMeta {
   onEditClick: (taxGroup: TaxGroupResponse) => void;
@@ -253,6 +258,26 @@ export const taxGroupColumns: ColumnDef<TaxGroupResponse>[] = [
           <span className={isActive ? 'text-foreground' : 'text-muted-foreground'}>
             {isActive ? 'Active' : 'Inactive'}
           </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'is_predefined',
+    header: 'Type',
+    size: 100,
+    cell: ({ getValue }) => {
+      const isPredefined = Boolean(getValue<boolean | undefined>());
+      return (
+        <div className="flex items-center h-full">
+          {isPredefined ? (
+            <span className={predefinedBadgeClasses}>
+              <Icon name="Lock" size={11} className="text-muted-foreground" />
+              Default
+            </span>
+          ) : (
+            <span className={customBadgeClasses}>Custom</span>
+          )}
         </div>
       );
     },

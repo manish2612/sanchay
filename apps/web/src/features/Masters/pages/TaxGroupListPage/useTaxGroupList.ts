@@ -90,12 +90,14 @@ export function useTaxGroupList() {
 
   const handleEditTaxGroup = useCallback(
     (taxGroup: TaxGroupResponse) => {
+      if (taxGroup.is_predefined) return;
       openMasterSheet('tax-group', 'edit', taxGroup);
     },
     [openMasterSheet]
   );
 
   const handleOpenDeleteDialog = useCallback((taxGroup: TaxGroupResponse) => {
+    if (taxGroup.is_predefined) return;
     setDeleteDialogState({
       isOpen: true,
       taxGroup,

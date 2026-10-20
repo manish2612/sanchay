@@ -115,6 +115,12 @@ export const updateTaxGroupHandler = http.put(
     const index = mockTaxGroups.findIndex((g) => g.id === id);
     if (index !== -1) {
       const existing = mockTaxGroups[index];
+      if (existing.is_predefined) {
+        return HttpResponse.json(
+          { message: 'Predefined system tax groups cannot be edited.' },
+          { status: 400 }
+        );
+      }
       const updated: TaxGroupResponse = {
         ...existing,
         name: body.name ?? existing.name,
@@ -146,6 +152,12 @@ export const deleteTaxGroupHandler = http.delete(
     const { id } = params;
     const index = mockTaxGroups.findIndex((g) => g.id === id);
     if (index !== -1) {
+      if (mockTaxGroups[index].is_predefined) {
+        return HttpResponse.json(
+          { message: 'Predefined system tax groups cannot be deleted.' },
+          { status: 400 }
+        );
+      }
       mockTaxGroups.splice(index, 1);
       return HttpResponse.json({ message: 'Tax group deleted successfully' });
     }
