@@ -6,7 +6,7 @@ import { UseFormReturn, useWatch } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
 import { LEDGER_FORM_FIELDS } from '../constants';
 import { CostCenterAllocationTable } from '@/features/CostCenter/components/CostCenterAllocationTable';
-import { TaxRatesTable } from './TaxRatesTable';
+import { TaxRatesTable } from '@/components/TaxRatesTable';
 import { SwitchCard } from '@/components/TableCells/SwitchCard';
 
 interface BillingCreditStepProps {

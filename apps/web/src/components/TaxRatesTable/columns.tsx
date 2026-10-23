@@ -7,7 +7,7 @@ import type { TaxRateRow } from './types';
 
 const columnHelper = createColumnHelper<TaxRateRow>();
 
-export const getColumns = (): ColumnDef<TaxRateRow, any>[] => [
+export const getColumns = (): ColumnDef<TaxRateRow, unknown>[] => [
   columnHelper.accessor('effective_from', {
     header: 'Effective From',
     cell: DateCell,

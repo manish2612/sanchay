@@ -95,8 +95,4 @@ export const REGISTRATION_TYPES = [
   { label: "GST", value: "GST" },
 ];
 
-export const APPLICABILITY_OPTIONS = [
-  { label: "Goods", value: "GOODS" },
-  { label: "Services", value: "SERVICES" },
-  { label: "Both", value: "BOTH" },
-];
+export { APPLICABILITY_OPTIONS } from '@/components/TaxRatesTable';

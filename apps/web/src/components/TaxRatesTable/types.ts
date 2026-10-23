@@ -1,3 +1,5 @@
+import type { FieldValues, UseFormReturn } from 'react-hook-form';
+
 export interface TaxRateRow {
   id: string;
   effective_from: string;
@@ -7,4 +9,10 @@ export interface TaxRateRow {
   applicability: 'GOODS' | 'SERVICES' | 'BOTH';
   tax_rate: number | string;
   isPhantom?: boolean;
+}
+
+export interface TaxRatesTableProps<TFormValues extends FieldValues = FieldValues> {
+  form: UseFormReturn<TFormValues>;
+  name?: string;
+  className?: string;
 }

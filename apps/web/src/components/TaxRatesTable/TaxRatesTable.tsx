@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 import { Table } from '@prime/ui';
-import { flexRender } from '@tanstack/react-table';
-import { UseFormReturn } from 'react-hook-form';
+import { flexRender, type Cell, type Row } from '@tanstack/react-table';
+import { FieldValues } from 'react-hook-form';
 import { useTaxRatesTable } from './useTaxRatesTable';
 import { getColumns } from './columns';
-import { APPLICABILITY_OPTIONS } from '../../constants';
-import type { LedgerFormValues } from '../../schema';
+import { APPLICABILITY_OPTIONS } from './constants';
+import type { TaxRateRow, TaxRatesTableProps } from './types';
 import { TableErrorSummary } from '@/components/EditableTable';
 
-interface TaxRatesTableProps {
-  form: UseFormReturn<LedgerFormValues>;
-}
-
-export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
+export const TaxRatesTable = <TFormValues extends FieldValues = FieldValues>({
+  form,
+  name = 'taxRates',
+  className = '',
+}: TaxRatesTableProps<TFormValues>) => {
   const columns = useMemo(() => getColumns(), []);
 
   const {
@@ -26,7 +26,7 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
     rowErrors,
     errorsList,
     tableRootError,
-  } = useTaxRatesTable(form);
+  } = useTaxRatesTable(form, name);
 
   const taxGroupOptions = useMemo(() => {
     return taxGroups.map((tg) => ({
@@ -40,9 +40,11 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
   }, [taxGroupOptions]);
 
   return (
-    <div className="rounded-md border border-border/60 bg-surface overflow-hidden flex flex-col">
+    <div
+      className={`rounded-md border border-border/60 bg-surface overflow-hidden flex flex-col ${className}`}
+    >
       <Table.Root
-        data={fields as any}
+        data={fields as unknown as TaxRateRow[]}
         columns={columns}
         rowHeight={38}
         className="w-full rounded-none border-0"
@@ -58,7 +60,7 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
               applicability: APPLICABILITY_OPTIONS,
             },
             phantomRowConfig: {
-              isPhantom: (row: any) => Boolean(row.original?.isPhantom),
+              isPhantom: (row: { original?: TaxRateRow }) => Boolean(row.original?.isPhantom),
               actionText: 'Add New Tax Rate',
             },
             actions: {
@@ -88,7 +90,10 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
                     >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </Table.Head>
                   ))}
                 </Table.HeaderRow>
@@ -98,10 +103,11 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
         </Table.Header>
 
         <Table.Body className="bg-background">
-          {(row: any, isFocused: boolean) => {
+          {(row: Row<TaxRateRow>, isFocused: boolean) => {
             const isPhantom = Boolean(row.original?.isPhantom);
             const hasRowError = Boolean(
-              rowErrors[row.index] && Object.keys(rowErrors[row.index]).length > 0
+              rowErrors[row.index] &&
+                Object.keys(rowErrors[row.index]).length > 0
             );
 
             return (
@@ -125,7 +131,7 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
                         : 'border-l-transparent hover:bg-surface-variant/40'
                 }`}
               >
-                {row.getVisibleCells().map((cell: any) => (
+                {row.getVisibleCells().map((cell: Cell<TaxRateRow, unknown>) => (
                   <Table.Cell
                     key={cell.id}
                     style={{

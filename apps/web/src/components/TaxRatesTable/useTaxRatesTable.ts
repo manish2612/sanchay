@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
-import { LEDGER_FORM_FIELDS } from '../../constants';
-import { type LedgerFormValues, isTaxRateRowEmpty } from '../../schema';
+import {
+  ArrayPath,
+  FieldValues,
+  Path,
+  useFieldArray,
+  UseFormReturn,
+} from 'react-hook-form';
+import { isTaxRateRowEmpty } from './schema';
 import type { TaxRateRow } from './types';
 import { useGetTaxGroupsQuery } from '@/features/Masters/api/taxGroupsApi';
 import { useTableRowErrors } from '@/components/EditableTable';
@@ -17,12 +22,15 @@ export const createDefaultPhantomRow = (): TaxRateRow => ({
   isPhantom: true,
 });
 
-export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
+export const useTaxRatesTable = <TFormValues extends FieldValues = FieldValues>(
+  form: UseFormReturn<TFormValues>,
+  fieldName: string = 'taxRates'
+) => {
   const { data: taxGroups = [] } = useGetTaxGroupsQuery();
 
   const { fields, replace, update } = useFieldArray({
     control: form.control,
-    name: LEDGER_FORM_FIELDS.TAX_RATES as any,
+    name: fieldName as unknown as ArrayPath<TFormValues>,
   });
 
   const [localRowErrors, setLocalRowErrors] = useState<Record<number, boolean>>({});
@@ -35,10 +43,10 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
     totalErrorCount,
     tableRootError,
     clearRowErrors,
-  } = useTableRowErrors(form, LEDGER_FORM_FIELDS.TAX_RATES, {
-    fields,
+  } = useTableRowErrors(form, fieldName, {
+    fields: fields as unknown as Record<string, unknown>[],
     isRowEmpty: isTaxRateRowEmpty,
-    isPhantom: (row) => Boolean((row as any)?.isPhantom),
+    isPhantom: (row) => Boolean((row as Record<string, unknown>)?.isPhantom),
     columnLabels: {
       effective_from: 'Effective Date',
       tax_group_id: 'Tax Group',
@@ -50,18 +58,18 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
 
   // Ensure there is always a phantom row for adding new items
   useEffect(() => {
-    const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+    const currentRows = (form.getValues(fieldName as unknown as Path<TFormValues>) || []) as unknown as TaxRateRow[];
     const hasPhantom = currentRows.some((row) => row.isPhantom);
 
     if (!hasPhantom) {
       const newRows = [...currentRows, createDefaultPhantomRow()];
-      replace(newRows);
+      replace(newRows as unknown as Parameters<typeof replace>[0]);
     }
-  }, [fields.length, form, replace]);
+  }, [fields.length, form, fieldName, replace]);
 
   const updateData = useCallback(
     (rowIndex: number, columnId: string, value: unknown) => {
-      const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+      const currentRows = (form.getValues(fieldName as unknown as Path<TFormValues>) || []) as unknown as TaxRateRow[];
       const row = currentRows[rowIndex];
       if (row) {
         let updatedRow = { ...row, [columnId]: value };
@@ -77,24 +85,24 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
           }
         }
 
-        update(rowIndex, updatedRow);
+        update(rowIndex, updatedRow as unknown as Parameters<typeof update>[1]);
 
-        // Immediate stale-error clearing on user input
+        // Immediate error clearing on user input
         clearRowErrors(rowIndex, columnId);
 
         // Auto-revert: If the row is emptied back to default, clear errors immediately
         if (isTaxRateRowEmpty(updatedRow)) {
-          form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+          form.clearErrors(`${fieldName}.${rowIndex}` as unknown as Path<TFormValues>);
           clearRowErrors(rowIndex);
         }
       }
     },
-    [form, update, taxGroups, clearRowErrors]
+    [form, fieldName, update, taxGroups, clearRowErrors]
   );
 
   const resetRow = useCallback(
     (rowIndex: number) => {
-      const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+      const currentRows = (form.getValues(fieldName as unknown as Path<TFormValues>) || []) as unknown as TaxRateRow[];
       const row = currentRows[rowIndex];
       if (!row) return;
 
@@ -102,18 +110,18 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         // Revert phantom row back to clean pristine defaults
         const newRows = [...currentRows];
         newRows[rowIndex] = createDefaultPhantomRow();
-        replace(newRows);
+        replace(newRows as unknown as Parameters<typeof replace>[0]);
       } else {
         // Remove committed row, ensuring at least one phantom row remains
         const updated = currentRows.filter((_, idx) => idx !== rowIndex);
         if (!updated.some((r) => r.isPhantom)) {
           updated.push(createDefaultPhantomRow());
         }
-        replace(updated);
+        replace(updated as unknown as Parameters<typeof replace>[0]);
       }
 
       // Clear validation errors for this row
-      form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+      form.clearErrors(`${fieldName}.${rowIndex}` as unknown as Path<TFormValues>);
       clearRowErrors(rowIndex);
       setLocalRowErrors((prev) => {
         const next = { ...prev };
@@ -121,26 +129,26 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         return next;
       });
     },
-    [form, replace, clearRowErrors]
+    [form, fieldName, replace, clearRowErrors]
   );
 
   const removeRow = useCallback(
     (rowIndex: number) => {
-      const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+      const currentRows = (form.getValues(fieldName as unknown as Path<TFormValues>) || []) as unknown as TaxRateRow[];
       const updated = currentRows.filter((_, idx) => idx !== rowIndex);
       if (!updated.some((r) => r.isPhantom)) {
         updated.push(createDefaultPhantomRow());
       }
-      replace(updated);
-      form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+      replace(updated as unknown as Parameters<typeof replace>[0]);
+      form.clearErrors(`${fieldName}.${rowIndex}` as unknown as Path<TFormValues>);
       clearRowErrors(rowIndex);
     },
-    [form, replace, clearRowErrors]
+    [form, fieldName, replace, clearRowErrors]
   );
 
   const onRowCommit = useCallback(
     (rowIndex: number, columnId?: string, cellValue?: unknown): 'ADVANCE' | 'EXIT' | 'STAY' => {
-      const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+      const currentRows = (form.getValues(fieldName as unknown as Path<TFormValues>) || []) as unknown as TaxRateRow[];
       let row = currentRows[rowIndex];
       if (!row) return 'EXIT';
 
@@ -158,7 +166,7 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
       const hasTaxGroup = Boolean(row.tax_group_id && row.tax_group_id.trim() !== '');
 
       if (!hasTaxGroup) {
-        form.trigger(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+        form.trigger(`${fieldName}.${rowIndex}` as unknown as Path<TFormValues>);
         setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
         setTimeout(() => {
           setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
@@ -171,11 +179,11 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         const rowsToReplace = [...currentRows];
         rowsToReplace[rowIndex] = { ...row, isPhantom: false };
         rowsToReplace.push(createDefaultPhantomRow());
-        replace(rowsToReplace);
+        replace(rowsToReplace as unknown as Parameters<typeof replace>[0]);
 
         // Clear RHF and local errors for this row upon successful commit
-        form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
-        form.clearErrors(LEDGER_FORM_FIELDS.TAX_RATES as any);
+        form.clearErrors(`${fieldName}.${rowIndex}` as unknown as Path<TFormValues>);
+        form.clearErrors(fieldName as unknown as Path<TFormValues>);
         clearRowErrors(rowIndex);
         setLocalRowErrors((prev) => {
           const next = { ...prev };
@@ -187,7 +195,7 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
 
       return 'ADVANCE';
     },
-    [form, replace, updateData, clearRowErrors]
+    [form, fieldName, replace, updateData, clearRowErrors]
   );
 
   return {
