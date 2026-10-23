@@ -65,6 +65,7 @@ The `@prime/ui` `Table.Root` requires `Table.Header` and `Table.Body` to receive
 - You **must** define exact `size` properties on every column definition in `columns.ts`.
 - You **must** apply `style={{ width: ...getSize(), flex: ... }}` to both `<Table.Head>` and `<Table.Cell>` (as shown above) to ensure column widths perfectly align.
 - Numeric columns should align their text to the right using `text-right` in the input classes.
+- **Action Column Width**: The Action column (`ActionCell`) must have at least `size: 80` (never `50`) if it renders multi-button states (e.g., Commit `Check` + Discard `RotateCcw` + Error Alert) to prevent button clipping and wrapping.
 
 ## 3. Cell Inputs & Whitespace
 Inputs within cells must consume the entire cell area cleanly without weird whitespace gaps or breaking borders.
@@ -85,6 +86,8 @@ meta: {
   actions: {
     updateData: (rowIndex, columnId, value) => void,
     onRowCommit: (rowIndex, columnId, value) => "ADVANCE" | "EXIT" | "STAY",
+    removeRow: (rowIndex) => void,
+    resetRow: (rowIndex) => void, // For discarding draft edits back to pristine
   },
   state: {
     rowErrors: {},
@@ -95,6 +98,7 @@ meta: {
     actionText: string,
   },
   removeRow: (rowIndex) => void, // For ActionCell
+  resetRow: (rowIndex) => void,  // For ActionCell discard
 }
 ```
 
@@ -177,3 +181,154 @@ Table navigation scripts intentionally swallow the `Enter` and `Arrow` keys when
 **Rule 3: Non-Blocking vs Blocking Modals for Data Entry**
 If pressing `Enter` on a row spawns a data-entry Sheet/Modal *and* advances the background table to a new row, you must ensure the Sheet is fully blocking (`modal={true}`).
 * **Fix**: If you use `modal={false}` (non-blocking), the background table's programmatic focus jump (`focusNewRowInput`) will be interpreted by the Sheet as an "outside interaction" (clicking/focusing away), causing the Sheet to instantly auto-close before it even renders. Always use `modal={true}` to trap focus and force the user to complete the allocation before focus is cleanly returned to the background grid.
+
+## 10. Pristine/Dirty Phantom Validation & The Triple Escape Reset Mechanism
+
+### The Problem & Anti-Pattern:
+In editable tables with dynamic phantom rows (`isPhantom: true`), if your Zod validation simply skips phantom rows (`if (row.isPhantom) return true;`), a critical vulnerability arises:
+1. A user enters or changes values in a phantom row (making it dirty).
+2. They do NOT press `Enter` to commit, leaving `isPhantom: true`.
+3. If they click "Next" on a wizard step or submit the form:
+   - Zod allows it to pass because `isPhantom: true`.
+   - Submit handlers filter out phantom rows (`filter(r => !r.isPhantom)`), silently discarding the user's data!
+   - Conversely, if you blindly validate all phantom rows, an untouched blank row will block the form and trap the user if there is no escape hatch to reset it.
+
+### The Solution:
+1. **Explicit Pristine Detection (`isRowEmpty`)**:
+   Implement a strict `isRowEmpty` predicate checking all editable business fields:
+   ```ts
+   export const isRowEmpty = (row: any): boolean => {
+     const data = row?.original || row;
+     if (!data) return true;
+     return (
+       !data.tax_group_id &&
+       !data.effective_from &&
+       (!data.rate || data.rate === 0 || data.rate === '' || data.rate === '0.00')
+     );
+   };
+   ```
+
+2. **Clean Phantom Initializer**:
+   `createDefaultPhantomRow()` must initialize mandatory input fields to empty strings (e.g., `effective_from: ''`, `tax_group_id: ''`), NEVER pre-filling today's date or active values, so brand-new rows are unequivocally pristine.
+
+3. **Zod `superRefine` Uncommitted Guard**:
+   In your row schema, enforce that touched phantom rows CANNOT pass validation until committed:
+   ```ts
+   .superRefine((row, ctx) => {
+     // 1. Pristine untouched phantom rows are completely valid and ignored
+     if (row.isPhantom && isRowEmpty(row)) {
+       return;
+     }
+
+     // 2. Dirty/uncommitted phantom row guard: MUST block progression
+     if (row.isPhantom) {
+       ctx.addIssue({
+         code: z.ZodIssueCode.custom,
+         message: "Row has uncommitted changes. Press Enter or click Check to commit, or discard this row.",
+         path: ["primary_field_name"],
+       });
+     }
+
+     // 3. Mandatory field validations for touched or committed rows
+     if (!row.mandatory_field) {
+       ctx.addIssue({
+         code: z.ZodIssueCode.custom,
+         message: "Field is required",
+         path: ["mandatory_field"],
+       });
+     }
+   })
+   ```
+
+4. **The Triple Escape Reset Mechanism**:
+   Provide 3 ways for users to make a dirty row pristine again without form deadlocks:
+   - **ActionCell Dual Buttons (`Check` + `RotateCcw`)**: When a phantom row is dirty (`isPhantom && !isRowEmpty`), `ActionCell` shows:
+     - `Check`: Commits the row via mouse click (`onRowCommit(row.index)`).
+     - `RotateCcw`: Discards draft changes (`resetRow(row.index)`).
+     - *Ensure Action column width is at least `size: 80` in `columns.ts`.*
+   - **Keyboard Escape**: Listen for `Escape` on row `onKeyDown` to call `resetRow(row.index)`.
+   - **Auto-Revert**: In `updateData`, if the user clears all inputs back to empty (`isRowEmpty(updatedRow)`), immediately clear RHF errors for that row index.
+
+5. **`onRowCommit` Contract**:
+   When committing, default sensible fields (like today's date if missing), atomically replace fields, append a fresh phantom row, and explicitly flush RHF and local errors:
+   ```ts
+   // In onRowCommit:
+   if (row.isPhantom) {
+     const rowsToReplace = [...currentRows];
+     rowsToReplace[rowIndex] = { ...row, isPhantom: false };
+     rowsToReplace.push(createDefaultPhantomRow());
+     replace(rowsToReplace);
+
+     form.clearErrors(`${FIELD_NAME}.${rowIndex}`);
+     form.clearErrors(FIELD_NAME);
+     clearRowErrors(rowIndex);
+     return 'ADVANCE';
+   }
+   ```
+
+---
+
+## 11. Decoupled Multi-Row Error Association (`useTableRowErrors` & `<TableErrorSummary />`)
+
+### The Problem:
+Legacy table implementations frequently extract only the first error of the first invalid row (`Row 1: ...`), leaving subsequent rows invisible until the first is resolved. Furthermore, stale errors linger after user edits because RHF does not automatically clear array field errors on individual keystrokes.
+
+### The Solution:
+Use the reusable table error primitives located in `@/components/EditableTable`:
+
+1. **`useTableRowErrors` Hook**:
+   Synchronizes RHF errors with TanStack Table meta, tracks real-time stale-error suppression on cell edits, and generates an itemized list of row errors.
+
+   ```tsx
+   import { useTableRowErrors, TableErrorSummary } from '@/components/EditableTable';
+
+   export const useMyTable = (form: UseFormReturn<FormValues>) => {
+     const {
+       rowErrors,
+       errorsList,
+       hasErrors,
+       totalErrorCount,
+       tableRootError,
+       clearRowErrors,
+     } = useTableRowErrors(form, FORM_FIELDS.ITEMS, {
+       fields,
+       isRowEmpty,
+       isPhantom: (row) => Boolean(row?.isPhantom),
+       columnLabels: {
+         item_id: 'Item',
+         quantity: 'Quantity',
+         rate: 'Rate',
+       },
+     });
+
+     // ...
+   };
+   ```
+
+2. **`<TableErrorSummary />` Component**:
+   Renders an accessible (`role="alert"`), compact banner directly below `<Table.Root>`. It displays `Row N` badges, localized column error descriptions, and an optional 1-click **Discard** button to instantly revert invalid rows.
+
+   ```tsx
+   <div className="rounded-md border border-border/60 bg-surface overflow-hidden flex flex-col">
+     <Table.Root
+       data={fields}
+       columns={columns}
+       tableOptions={{
+         meta: {
+           state: { rowErrors, isRowEmpty },
+           actions: { updateData, onRowCommit, removeRow, resetRow },
+           removeRow,
+           resetRow,
+         },
+       }}
+     >
+       {/* Table Header and Body */}
+     </Table.Root>
+
+     <TableErrorSummary
+       errorsList={errorsList}
+       tableRootError={tableRootError}
+       onResetRow={resetRow}
+     />
+   </div>
+   ```
