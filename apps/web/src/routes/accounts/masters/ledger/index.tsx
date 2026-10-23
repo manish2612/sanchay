@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Page from '@/features/Accounts/Ledger/LedgerList';
+import { LedgerListPage } from '@/features/Masters/pages/LedgerListPage';
 
 export const Route = createFileRoute('/accounts/masters/ledger/')({
-  component: Page,
+  component: LedgerListPage,
 });

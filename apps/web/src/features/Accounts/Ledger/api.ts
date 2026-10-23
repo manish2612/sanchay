@@ -2,10 +2,11 @@ import { apiSlice } from '@/store/apiSlice';
 import type { 
   GetLedgersRequest, 
   GetLedgersResponse,
-  GetStockGroupsRequest,
-  GetStockGroupsResponse,
+  Ledger,
   CreateLedgerRequest,
-  CreateLedgerResponse
+  CreateLedgerResponse,
+  UpdateLedgerRequest,
+  DeleteLedgerResponse,
 } from './types';
 
 export const ledgerApi = apiSlice.injectEndpoints({
@@ -17,11 +18,12 @@ export const ledgerApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['Ledger'],
     }),
-    getStockGroups: build.query<GetStockGroupsResponse, GetStockGroupsRequest>({
-      query: () => ({
-        url: 'inventory/stockgroups',
+    getLedgerById: build.query<Ledger, string>({
+      query: (id) => ({
+        url: `accounting/ledgers/${id}`,
         method: 'GET',
       }),
+      providesTags: (_result, _error, id) => [{ type: 'Ledger', id }],
     }),
     createLedger: build.mutation<CreateLedgerResponse, CreateLedgerRequest>({
       query: (body) => ({
@@ -31,11 +33,28 @@ export const ledgerApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Ledger'],
     }),
+    updateLedger: build.mutation<Ledger, UpdateLedgerRequest>({
+      query: ({ id, body }) => ({
+        url: `accounting/ledgers/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['Ledger'],
+    }),
+    deleteLedger: build.mutation<DeleteLedgerResponse, string>({
+      query: (id) => ({
+        url: `accounting/ledgers/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Ledger'],
+    }),
   }),
 });
 
 export const { 
   useGetLedgersQuery, 
-  useGetStockGroupsQuery,
-  useCreateLedgerMutation 
+  useGetLedgerByIdQuery,
+  useCreateLedgerMutation,
+  useUpdateLedgerMutation,
+  useDeleteLedgerMutation,
 } = ledgerApi;

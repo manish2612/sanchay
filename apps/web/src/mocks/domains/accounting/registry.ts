@@ -1,5 +1,8 @@
 export const accountingRegistry = {
   getLedgers: false,
+  getLedgerById: false,
+  updateLedger: false,
+  deleteLedger: false,
   getVoucherTypes: false,
   getCostCenters: false,
   getCostCategories: false,

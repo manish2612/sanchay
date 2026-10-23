@@ -29,6 +29,7 @@ import { Route as AccountsMastersLedgerNewRouteImport } from './routes/accounts/
 import { Route as AccountsMastersTaxGroupIndexRouteImport } from './routes/accounts/masters/tax-group/index'
 import { Route as AccountsMastersVoucherTypeNewRouteImport } from './routes/accounts/masters/voucher-type/new'
 import { Route as InventoryMastersGodownIndexRouteImport } from './routes/inventory/masters/godown/index'
+import { Route as InventoryMastersLedgerIndexRouteImport } from './routes/inventory/masters/ledger/index'
 import { Route as InventoryMastersStockCategoryIndexRouteImport } from './routes/inventory/masters/stock-category/index'
 import { Route as InventoryMastersStockGroupIndexRouteImport } from './routes/inventory/masters/stock-group/index'
 import { Route as InventoryMastersStockItemIndexRouteImport } from './routes/inventory/masters/stock-item/index'
@@ -145,6 +146,12 @@ const InventoryMastersGodownIndexRoute =
     path: '/inventory/masters/godown/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const InventoryMastersLedgerIndexRoute =
+  InventoryMastersLedgerIndexRouteImport.update({
+    id: '/inventory/masters/ledger/',
+    path: '/inventory/masters/ledger/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const InventoryMastersStockCategoryIndexRoute =
   InventoryMastersStockCategoryIndexRouteImport.update({
     id: '/inventory/masters/stock-category/',
@@ -203,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
   '/accounts/masters/tax-group/': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/godown/': typeof InventoryMastersGodownIndexRoute
+  '/inventory/masters/ledger/': typeof InventoryMastersLedgerIndexRoute
   '/inventory/masters/stock-category/': typeof InventoryMastersStockCategoryIndexRoute
   '/inventory/masters/stock-group/': typeof InventoryMastersStockGroupIndexRoute
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
@@ -231,6 +239,7 @@ export interface FileRoutesByTo {
   '/accounts/masters/ledger': typeof AccountsMastersLedgerIndexRoute
   '/accounts/masters/tax-group': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/godown': typeof InventoryMastersGodownIndexRoute
+  '/inventory/masters/ledger': typeof InventoryMastersLedgerIndexRoute
   '/inventory/masters/stock-category': typeof InventoryMastersStockCategoryIndexRoute
   '/inventory/masters/stock-group': typeof InventoryMastersStockGroupIndexRoute
   '/inventory/masters/stock-item': typeof InventoryMastersStockItemIndexRoute
@@ -260,6 +269,7 @@ export interface FileRoutesById {
   '/accounts/masters/ledger/': typeof AccountsMastersLedgerIndexRoute
   '/accounts/masters/tax-group/': typeof AccountsMastersTaxGroupIndexRoute
   '/inventory/masters/godown/': typeof InventoryMastersGodownIndexRoute
+  '/inventory/masters/ledger/': typeof InventoryMastersLedgerIndexRoute
   '/inventory/masters/stock-category/': typeof InventoryMastersStockCategoryIndexRoute
   '/inventory/masters/stock-group/': typeof InventoryMastersStockGroupIndexRoute
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
@@ -290,6 +300,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger/'
     | '/accounts/masters/tax-group/'
     | '/inventory/masters/godown/'
+    | '/inventory/masters/ledger/'
     | '/inventory/masters/stock-category/'
     | '/inventory/masters/stock-group/'
     | '/inventory/masters/stock-item/'
@@ -318,6 +329,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger'
     | '/accounts/masters/tax-group'
     | '/inventory/masters/godown'
+    | '/inventory/masters/ledger'
     | '/inventory/masters/stock-category'
     | '/inventory/masters/stock-group'
     | '/inventory/masters/stock-item'
@@ -346,6 +358,7 @@ export interface FileRouteTypes {
     | '/accounts/masters/ledger/'
     | '/accounts/masters/tax-group/'
     | '/inventory/masters/godown/'
+    | '/inventory/masters/ledger/'
     | '/inventory/masters/stock-category/'
     | '/inventory/masters/stock-group/'
     | '/inventory/masters/stock-item/'
@@ -375,6 +388,7 @@ export interface RootRouteChildren {
   AccountsMastersLedgerIndexRoute: typeof AccountsMastersLedgerIndexRoute
   AccountsMastersTaxGroupIndexRoute: typeof AccountsMastersTaxGroupIndexRoute
   InventoryMastersGodownIndexRoute: typeof InventoryMastersGodownIndexRoute
+  InventoryMastersLedgerIndexRoute: typeof InventoryMastersLedgerIndexRoute
   InventoryMastersStockCategoryIndexRoute: typeof InventoryMastersStockCategoryIndexRoute
   InventoryMastersStockGroupIndexRoute: typeof InventoryMastersStockGroupIndexRoute
   InventoryMastersStockItemIndexRoute: typeof InventoryMastersStockItemIndexRoute
@@ -525,6 +539,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryMastersGodownIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/inventory/masters/ledger/': {
+      id: '/inventory/masters/ledger/'
+      path: '/inventory/masters/ledger'
+      fullPath: '/inventory/masters/ledger/'
+      preLoaderRoute: typeof InventoryMastersLedgerIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/inventory/masters/stock-category/': {
       id: '/inventory/masters/stock-category/'
       path: '/inventory/masters/stock-category'
@@ -592,6 +613,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsMastersLedgerIndexRoute: AccountsMastersLedgerIndexRoute,
   AccountsMastersTaxGroupIndexRoute: AccountsMastersTaxGroupIndexRoute,
   InventoryMastersGodownIndexRoute: InventoryMastersGodownIndexRoute,
+  InventoryMastersLedgerIndexRoute: InventoryMastersLedgerIndexRoute,
   InventoryMastersStockCategoryIndexRoute:
     InventoryMastersStockCategoryIndexRoute,
   InventoryMastersStockGroupIndexRoute: InventoryMastersStockGroupIndexRoute,

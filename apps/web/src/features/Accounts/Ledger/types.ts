@@ -23,39 +23,50 @@ export interface TaxRate {
   tax_group: TaxGroup[];
 }
 
+export interface LedgerOpeningBalance {
+  amount: number;
+  cost_centre_id: string;
+  financial_year_id: string;
+  id: string;
+  ledger_id: string;
+}
+
 export interface Ledger {
   id: string;
   name: string;
-  code: string;
-  is_cost_entre_enabled: boolean;
-  is_cost_centre_enabled?: boolean;
-  is_bill_wise_enabled: boolean;
-  block_sales_on_credit_limit_exceed: boolean;
-  credit_period_days: number;
-  credit_limit_amount: string;
-  opening_balance: string;
-  is_predefined: boolean;
-  tax_rates: TaxRate[];
+  code?: string;
+  category?: string;
   sub_category?: string;
+  parent_id?: string | null;
+  grand_parent_id?: string | null;
+  is_cost_entre_enabled?: boolean;
+  is_cost_centre_enabled?: boolean;
+  is_bill_wise_enabled?: boolean;
+  block_sales_on_credit_limit_exceed?: boolean;
+  credit_period_days?: number;
+  credit_limit_amount?: string | number;
+  opening_balance?: string | number;
+  is_predefined?: boolean;
+  tax_rates?: TaxRate[];
+  tax_type?: string;
+  opening_balances?: LedgerOpeningBalance[];
+}
+
+export interface LedgerDecoratedItem extends Ledger {
+  parent_name?: string;
 }
 
 export type GetLedgersResponse = Ledger[];
 export type GetLedgersRequest = void;
 
-export interface StockGroup {
-  id: string;
-  company_id: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-  created_by: string;
-  is_active: boolean;
-  name: string;
-  is_taxable: boolean;
+export interface DeleteLedgerResponse {
+  message: string;
 }
 
-export type GetStockGroupsResponse = StockGroup[];
-export type GetStockGroupsRequest = void;
+export interface UpdateLedgerRequest {
+  id: string;
+  body: Partial<CreateLedgerRequest>;
+}
 
 export interface CreateLedgerRequest {
   account_group_id: string | null;

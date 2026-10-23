@@ -322,3 +322,39 @@ export const getLedgersHandler = http.get<never, never, GetLedgersResponse>(
     return HttpResponse.json(mockLedgers);
   }
 );
+
+export const getLedgerByIdHandler = http.get('*/api/v1/accounting/ledgers/:id', async ({ params }) => {
+  if (!isMockEnabled('accounting', 'getLedgerById')) return;
+  await delay(400);
+  const { id } = params;
+  const ledger = mockLedgers.find((l) => l.id === id);
+  if (!ledger) {
+    return new HttpResponse(null, { status: 404 });
+  }
+  return HttpResponse.json(ledger);
+});
+
+export const updateLedgerHandler = http.put('*/api/v1/accounting/ledgers/:id', async ({ params, request }) => {
+  if (!isMockEnabled('accounting', 'updateLedger')) return;
+  await delay(500);
+  const { id } = params;
+  const body = (await request.json()) as Partial<Ledger>;
+  const index = mockLedgers.findIndex((l) => l.id === id);
+  if (index === -1) {
+    return new HttpResponse(null, { status: 404 });
+  }
+  mockLedgers[index] = { ...mockLedgers[index], ...body };
+  return HttpResponse.json(mockLedgers[index]);
+});
+
+export const deleteLedgerHandler = http.delete('*/api/v1/accounting/ledgers/:id', async ({ params }) => {
+  if (!isMockEnabled('accounting', 'deleteLedger')) return;
+  await delay(400);
+  const { id } = params;
+  const index = mockLedgers.findIndex((l) => l.id === id);
+  if (index !== -1) {
+    mockLedgers.splice(index, 1);
+    return HttpResponse.json({ message: 'Ledger deleted successfully' });
+  }
+  return new HttpResponse(null, { status: 404 });
+});
