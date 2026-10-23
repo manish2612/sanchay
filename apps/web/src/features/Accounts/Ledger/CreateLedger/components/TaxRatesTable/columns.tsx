@@ -47,6 +47,6 @@ export const getColumns = (): ColumnDef<TaxRateRow, any>[] => [
     id: 'actions',
     header: '',
     cell: ActionCell,
-    size: 50,
+    size: 80,
   }),
 ];

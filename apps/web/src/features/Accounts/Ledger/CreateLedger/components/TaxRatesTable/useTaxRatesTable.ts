@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, UseFormReturn } from 'react-hook-form';
 import { LEDGER_FORM_FIELDS } from '../../constants';
-import type { LedgerFormValues } from '../../schema';
+import { type LedgerFormValues, isTaxRateRowEmpty } from '../../schema';
 import type { TaxRateRow } from './types';
 import { useGetTaxGroupsQuery } from '@/features/Masters/api/taxGroupsApi';
+import { useTableRowErrors } from '@/components/EditableTable';
 
 export const createDefaultPhantomRow = (): TaxRateRow => ({
   id: crypto.randomUUID(),
-  effective_from: new Date().toISOString(),
-  effective_to: new Date().toISOString(),
+  effective_from: '',
+  effective_to: '',
   tax_group_id: '',
   excise_tax_group_id: '',
   applicability: 'BOTH',
@@ -25,6 +26,27 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
   });
 
   const [localRowErrors, setLocalRowErrors] = useState<Record<number, boolean>>({});
+
+  // Reusable hook for extracting and synchronizing row-level errors
+  const {
+    rowErrors,
+    errorsList,
+    hasErrors,
+    totalErrorCount,
+    tableRootError,
+    clearRowErrors,
+  } = useTableRowErrors(form, LEDGER_FORM_FIELDS.TAX_RATES, {
+    fields,
+    isRowEmpty: isTaxRateRowEmpty,
+    isPhantom: (row) => Boolean((row as any)?.isPhantom),
+    columnLabels: {
+      effective_from: 'Effective Date',
+      tax_group_id: 'Tax Group',
+      excise_tax_group_id: 'Excise Tax Group',
+      applicability: 'Applicability',
+      tax_rate: 'Tax Rate',
+    },
+  });
 
   // Ensure there is always a phantom row for adding new items
   useEffect(() => {
@@ -56,23 +78,64 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         }
 
         update(rowIndex, updatedRow);
-        form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+
+        // Immediate stale-error clearing on user input
+        clearRowErrors(rowIndex, columnId);
+
+        // Auto-revert: If the row is emptied back to default, clear errors immediately
+        if (isTaxRateRowEmpty(updatedRow)) {
+          form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+          clearRowErrors(rowIndex);
+        }
       }
     },
-    [form, update, taxGroups]
+    [form, update, taxGroups, clearRowErrors]
+  );
+
+  const resetRow = useCallback(
+    (rowIndex: number) => {
+      const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
+      const row = currentRows[rowIndex];
+      if (!row) return;
+
+      if (row.isPhantom) {
+        // Revert phantom row back to clean pristine defaults
+        const newRows = [...currentRows];
+        newRows[rowIndex] = createDefaultPhantomRow();
+        replace(newRows);
+      } else {
+        // Remove committed row, ensuring at least one phantom row remains
+        const updated = currentRows.filter((_, idx) => idx !== rowIndex);
+        if (!updated.some((r) => r.isPhantom)) {
+          updated.push(createDefaultPhantomRow());
+        }
+        replace(updated);
+      }
+
+      // Clear validation errors for this row
+      form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+      clearRowErrors(rowIndex);
+      setLocalRowErrors((prev) => {
+        const next = { ...prev };
+        delete next[rowIndex];
+        return next;
+      });
+    },
+    [form, replace, clearRowErrors]
   );
 
   const removeRow = useCallback(
     (rowIndex: number) => {
       const currentRows = (form.getValues(LEDGER_FORM_FIELDS.TAX_RATES as any) || []) as TaxRateRow[];
       const updated = currentRows.filter((_, idx) => idx !== rowIndex);
-      // Ensure at least one phantom row always exists
       if (!updated.some((r) => r.isPhantom)) {
         updated.push(createDefaultPhantomRow());
       }
       replace(updated);
+      form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+      clearRowErrors(rowIndex);
     },
-    [form, replace]
+    [form, replace, clearRowErrors]
   );
 
   const onRowCommit = useCallback(
@@ -87,12 +150,15 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         updateData(rowIndex, columnId, cellValue);
       }
 
-      const hasEffectiveFrom = Boolean(row.effective_from);
+      // If effective_from is not set, default to today's ISO date upon commit
+      if (!row.effective_from || String(row.effective_from).trim() === '') {
+        row = { ...row, effective_from: new Date().toISOString() };
+      }
+
       const hasTaxGroup = Boolean(row.tax_group_id && row.tax_group_id.trim() !== '');
 
-      const isValid = hasEffectiveFrom && hasTaxGroup;
-
-      if (!isValid) {
+      if (!hasTaxGroup) {
+        form.trigger(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
         setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: true }));
         setTimeout(() => {
           setLocalRowErrors((prev) => ({ ...prev, [rowIndex]: false }));
@@ -106,30 +172,37 @@ export const useTaxRatesTable = (form: UseFormReturn<LedgerFormValues>) => {
         rowsToReplace[rowIndex] = { ...row, isPhantom: false };
         rowsToReplace.push(createDefaultPhantomRow());
         replace(rowsToReplace);
+
+        // Clear RHF and local errors for this row upon successful commit
+        form.clearErrors(`${LEDGER_FORM_FIELDS.TAX_RATES}.${rowIndex}` as any);
+        form.clearErrors(LEDGER_FORM_FIELDS.TAX_RATES as any);
+        clearRowErrors(rowIndex);
+        setLocalRowErrors((prev) => {
+          const next = { ...prev };
+          delete next[rowIndex];
+          return next;
+        });
         return 'ADVANCE';
       }
 
       return 'ADVANCE';
     },
-    [form, replace, updateData]
+    [form, replace, updateData, clearRowErrors]
   );
-
-  const isRowEmpty = useCallback((row: any) => {
-    const data = row.original;
-    return (
-      !data.tax_group_id &&
-      !data.excise_tax_group_id &&
-      (!data.tax_rate || data.tax_rate === '0.00' || data.tax_rate === 0 || data.tax_rate === '')
-    );
-  }, []);
 
   return {
     fields,
     taxGroups,
     updateData,
     removeRow,
+    resetRow,
     onRowCommit,
-    isRowEmpty,
+    isRowEmpty: isTaxRateRowEmpty,
     localRowErrors,
+    rowErrors,
+    errorsList,
+    hasErrors,
+    totalErrorCount,
+    tableRootError,
   };
 };

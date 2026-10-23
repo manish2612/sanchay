@@ -115,16 +115,16 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
     };
 
     console.log('>>>> create Ledger ', payload);
-    // try {
-    //   setSubmitError(null);
-    //   const res = await createLedger(payload).unwrap();
-    //   setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
-    //   setIsSuccess(true);
-    // } catch (error) {
-    //   console.error('Failed to create ledger', error);
-    //   const errMsg = getErrorMessage(error, 'Failed to create ledger. Please try again.');
-    //   setSubmitError(errMsg);
-    // }
+    try {
+      setSubmitError(null);
+      const res = await createLedger(payload).unwrap();
+      setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
+      setIsSuccess(true);
+    } catch (error) {
+      console.error('Failed to create ledger', error);
+      const errMsg = getErrorMessage(error, 'Failed to create ledger. Please try again.');
+      setSubmitError(errMsg);
+    }
   };
 
   const resetSuccess = () => {

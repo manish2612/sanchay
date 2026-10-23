@@ -6,7 +6,7 @@ import { useTaxRatesTable } from './useTaxRatesTable';
 import { getColumns } from './columns';
 import { APPLICABILITY_OPTIONS } from '../../constants';
 import type { LedgerFormValues } from '../../schema';
-import { LEDGER_FORM_FIELDS } from '../../constants';
+import { TableErrorSummary } from '@/components/EditableTable';
 
 interface TaxRatesTableProps {
   form: UseFormReturn<LedgerFormValues>;
@@ -20,9 +20,12 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
     taxGroups,
     updateData,
     removeRow,
+    resetRow,
     onRowCommit,
     isRowEmpty,
-    localRowErrors,
+    rowErrors,
+    errorsList,
+    tableRootError,
   } = useTaxRatesTable(form);
 
   const taxGroupOptions = useMemo(() => {
@@ -36,26 +39,8 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
     return [{ label: 'None', value: '' }, ...taxGroupOptions];
   }, [taxGroupOptions]);
 
-  const rowErrors = useMemo(() => {
-    const errs: Record<number, any> = { ...localRowErrors };
-    const rhfErrors = form.formState.errors?.[LEDGER_FORM_FIELDS.TAX_RATES as keyof LedgerFormValues];
-    if (Array.isArray(rhfErrors)) {
-      rhfErrors.forEach((err, idx) => {
-        const row = fields[idx] as any;
-        if (row?.isPhantom) return;
-        if (err) {
-          errs[idx] = {
-            ...(typeof errs[idx] === 'object' ? errs[idx] : {}),
-            ...err,
-          };
-        }
-      });
-    }
-    return errs;
-  }, [form.formState.errors, fields, localRowErrors]);
-
   return (
-    <div className="rounded-md border border-border/60 bg-surface overflow-hidden">
+    <div className="rounded-md border border-border/60 bg-surface overflow-hidden flex flex-col">
       <Table.Root
         data={fields as any}
         columns={columns}
@@ -80,7 +65,10 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
               updateData,
               onRowCommit,
               removeRow,
+              resetRow,
             },
+            removeRow,
+            resetRow,
           },
         }}
       >
@@ -110,35 +98,56 @@ export const TaxRatesTable: React.FC<TaxRatesTableProps> = ({ form }) => {
         </Table.Header>
 
         <Table.Body className="bg-background">
-          {(row: any, isFocused: boolean) => (
-            <Table.Row
-              key={row.id}
-              data-state={row.getIsSelected() ? 'selected' : undefined}
-              data-focused={isFocused}
-              className={`transition-colors border-b border-border/60 last:border-b-0 border-l-3 group ${
-                row.original?.isPhantom
-                  ? 'bg-primary/5'
-                  : isFocused
-                    ? 'bg-primary/[0.06] border-l-primary'
-                    : 'hover:bg-surface-variant/40'
-              }`}
-            >
-              {row.getVisibleCells().map((cell: any) => (
-                <Table.Cell
-                  key={cell.id}
-                  style={{
-                    width: cell.column.getSize(),
-                    flex: `${cell.column.getSize()} 0 auto`,
-                  }}
-                  className="px-2 py-1 border-r border-border/60 last:border-r-0 overflow-hidden flex items-center"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Table.Cell>
-              ))}
-            </Table.Row>
-          )}
+          {(row: any, isFocused: boolean) => {
+            const isPhantom = Boolean(row.original?.isPhantom);
+            const hasRowError = Boolean(
+              rowErrors[row.index] && Object.keys(rowErrors[row.index]).length > 0
+            );
+
+            return (
+              <Table.Row
+                key={row.id}
+                data-state={row.getIsSelected() ? 'selected' : undefined}
+                data-focused={isFocused}
+                data-error={hasRowError ? 'true' : undefined}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === 'Escape') {
+                    resetRow(row.index);
+                  }
+                }}
+                className={`transition-colors border-b border-border/60 last:border-b-0 border-l-3 group ${
+                  hasRowError
+                    ? 'border-l-danger bg-danger/[0.04]'
+                    : isPhantom
+                      ? 'border-l-transparent bg-primary/5'
+                      : isFocused
+                        ? 'bg-primary/[0.06] border-l-primary'
+                        : 'border-l-transparent hover:bg-surface-variant/40'
+                }`}
+              >
+                {row.getVisibleCells().map((cell: any) => (
+                  <Table.Cell
+                    key={cell.id}
+                    style={{
+                      width: cell.column.getSize(),
+                      flex: `${cell.column.getSize()} 0 auto`,
+                    }}
+                    className="px-2 py-1 border-r border-border/60 last:border-r-0 overflow-hidden flex items-center"
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            );
+          }}
         </Table.Body>
       </Table.Root>
+
+      <TableErrorSummary
+        errorsList={errorsList}
+        tableRootError={tableRootError}
+        onResetRow={resetRow}
+      />
     </div>
   );
 };

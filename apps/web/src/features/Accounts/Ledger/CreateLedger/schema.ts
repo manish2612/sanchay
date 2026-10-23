@@ -12,6 +12,23 @@ const costCenterAllocationSchema = z.object({
   isPhantom: z.boolean().optional(),
 });
 
+export const isTaxRateRowEmpty = (row: any): boolean => {
+  const data = row?.original || row;
+  if (!data) return true;
+  const hasEffective = Boolean(data.effective_from && String(data.effective_from).trim() !== '');
+  const hasTaxGroup = Boolean(data.tax_group_id && String(data.tax_group_id).trim() !== '');
+  const hasExciseGroup = Boolean(data.excise_tax_group_id && String(data.excise_tax_group_id).trim() !== '');
+  const hasRate = Boolean(
+    data.tax_rate !== '' &&
+    data.tax_rate !== undefined &&
+    data.tax_rate !== null &&
+    data.tax_rate !== 0 &&
+    data.tax_rate !== '0' &&
+    data.tax_rate !== '0.00'
+  );
+  return !hasEffective && !hasTaxGroup && !hasExciseGroup && !hasRate;
+};
+
 const taxRateRowSchema = z
   .object({
     id: z.string(),
@@ -23,16 +40,38 @@ const taxRateRowSchema = z
     tax_rate: z.union([z.number(), z.string()]).optional(),
     isPhantom: z.boolean().optional(),
   })
-  .refine(
-    (row) => {
-      if (row.isPhantom) return true;
-      return Boolean(row.effective_from && row.tax_group_id);
-    },
-    {
-      message: "Effective date and tax group are required",
-      path: ["tax_group_id"],
+  .superRefine((row, ctx) => {
+    // 1. Pristine untouched phantom rows are completely ignored and valid
+    if (row.isPhantom && isTaxRateRowEmpty(row)) {
+      return;
     }
-  );
+
+    // 2. If row is a phantom row but not empty, it has uncommitted changes!
+    if (row.isPhantom) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Row has uncommitted changes. Press Enter or click Check to commit, or discard this row.",
+        path: ["tax_group_id"],
+      });
+    }
+
+    // 3. Mandatory fields for touched or committed row
+    if (!row.effective_from || String(row.effective_from).trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Effective date is required",
+        path: ["effective_from"],
+      });
+    }
+
+    if (!row.tax_group_id || String(row.tax_group_id).trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Tax group is required",
+        path: ["tax_group_id"],
+      });
+    }
+  });
 
 export const ledgerFormSchema = z.object({
   // Step 1
