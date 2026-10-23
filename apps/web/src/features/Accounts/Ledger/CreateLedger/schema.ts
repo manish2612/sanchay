@@ -42,7 +42,10 @@ export const ledgerFormSchema = z.object({
 .merge(
   baseContactSchema.extend({
     contactPerson: z.string().optional(),
-    mobileNumber: z.string().optional(),
+    mobileNumber: z
+      .string()
+      .regex(/^\d*$/, "Mobile number must contain only numbers")
+      .optional(),
   })
 )
 .superRefine((data, ctx) => {

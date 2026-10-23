@@ -2,8 +2,14 @@
 
 import React from "react";
 import { Form, Icon, TextInput } from "@prime/ui";
+import type { Control, FieldValues } from "react-hook-form";
 
-export const ContactPersonInputField = ({ control, name }: { control: any, name: string }) => (
+export interface ContactFieldProps<TFieldValues extends FieldValues = FieldValues> {
+  control: Control<TFieldValues>;
+  name: string;
+}
+
+export const ContactPersonInputField = <T extends FieldValues = FieldValues>({ control, name }: ContactFieldProps<T>) => (
   <Form.Field
     control={control}
     name={name}
@@ -24,7 +30,7 @@ export const ContactPersonInputField = ({ control, name }: { control: any, name:
   />
 );
 
-export const EmailInputField = ({ control, name }: { control: any, name: string }) => (
+export const EmailInputField = <T extends FieldValues = FieldValues>({ control, name }: ContactFieldProps<T>) => (
   <Form.Field
     control={control}
     name={name}
@@ -46,7 +52,7 @@ export const EmailInputField = ({ control, name }: { control: any, name: string 
   />
 );
 
-export const MobileInputField = ({ control, name }: { control: any, name: string }) => (
+export const MobileInputField = <T extends FieldValues = FieldValues>({ control, name }: ContactFieldProps<T>) => (
   <Form.Field
     control={control}
     name={name}
@@ -55,9 +61,17 @@ export const MobileInputField = ({ control, name }: { control: any, name: string
         <Form.Control>
           <TextInput
             {...field}
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
             label="Mobile Number"
             labelVariant="in-field"
-            placeholder="e.g. +977-9800000000"
+            placeholder="e.g. 9800000000"
+            value={field.value ?? ""}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              field.onChange(val);
+            }}
             leftSlot={<Icon name="Smartphone" size={16} className="text-muted-foreground" />}
           />
         </Form.Control>
@@ -67,7 +81,7 @@ export const MobileInputField = ({ control, name }: { control: any, name: string
   />
 );
 
-export const WhatsappInputField = ({ control, name }: { control: any, name: string }) => (
+export const WhatsappInputField = <T extends FieldValues = FieldValues>({ control, name }: ContactFieldProps<T>) => (
   <Form.Field
     control={control}
     name={name}
@@ -76,9 +90,17 @@ export const WhatsappInputField = ({ control, name }: { control: any, name: stri
         <Form.Control>
           <TextInput
             {...field}
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
             label="WhatsApp Number"
             labelVariant="in-field"
-            placeholder="e.g. +977-9800000000"
+            placeholder="e.g. 9800000000"
+            value={field.value ?? ""}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              field.onChange(val);
+            }}
             leftSlot={<Icon name="MessageCircle" size={16} className="text-muted-foreground" />}
           />
         </Form.Control>
@@ -88,7 +110,7 @@ export const WhatsappInputField = ({ control, name }: { control: any, name: stri
   />
 );
 
-export const TelephoneInputField = ({ control, name }: { control: any, name: string }) => (
+export const TelephoneInputField = <T extends FieldValues = FieldValues>({ control, name }: ContactFieldProps<T>) => (
   <Form.Field
     control={control}
     name={name}
@@ -97,9 +119,17 @@ export const TelephoneInputField = ({ control, name }: { control: any, name: str
         <Form.Control>
           <TextInput
             {...field}
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
             label="Landline No"
             labelVariant="in-field"
-            placeholder="e.g. 01-4444444"
+            placeholder="e.g. 014444444"
+            value={field.value ?? ""}
+            onChange={(e) => {
+              const val = e.target.value.replace(/\D/g, "");
+              field.onChange(val);
+            }}
             leftSlot={<Icon name="Phone" size={16} className="text-muted-foreground" />}
           />
         </Form.Control>

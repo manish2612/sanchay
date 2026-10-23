@@ -23,7 +23,10 @@ export const companyFormSchema = z.object({
   pincode: z.string().optional(),
 }))
 .merge(baseContactSchema.omit({ contactPerson: true }).extend({
-  mobileNumber: z.string().optional(),
+  mobileNumber: z
+    .string()
+    .regex(/^\d*$/, "Mobile number must contain only numbers")
+    .optional(),
 }));
 
 export type CompanyFormValues = z.infer<typeof companyFormSchema>;

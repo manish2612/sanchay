@@ -22,9 +22,18 @@ export const baseMasterSchema = z.object({
 export const baseContactSchema = z.object({
   contactPerson: z.string().min(1, "Contact person is required").optional(),
   email: z.string().email("Invalid email address").or(z.literal("")),
-  mobileNumber: z.string().min(1, "Mobile number is required"),
-  whatsappNumber: z.string().optional(),
-  landlineNo: z.string().optional(),
+  mobileNumber: z
+    .string()
+    .min(1, "Mobile number is required")
+    .regex(/^\d+$/, "Mobile number must contain only numbers"),
+  whatsappNumber: z
+    .string()
+    .regex(/^\d*$/, "WhatsApp number must contain only numbers")
+    .optional(),
+  landlineNo: z
+    .string()
+    .regex(/^\d*$/, "Landline number must contain only numbers")
+    .optional(),
 });
 
 export const taxClassificationSchema = z.object({
