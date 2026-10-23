@@ -3,7 +3,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
 import { FormWizard, Icon, useFormWizardContext } from '@prime/ui';
 
 import { ledgerFormSchema, type LedgerFormValues } from './schema';
@@ -81,6 +80,8 @@ const CreateLedgerPage = () => {
       [LEDGER_FORM_FIELDS.OPENING_BALANCE]: '',
       [LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE]: 'Dr',
       [LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]: false,
+      [LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS]: [],
+      [LEDGER_FORM_FIELDS.TAX_RATES]: [],
       [LEDGER_FORM_FIELDS.COUNTRY]: '',
       [LEDGER_FORM_FIELDS.STATE]: '',
       [LEDGER_FORM_FIELDS.ADDRESS]: '',

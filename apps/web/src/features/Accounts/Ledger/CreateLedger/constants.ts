@@ -16,6 +16,7 @@ export const LEDGER_FORM_FIELDS = {
   OPENING_BALANCE_TYPE: "openingBalanceType",
   IS_COST_CENTER_ENABLED: "isCostCenterEnabled",
   COST_CENTER_ALLOCATIONS: "costCenterAllocations",
+  TAX_RATES: "taxRates",
 
   // Step 3: Address
   COUNTRY: "country",
@@ -58,6 +59,7 @@ export const LEDGER_WIZARD_STEPS = [
       LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE,
       LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED,
       LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS,
+      LEDGER_FORM_FIELDS.TAX_RATES,
     ],
   },
   {
@@ -91,4 +93,10 @@ export const REGISTRATION_TYPES = [
   { label: "PAN", value: "PAN" },
   { label: "VAT", value: "VAT" },
   { label: "GST", value: "GST" },
+];
+
+export const APPLICABILITY_OPTIONS = [
+  { label: "Goods", value: "GOODS" },
+  { label: "Services", value: "SERVICES" },
+  { label: "Both", value: "BOTH" },
 ];

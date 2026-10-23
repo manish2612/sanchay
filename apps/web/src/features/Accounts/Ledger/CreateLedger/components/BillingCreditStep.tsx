@@ -6,6 +6,7 @@ import { UseFormReturn, useWatch } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
 import { LEDGER_FORM_FIELDS } from '../constants';
 import { CostCenterAllocationTable } from '@/features/CostCenter/components/CostCenterAllocationTable';
+import { TaxRatesTable } from './TaxRatesTable';
 import { SwitchCard } from '@/components/TableCells/SwitchCard';
 
 interface BillingCreditStepProps {
@@ -193,6 +194,28 @@ export const BillingCreditStep = ({ form }: BillingCreditStepProps) => {
           )}
         />
       )}
+
+      {/* Tax Rates Table */}
+      <div className="col-span-1 md:col-span-2 mt-4 pt-4 border-t border-border/60">
+        <div className="flex flex-col gap-2 bg-surface/50 overflow-hidden">
+          <div className="flex justify-between items-center mb-1">
+            <div>
+              <Text variant="body" className="font-semibold text-foreground text-sm">
+                Tax Rates
+              </Text>
+              <Text variant="caption" className="text-muted-foreground text-xs">
+                Configure tax groups and applicable rates for this ledger.
+              </Text>
+            </div>
+            <span className="text-xs text-muted-foreground hidden sm:inline">
+              Press Tab or Enter on row to add more
+            </span>
+          </div>
+          <div className="relative min-h-0 flex-1">
+            <TaxRatesTable form={form} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

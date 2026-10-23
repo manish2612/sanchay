@@ -68,6 +68,25 @@ export interface UpdateLedgerRequest {
   body: Partial<CreateLedgerRequest>;
 }
 
+export interface LedgerBankDetail {
+  account_holder_name: string;
+  account_number: string;
+  bank_name: string;
+  beneficiary_code: string;
+  branch_name: string;
+  routing_code: string;
+  swift_code: string;
+}
+
+export interface LedgerTaxRatePayload {
+  applicability: string;
+  effective_from: string;
+  effective_to?: string;
+  excise_tax_group_id: string | null;
+  tax_group_id: string;
+  tax_rate: number;
+}
+
 export interface CreateLedgerRequest {
   account_group_id: string | null;
   address: {
@@ -78,6 +97,7 @@ export interface CreateLedgerRequest {
     state_id: string | null;
   };
   alias: string;
+  bank_detail?: LedgerBankDetail;
   block_sales_on_credit_limit_exceed: boolean;
   code: string;
   contact: {
@@ -104,7 +124,7 @@ export interface CreateLedgerRequest {
     financial_year_id: string;
     ledger_id: string;
   }[];
-  tax_rates: any[];
+  tax_rates: LedgerTaxRatePayload[];
   tax_type_id: string | null;
 }
 
