@@ -7,6 +7,8 @@ import {
 import {
   getVoucherTypesHandler,
   getVoucherTypeByIdHandler,
+  createVoucherTypeHandler,
+  updateVoucherTypeHandler,
   deleteVoucherTypeHandler,
 } from './getVoucherTypes';
 import {
@@ -46,6 +48,8 @@ export const accountingHandlers = [
   deleteLedgerHandler,
   getVoucherTypesHandler,
   getVoucherTypeByIdHandler,
+  createVoucherTypeHandler,
+  updateVoucherTypeHandler,
   deleteVoucherTypeHandler,
   getCostCentersHandler,
   getCostCenterByIdHandler,

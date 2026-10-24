@@ -89,14 +89,24 @@ export const WizardContent = ({ form, error, clearError }: { form: any; error: a
   );
 };
 
-export const FormWizardHeaderWithContext = () => {
+export const FormWizardHeaderWithContext = ({
+  isEditMode,
+  itemName,
+}: {
+  isEditMode?: boolean;
+  itemName?: string;
+} = {}) => {
   const { currentStep, steps } = useFormWizardContext();
   const stepConfig = steps.find((s) => s.id === currentStep);
+
+  const title = isEditMode
+    ? `${stepConfig?.title || 'Edit Voucher Type'}${itemName ? ` — ${itemName}` : ''}`
+    : stepConfig?.title || 'Create Voucher Type';
 
   return (
     <FormWizard.Header
       graphic={<Icon name="FileText" size={48} className="stroke-[1.25] text-primary" />}
-      title={stepConfig?.title || 'Create Voucher Type'}
+      title={title}
       subtitle={stepConfig?.description}
     />
   );

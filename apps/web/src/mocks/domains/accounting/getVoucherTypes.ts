@@ -1747,6 +1747,44 @@ export const getVoucherTypeByIdHandler = http.get(
   }
 );
 
+export const createVoucherTypeHandler = http.post(
+  '*/api/v1/accounting/vouchertypes',
+  async ({ request }) => {
+    if (!isMockEnabled('accounting', 'getVoucherTypes')) return;
+
+    await delay(400);
+    const body = (await request.json()) as any;
+    const newItem: any = {
+      id: `vt-${Date.now()}`,
+      is_active: true,
+      is_predefined: false,
+      ...body,
+    };
+    mockVoucherTypes.push(newItem);
+    return HttpResponse.json(newItem, { status: 201 });
+  }
+);
+
+export const updateVoucherTypeHandler = http.put(
+  '*/api/v1/accounting/vouchertypes/:id',
+  async ({ params, request }) => {
+    if (!isMockEnabled('accounting', 'getVoucherTypes')) return;
+
+    await delay(400);
+    const { id } = params;
+    const body = (await request.json()) as any;
+    const index = mockVoucherTypes.findIndex((vt) => vt.id === id);
+    if (index !== -1) {
+      mockVoucherTypes[index] = {
+        ...mockVoucherTypes[index],
+        ...body,
+      };
+      return HttpResponse.json(mockVoucherTypes[index]);
+    }
+    return new HttpResponse(null, { status: 404 });
+  }
+);
+
 export const deleteVoucherTypeHandler = http.delete(
   '*/api/v1/accounting/vouchertypes/:id',
   async ({ params }) => {

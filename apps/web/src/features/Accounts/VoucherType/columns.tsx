@@ -96,26 +96,47 @@ export const voucherTypeColumns: ColumnDef<VoucherType>[] = [
 
       return (
         <div className="flex items-center justify-end gap-1 w-full pr-1">
-          {/* Edit Action Button (UI present but temporarily disabled) */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="inline-block">
+          {/* Edit Action Button */}
+          {isPredefined ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-block">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-muted-foreground opacity-30 cursor-not-allowed pointer-events-none"
+                    disabled
+                    aria-label="Edit voucher type disabled"
+                  >
+                    <Icon name="Pencil" size={14} />
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                Predefined voucher types cannot be edited
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 text-muted-foreground opacity-30 cursor-not-allowed pointer-events-none"
-                  disabled
-                  aria-label="Edit voucher type disabled"
+                  className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                  aria-label={`Edit ${voucherType.name}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    meta?.onEditClick(voucherType);
+                  }}
                 >
                   <Icon name="Pencil" size={14} />
                 </Button>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              {isPredefined ? 'Predefined voucher types cannot be edited' : 'Edit coming soon'}
-            </TooltipContent>
-          </Tooltip>
+              </TooltipTrigger>
+              <TooltipContent side="left">Edit Voucher Type</TooltipContent>
+            </Tooltip>
+          )}
 
           {/* Delete Action Button */}
           {isPredefined ? (

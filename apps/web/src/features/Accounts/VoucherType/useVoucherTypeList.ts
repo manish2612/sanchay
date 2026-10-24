@@ -57,11 +57,17 @@ export function useVoucherTypeList() {
     navigate({ to: '/accounts/masters/voucher-type/new' });
   }, [navigate]);
 
-  // Edit handler placeholder (disabled in UI for now)
-  const handleEditVoucherType = useCallback((voucherType: VoucherType) => {
-    if (voucherType.is_predefined) return;
-    // In future: navigate or open sheet
-  }, []);
+  // Edit handler - navigates to fullscreen edit FormWizard
+  const handleEditVoucherType = useCallback(
+    (voucherType: VoucherType) => {
+      if (voucherType.is_predefined) return;
+      navigate({
+        to: '/accounts/masters/voucher-type/$id/edit',
+        params: { id: voucherType.id },
+      });
+    },
+    [navigate]
+  );
 
   const handleClearSearch = useCallback(() => {
     setSearchQuery('');

@@ -1,11 +1,22 @@
 import { useState } from 'react';
-import { useCreateVoucherTypeMutation } from '../../api';
+import { useCreateVoucherTypeMutation, useUpdateVoucherTypeMutation } from '../../api';
 import { VOUCHER_TYPE_FIELDS } from '../constants';
 import type { VoucherTypeFormValues } from '../schema';
 
-export const useCreateVoucherSubmit = () => {
-  const [createVoucherType, mutationState] = useCreateVoucherTypeMutation();
+export interface UseCreateVoucherSubmitOptions {
+  id?: string;
+  mode?: 'create' | 'edit';
+}
+
+export const useCreateVoucherSubmit = (options: UseCreateVoucherSubmitOptions = {}) => {
+  const { id, mode } = options;
+  const isEditMode = mode === 'edit' && Boolean(id);
+
+  const [createVoucherType, createMutationState] = useCreateVoucherTypeMutation();
+  const [updateVoucherType, updateMutationState] = useUpdateVoucherTypeMutation();
   const [createdItemName, setCreatedItemName] = useState<string>('');
+
+  const mutationState = isEditMode ? updateMutationState : createMutationState;
 
   const onSubmit = async (data: VoucherTypeFormValues) => {
     try {
@@ -16,7 +27,6 @@ export const useCreateVoucherSubmit = () => {
         is_set_as_default: data[VOUCHER_TYPE_FIELDS.SET_AS_DEFAULT],
         declaration: data[VOUCHER_TYPE_FIELDS.DECLARATION],
         apply_tax: data[VOUCHER_TYPE_FIELDS.APPLY_TAX],
-        // is_excise_appl: data[VOUCHER_TYPE_FIELDS.EXCISE_DUTY_APPLICABLE], // Asked not to pass
         apply_disc_bill: data[VOUCHER_TYPE_FIELDS.DISCOUNT_AT_BILL_LEVEL],
         apply_disc_item: data[VOUCHER_TYPE_FIELDS.DISCOUNT_AT_ITEM_LEVEL],
         allow_zero_value_item: data[VOUCHER_TYPE_FIELDS.ALLOW_ZERO_VALUE_ITEM],
@@ -30,8 +40,14 @@ export const useCreateVoucherSubmit = () => {
         rate_column: data[VOUCHER_TYPE_FIELDS.COL_RATE],
         net_rate_column: data[VOUCHER_TYPE_FIELDS.COL_NET_RATE],
         gross_column: data[VOUCHER_TYPE_FIELDS.COL_GROSS_AMOUNT],
-        voucher_type_numbering_info: data[VOUCHER_TYPE_FIELDS.VOUCHER_NUMBERING],
-        
+        voucher_type_numbering_info: (data[VOUCHER_TYPE_FIELDS.VOUCHER_NUMBERING] || []).map((row: any) => ({
+          ...row,
+          effective_from:
+            row.effective_from instanceof Date
+              ? row.effective_from.toISOString()
+              : row.effective_from,
+        })),
+
         default_cash_ledger_id: data[VOUCHER_TYPE_FIELDS.CASH_LEDGER] || null,
         default_bank_ledger_id: data[VOUCHER_TYPE_FIELDS.BANK_LEDGER] || null,
         default_local_trade_ledger_id: data[VOUCHER_TYPE_FIELDS.SALES_PURCHASE_LEDGER] || null,
@@ -39,11 +55,7 @@ export const useCreateVoucherSubmit = () => {
         default_discount_ledger_id: data[VOUCHER_TYPE_FIELDS.DISCOUNT_LEDGER] || null,
         default_roundoff_ledger_id: data[VOUCHER_TYPE_FIELDS.ROUNDING_OFF_LEDGER] || null,
 
-        code: "",
-
-        // category: "", // Removed from backend
-        // is_tax_applicable: true, // Asked not to pass
-        // is_predefined: true, // Asked not to pass
+        code: '',
         use_for_hsg_society: true,
         bottom_margin: 100,
         top_margin: 100,
@@ -52,23 +64,28 @@ export const useCreateVoucherSubmit = () => {
         page_height: 100,
         page_width: 100,
         no_of_copies: 100,
-        page_orientation: "",
-        page_size: "",
-        print_format: ""
+        page_orientation: '',
+        page_size: '',
+        print_format: '',
       };
 
       const submittedName = data[VOUCHER_TYPE_FIELDS.NAME] || '';
-      await (createVoucherType(payload as any) as any).unwrap();
+      if (isEditMode && id) {
+        await (updateVoucherType({ id, body: payload as any }) as any).unwrap();
+      } else {
+        await (createVoucherType(payload as any) as any).unwrap();
+      }
       setCreatedItemName(submittedName);
     } catch (err) {
-      console.error('Failed to create voucher type', err);
+      console.error('Failed to submit voucher type', err);
     }
   };
 
   const reset = () => {
     setCreatedItemName('');
-    mutationState.reset();
+    createMutationState.reset();
+    updateMutationState.reset();
   };
 
-  return { onSubmit, createdItemName, ...mutationState, reset };
+  return { onSubmit, createdItemName, ...mutationState, reset, isEditMode };
 };

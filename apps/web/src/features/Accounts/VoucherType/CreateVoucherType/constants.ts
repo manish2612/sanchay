@@ -110,7 +110,6 @@ export const DEFAULT_VIEWING_MODE_OPTIONS = [
   { label: 'Accounts Mode', value: 'AM' },
 ];
 
-
 export const APPLY_TAX_OPTIONS = [
   { label: 'Bill Level', value: 'B' },
   { label: 'Item Level', value: 'I' },

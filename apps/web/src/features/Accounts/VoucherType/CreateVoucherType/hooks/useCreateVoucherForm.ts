@@ -3,12 +3,27 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from '@tanstack/react-router';
 import { useLeavePrompt } from '@/hooks/useLeavePrompt';
-import { useCreateVoucherSubmit } from './useCreateVoucherSubmit';
+import { useCreateVoucherSubmit, UseCreateVoucherSubmitOptions } from './useCreateVoucherSubmit';
 import { voucherTypeSchema, type VoucherTypeFormValues } from '../schema';
 import { VOUCHER_TYPE_FIELDS } from '../constants';
+import { useGetVoucherTypeByIdQuery, useGetVoucherTypesQuery } from '../../api';
+import { transformVoucherTypeResponseToForm } from '../transformers';
 
-export const useCreateVoucherForm = () => {
+export interface UseCreateVoucherFormOptions extends UseCreateVoucherSubmitOptions {}
+
+export const useCreateVoucherForm = (options: UseCreateVoucherFormOptions = {}) => {
+  const { id, mode } = options;
+  const isEditMode = mode === 'edit' && Boolean(id);
   const navigate = useNavigate();
+
+  // Queries for edit mode hydration
+  const {
+    data: voucherTypeData,
+    isLoading: isLoadingVoucherType,
+    isError: isVoucherTypeError,
+  } = useGetVoucherTypeByIdQuery(id!, { skip: !id || !isEditMode });
+
+  const { data: voucherTypes = [] } = useGetVoucherTypesQuery();
 
   const form = useForm<VoucherTypeFormValues>({
     mode: 'onChange',
@@ -44,12 +59,23 @@ export const useCreateVoucherForm = () => {
     },
   });
 
+  // Hydrate form in edit mode when voucher type data arrives
+  useEffect(() => {
+    if (voucherTypeData && isEditMode) {
+      const formValues = transformVoucherTypeResponseToForm(voucherTypeData, voucherTypes);
+      form.reset(formValues);
+    }
+  }, [voucherTypeData, isEditMode, form, voucherTypes]);
+
   const { LeavePromptDialog } = useLeavePrompt({
     form,
     disabled: form.formState.isSubmitSuccessful,
   });
 
-  const { onSubmit, isSuccess, error, reset, createdItemName } = useCreateVoucherSubmit();
+  const { onSubmit, isSuccess, error, reset, createdItemName } = useCreateVoucherSubmit({
+    id,
+    mode,
+  });
 
   const handleCreateAnother = () => {
     form.reset();
@@ -75,5 +101,9 @@ export const useCreateVoucherForm = () => {
     createdItemName,
     error,
     reset: handleCreateAnother,
+    isEditMode,
+    isLoadingVoucherType,
+    isVoucherTypeError,
+    voucherTypeData,
   };
 };
