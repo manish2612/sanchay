@@ -3,14 +3,17 @@ import { useSelector } from 'react-redux';
 import { UseFormReturn } from 'react-hook-form';
 import { selectActiveFinancialYearId } from '@/store/authSlice';
 import { useCreateLedgerMutation } from '../../api';
+import { useGetCostCentersQuery } from '@/features/Masters/api/costCentersApi';
 import { LedgerFormValues } from '../schema';
 import { CreateLedgerRequest } from '../../types';
 import { LEDGER_FORM_FIELDS } from '../constants';
+import { isCostCenterRowEmpty } from '@/features/CostCenter/components/CostCenterAllocationTable';
 import { useNavigate } from '@tanstack/react-router';
 import { getErrorMessage } from '@/utils/errorUtils';
 
 export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
   const [createLedger, { isLoading }] = useCreateLedgerMutation();
+  const { data: costCenters = [] } = useGetCostCentersQuery();
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdItemName, setCreatedItemName] = useState<string>('');
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -60,6 +63,45 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
     });
 
     // Transform flat RHF data to nested API Payload
+    const rawAllocations = data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || [];
+    const mappedAllocations = data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]
+      ? rawAllocations
+          .filter((alloc) => !isCostCenterRowEmpty(alloc))
+          .map((alloc) => {
+            const matchedCenter = costCenters.find(
+              (c) =>
+                c.id === alloc.costCenterId ||
+                (alloc.costCenter &&
+                  c.name?.toLowerCase() === alloc.costCenter.trim().toLowerCase()),
+            );
+            const costCentreId = alloc.costCenterId || matchedCenter?.id || '';
+            const rawAmt =
+              typeof alloc.amount === 'number'
+                ? alloc.amount
+                : parseFloat(String(alloc.amount || '0').replace(/[^0-9.-]+/g, '')) || 0;
+
+            return {
+              amount: rawAmt,
+              cost_centre_id: costCentreId,
+              financial_year_id: financialYearId || '',
+              ledger_id: '',
+            };
+          })
+          .filter((item) => item.cost_centre_id || item.amount > 0)
+      : [];
+
+    const opening_balances =
+      mappedAllocations.length > 0
+        ? mappedAllocations
+        : [
+            {
+              amount: 0,
+              cost_centre_id: '',
+              financial_year_id: '',
+              ledger_id: '',
+            },
+          ];
+
     const payload: CreateLedgerRequest = {
       account_group_id: data[LEDGER_FORM_FIELDS.PARENT] || null,
       address: {
@@ -100,16 +142,7 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
       name: data[LEDGER_FORM_FIELDS.NAME],
       opening_balance: parseFloat(data[LEDGER_FORM_FIELDS.OPENING_BALANCE] || '0'),
       opening_balance_type: data[LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE] || 'Dr',
-      opening_balances: data[LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]
-        ? (data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || [])
-            .filter((alloc) => !alloc.isPhantom)
-            .map((alloc) => ({
-              amount: parseFloat(String(alloc.amount) || '0'),
-              cost_centre_id: alloc.costCenterId || '',
-              financial_year_id: financialYearId || '',
-              ledger_id: '',
-            }))
-        : [],
+      opening_balances,
       tax_rates,
       tax_type_id: null,
     };

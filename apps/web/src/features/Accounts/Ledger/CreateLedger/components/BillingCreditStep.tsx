@@ -5,7 +5,7 @@ import { Form, TextInput, SegmentedControl, Icon, Text, AnimatedNumber } from '@
 import { UseFormReturn, useWatch } from 'react-hook-form';
 import { LedgerFormValues } from '../schema';
 import { LEDGER_FORM_FIELDS } from '../constants';
-import { CostCenterAllocationTable } from '@/features/CostCenter/components/CostCenterAllocationTable';
+import { CostCenterAllocationTable, isCostCenterRowEmpty } from '@/features/CostCenter/components/CostCenterAllocationTable';
 import { TaxRatesTable } from '@/components/TaxRatesTable';
 import { SwitchCard } from '@/components/TableCells/SwitchCard';
 
@@ -35,7 +35,7 @@ export const BillingCreditStep = ({ form }: BillingCreditStepProps) => {
   const targetAmount = parseFloat(openingBalance.replace(/[^0-9.-]+/g, '')) || 0;
 
   const allocatedAmount = costCenterAllocations.reduce((sum, row: any) => {
-    if (row.isPhantom) return sum;
+    if (isCostCenterRowEmpty(row)) return sum;
     const amtString = typeof row.amount === 'string' ? row.amount : String(row.amount || '');
     const amt = parseFloat(amtString.replace(/[^0-9.-]+/g, '')) || 0;
     return sum + amt;
@@ -157,42 +157,35 @@ export const BillingCreditStep = ({ form }: BillingCreditStepProps) => {
       </div>
 
       {/* Cost Center Allocations */}
-      {isCostCenterEnabled && targetAmount > 0 && (
-        <Form.Field
-          control={form.control}
-          name={LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS}
-          render={({ field }) => (
-            <Form.Item className="col-span-1 md:col-span-2 mt-4">
-              <Form.Control>
-                <div className="flex flex-col gap-2 bg-surface/50 overflow-hidden">
-                  <div className="flex justify-between items-center mb-2">
-                    <Text variant="body" className="font-medium text-foreground">
-                      Cost Centre Allocations
-                    </Text>
-                    {isBalanced ? (
-                      <span className="text-xs font-medium text-success flex items-center gap-1">
-                        <Icon name="Check" size={14} /> Balanced
-                      </span>
-                    ) : (
-                      <span className="text-xs font-medium text-destructive flex items-center gap-1">
-                        Remaining:
-                        <AnimatedNumber value={remainingAmount} formatOptions={{ style: 'currency', currency: 'INR' }} />
-                      </span>
-                    )}
-                  </div>
-                  <div className="relative min-h-0 flex-1">
-                    <CostCenterAllocationTable
-                      initialAllocations={field.value || []}
-                      targetAmount={targetAmount}
-                      onChange={field.onChange}
-                    />
-                  </div>
-                </div>
-              </Form.Control>
-              <Form.Message />
-            </Form.Item>
-          )}
-        />
+      {isCostCenterEnabled && (
+        <div className="col-span-1 md:col-span-2 mt-4">
+          <div className="flex flex-col gap-2 bg-surface/50 overflow-hidden">
+            <div className="flex justify-between items-center mb-2">
+              <Text variant="body" className="font-medium text-foreground">
+                Cost Centre Allocations
+              </Text>
+              {targetAmount > 0 && (
+                isBalanced ? (
+                  <span className="text-xs font-medium text-success flex items-center gap-1">
+                    <Icon name="Check" size={14} /> Balanced
+                  </span>
+                ) : (
+                  <span className="text-xs font-medium text-destructive flex items-center gap-1">
+                    Remaining:
+                    <AnimatedNumber value={remainingAmount} formatOptions={{ style: 'currency', currency: 'INR' }} />
+                  </span>
+                )
+              )}
+            </div>
+            <div className="relative min-h-0 flex-1">
+              <CostCenterAllocationTable
+                form={form}
+                name={LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS}
+                targetAmount={targetAmount}
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Tax Rates Table */}

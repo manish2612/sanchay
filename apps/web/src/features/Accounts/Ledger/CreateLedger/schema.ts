@@ -2,18 +2,12 @@ import { z } from "zod";
 import { LEDGER_FORM_FIELDS } from "./constants";
 import { baseAddressSchema, baseContactSchema } from '@/utils/shared-schemas';
 import { taxRateRowSchema, isTaxRateRowEmpty } from '@/components/TaxRatesTable';
+import {
+  isCostCenterRowEmpty,
+  costCenterAllocationRowSchema,
+} from '@/features/CostCenter/components/CostCenterAllocationTable';
 
-export { isTaxRateRowEmpty };
-
-const costCenterAllocationSchema = z.object({
-  id: z.string(),
-  costCategoryId: z.string().optional(),
-  costCategory: z.string(),
-  costCenterId: z.string().optional(),
-  costCenter: z.string(),
-  amount: z.string(),
-  isPhantom: z.boolean().optional(),
-});
+export { isTaxRateRowEmpty, isCostCenterRowEmpty };
 
 export const ledgerFormSchema = z.object({
   // Step 1
@@ -32,7 +26,7 @@ export const ledgerFormSchema = z.object({
   [LEDGER_FORM_FIELDS.OPENING_BALANCE]: z.string().optional(),
   [LEDGER_FORM_FIELDS.OPENING_BALANCE_TYPE]: z.enum(["Dr", "Cr"]),
   [LEDGER_FORM_FIELDS.IS_COST_CENTER_ENABLED]: z.boolean(),
-  [LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS]: z.array(costCenterAllocationSchema).optional(),
+  [LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS]: z.array(costCenterAllocationRowSchema).optional(),
   [LEDGER_FORM_FIELDS.TAX_RATES]: z.array(taxRateRowSchema).optional(),
 })
 .merge(
@@ -60,7 +54,7 @@ export const ledgerFormSchema = z.object({
   if (isCostCenterEnabled && targetAmount > 0) {
     const allocations = data[LEDGER_FORM_FIELDS.COST_CENTER_ALLOCATIONS] || [];
     const allocatedAmount = allocations.reduce((sum, row) => {
-      if (row.isPhantom) return sum;
+      if (isCostCenterRowEmpty(row)) return sum;
       const amtString = typeof row.amount === 'string' ? row.amount : String(row.amount || "");
       const amt = parseFloat(amtString.replace(/[^0-9.-]+/g, "")) || 0;
       return sum + amt;
