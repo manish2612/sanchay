@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { UseFormReturn } from 'react-hook-form';
 import { selectActiveFinancialYearId } from '@/store/authSlice';
-import { useCreateLedgerMutation } from '../../api';
+import { useCreateLedgerMutation, useUpdateLedgerMutation } from '../../api';
 import { useGetCostCentersQuery } from '@/features/Masters/api/costCentersApi';
 import { LedgerFormValues } from '../schema';
 import { CreateLedgerRequest } from '../../types';
@@ -11,8 +11,18 @@ import { isCostCenterRowEmpty } from '@/features/CostCenter/components/CostCente
 import { useNavigate } from '@tanstack/react-router';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
-  const [createLedger, { isLoading }] = useCreateLedgerMutation();
+export interface UseCreateLedgerOptions {
+  id?: string;
+  mode?: 'create' | 'edit';
+}
+
+export const useCreateLedger = (
+  form?: UseFormReturn<LedgerFormValues>,
+  options?: UseCreateLedgerOptions
+) => {
+  const isEditMode = options?.mode === 'edit' || Boolean(options?.id);
+  const [createLedger, { isLoading: isCreating }] = useCreateLedgerMutation();
+  const [updateLedger, { isLoading: isUpdating }] = useUpdateLedgerMutation();
   const { data: costCenters = [] } = useGetCostCentersQuery();
   const [isSuccess, setIsSuccess] = useState(false);
   const [createdItemName, setCreatedItemName] = useState<string>('');
@@ -147,15 +157,23 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
       tax_type_id: null,
     };
 
-    console.log('>>>> create Ledger ', payload);
     try {
       setSubmitError(null);
-      const res = await createLedger(payload).unwrap();
-      setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
-      setIsSuccess(true);
+      if (isEditMode && options?.id) {
+        const res = await updateLedger({ id: options.id, body: payload }).unwrap();
+        setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
+        setIsSuccess(true);
+      } else {
+        const res = await createLedger(payload).unwrap();
+        setCreatedItemName(res?.name || data[LEDGER_FORM_FIELDS.NAME] || '');
+        setIsSuccess(true);
+      }
     } catch (error) {
-      console.error('Failed to create ledger', error);
-      const errMsg = getErrorMessage(error, 'Failed to create ledger. Please try again.');
+      console.error(isEditMode ? 'Failed to update ledger' : 'Failed to create ledger', error);
+      const defaultMsg = isEditMode
+        ? 'Failed to update ledger. Please try again.'
+        : 'Failed to create ledger. Please try again.';
+      const errMsg = getErrorMessage(error, defaultMsg);
       setSubmitError(errMsg);
     }
   };
@@ -169,7 +187,7 @@ export const useCreateLedger = (form?: UseFormReturn<LedgerFormValues>) => {
 
   return {
     onSubmit,
-    isSubmitting: isLoading,
+    isSubmitting: isCreating || isUpdating,
     isSuccess,
     createdItemName,
     resetSuccess,

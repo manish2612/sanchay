@@ -1,12 +1,16 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormWizard, Icon, useFormWizardContext } from '@prime/ui';
+import { Button, FormWizard, Icon, useFormWizardContext } from '@prime/ui';
 
 import { ledgerFormSchema, type LedgerFormValues } from './schema';
 import { LEDGER_FORM_FIELDS, LEDGER_WIZARD_STEPS } from './constants';
+import { transformLedgerResponseToForm } from './transformers';
+import { useGetLedgerByIdQuery } from '../api';
+import { useGetCostCentersQuery } from '@/features/Masters/api/costCentersApi';
+import { useGetTaxGroupsQuery } from '@/features/Masters/api/taxGroupsApi';
 
 import { GeneralInfoStep } from './components/GeneralInfoStep';
 import { BillingCreditStep } from './components/BillingCreditStep';
@@ -20,6 +24,11 @@ import { ContactLocationGraphic } from '@/features/Company/CreateCompany/compone
 import { useCreateLedger } from './hooks/useCreateLedger';
 import { CreateLedgerSuccess } from './components/CreateLedgerSuccess';
 import { FormSubmissionError } from '@/components/FormSubmissionError';
+
+export interface CreateLedgerPageProps {
+  id?: string;
+  mode?: 'create' | 'edit';
+}
 
 const WizardContent = ({
   form,
@@ -47,22 +56,42 @@ const WizardContent = ({
 
 const FormWizardHeaderWithContext = ({
   getHeaderIcon,
+  isEditMode,
+  itemName,
 }: {
   getHeaderIcon: (step: number) => React.ReactNode;
+  isEditMode?: boolean;
+  itemName?: string;
 }) => {
   const { currentStep } = useFormWizardContext();
   const stepConfig = LEDGER_WIZARD_STEPS.find((s) => s.id === currentStep);
 
+  const title = isEditMode
+    ? `${stepConfig?.title || 'Edit Ledger'}${itemName ? ` — ${itemName}` : ''}`
+    : stepConfig?.title || 'Create Ledger';
+
   return (
     <FormWizard.Header
       graphic={getHeaderIcon(currentStep)}
-      title={stepConfig?.title || 'Create Ledger'}
+      title={title}
       subtitle={stepConfig?.description}
     />
   );
 };
 
-const CreateLedgerPage = () => {
+const CreateLedgerPage = ({ id, mode }: CreateLedgerPageProps = {}) => {
+  const isEditMode = mode === 'edit' || Boolean(id);
+
+  // Queries for edit hydration
+  const {
+    data: ledgerData,
+    isLoading: isLoadingLedger,
+    isError: isLedgerError,
+  } = useGetLedgerByIdQuery(id!, { skip: !id || !isEditMode });
+
+  const { data: costCenters = [] } = useGetCostCentersQuery();
+  const { data: taxGroups = [] } = useGetTaxGroupsQuery();
+
   const form = useForm<LedgerFormValues>({
     mode: 'onChange',
     resolver: zodResolver(ledgerFormSchema),
@@ -94,6 +123,17 @@ const CreateLedgerPage = () => {
     },
   });
 
+  // Hydrate form in edit mode when ledger data arrives
+  useEffect(() => {
+    if (ledgerData && isEditMode) {
+      const formValues = transformLedgerResponseToForm(ledgerData, {
+        costCenters,
+        taxGroups,
+      });
+      form.reset(formValues);
+    }
+  }, [ledgerData, isEditMode, form, costCenters, taxGroups]);
+
   const {
     onSubmit,
     isSubmitting,
@@ -103,7 +143,7 @@ const CreateLedgerPage = () => {
     navigate,
     submitError,
     clearSubmitError,
-  } = useCreateLedger(form);
+  } = useCreateLedger(form, { id, mode });
 
   const getHeaderIcon = (step: number) => {
     switch (step) {
@@ -120,10 +160,43 @@ const CreateLedgerPage = () => {
     }
   };
 
+  if (isEditMode && isLoadingLedger) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full bg-background gap-3">
+        <Icon name="Loader2" size={32} className="animate-spin text-primary" />
+        <p className="text-sm text-muted-foreground">Loading ledger details...</p>
+      </div>
+    );
+  }
+
+  if (isEditMode && isLedgerError) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full bg-background gap-4 p-6">
+        <div className="w-12 h-12 bg-danger/10 text-danger rounded-full flex items-center justify-center">
+          <Icon name="CircleAlert" size={24} />
+        </div>
+        <div className="text-center">
+          <h2 className="text-lg font-semibold text-foreground">Ledger Not Found</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Unable to load the requested ledger details. It may have been removed.
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => navigate({ to: '/accounts/masters/ledger' as any })}
+        >
+          Back to Ledger List
+        </Button>
+      </div>
+    );
+  }
+
   if (isSuccess) {
     return (
       <CreateLedgerSuccess
-        itemName={createdItemName}
+        itemName={createdItemName || ledgerData?.name}
+        isEditMode={isEditMode}
         onCreateAnother={resetSuccess}
       />
     );
@@ -132,10 +205,14 @@ const CreateLedgerPage = () => {
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden relative">
       <FormWizard form={form} initialStep={1} steps={LEDGER_WIZARD_STEPS} onSubmit={onSubmit}>
-        <FormWizard.StepNav title="Create New Ledger" />
+        <FormWizard.StepNav title={isEditMode ? 'Edit Ledger' : 'Create New Ledger'} />
 
         <FormWizard.Container>
-          <FormWizardHeaderWithContext getHeaderIcon={getHeaderIcon} />
+          <FormWizardHeaderWithContext
+            getHeaderIcon={getHeaderIcon}
+            isEditMode={isEditMode}
+            itemName={ledgerData?.name}
+          />
 
           <WizardContent
             form={form}

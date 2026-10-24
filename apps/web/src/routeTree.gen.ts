@@ -35,6 +35,7 @@ import { Route as InventoryMastersStockGroupIndexRouteImport } from './routes/in
 import { Route as InventoryMastersStockItemIndexRouteImport } from './routes/inventory/masters/stock-item/index'
 import { Route as InventoryMastersUnitOfMeasureIndexRouteImport } from './routes/inventory/masters/unit-of-measure/index'
 import { Route as InventoryMastersStockItemNewIndexRouteImport } from './routes/inventory/masters/stock-item/new/index'
+import { Route as AccountsMastersLedgerIdEditIndexRouteImport } from './routes/accounts/masters/ledger/$id/edit/index'
 import { Route as InventoryMastersStockItemIdEditIndexRouteImport } from './routes/inventory/masters/stock-item/$id/edit/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -182,6 +183,12 @@ const InventoryMastersStockItemNewIndexRoute =
     path: '/inventory/masters/stock-item/new/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AccountsMastersLedgerIdEditIndexRoute =
+  AccountsMastersLedgerIdEditIndexRouteImport.update({
+    id: '/accounts/masters/ledger/$id/edit/',
+    path: '/accounts/masters/ledger/$id/edit/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const InventoryMastersStockItemIdEditIndexRoute =
   InventoryMastersStockItemIdEditIndexRouteImport.update({
     id: '/inventory/masters/stock-item/$id/edit/',
@@ -216,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure/': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
+  '/accounts/masters/ledger/$id/edit/': typeof AccountsMastersLedgerIdEditIndexRoute
   '/inventory/masters/stock-item/$id/edit/': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRoutesByTo {
@@ -245,6 +253,7 @@ export interface FileRoutesByTo {
   '/inventory/masters/stock-item': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new': typeof InventoryMastersStockItemNewIndexRoute
+  '/accounts/masters/ledger/$id/edit': typeof AccountsMastersLedgerIdEditIndexRoute
   '/inventory/masters/stock-item/$id/edit': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRoutesById {
@@ -275,6 +284,7 @@ export interface FileRoutesById {
   '/inventory/masters/stock-item/': typeof InventoryMastersStockItemIndexRoute
   '/inventory/masters/unit-of-measure/': typeof InventoryMastersUnitOfMeasureIndexRoute
   '/inventory/masters/stock-item/new/': typeof InventoryMastersStockItemNewIndexRoute
+  '/accounts/masters/ledger/$id/edit/': typeof AccountsMastersLedgerIdEditIndexRoute
   '/inventory/masters/stock-item/$id/edit/': typeof InventoryMastersStockItemIdEditIndexRoute
 }
 export interface FileRouteTypes {
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item/'
     | '/inventory/masters/unit-of-measure/'
     | '/inventory/masters/stock-item/new/'
+    | '/accounts/masters/ledger/$id/edit/'
     | '/inventory/masters/stock-item/$id/edit/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item'
     | '/inventory/masters/unit-of-measure'
     | '/inventory/masters/stock-item/new'
+    | '/accounts/masters/ledger/$id/edit'
     | '/inventory/masters/stock-item/$id/edit'
   id:
     | '__root__'
@@ -364,6 +376,7 @@ export interface FileRouteTypes {
     | '/inventory/masters/stock-item/'
     | '/inventory/masters/unit-of-measure/'
     | '/inventory/masters/stock-item/new/'
+    | '/accounts/masters/ledger/$id/edit/'
     | '/inventory/masters/stock-item/$id/edit/'
   fileRoutesById: FileRoutesById
 }
@@ -394,6 +407,7 @@ export interface RootRouteChildren {
   InventoryMastersStockItemIndexRoute: typeof InventoryMastersStockItemIndexRoute
   InventoryMastersUnitOfMeasureIndexRoute: typeof InventoryMastersUnitOfMeasureIndexRoute
   InventoryMastersStockItemNewIndexRoute: typeof InventoryMastersStockItemNewIndexRoute
+  AccountsMastersLedgerIdEditIndexRoute: typeof AccountsMastersLedgerIdEditIndexRoute
   InventoryMastersStockItemIdEditIndexRoute: typeof InventoryMastersStockItemIdEditIndexRoute
 }
 
@@ -581,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InventoryMastersStockItemNewIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/accounts/masters/ledger/$id/edit/': {
+      id: '/accounts/masters/ledger/$id/edit/'
+      path: '/accounts/masters/ledger/$id/edit'
+      fullPath: '/accounts/masters/ledger/$id/edit/'
+      preLoaderRoute: typeof AccountsMastersLedgerIdEditIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/inventory/masters/stock-item/$id/edit/': {
       id: '/inventory/masters/stock-item/$id/edit/'
       path: '/inventory/masters/stock-item/$id/edit'
@@ -622,6 +643,7 @@ const rootRouteChildren: RootRouteChildren = {
     InventoryMastersUnitOfMeasureIndexRoute,
   InventoryMastersStockItemNewIndexRoute:
     InventoryMastersStockItemNewIndexRoute,
+  AccountsMastersLedgerIdEditIndexRoute: AccountsMastersLedgerIdEditIndexRoute,
   InventoryMastersStockItemIdEditIndexRoute:
     InventoryMastersStockItemIdEditIndexRoute,
 }

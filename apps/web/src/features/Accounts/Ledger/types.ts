@@ -35,6 +35,7 @@ export interface Ledger {
   id: string;
   name: string;
   code?: string;
+  alias?: string;
   category?: string;
   sub_category?: string;
   parent_id?: string | null;
@@ -46,10 +47,31 @@ export interface Ledger {
   credit_period_days?: number;
   credit_limit_amount?: string | number;
   opening_balance?: string | number;
+  opening_balance_type?: string;
   is_predefined?: boolean;
   tax_rates?: TaxRate[];
   tax_type?: string;
+  tax_type_id?: string | null;
   opening_balances?: LedgerOpeningBalance[];
+  address?: {
+    address?: string | null;
+    city?: string | null;
+    country_id?: string | null;
+    postal_code?: string | null;
+    state_id?: string | null;
+  };
+  contact?: {
+    cin_number?: string | null;
+    contact_person?: string | null;
+    description?: string | null;
+    email?: string | null;
+    mobile_number?: string | null;
+    registration_type?: string | null;
+    tax_identifier?: string | null;
+    telephone_number?: string | null;
+    whatsapp_number?: string | null;
+  };
+  bank_detail?: LedgerBankDetail;
 }
 
 export interface LedgerDecoratedItem extends Ledger {
