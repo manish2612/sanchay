@@ -25,6 +25,17 @@ export let mockStockItems: StockItemListItem[] = [
     opening_quantity: '100',
     opening_rate: '250',
     opening_value: '25000',
+    tax_rates: [
+      {
+        id: 'tax-rate-1',
+        effective_from: '2026-04-01T00:00:00Z',
+        effective_to: null,
+        tax_group_id: '01918a20-8000-7b3f-b12a-456789abcdef',
+        excise_tax_group_id: '',
+        applicability: 'both',
+        tax_rate: 0.18,
+      },
+    ],
   },
   {
     id: '01a150ca-09b2-7141-8297-76de4af6bb47',
@@ -94,6 +105,7 @@ export const createStockItemHandler = http.post<never, CreateStockItemPayload, S
       opening_quantity: body.opening_quantity ?? '0',
       opening_rate: body.opening_rate ?? '0',
       opening_value: body.opening_value ?? '0',
+      tax_rates: body.tax_rates || [],
       is_active: true,
     };
 
@@ -129,6 +141,7 @@ export const updateStockItemHandler = http.put(
         local_sales_ledger_id: body.local_sales_ledger_id,
         global_purchase_ledger_id: body.global_purchase_ledger_id,
         global_sales_ledger_id: body.global_sales_ledger_id,
+        tax_rates: body.tax_rates !== undefined ? body.tax_rates : mockStockItems[index].tax_rates,
       };
       return HttpResponse.json(mockStockItems[index]);
     }
