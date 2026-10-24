@@ -68,7 +68,11 @@ export function useCostCategoryList() {
         const nameMatch = c.name.toLowerCase().includes(query);
         const aliasMatch = c.alias ? c.alias.toLowerCase().includes(query) : false;
         const codeMatch = c.code ? c.code.toLowerCase().includes(query) : false;
-        return nameMatch || aliasMatch || codeMatch;
+        const isPredefined = Boolean(c.is_predefined);
+        const statusMatch = isPredefined
+          ? 'default'.includes(query) || 'predefined'.includes(query)
+          : 'custom'.includes(query);
+        return nameMatch || aliasMatch || codeMatch || statusMatch;
       });
     }
 
@@ -118,7 +122,7 @@ export function useCostCategoryList() {
 
   const handleConfirmDelete = useCallback(async () => {
     const categoryToDelete = deleteDialogState.category;
-    if (!categoryToDelete) return;
+    if (!categoryToDelete || categoryToDelete.is_predefined) return;
 
     try {
       await deleteCostCategory(categoryToDelete.id).unwrap();

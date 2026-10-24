@@ -3,10 +3,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Icon, Button, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 import type { CostCategory } from '@/features/Masters/api/costCategoriesApi';
 import {
-  badgeYesClasses,
-  badgeNoClasses,
-  activeDotClasses,
-  inactiveDotClasses,
+  predefinedBadgeClasses,
+  customBadgeClasses,
 } from '@/features/Masters/components/common';
 
 export interface CostCategoryTableMeta {
@@ -44,46 +42,21 @@ export const costCategoryColumns: ColumnDef<CostCategory>[] = [
       );
     },
   },
-  // {
-  //   accessorKey: 'allocate_revenue',
-  //   header: 'Allocate Revenue',
-  //   size: 150,
-  //   cell: ({ getValue }) => {
-  //     const isRevenue = Boolean(getValue<boolean | undefined>());
-  //     return (
-  //       <span className={isRevenue ? badgeYesClasses : badgeNoClasses}>
-  //         {isRevenue ? 'Yes' : 'No'}
-  //       </span>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: 'allocate_non_revenue',
-  //   header: 'Allocate Non-Revenue',
-  //   size: 170,
-  //   cell: ({ getValue }) => {
-  //     const isNonRevenue = Boolean(getValue<boolean | undefined>());
-  //     return (
-  //       <span className={isNonRevenue ? badgeYesClasses : badgeNoClasses}>
-  //         {isNonRevenue ? 'Yes' : 'No'}
-  //       </span>
-  //     );
-  //   },
-  // },
   {
-    accessorKey: 'is_active',
+    accessorKey: 'is_predefined',
     header: 'Status',
-    size: 90,
+    size: 100,
     cell: ({ getValue }) => {
-      const isActive = getValue<boolean>() !== false;
-      return (
-        <div className="flex items-center text-xs font-medium">
-          <span className={isActive ? activeDotClasses : inactiveDotClasses} />
-          <span className={isActive ? 'text-foreground' : 'text-muted-foreground'}>
-            {isActive ? 'Active' : 'Inactive'}
+      const isPredefined = Boolean(getValue<boolean | null | undefined>());
+      if (isPredefined) {
+        return (
+          <span className={predefinedBadgeClasses}>
+            <Icon name="Lock" size={11} className="text-muted-foreground" />
+            Default
           </span>
-        </div>
-      );
+        );
+      }
+      return <span className={customBadgeClasses}>Custom</span>;
     },
   },
   {

@@ -17,7 +17,7 @@ export interface CostCategory {
   is_active: boolean;
   allocate_revenue: boolean;
   allocate_non_revenue: boolean;
-  is_predefined?: boolean;
+  is_predefined?: boolean | null;
 }
 
 export interface UpdateCostCategoryRequest {
