@@ -7,7 +7,7 @@ import {
 import { useGlobalMasterSheet } from '@/features/Masters/components/MasterFormSheet/MasterFormSheetContext';
 import { getErrorMessage } from '@/utils/errorUtils';
 
-export type CostCentreFilterType = 'all' | 'active' | 'inactive';
+export type CostCentreFilterType = 'all' | 'predefined' | 'custom';
 
 export function useCostCentreList() {
   const { data: costCentres = [], isLoading, isError, refetch } = useGetCostCentersQuery();
@@ -35,21 +35,21 @@ export function useCostCentreList() {
 
   // Compute counts
   const counts = useMemo(() => {
-    let active = 0;
-    let inactive = 0;
+    let predefined = 0;
+    let custom = 0;
 
     for (const c of costCentres) {
-      if (c.is_active !== false) {
-        active++;
+      if (c.is_predefined) {
+        predefined++;
       } else {
-        inactive++;
+        custom++;
       }
     }
 
     return {
       total: costCentres.length,
-      active,
-      inactive,
+      predefined,
+      custom,
     };
   }, [costCentres]);
 
@@ -57,11 +57,11 @@ export function useCostCentreList() {
   const filteredCostCentres = useMemo(() => {
     let list = [...costCentres];
 
-    // Filter by status tab
-    if (activeFilter === 'active') {
-      list = list.filter((c) => c.is_active !== false);
-    } else if (activeFilter === 'inactive') {
-      list = list.filter((c) => c.is_active === false);
+    // Filter by type tab
+    if (activeFilter === 'predefined') {
+      list = list.filter((c) => Boolean(c.is_predefined));
+    } else if (activeFilter === 'custom') {
+      list = list.filter((c) => !c.is_predefined);
     }
 
     // Filter by search query

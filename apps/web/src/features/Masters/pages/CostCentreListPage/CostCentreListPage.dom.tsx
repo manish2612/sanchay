@@ -47,8 +47,8 @@ export function CostCentreListPage() {
 
   const filterTabs: Array<{ id: CostCentreFilterType; label: string; count: number }> = [
     { id: 'all', label: 'All', count: counts.total },
-    { id: 'active', label: 'Active', count: counts.active },
-    { id: 'inactive', label: 'Inactive', count: counts.inactive },
+    { id: 'predefined', label: 'Predefined', count: counts.predefined },
+    { id: 'custom', label: 'Custom', count: counts.custom },
   ];
 
   return (

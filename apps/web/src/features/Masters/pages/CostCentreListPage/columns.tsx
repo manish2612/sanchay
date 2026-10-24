@@ -2,7 +2,10 @@ import React from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Icon, Button, Tooltip, TooltipTrigger, TooltipContent } from '@prime/ui';
 import type { CostCenterListItem } from '@/features/Masters/api/costCentersApi';
-import { activeDotClasses, inactiveDotClasses } from '@/features/Masters/components/common';
+import {
+  predefinedBadgeClasses,
+  customBadgeClasses,
+} from '@/features/Masters/components/common';
 
 export interface CostCentreTableMeta {
   onEditClick: (center: CostCenterListItem) => void;
@@ -40,19 +43,20 @@ export const costCentreColumns: ColumnDef<CostCenterListItem>[] = [
     },
   },
   {
-    accessorKey: 'is_active',
+    accessorKey: 'is_predefined',
     header: 'Status',
-    size: 90,
+    size: 100,
     cell: ({ getValue }) => {
-      const isActive = getValue<boolean>() !== false;
-      return (
-        <div className="flex items-center text-xs font-medium">
-          <span className={isActive ? activeDotClasses : inactiveDotClasses} />
-          <span className={isActive ? 'text-foreground' : 'text-muted-foreground'}>
-            {isActive ? 'Active' : 'Inactive'}
+      const isPredefined = Boolean(getValue<boolean | undefined>());
+      if (isPredefined) {
+        return (
+          <span className={predefinedBadgeClasses}>
+            <Icon name="Lock" size={11} className="text-muted-foreground" />
+            Default
           </span>
-        </div>
-      );
+        );
+      }
+      return <span className={customBadgeClasses}>Custom</span>;
     },
   },
   {

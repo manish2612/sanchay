@@ -13,6 +13,7 @@ export interface CostCenterListItem {
   name: string;
   display_order: number;
   cost_category_name: string;
+  /** Optional key indicating whether this is a system predefined/default record */
   is_predefined?: boolean;
 }
 
