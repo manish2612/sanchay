@@ -14,6 +14,7 @@ import { TableErrorSummary } from '@/components/EditableTable';
 import { useGetCostCategoriesQuery, useGetCostCentersQuery } from '../../api';
 
 export { isCostCenterRowEmpty, costCenterAllocationRowSchema };
+export { createDefaultCostCenterPhantomRow } from './useCostCenterAllocationTable';
 export type { CostCenterAllocationRow };
 
 export interface CostCenterAllocationTableProps<TFormValues extends FieldValues = FieldValues> {
