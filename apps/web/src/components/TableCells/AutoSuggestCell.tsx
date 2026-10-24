@@ -24,7 +24,6 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   const rowError = meta?.rowErrors?.[row.index] || state?.rowErrors?.[row.index];
   const error = typeof rowError === 'object' && rowError !== null ? rowError[column.id] : rowError;
   const updateData = meta?.updateData || actions?.updateData;
-  const onRowCommit = meta?.onRowCommit || actions?.onRowCommit;
 
   const targetKey = inputConfig?.optionsKey || column.id;
   let dynamicOptions = meta?.options?.[targetKey] || [];
@@ -45,9 +44,14 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
 
   const onBlur = () => {
     const matchedOption = dynamicOptions.find(
-      (opt: any) => opt.value === value || opt.label === value
+      (opt: any) => opt.value === value || opt.label === value || opt.id === value
     );
-    if (!inputConfig?.idKey && matchedOption) {
+    if (inputConfig?.idKey) {
+      updateData?.(row.index, column.id, value);
+      if (matchedOption?.id) {
+        updateData?.(row.index, inputConfig.idKey, matchedOption.id);
+      }
+    } else if (matchedOption) {
       updateData?.(row.index, column.id, matchedOption.value);
     } else {
       updateData?.(row.index, column.id, value);
@@ -61,12 +65,26 @@ export const AutoSuggestCell = ({ getValue, row, column, table }: any) => {
   return (
     <>
       <AutoSuggest
+        value={value}
+        onChange={(val) => {
+          const matchedOption = dynamicOptions.find(
+            (opt: any) => opt.value === val || opt.label === val || opt.id === val
+          );
+          const displayLabel = matchedOption ? matchedOption.label : String(val);
+          setValue(displayLabel);
+          if (inputConfig?.idKey) {
+            updateData?.(row.index, column.id, displayLabel);
+            updateData?.(row.index, inputConfig.idKey, matchedOption?.id || "");
+          } else {
+            updateData?.(row.index, column.id, matchedOption ? matchedOption.value : val);
+          }
+        }}
         inputValue={value}
         onInputChange={(val) => {
           setValue(val);
 
           const matchedOption = dynamicOptions.find(
-            (opt: any) => opt.value === val || opt.label === val
+            (opt: any) => opt.value === val || opt.label === val || opt.id === val
           );
 
           if (inputConfig?.idKey) {

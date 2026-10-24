@@ -30,15 +30,32 @@ export const useTableRowErrors = <
   const tableRootError = useMemo<string | undefined>(() => {
     if (!formFieldErrors || typeof formFieldErrors !== 'object') return undefined;
     const errObj = formFieldErrors as Record<string, unknown>;
+    let msg: string | undefined;
     if (errObj.root && typeof errObj.root === 'object') {
       const rootErr = errObj.root as { message?: string };
-      if (rootErr.message) return rootErr.message;
+      if (rootErr.message) msg = rootErr.message;
     }
-    if (typeof errObj.message === 'string') {
-      return errObj.message;
+    if (!msg && typeof errObj.message === 'string') {
+      msg = errObj.message;
     }
-    return undefined;
-  }, [formFieldErrors]);
+    if (!msg) return undefined;
+
+    // Suppress root error if user has not interacted with the table yet and form is not submitted
+    const isTablePristine =
+      fields.length === 0 ||
+      fields.every((row) => (isRowEmpty ? isRowEmpty(row) : false));
+
+    const isSubmitted =
+      Boolean(form.formState.isSubmitted) || form.formState.submitCount > 0;
+    const isDirty = Boolean(form.formState.dirtyFields?.[fieldName]);
+    const isTouched = Boolean(form.formState.touchedFields?.[fieldName]);
+
+    if (isTablePristine && !isDirty && !isTouched && !isSubmitted) {
+      return undefined;
+    }
+
+    return msg;
+  }, [formFieldErrors, fields, isRowEmpty, form.formState, fieldName]);
 
   const rowErrors = useMemo<Record<number, Record<string, string>>>(() => {
     const errorMap: Record<number, Record<string, string>> = {};
