@@ -1,9 +1,10 @@
 import { apiSlice } from '@/store/apiSlice';
-import type { 
-  GetVoucherTypesRequest, 
+import type {
+  GetVoucherTypesRequest,
   GetVoucherTypesResponse,
   CreateVoucherTypeRequest,
-  CreateVoucherTypeResponse
+  CreateVoucherTypeResponse,
+  VoucherType,
 } from './types';
 
 export const voucherTypeApi = apiSlice.injectEndpoints({
@@ -15,6 +16,13 @@ export const voucherTypeApi = apiSlice.injectEndpoints({
       }),
       providesTags: ['VoucherType'],
     }),
+    getVoucherTypeById: build.query<VoucherType, string>({
+      query: (id) => ({
+        url: `accounting/vouchertypes/${id}`,
+        method: 'GET',
+      }),
+      providesTags: (_result, _error, id) => [{ type: 'VoucherType', id }],
+    }),
     createVoucherType: build.mutation<CreateVoucherTypeResponse, CreateVoucherTypeRequest>({
       query: (body) => ({
         url: 'accounting/vouchertypes',
@@ -23,7 +31,28 @@ export const voucherTypeApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['VoucherType'],
     }),
+    updateVoucherType: build.mutation<VoucherType, { id: string; body: CreateVoucherTypeRequest }>({
+      query: ({ id, body }) => ({
+        url: `accounting/vouchertypes/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['VoucherType'],
+    }),
+    deleteVoucherType: build.mutation<{ message: string }, string>({
+      query: (id) => ({
+        url: `accounting/vouchertypes/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['VoucherType'],
+    }),
   }),
 });
 
-export const { useGetVoucherTypesQuery, useCreateVoucherTypeMutation } = voucherTypeApi;
+export const {
+  useGetVoucherTypesQuery,
+  useGetVoucherTypeByIdQuery,
+  useCreateVoucherTypeMutation,
+  useUpdateVoucherTypeMutation,
+  useDeleteVoucherTypeMutation,
+} = voucherTypeApi;
