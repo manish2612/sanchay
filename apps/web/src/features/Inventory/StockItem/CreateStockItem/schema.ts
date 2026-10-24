@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { taxClassificationSchema, baseMasterSchema } from '@/utils/shared-schemas';
+import { taxRateRowSchema } from '@/components/TaxRatesTable';
 
 export const multiUnitSchema = z
   .object({
@@ -110,6 +111,8 @@ export const stockItemSchema = baseMasterSchema
 
     maintainBatches: z.boolean().default(false),
     isBranchEnabled: z.boolean().default(false),
+
+    taxRates: z.array(taxRateRowSchema).optional(),
 
     enableMultiUnit: z.boolean(),
     multiUnits: z.array(multiUnitSchema).optional(),

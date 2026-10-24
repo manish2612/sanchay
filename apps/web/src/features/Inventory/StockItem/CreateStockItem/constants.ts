@@ -22,6 +22,7 @@ export const STOCK_ITEM_FORM_FIELDS = {
   IS_BRANCH_ENABLED: 'isBranchEnabled',
   TRACK_MFG_DATE: 'trackMfgDate',
   TRACK_EXPIRY_DATE: 'trackExpiryDate',
+  TAX_RATES: 'taxRates',
 } as const;
 
 export const STOCK_ITEM_WIZARD_STEPS = [
@@ -47,6 +48,7 @@ export const STOCK_ITEM_WIZARD_STEPS = [
       STOCK_ITEM_FORM_FIELDS.EXPORT_SALES_TAX,
       STOCK_ITEM_FORM_FIELDS.LOCAL_PURCHASE_TAX,
       STOCK_ITEM_FORM_FIELDS.EXPORT_PURCHASE_TAX,
+      STOCK_ITEM_FORM_FIELDS.TAX_RATES,
     ],
   },
   {

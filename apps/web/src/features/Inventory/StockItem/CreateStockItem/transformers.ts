@@ -1,5 +1,33 @@
+import { format } from 'date-fns';
 import { StockItemFormValues } from './schema';
 import { CreateStockItemPayload } from '../types';
+import { TaxRateRow, createDefaultPhantomRow } from '@/components/TaxRatesTable';
+
+const safeFormatDate = (dateVal?: string | Date | null): string => {
+  if (!dateVal) return '';
+  try {
+    const d = typeof dateVal === 'string' ? new Date(dateVal) : dateVal;
+    if (d instanceof Date && !isNaN(d.getTime())) {
+      return format(d, 'yyyy-MM-dd');
+    }
+  } catch {
+    // fallback
+  }
+  return typeof dateVal === 'string' ? dateVal.split('T')[0] : '';
+};
+
+const safeToIsoString = (val?: string | Date | null): string | null => {
+  if (!val) return null;
+  try {
+    const d = typeof val === 'string' ? new Date(val) : val;
+    if (d instanceof Date && !isNaN(d.getTime())) {
+      return d.toISOString();
+    }
+  } catch {
+    // fallback
+  }
+  return null;
+};
 
 /**
  * Transforms React Hook Form values into the exact backend payload expected
@@ -82,7 +110,26 @@ export const transformStockItemPayload = (data: StockItemFormValues): CreateStoc
     remarks: '',
     stock_category_id: data.categoryId || null,
     stock_group_id: data.parentId || null,
-    tax_rates: [],
+    tax_rates: (data.taxRates || [])
+      .filter((r) => !r.isPhantom && Boolean(r.tax_group_id) && Boolean(r.effective_from))
+      .map((r) => {
+        const rawRate =
+          typeof r.tax_rate === 'number'
+            ? r.tax_rate
+            : parseFloat(String(r.tax_rate || '0')) || 0;
+        const ratePercentage = rawRate > 1 ? rawRate / 100 : rawRate;
+        const effectiveFrom = safeToIsoString(r.effective_from) || new Date().toISOString();
+        const effectiveTo = safeToIsoString(r.effective_to);
+
+        return {
+          applicability: r.applicability || 'BOTH',
+          effective_from: effectiveFrom,
+          effective_to: effectiveTo,
+          excise_tax_group_id: r.excise_tax_group_id || '',
+          tax_group_id: r.tax_group_id || '',
+          tax_rate: ratePercentage,
+        };
+      }),
     track_expiry_date: Boolean(data.trackExpiryDate),
     track_mfg_date: Boolean(data.trackMfgDate),
   };
@@ -134,6 +181,35 @@ export const transformStockItemResponseToForm = (item: any): StockItemFormValues
   const openingRate = Number(item.opening_rate || 0);
   const openingAmount = Number(item.opening_value ?? item.opening_amount ?? (openingQty * openingRate));
 
+  const rawTaxRates = item.tax_rates || [];
+  const taxRates: TaxRateRow[] = rawTaxRates.map((tr: any, index: number) => {
+    const rawTg = Array.isArray(tr.tax_group) ? tr.tax_group[0] : tr.tax_group;
+    const rawRateNum = parseFloat(String(tr.tax_rate ?? '0')) || 0;
+    const rateDisplay =
+      rawTg?.taxgroup_combined_rate !== undefined
+        ? Number(rawTg.taxgroup_combined_rate)
+        : rawRateNum > 0 && rawRateNum <= 1
+          ? Math.round(rawRateNum * 10000) / 100
+          : rawRateNum;
+
+    const applicability = (tr.applicability?.toUpperCase() || 'BOTH') as
+      | 'GOODS'
+      | 'SERVICES'
+      | 'BOTH';
+
+    return {
+      id: tr.id || `tax-rate-${index + 1}`,
+      effective_from: safeFormatDate(tr.effective_from),
+      effective_to: safeFormatDate(tr.effective_to),
+      tax_group_id: tr.tax_group_id || rawTg?.id || '',
+      excise_tax_group_id: tr.excise_tax_group_id || '',
+      applicability,
+      tax_rate: rateDisplay,
+      isPhantom: false,
+    };
+  });
+  taxRates.push(createDefaultPhantomRow());
+
   return {
     name: item.name || '',
     alias: item.alias || '',
@@ -150,6 +226,8 @@ export const transformStockItemResponseToForm = (item: any): StockItemFormValues
     exportSales: item.global_sales_ledger_id || null,
     localInterstatePurchase: item.local_purchase_ledger_id || null,
     exportPurchase: item.global_purchase_ledger_id || null,
+
+    taxRates,
 
     enableMultiUnit,
     multiUnits,
