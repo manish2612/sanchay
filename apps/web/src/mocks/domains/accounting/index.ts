@@ -4,7 +4,11 @@ import {
   updateLedgerHandler,
   deleteLedgerHandler,
 } from './getLedgers';
-import { getVoucherTypesHandler } from './getVoucherTypes';
+import {
+  getVoucherTypesHandler,
+  getVoucherTypeByIdHandler,
+  deleteVoucherTypeHandler,
+} from './getVoucherTypes';
 import {
   getCostCentersHandler,
   getCostCenterByIdHandler,
@@ -41,6 +45,8 @@ export const accountingHandlers = [
   updateLedgerHandler,
   deleteLedgerHandler,
   getVoucherTypesHandler,
+  getVoucherTypeByIdHandler,
+  deleteVoucherTypeHandler,
   getCostCentersHandler,
   getCostCenterByIdHandler,
   createCostCenterHandler,

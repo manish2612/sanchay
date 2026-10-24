@@ -1726,8 +1726,39 @@ export const getVoucherTypesHandler = http.get<never, never, GetVoucherTypesResp
   async () => {
     if (!isMockEnabled('accounting', 'getVoucherTypes')) return;
 
-    await delay(800);
+    await delay(400);
 
     return HttpResponse.json(mockVoucherTypes);
+  }
+);
+
+export const getVoucherTypeByIdHandler = http.get(
+  '*/api/v1/accounting/vouchertypes/:id',
+  async ({ params }) => {
+    if (!isMockEnabled('accounting', 'getVoucherTypes')) return;
+
+    await delay(300);
+    const { id } = params;
+    const item = mockVoucherTypes.find((vt) => vt.id === id);
+    if (item) {
+      return HttpResponse.json(item);
+    }
+    return new HttpResponse(null, { status: 404 });
+  }
+);
+
+export const deleteVoucherTypeHandler = http.delete(
+  '*/api/v1/accounting/vouchertypes/:id',
+  async ({ params }) => {
+    if (!isMockEnabled('accounting', 'getVoucherTypes')) return;
+
+    await delay(400);
+    const { id } = params;
+    const index = mockVoucherTypes.findIndex((vt) => vt.id === id);
+    if (index !== -1) {
+      mockVoucherTypes.splice(index, 1);
+      return HttpResponse.json({ message: 'Operation completed successfully' });
+    }
+    return new HttpResponse(null, { status: 404 });
   }
 );
