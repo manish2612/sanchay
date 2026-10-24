@@ -38,7 +38,16 @@ export const getColumns = (): ColumnDef<CostCenterAllocationRow>[] => [
         optionsKey: "costCenters", 
         idKey: "costCenterId",
         disabled: (row: any) => !row.original.costCategory || row.original.costCategory.trim() === "",
-        optionsFilter: (opt: any, row: any) => opt.cost_category_name === row.costCategory
+        optionsFilter: (opt: any, row: any) => {
+          if (!row?.costCategory && !row?.costCategoryId) return true;
+          if (opt?.cost_category_id && row?.costCategoryId) {
+            return opt.cost_category_id === row.costCategoryId;
+          }
+          if (opt?.cost_category_name && row?.costCategory) {
+            return opt.cost_category_name.toLowerCase() === row.costCategory.toLowerCase();
+          }
+          return true;
+        },
       },
     },
   },
@@ -54,7 +63,7 @@ export const getColumns = (): ColumnDef<CostCenterAllocationRow>[] => [
   },
   {
     id: "actions",
-    size: 48,
+    size: 80,
     cell: ActionCell,
     meta: { layout: { cellClassName: "px-2" } },
   },
