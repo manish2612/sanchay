@@ -89,6 +89,17 @@ export function useLedgerList() {
     navigate({ to: '/accounts/masters/ledger/new' });
   }, [navigate]);
 
+  const handleEdit = useCallback(
+    (ledger: LedgerDecoratedItem) => {
+      if (ledger.is_predefined) return;
+      navigate({
+        to: '/accounts/masters/ledger/$id/edit',
+        params: { id: ledger.id },
+      });
+    },
+    [navigate]
+  );
+
   // Deletion Handlers
   const handleOpenDeleteDialog = useCallback((ledger: LedgerDecoratedItem) => {
     if (ledger.is_predefined) return;
@@ -137,6 +148,7 @@ export function useLedgerList() {
     setSearchQuery,
     handleClearSearch,
     handleAddNew,
+    handleEdit,
     refetch,
     // Deletion
     deleteDialogState,

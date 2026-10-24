@@ -100,28 +100,44 @@ export const ledgerColumns: ColumnDef<LedgerDecoratedItem>[] = [
 
       return (
         <div className="flex items-center justify-end gap-1 w-full pr-1">
-          {/* Edit Action - Temporarily Disabled UI */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="inline-block">
+          {/* Edit Action */}
+          {isPredefined ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="inline-block">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-muted-foreground opacity-30 cursor-not-allowed pointer-events-none"
+                    disabled
+                    aria-label="Edit ledger disabled"
+                  >
+                    <Icon name="Pencil" size={14} />
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="left">
+                Predefined system ledgers cannot be edited
+              </TooltipContent>
+            </Tooltip>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 text-muted-foreground opacity-30 cursor-not-allowed pointer-events-none"
-                  disabled
-                  aria-label="Edit ledger disabled"
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-surface-variant transition-colors"
+                  onClick={() => meta?.onEditClick(ledger)}
+                  aria-label={`Edit ${ledger.name}`}
                 >
                   <Icon name="Pencil" size={14} />
                 </Button>
-              </span>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              {isPredefined
-                ? 'Predefined system ledgers cannot be edited'
-                : 'Editing ledgers is currently disabled'}
-            </TooltipContent>
-          </Tooltip>
+              </TooltipTrigger>
+              <TooltipContent side="left">Edit Ledger</TooltipContent>
+            </Tooltip>
+          )}
 
           {/* Delete Action */}
           {isPredefined ? (

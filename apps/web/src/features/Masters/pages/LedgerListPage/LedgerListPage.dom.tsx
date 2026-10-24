@@ -32,6 +32,7 @@ export function LedgerListPage() {
     setSearchQuery,
     handleClearSearch,
     handleAddNew,
+    handleEdit,
     refetch,
     // Deletion
     deleteDialogState,
@@ -140,6 +141,7 @@ export function LedgerListPage() {
               className="w-full flex-1 min-h-0 border-0 rounded-none"
               tableOptions={{
                 meta: {
+                  onEditClick: handleEdit,
                   onDeleteClick: handleOpenDeleteDialog,
                 } satisfies LedgerTableMeta,
               }}
