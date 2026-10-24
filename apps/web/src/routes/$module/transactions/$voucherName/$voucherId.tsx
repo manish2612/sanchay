@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import Page from '@/features/Accounts/VoucherType';
+import Page from '@/features/Vouchers/pages/VoucherTransactionPage';
 
 function VoucherPageRoute() {
   const { module, voucherName, voucherId } = Route.useParams();
